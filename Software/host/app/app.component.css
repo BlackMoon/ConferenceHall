@@ -198,6 +198,13 @@ a {
     padding: 0 5px;
 }
 
+.s8itemsContainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+}
+
 .s11screenWidthBackground {
     position: absolute;
     top: 0;
