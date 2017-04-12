@@ -1,1 +1,350 @@
-﻿
+﻿html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.SITE_ROOT {
+    min-height: 100%;
+    position: relative;
+    margin: 0 auto;
+}
+
+.s0screenWidthBackground {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s0centeredContent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s0inlineContent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.style-ijforulp1 svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    fill: #0DB26B;
+    fill-opacity: 1;
+    stroke: rgba(0, 0, 0, 1);
+    stroke-width: 0px;
+}
+
+.style-ijforulp1 svg * {
+    vector-effect: non-scaling-stroke;
+}
+
+.style-ijfp4sma svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    fill: #FFFFFF;
+    fill-opacity: 1;
+    stroke: rgba(0, 0, 0, 1);
+    stroke-width: 0px;
+}
+
+.style-ijfp4sma svg * {
+    vector-effect: non-scaling-stroke;
+}
+
+.style-ijfori4f svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    fill: #0DB26B;
+    fill-opacity: 1;
+    stroke: rgba(0, 0, 0, 1);
+    stroke-width: 0px;
+}
+
+.style-ijfori4f svg * {
+    vector-effect: non-scaling-stroke;
+}
+
+.style-ijfp4hk4 svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    fill: #FFFFFF;
+    fill-opacity: 1;
+    stroke: rgba(0, 0, 0, 1);
+    stroke-width: 0px;
+}
+
+.style-ijfp4hk4 svg * {
+    vector-effect: non-scaling-stroke;
+}
+
+.style-imn5j0do svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    fill: #9155A7;
+    fill-opacity: 1;
+    stroke: rgba(145, 85, 167, 1);
+    stroke-width: 0px;
+}
+
+.style-imn5j0do svg * {
+    vector-effect: non-scaling-stroke;
+}
+
+.s2 {
+    word-wrap: break-word;
+}
+
+.s2 a {
+    color: inherit;
+}
+
+.s2 h1 {
+    margin: 0;
+    line-height: normal;
+    letter-spacing: normal;
+}
+
+.s2 h6 {
+    margin: 0;
+    line-height: normal;
+    letter-spacing: normal;
+}
+
+.s2 p {
+    margin: 0;
+    line-height: normal;
+    letter-spacing: normal;
+}
+
+.s5itemsContainer {
+    width: calc(100% - 0px);
+    height: calc(100% - 0px);
+    white-space: nowrap;
+    display: inline-block;
+    overflow: visible;
+    position: relative;
+}
+
+.s5repeaterButton {
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    cursor: pointer;
+    font: normal normal normal 14px/1.4em raleway,sans-serif;
+}
+
+.s5repeaterButton_gapper {
+    padding: 0 5px;
+}
+
+.s11screenWidthBackground {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s11bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s11inlineContent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s14bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s22inlineContent, .s22bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s22bg {
+    border: 0px solid rgba(204, 204, 204, 0.5);
+    background-color: rgba(109, 204, 163, 0.9);
+    border-radius: 0;
+}
+
+.s23label {
+    font: normal normal normal 13px/1.4em raleway,sans-serif;
+    transition: color 0.4s ease 0s;
+    color: #FFFFFF;
+    display: inline-block;
+    margin: calc(-1 * 0px) 0px 0;
+    position: relative;
+    white-space: nowrap;
+}
+
+.s23[data-state~="shouldUseFlex"][data-state~="center"] .s23link, .s23[data-state~="shouldUseFlex"][data-state~="center"] .s23labelwrapper {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+.s23[data-disabled="false"] .s23link {
+    background-color: rgba(4, 59, 36, 0.15);
+    border: solid rgba(171, 5, 53, 1) 0px;
+    cursor: pointer !important;
+}
+
+.s23[data-state~="shouldUseFlex"] .s23link, .s23[data-state~="shouldUseFlex"] .s23labelwrapper {
+    text-align: initial;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.g-transparent-a:link, .g-transparent-a:visited {
+    border-color: transparent;
+}
+
+.s23link {
+    border-radius: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: border-color 0.4s ease 0s, background-color 0.4s ease 0s;
+}
+
+.s24inlineContent, .s24bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s24bg {
+    border: 0px solid rgba(204, 204, 204, 0.5);
+    background-color: rgba(13, 178, 107, 0.9);
+    border-radius: 0;
+}
+
+.s25inlineContent, .s25bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.s25bg {
+    border: 0px solid rgba(204, 204, 204, 0.5);
+    background-color: rgba(9, 119, 71, 0.9);
+    border-radius: 0;
+}
+
+.color_11 {
+    color: #FFFFFF;
+}
+
+.color_13 {
+    color: #A0A09F;
+}
+
+.color_28 {
+    color: #0DB26B;
+}
+
+.font_0 {
+    font: normal normal normal 32px/1.4em raleway,sans-serif;
+    color: #9155A7;
+}
+
+.font_6 {
+    font: normal normal normal 22px/1.4em raleway,sans-serif;
+    color: #0DB26B;
+}
+
+.font_8 {
+    font: normal normal normal 15px/1.4em raleway,sans-serif;
+    color: #605E5E;
+}
+
+.img1 {
+    background: url("images/bg.jpg") 50% center / cover no-repeat;
+}
