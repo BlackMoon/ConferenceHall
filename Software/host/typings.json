@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "mCustomScrollbar": "github:DefinitelyTyped/DefinitelyTyped/mCustomScrollbar/index.d.ts#50387d40462301d54cda62e24d3b2ee46540f24a"
+  }
+}

@@ -9,12 +9,10 @@ module.exports = {
     entry: {
         'app': './index.ts',
         'polyfills': './polyfills.ts',
-        'theme': 'igniteui/css/themes/infragistics2012/infragistics.theme.css',
         'vendor': './vendor.ts'
     },
 
     resolve: {
-        alias: { 'jquery-ui': 'jquery-ui-bundle' },
         extensions: ['', '.ts', '.js'] // Try .ts first, otherwise map will reference .js file.
     },
 
@@ -42,12 +40,11 @@ module.exports = {
     plugins: [     
 
       new CopyWebpackPlugin([
-            { from: 'favicon.ico' },
-            { from: '**/routes.json', to: '[name].[ext]' }
+            { from: 'favicon.ico' }
         ]),
 
       new webpack.optimize.CommonsChunkPlugin({
-          name: ['app', 'theme', 'vendor', 'polyfills']
+          name: ['app', 'vendor', 'polyfills']
       }),
 
       new HtmlWebpackPlugin({
