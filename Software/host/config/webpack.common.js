@@ -8,6 +8,7 @@ module.exports = {
     context: helpers.root('./app'),
     entry: {
         'app': './index.ts',
+        'theme': ['primeng/resources/primeng.css', 'primeng/resources/themes/omega/theme.css'],
         'polyfills': './polyfills.ts',
         'vendor': './vendor.ts'
     },
@@ -44,7 +45,7 @@ module.exports = {
         ]),
 
       new webpack.optimize.CommonsChunkPlugin({
-          name: ['app', 'vendor', 'polyfills']
+          name: ['app', 'theme', 'vendor', 'polyfills']
       }),
 
       new HtmlWebpackPlugin({

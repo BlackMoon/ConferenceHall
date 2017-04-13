@@ -10,9 +10,10 @@ import '@angular/router';
 // CryptoJS
 import 'crypto-js';
 
+// PrimeNG
+import 'primeng/resources/primeng.min.css';
+import 'primeng/resources/themes/omega/theme.css';
+import 'primeng/primeng.js';
+
 // RxJS
 import 'rxjs';
-
-// Other vendors for example jQuery, Lodash or Bootstrap
-// You can import js, ts, css, sass, ...
-//import 'primeng';

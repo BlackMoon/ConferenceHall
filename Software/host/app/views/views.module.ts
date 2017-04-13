@@ -1,5 +1,6 @@
 ﻿import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
+import { InputTextModule, ButtonModule } from 'primeng/primeng';
 import * as views from './index';
 
 @NgModule({
