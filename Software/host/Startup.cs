@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Security.Claims;
 using DryIoc;
 using Kit.Core;
 using Kit.Core.CQRS.Job;
@@ -9,17 +8,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Server.Kestrel.Internal.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace host
 {
-    public class Startup : DryIocStartup
+    public partial class Startup : DryIocStartup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -94,6 +91,9 @@ namespace host
                     }
                 });
             });
+
+            // authentication
+            ConfigureAuth(app);
 
             app.UseFileServer();
             app.UseMvc();
