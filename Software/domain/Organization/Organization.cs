@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using domain.Common;
 
 namespace domain.Organization
 {
-    class Organization
+    public class Organization : KeyObject
     {
     }
 }
