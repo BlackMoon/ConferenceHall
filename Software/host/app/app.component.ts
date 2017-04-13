@@ -7,6 +7,9 @@ import { Http, RequestOptions, URLSearchParams } from '@angular/http';
     styleUrls: ['app.component.css'],
     templateUrl: 'app.component.html'
 })
-export class AppComponent {    
-    
+export class AppComponent {
+    constructor() {
+    }
+
+
 }
