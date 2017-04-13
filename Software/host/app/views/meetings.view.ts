@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
 
 @Component({
-    template: `meetings`
+    templateUrl: 'meetings.view.html'
 })
 export class MeetingsView {
 

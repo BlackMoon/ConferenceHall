@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
 
 @Component({
-    template: `editor`
+    templateUrl: `editor.view.html`
 })
 export class EditorView {
 

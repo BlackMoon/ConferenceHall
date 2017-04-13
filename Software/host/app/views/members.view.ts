@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
 
 @Component({
-    template: `<div style="position: absolute; left:-462px">members</div>`
+    templateUrl: 'members.view.html'
 })
 export class MembersView {
 
