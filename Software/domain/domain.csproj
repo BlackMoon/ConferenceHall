@@ -8,4 +8,15 @@
     <ProjectReference Include="..\..\..\kit\Kit.Dal.Postgre\Kit.Dal.Postgre.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="Organization\Command\" />
+    <Folder Include="Organization\Query\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Dapper.Contrib" Version="1.50.0" />
+  </ItemGroup>
+
 </Project>

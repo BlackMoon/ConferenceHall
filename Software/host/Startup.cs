@@ -4,6 +4,7 @@ using System.Security.Claims;
 using DryIoc;
 using Kit.Core;
 using Kit.Core.CQRS.Job;
+using Kit.Dal.DbManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -53,24 +54,9 @@ namespace host
             IContainer container = ConfigureDependencies(services, "domain", "Kit.Core", "Kit.Dal", "Kit.Dal.Postgre");
 
             // IDbManager
-            /*container.RegisterDelegate(delegate (IResolver r)
-            {
-                HttpContext httpContext = r.Resolve<IHttpContextAccessor>().HttpContext;
-                ConnectionOptions options = r.Resolve<IOptions<ConnectionOptions>>().Value;
-
-                ClaimsPrincipal cp = httpContext.User;
-                string pswd = "postgres",//cp.FindFirst(ConnectionClaimTypes.Password)?.Value,
-                    userId = "postgres";// cp.Identity.Name;                       
-
-                return $"User Id={userId};Password={pswd};Host={options.Server};Port={options.Port};Database={options.DataSource};Pooling=true;";
-
-            }, serviceKey: "ConnectionString");*/
-
             container.RegisterInstance(Configuration["Data:DefaultConnection:ProviderName"], serviceKey: "ProviderName");
-
-            // dbManager для текущего пользователя (веб)
-            //container.Register(
-              //  made: Made.Of(() => DbManagerFactory.CreateDbManager(Arg.Of<string>("ProviderName"), Arg.Of<string>("ConnectionString")), requestIgnored => string.Empty));
+            container.Register(
+                made: Made.Of(() => DbManagerFactory.CreateDbManager(Arg.Of<string>("ProviderName"), Arg.Of<string>("ConnectionString")), requestIgnored => string.Empty));
 
             // Startup Jobs
             IJobDispatcher dispatcher = container.Resolve<IJobDispatcher>(IfUnresolved.ReturnDefault);
