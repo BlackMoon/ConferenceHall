@@ -38,6 +38,13 @@ namespace host
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                    context.Response.Redirect("/?returnUrl=" + context.Request.Path.Value.TrimStart('/'));
+            });
+
             // exception handlers
             app.UseExceptionHandler(builder =>
             {
