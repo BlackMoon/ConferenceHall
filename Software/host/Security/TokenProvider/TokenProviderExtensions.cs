@@ -5,7 +5,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 
-namespace Host.Security.TokenProvider
+namespace host.Security.TokenProvider
 {
     /// <summary>
     /// Adds a token generation endpoint to an application pipeline.

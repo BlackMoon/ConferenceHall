@@ -15,7 +15,7 @@ using Newtonsoft.Json.Serialization;
 using Kit.Core.Encryption;
 using Kit.Core.Encryption.Symmetric;
 
-namespace Host.Security.TokenProvider
+namespace host.Security.TokenProvider
 { 
     /// <summary>
     /// Token generator middleware component which is added to an HTTP pipeline.

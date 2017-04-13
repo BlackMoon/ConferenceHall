@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Host.Security.TokenProvider
+namespace host.Security.TokenProvider
 {
     /// <summary>
     /// Provides options for <see cref="TokenProviderMiddleware"/>.

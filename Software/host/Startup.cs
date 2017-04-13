@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net;
+using CacheManager.Core;
 using DryIoc;
+using host.Security;
+using host.Security.TokenProvider;
 using Kit.Core;
 using Kit.Core.CQRS.Job;
 using Kit.Dal.DbManager;
@@ -13,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
 
 namespace host
 {
@@ -36,6 +40,10 @@ namespace host
         {
             services.AddOptions();
 
+            services.AddCors(o => o.AddPolicy("AllowAll", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+            services.Configure<TokenProviderOptions>(Configuration.GetSection("TokenAuthentication"));
+
             services
                 .AddMvc()
                 .AddJsonOptions(option =>
@@ -55,6 +63,15 @@ namespace host
             container.Register(
                 made: Made.Of(() => DbManagerFactory.CreateDbManager(Arg.Of<string>("ProviderName"), Arg.Of<string>("ConnectionString")), requestIgnored => string.Empty));
 
+            // cache manager
+            ICacheManagerConfiguration cacheConfiguration = Configuration.GetCacheConfiguration("secretCache");
+
+            container.Register(
+                reuse: Reuse.Singleton,
+                made: Made.Of(() => CacheFactory.FromConfiguration<SecretItem>("secretCache", cacheConfiguration)));
+
+            container.Register<SecretStorage>(Reuse.Singleton);
+
             // Startup Jobs
             IJobDispatcher dispatcher = container.Resolve<IJobDispatcher>(IfUnresolved.ReturnDefault);
             dispatcher?.Dispatch<IStartupJob>();
@@ -67,6 +84,11 @@ namespace host
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            if (env.IsDevelopment())
+            {
+                app.UseCors("AllowAll");
+            }
 
             app.Use(async (context, next) =>
             {

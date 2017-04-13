@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Kit.Core.Encryption;
 
-namespace Host.Security.TokenProvider
+namespace host.Security.TokenProvider
 {
     /// <summary>
     /// 2-factor authentication options

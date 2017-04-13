@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace host.Controllers
@@ -9,10 +10,19 @@ namespace host.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private IQueryDispatcher _queryDispatcher;
+
+        public ValuesController(IQueryDispatcher queryDispatcher)
+        {
+            _queryDispatcher = queryDispatcher;
+        }
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            // todo _queryDispatcher.DispatchAsync<>()
+
             return new string[] { "value1", "value2" };
         }
 
