@@ -5,7 +5,7 @@ namespace domain.Common
     public abstract class KeyObject
     {              
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public override int GetHashCode()
         {
