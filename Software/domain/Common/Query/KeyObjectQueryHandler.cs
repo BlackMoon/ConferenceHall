@@ -30,25 +30,25 @@ namespace domain.Common.Query
             return DbManager.DbConnection.GetAll<TResult>();
         }
 
-        public virtual Task<TResult> ExecuteAsync(TQuery query)
+        public virtual async Task<TResult> ExecuteAsync(TQuery query)
         {
             IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
             if (dbManagerAsync != null)
             {
-                dbManagerAsync.OpenAsync();
-                return DbManager.DbConnection.GetAsync<TResult>(query.Id);
+                await dbManagerAsync.OpenAsync();
+                return await DbManager.DbConnection.GetAsync<TResult>(query.Id);
             }
 
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TResult>> ExecuteAsync(GetAllQuery query)
+        public async Task<IEnumerable<TResult>> ExecuteAsync(GetAllQuery query)
         {
             IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
             if (dbManagerAsync != null)
             {
-                dbManagerAsync.OpenAsync();
-                return DbManager.DbConnection.GetAllAsync<TResult>();
+                await dbManagerAsync.OpenAsync();
+                return await DbManager.DbConnection.GetAllAsync<TResult>();
             }
             throw new NotImplementedException();
         }
