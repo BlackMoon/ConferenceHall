@@ -4,6 +4,7 @@ using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 using System.Collections.Generic;
+using System.Data;
 
 namespace domain.Common.Query
 {
