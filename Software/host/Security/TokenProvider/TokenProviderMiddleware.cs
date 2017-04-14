@@ -147,23 +147,23 @@ namespace host.Security.TokenProvider
                 return;
             }
 
+            string key = context.Request.Form["key"];
+            byte[] keyBytes = string.IsNullOrEmpty(key) ? new byte[] { } : Convert.FromBase64String(key.Replace(' ', '+'));
+
+            SecretItem si = _storage.Get(username);
+            if (si == null || !keyBytes.SequenceEqual(si.Key))
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync("Invalid secret key.");
+                return;
+            }
+
             // Аутентификация
             string password = context.Request.Form["password"];
 
+            #region decryption
             if (_options.TwoFactorAuth)
-            { 
-                string key = context.Request.Form["key"];
-                byte[] keyBytes = string.IsNullOrEmpty(key) ? new byte[] { } : Convert.FromBase64String(key.Replace(' ', '+'));
-
-                SecretItem si = _storage.Get(username);
-                if (si == null || !keyBytes.SequenceEqual(si.Key))
-                {
-                    context.Response.StatusCode = 400;
-                    await context.Response.WriteAsync("Invalid secret key.");
-                    return;
-                }
-
-                #region decryption
+            {
                 CipherOptions cipherOptions = new CipherOptions()
                 {
                     IV = si.IV,

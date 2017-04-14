@@ -1,19 +1,22 @@
-﻿using domain.Common.Query;
-using domain.SysUser;
-using domain.SysUser.Query;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using domain.SysUser;
+using domain.SysUser.Query;
+using domain.Common.Query;
+
 
 namespace host.Controllers
 {
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class SysUsersController : Controller
     {
         private IQueryDispatcher _queryDispatcher;
 
-        public UsersController(IQueryDispatcher queryDispatcher)
+        public SysUsersController(IQueryDispatcher queryDispatcher)
         {
             _queryDispatcher = queryDispatcher;
         }

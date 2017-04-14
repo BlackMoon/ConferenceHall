@@ -7,25 +7,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
-var views_module_1 = require("../views/views.module");
-var views = require("../views");
+var views_module_1 = require("./views/views.module");
+var views = require("./views");
 var routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'editor', component: views.EditorView },
     { path: 'home', component: views.HomeView },
-    { path: 'meetings', component: views.MeetingsView },
+    { path: 'meetings', component: views.MembersView },
     { path: 'members', component: views.MembersView }
 ];
-var NavigationModule = (function () {
-    function NavigationModule() {
+var AppRoutingModule = (function () {
+    function AppRoutingModule() {
     }
-    return NavigationModule;
+    return AppRoutingModule;
 }());
-NavigationModule = __decorate([
+AppRoutingModule = __decorate([
     core_1.NgModule({
         imports: [router_1.RouterModule.forRoot(routes), views_module_1.ViewsModule],
-        exports: [router_1.RouterModule, views_module_1.ViewsModule]
+        exports: [router_1.RouterModule]
     })
-], NavigationModule);
-exports.NavigationModule = NavigationModule;
-//# sourceMappingURL=navigation.module.js.map
+], AppRoutingModule);
+exports.AppRoutingModule = AppRoutingModule;
+//# sourceMappingURL=app-routing.module.js.map
