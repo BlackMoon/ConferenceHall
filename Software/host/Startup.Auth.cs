@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using domain.Login.Command;
 using domain.SysUser;
+using domain.SysUser.Query;
 using host.Security.TokenProvider;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
-using Kit.Dal.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +47,6 @@ namespace host
             {
                 ICommandDispatcher commandDispatcher = app.ApplicationServices.GetRequiredService<ICommandDispatcher>();
                 IQueryDispatcher queryDispatcher = app.ApplicationServices.GetRequiredService<IQueryDispatcher>();
-                ILogger<TokenProviderMiddleware> logger = app.ApplicationServices.GetRequiredService<ILogger<TokenProviderMiddleware>>();
 
                 ClaimsIdentity identity = null;
                
@@ -60,10 +59,11 @@ namespace host
 
                 if (result.Status == LoginStatus.Success)
                 {
-                    SysUser sysUser;
-                        // = await queryDispatcher.DispatchAsync<FindUserByLoginQuery, AdkUser>(new FindUserByLoginQuery { ConnectionString = connectionString, Login = u});
+                    SysUser sysUser = await queryDispatcher.DispatchAsync<FindSysUserByLoginQuery, SysUser>(new FindSysUserByLoginQuery { Login = u});
 
-                    Claim[] claims = null;
+                    Claim[] claims = (sysUser != null) ?
+                        new[] { new Claim("role", sysUser.Role) } :
+                        null;
 
                     identity = new ClaimsIdentity(new GenericIdentity(u, "Token"), claims);
                 }

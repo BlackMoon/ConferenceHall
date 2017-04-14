@@ -1,5 +1,4 @@
 ﻿using Kit.Core.CQRS.Query;
-using domain.Common.Query;
 
 namespace domain.SysUser.Query
 {
@@ -8,7 +7,6 @@ namespace domain.SysUser.Query
     /// </summary>
     public class FindSysUserByLoginQuery : IQuery
     {
-        public string ConnectionString { get; set; }
         public string Login { get; set; }
     }
 }
