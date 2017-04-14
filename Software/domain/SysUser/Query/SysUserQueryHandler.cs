@@ -9,7 +9,7 @@ namespace domain.SysUser.Query
     public class SysUserQueryHandler : KeyObjectQueryHandler<FindSysUserByIdQuery, SysUser>,         
         IQueryHandler<FindSysUserByLoginQuery, SysUser>        
     {
-        private const string SelectSysUser = "SELECT u.* FROM adk_user.users u";
+        private const string SelectSysUser = "SELECT u.* FROM conf_hall.users u";
 
         public SysUserQueryHandler(IDbManager dbManager) : base(dbManager)
         {  
