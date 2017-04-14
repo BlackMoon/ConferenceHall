@@ -10,7 +10,7 @@ namespace domain.Employee
         public string Name { get; set; }
 
         [Column("org_id")]
-        public int Org_Id { get; set; }
+        public Organization.Organization OrganizationId { get; set; }
 
         [Column("job_title")]
         public bool JobTitle { get; set; }
