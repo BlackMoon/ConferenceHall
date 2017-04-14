@@ -42,12 +42,14 @@ namespace domain.Login.Command
                 msg = ex.MessageText;
                 status = LoginStatus.Failure;
 
-                _logger.LogError(0, ex, null);
+                _logger.LogError($"{ex.Message}. {ex.Detail}");
             }
             catch (Exception ex)
             {
                 msg = ex.Message;
                 status = LoginStatus.Failure;
+
+                _logger.LogError(msg);
             }
             finally
             {
