@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
+using domain.Employe;
+using domain.Employe.Query;
+using domain.Common.Query;
 
 namespace host.Controllers
 {
@@ -19,18 +22,16 @@ namespace host.Controllers
 
         // GET api/employes
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Task<IEnumerable<Employe>> Get()
         {
-            // todo _queryDispatcher.DispatchAsync<>()
-
-            return new string[] { "employe1", "employe2" };
+            return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Employe>>(new GetAllQuery());
         }
 
         // GET api/employes/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Task<Employe> Get(int id)
         {
-            return "employe";
+            return _queryDispatcher.DispatchAsync<FindEmployeByIdQuery, Employe>(new FindEmployeByIdQuery() { Id = id });
         }
 
         // POST api/employes

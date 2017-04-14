@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
+using domain.User;
+using domain.User.Query;
+using domain.Common.Query;
+
 
 namespace host.Controllers
 {
@@ -19,18 +23,18 @@ namespace host.Controllers
 
         // GET api/users
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Task<IEnumerable<User>> Get()
         {
             // todo _queryDispatcher.DispatchAsync<>()
 
-            return new string[] { "user1", "user2" };
+            return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<User>>(new GetAllQuery());
         }
 
         // GET api/users/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Task<User> Get(int id)
         {
-            return "user";
+            return _queryDispatcher.DispatchAsync<FindUserByIdQuery, User>(new FindUserByIdQuery() { Id = id });
         }
 
         // POST api/users

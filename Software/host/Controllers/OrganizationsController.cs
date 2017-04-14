@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
+using domain.Organization;
+using domain.Organization.Query;
+using domain.Common.Query;
 
 namespace host.Controllers
 {
@@ -19,18 +22,18 @@ namespace host.Controllers
 
         // GET api/organizations
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Task<IEnumerable<Organization>> Get()
         {
             // todo _queryDispatcher.DispatchAsync<>()
 
-            return new string[] { "organization1", "organization2" };
+            return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Organization>>(new GetAllQuery());
         }
 
         // GET api/organizations/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Task<Organization> Get(int id)
         {
-            return "organization";
+            return _queryDispatcher.DispatchAsync<FindOrganizationByIdQuery, Organization>(new FindOrganizationByIdQuery() { Id = id });
         }
 
         // POST api/conferences
