@@ -7,6 +7,6 @@ namespace domain.Common.Query
     /// </summary>
     public abstract class FindObjectByIdQuery : IQuery
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }
