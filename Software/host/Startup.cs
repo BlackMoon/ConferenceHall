@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using CacheManager.Core;
 using DryIoc;
 using host.Security;
 using host.Security.TokenProvider;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
+
 
 namespace host
 {
@@ -59,16 +58,17 @@ namespace host
             IContainer container = ConfigureDependencies(services, "domain", "Kit.Core", "Kit.Dal", "Kit.Dal.Postgre");
 
             // IDbManager
+            container.RegisterInstance(Configuration.GetConnectionString("DefaultConnection"), serviceKey: "ConnectionString");
             container.RegisterInstance(Configuration["Data:DefaultConnection:ProviderName"], serviceKey: "ProviderName");
             container.Register(
                 made: Made.Of(() => DbManagerFactory.CreateDbManager(Arg.Of<string>("ProviderName"), Arg.Of<string>("ConnectionString")), requestIgnored => string.Empty));
 
             // cache manager
-            ICacheManagerConfiguration cacheConfiguration = Configuration.GetCacheConfiguration("secretCache");
+            CacheManager.Core.ICacheManagerConfiguration cacheConfiguration = Configuration.GetCacheConfiguration("secretCache");
 
             container.Register(
                 reuse: Reuse.Singleton,
-                made: Made.Of(() => CacheFactory.FromConfiguration<SecretItem>("secretCache", cacheConfiguration)));
+                made: Made.Of(() => CacheManager.Core.CacheFactory.FromConfiguration<SecretItem>("secretCache", cacheConfiguration)));
 
             container.Register<SecretStorage>(Reuse.Singleton);
 

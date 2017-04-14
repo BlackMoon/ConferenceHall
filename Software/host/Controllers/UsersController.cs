@@ -23,18 +23,18 @@ namespace host.Controllers
 
         // GET api/users
         [HttpGet]
-        public Task<IEnumerable<User>> Get()
+        public Task<IEnumerable<SysUser>> Get()
         {
             // todo _queryDispatcher.DispatchAsync<>()
 
-            return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<User>>(new GetAllQuery());
+            return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<SysUser>>(new GetAllQuery());
         }
 
         // GET api/users/5
         [HttpGet("{id}")]
-        public Task<User> Get(int id)
+        public Task<SysUser> Get(int id)
         {
-            return _queryDispatcher.DispatchAsync<FindUserByIdQuery, User>(new FindUserByIdQuery() { Id = id });
+            return _queryDispatcher.DispatchAsync<FindUserByIdQuery, SysUser>(new FindUserByIdQuery() { Id = id });
         }
 
         // POST api/users

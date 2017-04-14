@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using domain.Login.Command;
+using domain.User;
 using host.Security.TokenProvider;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
@@ -59,25 +60,18 @@ namespace host
                             UserName = u
                         });
 
-                    /*string connectionString = commandDispatcher.Dispatch<LoginCommand, string>(
-                        new LoginCommand
-                        {
-                            Host = connOptions.Server,
-                            Port = connOptions.Port,
-                            DataBase = connOptions.DataSource,
-                            UserName = u,
-                            Password = p
-                        });
                     
-                    AdkUser adkUser = await queryDispatcher.DispatchAsync<FindUserByLoginQuery, AdkUser>(new FindUserByLoginQuery { ConnectionString = connectionString, Login = u});
-                    */
+                    
+                    //SysUser sysUser = await queryDispatcher.DispatchAsync<FindUserByLoginQuery, AdkUser>(new FindUserByLoginQuery { ConnectionString = connectionString, Login = u});
+                    
                     Claim[] claims = null;
 
                     identity = new ClaimsIdentity(new GenericIdentity(u, "Token"), claims);
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex.Message);    
+                    logger.LogError(ex.Message);
+                    throw;
                 }
 
                 return await Task.FromResult(identity);
