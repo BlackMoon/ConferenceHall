@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using domain.Login.Command;
+using domain.SysUser;
 using host.Security.TokenProvider;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
@@ -44,33 +45,27 @@ namespace host
             tokenOptions.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature);
             tokenOptions.IdentityResolver = async (u, p) =>
             {
-                ConnectionOptions connOptions = app.ApplicationServices.GetRequiredService<IOptions<ConnectionOptions>>().Value;
                 ICommandDispatcher commandDispatcher = app.ApplicationServices.GetRequiredService<ICommandDispatcher>();
                 IQueryDispatcher queryDispatcher = app.ApplicationServices.GetRequiredService<IQueryDispatcher>();
                 ILogger<TokenProviderMiddleware> logger = app.ApplicationServices.GetRequiredService<ILogger<TokenProviderMiddleware>>();
 
                 ClaimsIdentity identity = null;
-                try
-                {
-                    await commandDispatcher.DispatchAsync<LoginCommand, bool>(
-                        new LoginCommand()
-                        {
-                            Password = p,
-                            UserName = u
-                        });
+               
+                LoginCommandResult result = await commandDispatcher.DispatchAsync<LoginCommand, LoginCommandResult>(
+                    new LoginCommand()
+                    {
+                        Password = p,
+                        UserName = u
+                    });
 
-                    
-                    
-                    //SysUser sysUser = await queryDispatcher.DispatchAsync<FindUserByLoginQuery, AdkUser>(new FindUserByLoginQuery { ConnectionString = connectionString, Login = u});
-                    
+                if (result.Status == LoginStatus.Success)
+                {
+                    SysUser sysUser;
+                        // = await queryDispatcher.DispatchAsync<FindUserByLoginQuery, AdkUser>(new FindUserByLoginQuery { ConnectionString = connectionString, Login = u});
+
                     Claim[] claims = null;
 
                     identity = new ClaimsIdentity(new GenericIdentity(u, "Token"), claims);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex.Message);
-                    throw;
                 }
 
                 return await Task.FromResult(identity);
