@@ -1,11 +1,12 @@
 ﻿import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
-import { SplitButtonModule } from 'primeng/primeng';
+//import { AngularSplitModule } from 'angular-split';
+import { SplitButtonModule, ToolbarModule } from 'primeng/primeng';
 import * as views from './index';
 
 @NgModule({
     declarations: [views.EditorView, views.HomeView, views.MeetingsView, views.MembersView],
-    exports: [SplitButtonModule],
-    imports: [RouterModule, SplitButtonModule]
+    exports: [ToolbarModule],
+    imports: [RouterModule, SplitButtonModule, ToolbarModule]
 })
 export class ViewsModule { }
