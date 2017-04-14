@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Dapper;
 using domain.Common.Query;
-using Dapper;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
+using System;
+using System.Threading.Tasks;
 
 namespace domain.SysUser.Query
 {
