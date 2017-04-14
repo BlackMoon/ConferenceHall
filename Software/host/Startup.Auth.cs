@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using domain.Login.Command;
 using host.Security.TokenProvider;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
@@ -51,6 +52,13 @@ namespace host
                 ClaimsIdentity identity = null;
                 try
                 {
+                    await commandDispatcher.DispatchAsync<LoginCommand, bool>(
+                        new LoginCommand()
+                        {
+                            Password = p,
+                            UserName = u
+                        });
+
                     /*string connectionString = commandDispatcher.Dispatch<LoginCommand, string>(
                         new LoginCommand
                         {
