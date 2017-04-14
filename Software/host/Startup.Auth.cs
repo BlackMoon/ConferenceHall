@@ -5,7 +5,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using domain.Login.Command;
-using domain.User;
 using host.Security.TokenProvider;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;

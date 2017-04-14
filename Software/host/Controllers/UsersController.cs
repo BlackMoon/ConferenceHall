@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using domain.Common.Query;
+using domain.SysUser;
+using domain.SysUser.Query;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
-using domain.User;
-using domain.User.Query;
-using domain.Common.Query;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace host.Controllers
 {
@@ -34,7 +31,7 @@ namespace host.Controllers
         [HttpGet("{id}")]
         public Task<SysUser> Get(int id)
         {
-            return _queryDispatcher.DispatchAsync<FindUserByIdQuery, SysUser>(new FindUserByIdQuery() { Id = id });
+            return _queryDispatcher.DispatchAsync<FindSysUserByIdQuery, SysUser>(new FindSysUserByIdQuery() { Id = id });
         }
 
         // POST api/users
