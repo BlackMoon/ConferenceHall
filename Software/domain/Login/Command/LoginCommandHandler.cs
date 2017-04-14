@@ -40,7 +40,7 @@ namespace domain.Login.Command
                 _dbManager.AddParameter("ppassword", command.Password);
 
                 await dbManagerAsync.OpenAsync();
-                await dbManagerAsync.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_logon");
+                await dbManagerAsync.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conf_hall.user_logon");
 
                 return true;
             }
