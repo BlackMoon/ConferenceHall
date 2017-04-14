@@ -20,9 +20,9 @@ namespace domain.Conference
         [Column("state")]
         public string State { get; set; }
         [Column("hall_id")]
-        public int? HallId { get; set; }
+        public Hall.Hall HallId { get; set; }
         [Column("hall_scheme_id")]
-        public int? HallSchemeId { get; set; }
+        public HallScheme.HallScheme HallSchemeId { get; set; }
     }
 
 }
