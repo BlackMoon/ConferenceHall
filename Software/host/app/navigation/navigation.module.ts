@@ -13,6 +13,6 @@ const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes), ViewsModule],
-    exports: [RouterModule]
+    exports: [RouterModule, ViewsModule]
 })
 export class NavigationModule { }

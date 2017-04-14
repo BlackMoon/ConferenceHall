@@ -12,8 +12,10 @@ import 'crypto-js';
 
 // PrimeNG
 import 'primeng/resources/primeng.min.css';
-import 'primeng/resources/themes/omega/theme.css';
 import 'primeng/primeng.js';
+
+//font-awesome
+import 'font-awesome/css/font-awesome.min.css';
 
 // RxJS
 import 'rxjs';

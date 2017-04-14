@@ -8,7 +8,7 @@ module.exports = {
     context: helpers.root('./app'),
     entry: {
         'app': './index.ts',
-        'theme': ['primeng/resources/primeng.css', 'primeng/resources/themes/omega/theme.css'],
+        'theme': 'primeng/resources/themes/omega/theme.css',
         'polyfills': './polyfills.ts',
         'vendor': './vendor.ts'
     },
@@ -28,7 +28,7 @@ module.exports = {
               loader: 'html'
           },
           {
-              test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+              test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?.*)?$/,
               loader: 'file?name=assets/[name].[hash].[ext]'
           },          
           {
