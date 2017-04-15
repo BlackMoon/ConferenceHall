@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +22,7 @@ namespace host.Controllers
         // GET api/users
         [HttpGet]
         public Task<IEnumerable<SysUser>> Get()
-        {
-            // todo _queryDispatcher.DispatchAsync<>()
-
+        {    
             return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<SysUser>>(new GetAllQuery());
         }
 

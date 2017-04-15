@@ -8,18 +8,17 @@ namespace domain.Employee
     {
         [Column("name")]
         public string Name { get; set; }
-
-        [Column("org_id")]
-        public Organization.Organization OrganizationId { get; set; }
-
+                
         [Column("job_title")]
-        public bool JobTitle { get; set; }
+        public string JobTitle { get; set; }
 
         [Column("phones_list")]
         public string[] PhonesList { get; set; }
 
-        [Column("emails_list")]
+        [Column("emails_list", TypeName = "Array | Varchar")]
         public string[] EmailsList { get; set; }
 
+
+        public Organization.Organization Organization { get; set; }
     }
 }
