@@ -1,5 +1,6 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, HostListener, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { HallService } from './hall.service';
 
@@ -7,17 +8,24 @@ import { HallService } from './hall.service';
     templateUrl: 'hall-list.html'
 })
 export class HallListComponent implements OnInit {
-    halls = [{ name: 'Создать', description: 'Новый халл' }];
+    halls = [];
 
-    constructor(private hallService: HallService) { }
+    constructor(private hallService: HallService,
+        private router: Router) { }
 
     ngOnInit() {
         
         this.hallService.get()
             .subscribe(halls => {
-               
-                this.halls = this.halls.concat(halls);
+                
+                this.halls = [{ name: 'Создать', description: 'Новый халл' }]
+                    .concat(halls);
             });
+    }
+
+    @HostListener('click', ['$event.target'])
+    details() {
+        debugger;
     }
 
 }

@@ -13,7 +13,7 @@ namespace host.Controllers
     [Route("api/[controller]")]
     public class HallsController : Controller
     {
-        private IQueryDispatcher _queryDispatcher;
+        private readonly IQueryDispatcher _queryDispatcher;
 
         public HallsController(IQueryDispatcher queryDispatcher)
         {
@@ -25,7 +25,6 @@ namespace host.Controllers
         public Task<IEnumerable<Hall>> Get()
         {
             // todo _queryDispatcher.DispatchAsync<>()
-
             return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Hall>>(new GetAllQuery());
         }
 
