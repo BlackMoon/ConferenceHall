@@ -1,6 +1,6 @@
-﻿<div style="position: absolute; height: 600px; width: 1200px">
-    <vertical-split-pane primary-component-minsize="100" primary-component-initialratio="0.2" secondary-component-minsize="300" separator-thickness="6">
-        <div class="split-pane-content-primary">
+﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
+    <vertical-split-pane primary-component-minsize="200" primary-component-initialratio="0.2" secondary-component-minsize="400" separator-thickness="6">
+        <div class="split-pane-content-primary" [ngStyle]="{'padding-right': '6px'}">
             <div class="w100">
                 <p-autoComplete [styleClass]="'w100'" [inputStyleClass]="'w100'" placeholder="Поиск по каталогу"></p-autoComplete>
             </div>
@@ -9,23 +9,17 @@
             </p-toolbar>
         </div>
         <div class="split-pane-content-secondary">
-            <p-toolbar>
+            <p-toolbar [styleClass]="'p0'">
                 <div class="ui-toolbar-group-left">
-                    <button pButton type="button" label="New" icon="fa-plus"></button>
-                    <button pButton type="button" label="Open" icon="fa-folder-open"></button>
-
-                    <i class="fa fa-bars"></i>
-
-                    <p-splitButton label="Save" icon="fa-check" ></p-splitButton>
+                    <button pButton type="button" label="Сохранить" icon="fa-floppy-o"></button>
+                    <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
                 </div>
-
                 <div class="ui-toolbar-group-right">
-                    <button pButton type="button" icon="fa-search"></button>
-                    <i class="fa fa-bars"></i>
-                    <button pButton type="button" icon="fa-refresh"></button>
-                    <button pButton type="button" icon="fa-trash"></button>
+                    <button pButton type="button" icon="fa-search-plus"></button><button pButton type="button" icon="fa-search-minus"></button><button pButton type="button" icon="fa-dot-circle-o" title="По центру"></button>
+                    <button pButton type="button" icon="fa-desktop" title="На весь экран"></button>
                 </div>
             </p-toolbar>
+            <svg #canvas></svg>
         </div>
     </vertical-split-pane>
 </div>
