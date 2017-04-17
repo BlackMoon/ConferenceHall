@@ -18,11 +18,17 @@ namespace domain.Conference
         [Column("date_end")]
         public DateTime? DateEnd { get; set; }
         [Column("state")]
-        public string State { get; set; }
+        public StateType State { get; set; }
         [Column("hall_id")]
-        public Hall.Hall HallId { get; set; }
+        public Hall.Hall Hall { get; set; }
         [Column("hall_scheme_id")]
-        public HallScheme.HallScheme HallSchemeId { get; set; }
+        public HallScheme.HallScheme HallScheme { get; set; }
     }
+
+    public enum StateType {
+         State0 = 0,
+         State1 = 1,
+         State2 = 2
+     };
 
 }
