@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using domain.Common;
+﻿using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace domain.Hall
@@ -11,6 +8,7 @@ namespace domain.Hall
     {
         [Column("name")]
         public string Name { get; set; }
+
         [Column("description")]
         public string Description { get; set; }
     }
