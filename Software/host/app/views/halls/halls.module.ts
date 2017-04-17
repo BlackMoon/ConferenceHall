@@ -1,7 +1,7 @@
 ﻿import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DataListModule } from 'primeng/primeng';
+import { NgModule } from '@angular/core';
+import { DataGridModule, PanelModule } from 'primeng/primeng';
 
 import { HallListComponent } from './hall-list';
 import { HallDetailComponent } from './hall-detail';
@@ -10,8 +10,8 @@ import { HallService } from './hall.service';
 
 @NgModule({
     declarations: [HallDetailComponent, HallListComponent],
-    exports: [DataListModule],
-    imports: [CommonModule, DataListModule, FormsModule, HallRoutingModule ],
+    exports: [DataGridModule],
+    imports: [CommonModule, DataGridModule, FormsModule, HallRoutingModule, PanelModule ],
     providers: [HallService]
 })
 export class HallsModule { }

@@ -352,7 +352,7 @@ a {
 }
 
 .img1 {
-    background: url("images/bg.jpg") 50% center / cover no-repeat;
+    background: url(images/bg.jpg) 50% center / cover no-repeat;
 }
 
 /*****
