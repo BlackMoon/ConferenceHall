@@ -19,11 +19,6 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.js$/,
-                loader: "babel-loader",
-                include: helpers.root('./node_modules/angular-split')
-            },
-            {
                 test: /\.ts$/,
                 loaders: ['awesome-typescript-loader', 'angular2-template-loader']
             },

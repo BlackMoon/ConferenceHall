@@ -1,12 +1,12 @@
 ﻿import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
-//import { AngularSplitModule } from 'angular-split';
-import { SplitButtonModule, ToolbarModule } from 'primeng/primeng';
+import { SplitPaneModule } from 'ng2-split-pane';
+import { AutoCompleteModule, SplitButtonModule, ToolbarModule } from 'primeng/primeng';
 import * as views from './index';
 
 @NgModule({
     declarations: [Object.values(views)],
-    exports: [ToolbarModule],
-    imports: [ RouterModule, SplitButtonModule, ToolbarModule]
+    exports: [ AutoCompleteModule, SplitPaneModule, ToolbarModule],
+    imports: [AutoCompleteModule, RouterModule, SplitButtonModule, SplitPaneModule, ToolbarModule]
 })
 export class ViewsModule { }

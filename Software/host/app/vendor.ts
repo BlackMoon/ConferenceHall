@@ -7,7 +7,7 @@ import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
 import '@angular/router';
 import 'angular2-jwt';
-import 'angular-split';
+import 'ng2-split-pane';
 
 // CryptoJS
 import 'crypto-js';

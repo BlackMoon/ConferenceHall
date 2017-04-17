@@ -1,7 +1,14 @@
-﻿<div style="position: absolute; height: 100%; width: 1200px">
-    <div class="ui-g" style="height: 100%">
-        <div class="ui-g-2 ui-g-nopad">l</div>
-        <div class="ui-g-9 ui-g-nopad">
+﻿<div style="position: absolute; height: 600px; width: 1200px">
+    <vertical-split-pane primary-component-minsize="100" primary-component-initialratio="0.2" secondary-component-minsize="300" separator-thickness="6">
+        <div class="split-pane-content-primary">
+            <div class="w100">
+                <p-autoComplete [styleClass]="'w100'" [inputStyleClass]="'w100'" placeholder="Поиск по каталогу"></p-autoComplete>
+            </div>
+            <p-toolbar [styleClass]="'p0'">
+                <button pButton type="button" icon="fa-home"></button><button pButton type="button" icon="fa-undo"></button><button pButton type="button" icon="fa-th-large"></button><button pButton type="button" icon="fa-th"></button>
+            </p-toolbar>
+        </div>
+        <div class="split-pane-content-secondary">
             <p-toolbar>
                 <div class="ui-toolbar-group-left">
                     <button pButton type="button" label="New" icon="fa-plus"></button>
@@ -9,7 +16,7 @@
 
                     <i class="fa fa-bars"></i>
 
-                    <p-splitButton label="Save" icon="fa-check" [model]="items"></p-splitButton>
+                    <p-splitButton label="Save" icon="fa-check" ></p-splitButton>
                 </div>
 
                 <div class="ui-toolbar-group-right">
@@ -20,6 +27,5 @@
                 </div>
             </p-toolbar>
         </div>
-        <div class="ui-g-nopad" style="width: 39px">r</div>
-    </div>
+    </vertical-split-pane>
 </div>
