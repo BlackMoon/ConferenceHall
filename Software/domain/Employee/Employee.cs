@@ -12,11 +12,11 @@ namespace domain.Employee
         [Column("job_title")]
         public string JobTitle { get; set; }
 
-        [Column("phones_list")]
-        public string[] PhonesList { get; set; }
-
         [Column("emails_list")]
         public string[] EmailsList { get; set; }
+
+        [Column("phones_list")]
+        public string[] PhonesList { get; set; }
 
         public Organization.Organization Organization { get; set; }
     }
