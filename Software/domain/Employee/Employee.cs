@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace domain.Employee
 {
     [Table("conf_hall.employees")]
-    public class Employee : KeyObject, IComponent
+    public class Employee : KeyObject
     {
         [Column("name")]
         public string Name { get; set; }
@@ -12,11 +12,11 @@ namespace domain.Employee
         [Column("job_title")]
         public string JobTitle { get; set; }
 
-        [Column("phones_list", TypeName = "Array | Varchar")]
-        public string[] PhonesList { get; set; }
-
-        [Column("emails_list", TypeName = "Array | Varchar")]
+        [Column("emails_list")]
         public string[] EmailsList { get; set; }
+
+        [Column("phones_list")]
+        public string[] PhonesList { get; set; }
 
         public Organization.Organization Organization { get; set; }
     }

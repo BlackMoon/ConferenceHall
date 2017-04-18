@@ -1,4 +1,4 @@
-﻿export class UserModel {
+﻿export class SysUserModel {
     role: string;
     name: string;
 }

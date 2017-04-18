@@ -1,13 +1,14 @@
-﻿import { NgModule } from "@angular/core";
+﻿import { CommonModule } from '@angular/common';
+import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
-import { AngularSplitModule } from 'angular-split';
-import { SplitButtonModule, ToolbarModule } from 'primeng/primeng';
+import { SplitPaneModule } from 'ng2-split-pane';
+import { AutoCompleteModule, SplitButtonModule, ToolbarModule } from 'primeng/primeng';
+import { HallsModule } from './halls/halls.module';
 import * as views from './index';
 
-
 @NgModule({
-    declarations: [views.EditorView, views.HomeView, views.MeetingsView, views.MembersView],
-    exports: [AngularSplitModule, ToolbarModule],
-    imports: [AngularSplitModule, RouterModule, SplitButtonModule, ToolbarModule]
+    declarations: [Object.values(views)],
+    exports: [AutoCompleteModule, SplitPaneModule, ToolbarModule],
+    imports: [AutoCompleteModule, CommonModule, HallsModule, RouterModule, SplitButtonModule, SplitPaneModule, ToolbarModule]
 })
 export class ViewsModule { }

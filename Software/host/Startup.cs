@@ -87,7 +87,7 @@ namespace host
                 .AddConsole(Configuration.GetSection("Logging"))
                 .AddDebug();
 
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
             {
                 app.UseCors("AllowAll");
             }
