@@ -1,11 +1,15 @@
 ﻿import { JsonProperty } from '../common/map-utils';
 
-/**
- * Модель. Конфенец-халл
- */
 
+/**
+ * Модель. Размер
+ */
 export class Size {
+
+    @JsonProperty('x')
     h: number;
+
+    @JsonProperty('y')
     w: number;
 
     constructor() {
@@ -13,9 +17,12 @@ export class Size {
         this.h = undefined;
     }
 
-    public toString1 = (): string => `(Размер: ${this.w} x ${this.h})`;
+    public toString = (): string => `(Размер: ${this.w} x ${this.h})`;
 }
 
+/**
+ * Модель. Конфенец-халл
+ */
 export class HallModel {
    
     id: number;
