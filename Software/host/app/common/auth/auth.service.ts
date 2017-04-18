@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { JwtHelper } from 'angular2-jwt';
 import { Observable } from 'rxjs';
-import { UserModel } from '../models/index';
+import { SysUserModel } from '../../models/index';
 import * as CryptoJS from 'crypto-js';
 
 const secretUrl = '/secret';
@@ -59,8 +59,8 @@ export class AuthService {
         return (token !== null) && !this.jwtHelper.isTokenExpired(token);
     }
 
-    get LoggedUser(): UserModel {
-        var user: UserModel = new UserModel(),
+    get LoggedUser(): SysUserModel {
+        var user: SysUserModel = new SysUserModel(),
             token = this.storage.getItem(TokenKey);
 
         if (token != null) {

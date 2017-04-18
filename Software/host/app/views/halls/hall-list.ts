@@ -15,7 +15,7 @@ export class HallListComponent implements OnInit {
 
     ngOnInit() {
         
-        this.hallService.get()
+        this.hallService.getAll()
             .subscribe(halls => {
                 
                 this.halls = [{ name: 'Создать', description: 'Новый халл' }]

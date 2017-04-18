@@ -2,20 +2,41 @@
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
+import { IDataService } from '../../common/data-service';
 import { HallModel } from '../../models/index';
 
-const url = "/api/halls";
+const url = "http://webtest.aquilon.ru:810/api/halls";
 
 @Injectable()
-export class HallService {
+export class HallService implements IDataService<HallModel> {
 
     constructor(private http: Http) {}
 
-    get(): Observable<any> {
+    add(hall): Observable<any> {
+        return Observable.of(null);
+    }
+
+    delete(key): Observable<any> {
+        return Observable.of(null);
+    }
+
+    getAll(): Observable<any> {
 
         return this.http
             .get(url)
             .map((r: Response) => r.json());
 
+    }
+
+    get(key): Observable<any> {
+
+        return this.http
+            .get(url)
+            .map((r: Response) => r.json());
+
+    }
+
+    update(hall): Observable<any> {
+        return Observable.of(null);
     }
 }

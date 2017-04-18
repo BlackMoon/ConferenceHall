@@ -1,8 +1,8 @@
 ﻿import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from "./app.component";
-import { AuthModule } from "./auth/auth.module";
-import { NavigationModule } from './navigation/navigation.module';
+import { AuthModule } from "./common/auth/auth.module";
+import { NavigationModule } from './common/navigation/navigation.module';
 
 @NgModule({    
     bootstrap: [AppComponent],
