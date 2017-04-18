@@ -9,11 +9,10 @@
     <Content Remove="package.json" />
     <Content Remove="tsconfig.json" />
     <Content Remove="tslint.json" />
-    <Content Remove="typings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="app\auth\" />
+    <Folder Include="app\common\auth\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
@@ -40,7 +39,6 @@
     <None Include="package.json" />
     <None Include="tsconfig.json" />
     <None Include="tslint.json" />
-    <None Include="typings.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\kit\Kit.Core\Kit.Core.csproj" />

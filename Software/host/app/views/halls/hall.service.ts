@@ -1,8 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
-
 import { IDataService } from '../../common/data-service';
+//import { MapUtils } from '../../common/map-utils';
 import { HallModel } from '../../models/index';
 
 const url = "http://webtest.aquilon.ru:810/api/halls";
@@ -24,8 +24,12 @@ export class HallService implements IDataService<HallModel> {
 
         return this.http
             .get(url)
-            .map((r: Response) => r.json());
-
+            .map((r: Response) => {
+                debugger;
+                
+                //let a = MapUtils.deserialize(HallModel, r.json());
+                return r.json();
+            });
     }
 
     get(key): Observable<any> {
