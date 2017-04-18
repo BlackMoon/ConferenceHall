@@ -2,27 +2,22 @@
 import { Observable } from 'rxjs';
 import { HallService } from './hall.service';
 
-
 @Component({
     styleUrls: [`hall-list.css`],
     templateUrl: 'hall-list.html'
 })
 export class HallListComponent implements OnInit {
 
-    halls = [{ name: '1', size: {w:1, h:2} }];
+    halls = [{ name: 'Создать', description: 'Новый халл' }];
 
     constructor(private hallService: HallService) { }
 
     ngOnInit() {
-        debugger;
-
-        //Reflect.metadata
 
         this.hallService.getAll()
             .subscribe(halls => {
                 debugger;
-                /*this.halls = [{ name: 'Создать', description: 'Новый халл' }]
-                    .concat(halls);*/
+                this.halls = this.halls.concat(halls);
             });
     }
 }
