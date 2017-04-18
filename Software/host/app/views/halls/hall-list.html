@@ -6,9 +6,10 @@
         <ng-template let-hall pTemplate="item">
             <div style="padding:3px" class="ui-g-8 ui-md-2">
                 <p-panel [header]="hall.name" [style]="{'cursor':'pointer', 'text-align':'center'}">
-                    <img src="/assets/office_64x64.png">
-                    <div class="hall-detail">{{hall.description}}</div>
-                    <i>{{hall.size ? hall.size.area() : '&nbsp;'}}</i>
+                    
+                        <img src="/assets/office_64x64.png">
+                        <div class="hall-detail">{{hall.description}}</div>
+                        <i>{{hall.size ? hall.size.area() : '&nbsp;'}}</i>
                     
                 </p-panel>
             </div>
