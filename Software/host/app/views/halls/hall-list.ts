@@ -14,10 +14,8 @@ export class HallListComponent implements OnInit {
 
     ngOnInit() {
 
-        this.hallService.getAll()
-            .subscribe(halls => {
-                debugger;
-                this.halls = this.halls.concat(halls);
-            });
+        this.hallService
+            .getAll()
+            .subscribe(halls => this.halls = this.halls.concat(halls));
     }
 }

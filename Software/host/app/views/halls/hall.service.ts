@@ -2,7 +2,8 @@
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { IDataService } from '../../common/data-service';
-import { MapUtils } from '../../common/map-utils';
+import MapUtils from '../../common/map-utils';
+
 import { HallModel } from '../../models/index';
 
 const url = "http://webtest.aquilon.ru:810/api/halls";

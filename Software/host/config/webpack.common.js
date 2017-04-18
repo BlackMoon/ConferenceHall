@@ -40,6 +40,7 @@ module.exports = {
     plugins: [     
 
       new CopyWebpackPlugin([
+            { from: './images', to: './assets', ignore: 'bg.jpg' },
             { from: 'favicon.ico' }
         ]),
 

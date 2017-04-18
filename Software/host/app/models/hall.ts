@@ -17,7 +17,7 @@ export class Size {
         this.h = undefined;
     }
 
-    public toString = (): string => `(Размер: ${this.w} x ${this.h})`;
+    public area = (): string => `(Размеры: ${this.w}м x ${this.h}м)`;
 }
 
 /**
