@@ -1,4 +1,5 @@
-﻿import { JsonProperty } from '../common/map-utils';
+﻿import { KeyModel } from './index';
+import { JsonProperty } from '../common/map-utils';
 
 
 /**
@@ -23,9 +24,8 @@ export class Size {
 /**
  * Модель. Конфенец-халл
  */
-export class HallModel {
+export class HallModel extends KeyModel {
    
-    id: number;
     name: string;
     description?: string;
 
@@ -33,7 +33,9 @@ export class HallModel {
     size?: Size;
 
     constructor() {
-        this.id = undefined;
+
+        super();
+        
         this.name = undefined;
         this.description = undefined;
         this.size = undefined;

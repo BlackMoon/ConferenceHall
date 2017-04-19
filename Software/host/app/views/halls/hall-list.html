@@ -1,15 +1,22 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <p-dataGrid [value]="halls" [rows]="5">
+    <p-dataGrid [value]="halls" [rows]="2">
         <p-header>
             Halls
         </p-header>
         <ng-template let-hall pTemplate="item">
             <div style="padding:3px" class="ui-g-8 ui-md-2">
-                <p-panel [header]="hall.name" [style]="{'cursor':'pointer', 'text-align':'center'}">
-                    
-                        <img src="/assets/office_64x64.png">
-                        <div class="hall-detail">{{hall.description}}</div>
-                        <i>{{hall.size ? hall.size.area() : '&nbsp;'}}</i>
+                <p-panel [style]="{'text-align':'center'}">
+                    <p-header>
+                        <div class="hall-header">
+                            {{hall.name}}
+                            <i *ngIf="hall.id" class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" (click)="removeHall(hall.id)"></i>
+                        </div>
+
+                    </p-header>
+
+                    <img src="/assets/office_64x64.png">
+                    <div class="hall-detail">{{hall.description}}</div>
+                    <i>{{hall.size ? hall.size.area() : '&nbsp;'}}</i>
                     
                 </p-panel>
             </div>

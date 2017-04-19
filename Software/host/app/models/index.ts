@@ -1,3 +1,3 @@
-﻿export * from "./keyobject";
-export * from "./hall";
-export * from "./sysuser";
+﻿export * from "./keyobject.model";
+export * from "./hall.model";
+export * from "./sysuser.model";
