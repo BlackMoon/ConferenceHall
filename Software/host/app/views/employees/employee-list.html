@@ -1,0 +1,25 @@
+﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
+    <p-dataGrid [value]="employees" [rows]="2">
+        <p-header>
+            Employees
+        </p-header>
+        <ng-template let-employee pTemplate="item">
+            <div style="padding:3px" class="ui-g-8 ui-md-2">
+                <p-panel [style]="{'text-align':'center'}">
+                    <p-header>
+                        <div class="employee-header">
+                            {{employee.name }}
+                            <i *ngIf="employee.id" class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" (click)="removeEmployee(employee.id)"> </i>
+                        </div>
+
+                    </p-header>
+
+                    <img src="/assets/office_64x64.png">
+                    <div class="employee-detail"> {{employee.description }}</div>
+                    <i> {{employee.size ? employee.size.area() : '&nbsp;' }}</i>
+
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataGrid>
+</div>
