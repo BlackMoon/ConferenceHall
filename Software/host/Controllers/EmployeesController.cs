@@ -1,6 +1,5 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -20,33 +19,33 @@ namespace host.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        // GET api/employes
+        // GET api/employees
         [HttpGet]
         public Task<IEnumerable<Employee>> Get()
         {
             return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Employee>>(new GetAllQuery());
         }
 
-        // GET api/employes/5
+        // GET api/employees/5
         [HttpGet("{id}")]
         public Task<Employee> Get(int id)
         {
             return _queryDispatcher.DispatchAsync<FindEmployeByIdQuery, Employee>(new FindEmployeByIdQuery() { Id = id });
         }
 
-        // POST api/employes
+        // POST api/employees
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/employes/5
+        // PUT api/employees/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/employes/5
+        // DELETE api/employees/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
