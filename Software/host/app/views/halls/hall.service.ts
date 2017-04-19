@@ -31,9 +31,9 @@ export class HallService implements IDataService<HallModel> {
     }
 
     get(key): Observable<any> {
-
+        debugger;
         return this.http
-            .get(url)
+            .get(`${url}\\${key}`)
             .map((r: Response) => r.json());
 
     }
