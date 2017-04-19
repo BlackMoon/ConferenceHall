@@ -24,7 +24,9 @@ export class HallListComponent implements OnInit {
 
         this.hallService
             .getAll()
-            .subscribe(halls => this.halls = this.halls.concat(halls));
+            .subscribe(
+                halls => this.halls = this.halls.concat(halls),
+                error => console.log(error));
     }
 
     editHall(id?: number) {
@@ -45,11 +47,13 @@ export class HallListComponent implements OnInit {
                 
                 this.hallService
                     .delete(id)
-                    .subscribe(_ => {
+                    .subscribe(
+                        _ => {
                     
-                        let ix = this.halls.findIndex(h => h.id === id);
-                        this.halls.splice(ix, 1);
-                    })
+                            let ix = this.halls.findIndex(h => h.id === id);
+                            this.halls.splice(ix, 1);
+                        },
+                        error => console.log(error))
             
         });
     }

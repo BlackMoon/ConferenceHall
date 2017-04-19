@@ -27,6 +27,9 @@ export function JsonProperty<T>(metadata?: IJsonMetaData<T> | string): any {
     }
 }
 
+/**
+ * JSON to class mapper
+ */
 export default class MapUtils {
 
     static isArray(object) {

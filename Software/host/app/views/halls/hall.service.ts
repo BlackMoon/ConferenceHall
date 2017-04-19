@@ -1,10 +1,11 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { handleResponseError } from '../../common/http-error';
 import { IDataService } from '../../common/data-service';
-import MapUtils from '../../common/map-utils';
-
 import { HallModel } from '../../models/index';
+
+import MapUtils from '../../common/map-utils';
 
 const url = "/api/halls";
 //const url = "http://webtest.aquilon.ru:810/api/halls";
@@ -15,11 +16,17 @@ export class HallService implements IDataService<HallModel> {
     constructor(private http: Http) {}
 
     add(hall): Observable<any> {
-        return Observable.of(null);
+
+        return this.http
+            .post(url, hall)
+            .catch(handleResponseError);
     }
 
     delete(key): Observable<any> {
-        return Observable.of(null);
+
+        return this.http
+            .delete(`${url}\\${key}`)
+            .catch(handleResponseError);
     }
 
     getAll(): Observable<any> {
@@ -28,7 +35,8 @@ export class HallService implements IDataService<HallModel> {
             .get(url)
             .map((r: Response) => r
                 .json()
-                .map(h => MapUtils.deserialize(HallModel, h)));
+                .map(h => MapUtils.deserialize(HallModel, h)))
+            .catch(handleResponseError);
     }
 
     get(key): Observable<any> {
@@ -40,7 +48,8 @@ export class HallService implements IDataService<HallModel> {
                 let hall = MapUtils.deserialize(HallModel, r.json());
                 
                 return hall;
-            });
+            })
+            .catch(handleResponseError);
 
     }
 

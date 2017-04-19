@@ -1,20 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using domain.Common.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Hall;
 using domain.Hall.Query;
 using domain.Common.Query;
+using domain.Hall.Command;
+using Kit.Core.CQRS.Command;
 
 namespace host.Controllers
 {
     [Route("api/[controller]")]
     public class HallsController : Controller
     {
+        private readonly ICommandDispatcher _commandDispatcher;
         private readonly IQueryDispatcher _queryDispatcher;
 
-        public HallsController(IQueryDispatcher queryDispatcher)
+        public HallsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
         {
+            _commandDispatcher = commandDispatcher;
             _queryDispatcher = queryDispatcher;
         }
 
@@ -34,20 +39,23 @@ namespace host.Controllers
 
         // POST api/halls
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Task Post([FromBody]CreateHallCommand value)
         {
+            return _commandDispatcher.DispatchAsync<CreateHallCommand, long>(value);
         }
 
         // PUT api/halls/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public Task Put(int id, [FromBody]Hall value)
         {
+            return _commandDispatcher.DispatchAsync<Hall, bool>(value);
         }
 
         // DELETE api/halls/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public Task Delete(int id)
         {
+            return _commandDispatcher.DispatchAsync<DeleteObjectByIdCommand, bool>(new DeleteObjectByIdCommand() {Id = id});
         }
     }
 }
