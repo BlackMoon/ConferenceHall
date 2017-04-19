@@ -31,10 +31,14 @@ export class HallService implements IDataService<HallModel> {
     }
 
     get(key): Observable<any> {
-
+        
         return this.http
-            .get(url)
-            .map((r: Response) => r.json());
+            .get(`${url}\\${key}`)
+            .map((r: Response) => {
+                let hall = MapUtils.deserialize(HallModel, r.json());
+                hall.schemes = [{ id: 1, name: 'First' }, { id: 2, name: 'Second' }];
+                return hall;
+            });
 
     }
 

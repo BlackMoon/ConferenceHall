@@ -3,7 +3,7 @@
         <div id="SITE_BACKGROUND"></div>
         <div id="SITE_ROOT" class="SITE_ROOT" style="width:980px;">
             <div id="masterPage" style="width: 980px; position: static; top: 0px; height: 1912px;">
-                
+
                 <div id="SITE_HEADER" style="position: absolute; width: 980px; top: 0px; height: 186px; left: 0px;" class="s0">
                     <div id="SITE_HEADERscreenWidthBackground" class="s0screenWidthBackground" style="width: 1903px; left: -462px;">
                         <div class="s0_bg"></div>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="SITE_FOOTER" style="position: absolute; width: 980px; left: 0px; height: 100px; bottom: auto; top: 842px;" class="s7_footer s7" data-state=" ">
                     <div id="SITE_FOOTERscreenWidthBackground" class="s7screenWidthBackground" style="width: 1903px; left: -462px;"></div>
                     <div id="SITE_FOOTERcenteredContent" class="s7centeredContent">
@@ -124,7 +124,7 @@
                                             <div style="left: 20px; width: 807px; position: absolute; top: 25px;" class="s2" id="comp-iirm0a5r">
                                                 <p class="font_8">
                                                     <span class="color_11">
-                                                        © 2017 Aquilon Software Technologies. 
+                                                        © 2017 Aquilon Software Technologies.
                                                     </span>
                                                 </p>
                                             </div>
@@ -201,4 +201,11 @@
 
         </div>
 
+    </div>
+    <p-confirmDialog #cd width="425">
+        <p-footer>
+            <button type="button" pButton icon="fa-close" label="Нет" (click)="cd.reject()"></button>
+            <button type="button" pButton icon="fa-check" label="Да" (click)="cd.accept()"></button>
+        </p-footer>
+    </p-confirmDialog>
 </div>
