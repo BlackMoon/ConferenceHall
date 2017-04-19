@@ -17,8 +17,8 @@ namespace domain.Hall
         [Column("description")]
         public string Description { get; set; }
 
-        [Column("size")]
-        public NpgsqlTypes.NpgsqlPoint Size { get; set; }
+        //[Column("size")]
+        //public NpgsqlTypes.NpgsqlPoint Size { get; set; }
 
         public IList<Scheme> Schemes { get; set; }
     }
