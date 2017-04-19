@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="Organization\Command\" />
     <Folder Include="Organization\Query\" />
   </ItemGroup>

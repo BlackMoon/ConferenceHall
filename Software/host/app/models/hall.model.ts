@@ -22,7 +22,7 @@ export class Size {
 }
 
 /**
- * Модель. Схема халла
+ * Модель. Схема холла
  */
 export class HallSchemeModel extends KeyModel {
     name: string;
@@ -30,7 +30,7 @@ export class HallSchemeModel extends KeyModel {
 
 
 /**
- * Модель. Конференц-халл
+ * Модель. Конференц-холл
  */
 export class HallModel extends KeyModel {
    

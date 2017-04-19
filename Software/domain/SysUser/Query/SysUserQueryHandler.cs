@@ -29,7 +29,7 @@ namespace domain.SysUser.Query
             if (dbManagerAsync != null)
             {
                 dbManagerAsync.OpenAsync();
-                return null;// DbManager.DbConnection.QuerySingleOrDefaultAsync<SysUser>($"{SelectSysUser} WHERE u.login = @login", new { login = query.Login });
+                return DbManager.DbConnection.QuerySingleOrDefaultAsync<SysUser>($"{SelectSysUser} WHERE u.login = @login", new { login = query.Login });
             }
 
             throw new NotImplementedException();

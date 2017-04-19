@@ -6,7 +6,8 @@ import MapUtils from '../../common/map-utils';
 
 import { HallModel } from '../../models/index';
 
-const url = "http://webtest.aquilon.ru:810/api/halls";
+const url = "/api/halls";
+//const url = "http://webtest.aquilon.ru:810/api/halls";
 
 @Injectable()
 export class HallService implements IDataService<HallModel> {
