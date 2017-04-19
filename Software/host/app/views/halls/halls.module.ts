@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { ButtonModule, DataGridModule, PanelModule } from 'primeng/primeng';
 
-import { HallListComponent } from './hall-list';
-import { HallDetailComponent } from './hall-detail';
+import { HallListComponent } from './hall-list.component';
+import { HallDetailComponent } from './hall-detail.component';
 import { HallRoutingModule } from './halls-routing.module';
 import { HallService } from './hall.service';
 
