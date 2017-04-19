@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { HallModel, HallSchemeModel } from '../../models';
+import { HallModel, SchemeModel } from '../../models';
 import { HallService } from './hall.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { HallService } from './hall.service';
 export class HallDetailComponent implements OnInit {
 
     hallform: FormGroup;
-    schemes: HallSchemeModel[];
+    schemes: SchemeModel[];
 
     constructor(
         private fb: FormBuilder,

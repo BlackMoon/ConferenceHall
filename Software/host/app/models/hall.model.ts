@@ -24,8 +24,14 @@ export class Size {
 /**
  * Модель. Схема холла
  */
-export class HallSchemeModel extends KeyModel {
+export class SchemeModel extends KeyModel {
     name: string;
+
+    constructor() {
+        super();
+
+        this.name = undefined;
+    }
 }
 
 
@@ -40,8 +46,8 @@ export class HallModel extends KeyModel {
     @JsonProperty('size')
     size?: Size;
 
-    @JsonProperty({ clazz: HallSchemeModel })
-    schemes?: HallSchemeModel[];
+    @JsonProperty({ clazz: SchemeModel })
+    schemes?: SchemeModel[];
 
     constructor() {
 
