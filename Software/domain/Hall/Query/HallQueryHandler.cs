@@ -10,7 +10,7 @@ namespace domain.Hall.Query
 {
     public class HallQueryHandler: KeyObjectQueryHandler<FindHallByIdQuery, Hall>
     {
-        private const string SelectHall = "SELECT h.*, s.* FROM conf_hall.halls h LEFT JOIN conf_hall.hall_scheme s ON s.hall_id = h.id";
+        private const string SelectHall = "SELECT h.*, s.id, s.name FROM conf_hall.halls h LEFT JOIN conf_hall.hall_scheme s ON s.hall_id = h.id";
 
         public HallQueryHandler(IDbManager dbManager) : base(dbManager)
         {

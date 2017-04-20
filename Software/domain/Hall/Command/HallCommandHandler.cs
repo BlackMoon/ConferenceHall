@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
+using domain.Common.Command;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
@@ -8,19 +8,13 @@ using Mapster;
 
 namespace domain.Hall.Command
 {
-    public class HallCommandHandler : 
+    public class HallCommandHandler : KeyObjectCommandHandler,
         ICommandHandlerWithResult<CreateHallCommand, long>,
         ICommandHandlerWithResult<DeleteHallCommand, bool>,
         ICommandHandlerWithResult<Hall, bool>
     {
-        private readonly IDbManager _dbManager;
-
-        private readonly StringBuilder _columnList = new StringBuilder(null);
-        private readonly StringBuilder _parameterList = new StringBuilder(null);
-
-        public HallCommandHandler(IDbManager dbManager)
+        public HallCommandHandler(IDbManager dbManager) : base(dbManager)
         {
-            _dbManager = dbManager;
         }
 
         /// <summary>
@@ -30,22 +24,21 @@ namespace domain.Hall.Command
         /// <returns></returns>
         public long Execute(CreateHallCommand command)
         {
-            _dbManager.Open();
+            DbManager.Open();
 
             Hall hall = new Hall();
-            return _dbManager.DbConnection.Insert(command.Adapt(hall));
+            return DbManager.DbConnection.Insert(command.Adapt(hall));
         }
 
         public async Task<long> ExecuteAsync(CreateHallCommand command)
         {
-            IDbManagerAsync dbManagerAsync = _dbManager as IDbManagerAsync;
+            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
             if (dbManagerAsync != null)
             {
                 await dbManagerAsync.OpenAsync();
 
                 Hall hall = new Hall();
-                //var l = _dbManager.DbConnection.Insert(command.Adapt(hall));
-                return await _dbManager.DbConnection.InsertAsync(command.Adapt(hall));
+                return await DbManager.DbConnection.InsertAsync(command.Adapt(hall));
             }
 
             throw new NotImplementedException();
@@ -58,19 +51,19 @@ namespace domain.Hall.Command
         /// <returns></returns>
         public  bool Execute(DeleteHallCommand command)
         {
-            _dbManager.Open();
-            return _dbManager.DbConnection.Delete(new Hall() {Id = command.Id});
+            DbManager.Open();
+            return DbManager.DbConnection.Delete(new Hall() {Id = command.Id});
         }
 
         public async Task<bool> ExecuteAsync(DeleteHallCommand command)
         {
-            IDbManagerAsync dbManagerAsync = _dbManager as IDbManagerAsync;
+            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
             if (dbManagerAsync != null)
             {
                 await dbManagerAsync.OpenAsync();
 
                 Hall hall = new Hall();
-                return await _dbManager.DbConnection.DeleteAsync(command.Adapt(hall));
+                return await DbManager.DbConnection.DeleteAsync(command.Adapt(hall));
             }
 
             throw new NotImplementedException();
@@ -84,17 +77,17 @@ namespace domain.Hall.Command
 
         public bool Execute(Hall command)
         {
-            _dbManager.Open();
-            return true;//_dbManager.DbConnection.Update(command);
+            DbManager.Open();
+            return DbManager.DbConnection.Update(command);
         }
 
         public async Task<bool> ExecuteAsync(Hall command)
         {
-            IDbManagerAsync dbManagerAsync = _dbManager as IDbManagerAsync;
+            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
             if (dbManagerAsync != null)
             {
                 await dbManagerAsync.OpenAsync();
-                //return await _dbManager.DbConnection.UpdateAsync(command);
+                return await DbManager.DbConnection.UpdateAsync(command);
             }
 
             throw new NotImplementedException();

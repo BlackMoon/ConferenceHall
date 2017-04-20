@@ -820,7 +820,7 @@ public partial class PostgresAdapter : ISqlAdapter
 
     public void AppendColumnNameEqualsValue(StringBuilder sb, string columnName)
     {
-        sb.AppendFormat("\"{0}\" = @{1}", columnName, columnName);
+        sb.AppendFormat("{0} = @{1}", columnName, columnName);
     }
 }
 

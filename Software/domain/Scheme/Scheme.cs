@@ -11,5 +11,9 @@ namespace domain.Scheme
     {
         [Column("name")]
         public string Name { get; set; }
+
+        [Column("plan")]
+        public byte[] Plan { get; set; }
+
     }
 }
