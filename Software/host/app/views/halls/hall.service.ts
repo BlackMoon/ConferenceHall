@@ -7,8 +7,8 @@ import { HallModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-const url = "/api/halls";
-//const url = "http://webtest.aquilon.ru:810/api/halls";
+//const url = "/api/halls";
+const url = "http://webtest.aquilon.ru:810/api/halls";
 
 @Injectable()
 export class HallService implements IDataService<HallModel> {
@@ -48,6 +48,9 @@ export class HallService implements IDataService<HallModel> {
     }
 
     update(hall): Observable<any> {
-        return Observable.of(null);
+
+        return this.http
+            .put(`${url}\\${hall.id}`, hall)
+            .catch(handleResponseError);
     }
 }

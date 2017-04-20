@@ -1,18 +1,5 @@
-﻿import { KeyModel } from './index';
+﻿import { KeyModel, SchemeModel } from './index';
 import { JsonProperty } from '../common/map-utils';
-
-/**
- * Модель. Схема холла
- */
-export class SchemeModel extends KeyModel {
-    name: string;
-
-    constructor() {
-        super();
-
-        this.name = undefined;
-    }
-}
 
 /**
  * Модель. Конференц-холл

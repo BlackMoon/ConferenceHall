@@ -2,15 +2,17 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { AutoCompleteModule, ButtonModule, DataGridModule, DataListModule, FieldsetModule, InputTextModule, InputTextareaModule, PanelModule, SpinnerModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
-import { HallDetailComponent } from './hall-detail.component';
-import { HallListComponent } from './hall-list.component';
-import { HallRoutingModule } from './halls-routing.module';
-import { HallService } from './hall.service';
-import { SchemesModule } from "../schemes/schemes.module";
+import { SplitPaneModule } from 'ng2-split-pane';
+
+import { SchemeDetailComponent } from "./scheme-detail.component";
+import { SchemeListComponent } from "./scheme-list.component";
+import { SchemeRoutingModule } from './schemes-routing.module';
+import { SchemeService } from './scheme.service';
+
 
 @NgModule({
-    declarations: [HallDetailComponent, HallListComponent],
-    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule],
+    declarations: [SchemeDetailComponent, SchemeListComponent],
+    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SchemeListComponent, SpinnerModule],
     imports: [
         AutoCompleteModule,
         ButtonModule,
@@ -19,15 +21,15 @@ import { SchemesModule } from "../schemes/schemes.module";
         DataListModule,
         FieldsetModule,
         FormsModule,
-        HallRoutingModule,
         InputTextModule,
         InputTextareaModule,
         PanelModule,
         ReactiveFormsModule,
-        SchemesModule, 
+        SchemeRoutingModule,
         SpinnerModule,
+        SplitPaneModule,
         TabViewModule,
         ToolbarModule],
-    providers: [HallService]
+    providers: [SchemeService]
 })
-export class HallsModule { }
+export class SchemesModule { }
