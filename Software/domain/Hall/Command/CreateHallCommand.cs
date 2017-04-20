@@ -3,6 +3,9 @@ using Kit.Core.CQRS.Command;
 
 namespace domain.Hall.Command
 {
+    /// <summary>
+    /// Команда. Создание конференц-холла
+    /// </summary>
     public class CreateHallCommand : ICommand
     {
         [Column("name")]

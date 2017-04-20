@@ -27,7 +27,7 @@ namespace domain.Conference
         public Hall.Hall Hall { get; set; }
 
         [Column("hall_scheme_id")]
-        public Scheme Scheme { get; set; }
+        public Scheme.Scheme Scheme { get; set; }
     }
 
     public enum StateType {

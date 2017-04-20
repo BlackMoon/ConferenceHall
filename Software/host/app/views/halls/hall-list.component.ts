@@ -13,7 +13,7 @@ const modelRoute = 'hall';
 })
 export class HallListComponent implements OnInit {
 
-    halls: HallModel[] = [{ name: 'Создать', description: 'Новый халл' }];
+    halls: HallModel[] = [<any>{ name: 'Создать', description: 'Новый халл' }];
 
     constructor(
         private confirmationService: ConfirmationService,

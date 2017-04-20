@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using domain.Common.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Hall;
@@ -55,7 +54,7 @@ namespace host.Controllers
         [HttpDelete("{id}")]
         public Task Delete(int id)
         {
-            return _commandDispatcher.DispatchAsync<DeleteObjectByIdCommand, bool>(new DeleteObjectByIdCommand() {Id = id});
+            return _commandDispatcher.DispatchAsync<DeleteHallCommand, bool>(new DeleteHallCommand() {Id = id});
         }
     }
 }

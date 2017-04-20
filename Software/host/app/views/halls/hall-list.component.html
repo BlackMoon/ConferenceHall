@@ -16,7 +16,7 @@
                     <div [ngStyle]="{'cursor':'pointer'}" (click)="editHall(hall.id)">
                         <img src="/assets/office_64x64.png">
                         <div class="hall-detail">{{hall.description}}</div>
-                        <i>{{hall.size ? hall.size.area() : '&nbsp;'}}</i>
+                        <i>{{hall.id ? hall.area() : '&nbsp;'}}</i>
                     </div>
                 </p-panel>
             </div>

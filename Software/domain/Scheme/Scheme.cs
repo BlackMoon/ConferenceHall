@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
 
-namespace domain.Hall
+namespace domain.Scheme
 {
     /// <summary>
     /// Модель. Схема конференц-холла

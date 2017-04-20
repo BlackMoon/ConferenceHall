@@ -24,7 +24,7 @@ namespace domain.Hall.Query
                 await dbManagerAsync.OpenAsync();
 
                 Hall prev = null;
-                Func<Hall, Scheme, Hall> map = (h, s) =>
+                Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
                 {
                     if (prev != null && prev.Id != h.Id)
                     {
@@ -33,7 +33,7 @@ namespace domain.Hall.Query
                     }
 
                     prev = h;
-                    prev.Schemes = new List<Scheme> {s};
+                    prev.Schemes = new List<Scheme.Scheme> {s};
 
                     return h;
                 };

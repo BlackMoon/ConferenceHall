@@ -1,26 +1,6 @@
 ﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
 
-
-/**
- * Модель. Размер
- */
-export class Size {
-
-    @JsonProperty('x')
-    h: number;
-
-    @JsonProperty('y')
-    w: number;
-
-    constructor() {
-        this.w = undefined;
-        this.h = undefined;
-    }
-
-    public area = (): string => `(Размеры: ${this.w}м x ${this.h}м)`;
-}
-
 /**
  * Модель. Схема холла
  */
@@ -34,7 +14,6 @@ export class SchemeModel extends KeyModel {
     }
 }
 
-
 /**
  * Модель. Конференц-холл
  */
@@ -42,9 +21,8 @@ export class HallModel extends KeyModel {
    
     name: string;
     description?: string;
-
-    @JsonProperty('size')
-    size?: Size;
+    height?: number;
+    width?: number;
 
     @JsonProperty({ clazz: SchemeModel })
     schemes?: SchemeModel[];
@@ -55,7 +33,10 @@ export class HallModel extends KeyModel {
         
         this.name = undefined;
         this.description = undefined;
-        this.size = undefined;
+        this.height = undefined;
+        this.width = undefined;
         this.schemes = undefined;
     }
+
+    public area = (): string => `(Размеры: ${this.width}м x ${this.height}м)`;
 }
