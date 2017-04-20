@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Dapper;
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace domain.Common.Query
 {
@@ -17,9 +16,6 @@ namespace domain.Common.Query
         protected KeyObjectQueryHandler(IDbManager dbManager)
         {
             DbManager = dbManager;
-
-            // Should column names like User_Id be allowed to match properties/fields like UserId
-            DefaultTypeMap.MatchNamesWithUnderscores = true;
         }       
 
         public virtual TResult Execute(TQuery query)
@@ -51,7 +47,7 @@ namespace domain.Common.Query
             IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
             if (dbManagerAsync != null)
             {
-                await dbManagerAsync.OpenAsync();   
+                await dbManagerAsync.OpenAsync();
                 return await DbManager.DbConnection.GetAllAsync<TResult>();
             }
             throw new NotImplementedException();

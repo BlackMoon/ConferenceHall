@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using domain.Common;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using domain.Common;
 using Kit.Core.CQRS.Command;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace domain.Hall
 {
@@ -23,6 +23,7 @@ namespace domain.Hall
         [Column("width")]
         public double Width { get; set; }
 
+        [Dapper.Contrib.Extensions.Write(false)]
         public IList<Scheme.Scheme> Schemes { get; set; }
     }
 }

@@ -13,5 +13,11 @@ namespace domain.Hall.Command
 
         [Column("description")]
         public string Description { get; set; }
+
+        [Column("height")]
+        public double Height { get; set; }
+
+        [Column("width")]
+        public double Width { get; set; }
     }
 }

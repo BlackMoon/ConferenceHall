@@ -5,7 +5,7 @@ using domain.Scheme.Command;
 using Kit.Core.CQRS.Job;
 using Mapster;
 
-namespace domain
+namespace domain.Common.Job
 {
     public class CreateTypeAdapter : IStartupJob
     {

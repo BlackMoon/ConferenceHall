@@ -22,7 +22,7 @@ namespace domain.Hall.Query
             if (dbManagerAsync != null)
             {
                 await dbManagerAsync.OpenAsync();
-
+                
                 Hall prev = null;
                 Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
                 {
@@ -38,7 +38,7 @@ namespace domain.Hall.Query
                     return h;
                 };
 
-                var halls = await DbManager.DbConnection.QueryAsync($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
+                var halls = DbManager.DbConnection.Query($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
 
                 return halls.SingleOrDefault();
             }
