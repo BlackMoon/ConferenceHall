@@ -40,17 +40,11 @@ export class HallService implements IDataService<HallModel> {
     }
 
     get(key): Observable<any> {
-        
+
         return this.http
             .get(`${url}\\${key}`)
-            .map((r: Response) => {
-                debugger;
-                let hall = MapUtils.deserialize(HallModel, r.json());
-                
-                return hall;
-            })
+            .map((r: Response) => MapUtils.deserialize(HallModel, r.json()))
             .catch(handleResponseError);
-
     }
 
     update(hall): Observable<any> {

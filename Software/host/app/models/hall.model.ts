@@ -33,10 +33,10 @@ export class HallModel extends KeyModel {
         
         this.name = undefined;
         this.description = undefined;
-        this.height = undefined;
-        this.width = undefined;
+        this.height = 2;
+        this.width = 2;
         this.schemes = undefined;
     }
 
-    public area = (): string => `(Размеры: ${this.width}м x ${this.height}м)`;
+    area = (): string => `(Размеры: ${this.width}м x ${this.height}м)`;
 }

@@ -27,10 +27,8 @@ export class HallDetailComponent implements OnInit {
             id: [null],
             name: [null, Validators.required],
             description: [null],
-            size: this.fb.group({
-                h: [null],
-                w: [null]
-            })
+            height: [null],
+            width: [null]
         });
 
         this.route.params
@@ -52,6 +50,10 @@ export class HallDetailComponent implements OnInit {
 
     editScheme(id) {
         this.router.navigate(['scheme', id]);
+    }
+
+    removeScheme(id) {
+        
     }
 
     save(hall) {

@@ -10,12 +10,15 @@
 
 .hall-header {
     display: table-cell;
-    position: relative;
     vertical-align: middle;
+}
+
+.ui-panel-titlebar {
+    position: relative
 }
 
 .ui-panel-titlebar-remove {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 0.5em;
+    top: 0.5em;
 }
