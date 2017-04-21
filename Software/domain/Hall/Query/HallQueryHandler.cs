@@ -26,7 +26,7 @@ namespace domain.Hall.Query
                 Hall prev = null;
                 Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
                 {
-                    if (prev != null && prev.Id != h.Id)
+                    if (prev != null && prev.Id == h.Id)
                     {
                         prev.Schemes.Add(s);
                         return null;
@@ -40,7 +40,7 @@ namespace domain.Hall.Query
 
                 var halls = DbManager.DbConnection.Query($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
 
-                return halls.SingleOrDefault();
+                return halls.SingleOrDefault(h => h != null);
             }
 
             throw new NotImplementedException();
