@@ -18,32 +18,26 @@ namespace domain.Hall.Query
 
         public override async Task<Hall> ExecuteAsync(FindHallByIdQuery query)
         {
-            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
-            if (dbManagerAsync != null)
-            {
-                await dbManagerAsync.OpenAsync();
+            await DbManager.OpenAsync();
                 
-                Hall prev = null;
-                Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
+            Hall prev = null;
+            Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
+            {
+                if (prev != null && prev.Id == h.Id)
                 {
-                    if (prev != null && prev.Id == h.Id)
-                    {
-                        prev.Schemes.Add(s);
-                        return null;
-                    }
+                    prev.Schemes.Add(s);
+                    return null;
+                }
 
-                    prev = h;
-                    prev.Schemes = new List<Scheme.Scheme> {s};
+                prev = h;
+                prev.Schemes = new List<Scheme.Scheme> {s};
 
-                    return h;
-                };
+                return h;
+            };
 
-                var halls = DbManager.DbConnection.Query($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
+            var halls = DbManager.DbConnection.Query($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
 
-                return halls.SingleOrDefault(h => h != null);
-            }
-
-            throw new NotImplementedException();
+            return halls.SingleOrDefault(h => h != null);
         }
     }
 }

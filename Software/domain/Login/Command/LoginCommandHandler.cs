@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
+using domain.Common.Command;
 using Microsoft.Extensions.Logging;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
@@ -8,14 +9,12 @@ using Npgsql;
 
 namespace domain.Login.Command
 {
-    public class LoginCommandHandler : ICommandHandlerWithResult<LoginCommand, LoginCommandResult>
+    public class LoginCommandHandler : KeyObjectCommandHandler, ICommandHandlerWithResult<LoginCommand, LoginCommandResult>
     {
-        private readonly IDbManager _dbManager;
         private readonly ILogger _logger;
 
-        public LoginCommandHandler(IDbManager dbManager, ILogger<LoginCommandHandler> logger)
+        public LoginCommandHandler(IDbManager dbManager, ILogger<LoginCommandHandler> logger) : base(dbManager)
         {
-            _dbManager = dbManager;
             _logger = logger;
         }
 
@@ -31,11 +30,11 @@ namespace domain.Login.Command
 
             try
             {
-                _dbManager.AddParameter("plogin", command.UserName);
-                _dbManager.AddParameter("ppassword", command.Password);
+                DbManager.AddParameter("plogin", command.UserName);
+                DbManager.AddParameter("ppassword", command.Password);
 
-                _dbManager.Open();
-                _dbManager.ExecuteNonQuery(CommandType.StoredProcedure, "user_logon");
+                DbManager.Open();
+                DbManager.ExecuteNonQuery(CommandType.StoredProcedure, "user_logon");
             }
             catch (PostgresException ex)
             {
@@ -53,7 +52,7 @@ namespace domain.Login.Command
             }
             finally
             {
-                _dbManager.Close();
+                DbManager.Close();
             }
 
             return new LoginCommandResult() { Status = status, Message = msg };
@@ -64,41 +63,35 @@ namespace domain.Login.Command
             LoginStatus status = LoginStatus.Success;
             string msg = null;
 
-            IDbManagerAsync dbManagerAsync = _dbManager as IDbManagerAsync;
-
-            if (dbManagerAsync != null)
-            {
-                try
-                {
-                    _dbManager.AddParameter("plogin", command.UserName);
-                    _dbManager.AddParameter("ppassword", command.Password);
-
-                    await dbManagerAsync.OpenAsync();
-                    await dbManagerAsync.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conf_hall.user_logon");
-                }
-                catch (PostgresException ex)
-                {
-                    msg = ex.MessageText;
-                    status = LoginStatus.Failure;
-
-                    _logger.LogError($"{ex.Message}. {ex.Detail}");
-                }
-                catch (Exception ex)
-                {
-                    msg = ex.Message;
-                    status = LoginStatus.Failure;
-
-                    _logger.LogError(msg);
-                }
-                finally
-                {
-                    _dbManager.Close();
-                }
-
-                return new LoginCommandResult() { Status = status, Message = msg };
-            }
             
-            throw new NotImplementedException();
+            try
+            {
+                DbManager.AddParameter("plogin", command.UserName);
+                DbManager.AddParameter("ppassword", command.Password);
+
+                await DbManager.OpenAsync();
+                await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conf_hall.user_logon");
+            }
+            catch (PostgresException ex)
+            {
+                msg = ex.MessageText;
+                status = LoginStatus.Failure;
+
+                _logger.LogError($"{ex.Message}. {ex.Detail}");
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                status = LoginStatus.Failure;
+
+                _logger.LogError(msg);
+            }
+            finally
+            {
+                DbManager.Close();
+            }
+
+            return new LoginCommandResult() { Status = status, Message = msg };
         }
     }
 }

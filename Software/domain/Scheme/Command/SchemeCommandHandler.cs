@@ -35,16 +35,10 @@ namespace domain.Scheme.Command
 
         public async Task<bool> ExecuteAsync(DeleteSchemeCommand command)
         {
-            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
-            if (dbManagerAsync != null)
-            {
-                await dbManagerAsync.OpenAsync();
+            await DbManager.OpenAsync();
 
-                Scheme scheme = new Scheme();
-                return await DbManager.DbConnection.DeleteAsync(command.Adapt(scheme));
-            }
-
-            throw new NotImplementedException();
+            Scheme scheme = new Scheme();
+            return await DbManager.DbConnection.DeleteAsync(command.Adapt(scheme));
         }
     }
 }

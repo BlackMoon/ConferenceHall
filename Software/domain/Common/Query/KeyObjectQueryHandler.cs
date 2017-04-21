@@ -1,7 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,25 +31,13 @@ namespace domain.Common.Query
 
         public virtual async Task<TResult> ExecuteAsync(TQuery query)
         {
-            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
-            if (dbManagerAsync != null)
-            {
-                await dbManagerAsync.OpenAsync();
-                return await DbManager.DbConnection.GetAsync<TResult>(query.Id);
-            }
-
-            throw new NotImplementedException();
-        }
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.GetAsync<TResult>(query.Id);}
 
         public async Task<IEnumerable<TResult>> ExecuteAsync(GetAllQuery query)
         {
-            IDbManagerAsync dbManagerAsync = DbManager as IDbManagerAsync;
-            if (dbManagerAsync != null)
-            {
-                await dbManagerAsync.OpenAsync();
-                return await DbManager.DbConnection.GetAllAsync<TResult>();
-            }
-            throw new NotImplementedException();
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.GetAllAsync<TResult>();
         }
     }
 }
