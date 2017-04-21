@@ -6,8 +6,6 @@ import { Logger } from "../../common/logger";
 import { SchemeModel } from '../../models/index';
 import { SchemeService } from './scheme.service';
 
-const modelRoute = 'scheme';
-
 @Component({
     selector: 'scheme-list',
     templateUrl: 'scheme-list.component.html'
@@ -51,14 +49,6 @@ export class SchemeListComponent {
                     this.schemeform.reset();
                 },
                 error => this.logger.error(error));
-    }
-
-    editScheme(id?: number) {
-
-        let commands: any[] = [modelRoute];
-        (id) && commands.push(id);
-
-        this.router.navigate(commands);
     }
 
     removeScheme(id: number, name?: string) {

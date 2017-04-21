@@ -13,13 +13,13 @@
                         <i *ngIf="hall.id" class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" (click)="removeHall(hall.id, hall.name)" title="Удалить"></i>
                     </p-header>
 
-                    <div [ngStyle]="{'cursor':'pointer'}" (click)="editHall(hall.id)">
+                    <a [routerLink]="['/hall', hall.id]">
                         <img src="/assets/office_64x64.png">
                         <div class="hall-detail">
                             {{hall.description}}
                         </div>
                         <i>{{hall.id ? hall.area() : '&nbsp;'}}</i>
-                    </div>
+                    </a>
                 </p-panel>
             </div>
         </ng-template>

@@ -14,7 +14,7 @@ const modelRoute = 'hall';
 })
 export class HallListComponent implements OnInit {
 
-    halls: HallModel[] = [<any>{ name: 'Создать', description: 'Новый халл' }];
+    halls: HallModel[] = [<any>{ name: 'Создать', description: 'Новый холл' }];
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -29,14 +29,6 @@ export class HallListComponent implements OnInit {
             .subscribe(
                 halls => this.halls = this.halls.concat(halls),
                 error => this.logger.error(error));
-    }
-
-    editHall(id?: number) {
-
-        let commands:any[] = [modelRoute];
-        (id) && commands.push(id);
-
-        this.router.navigate(commands);
     }
 
     removeHall(id:number, name?: string) {
