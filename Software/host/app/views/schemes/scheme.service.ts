@@ -17,6 +17,7 @@ export class SchemeService implements IDataService<SchemeModel> {
 
         return this.http
             .post(url, scheme)
+            .map((r: Response) => r.json())
             .catch(handleResponseError);
     }
 

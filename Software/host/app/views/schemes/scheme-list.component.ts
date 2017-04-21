@@ -1,4 +1,5 @@
 ﻿import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
@@ -9,35 +10,48 @@ const modelRoute = 'scheme';
 
 @Component({
     selector: 'scheme-list',
-    template: `
-        <p-dataList [value]="items" [rows]="10">
-            <ng-template let-scheme pTemplate="item">
-                <div class="ui-grid ui-grid-responsive ui-fluid"  style="font-size:16px;padding:20px;border-bottom:1px solid #D5D5D5;">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-1">
-                            <i class="fa fa-object-group" (click)="editScheme(scheme.id)" style="cursor: pointer;" title="Редактор"></i>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            {{scheme.name}}
-                        </div>
-                        <div class="ui-grid-col-1">
-                            <i class="fa fa-trash" (click)="removeScheme(scheme.id, scheme.name)" style="cursor: pointer;" title="Удалить"></i>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
-        </p-dataList>`
+    templateUrl: 'scheme-list.component.html'
+        
 })
 export class SchemeListComponent {
+
+    schemeformVisible: boolean;
+    schemeform: FormGroup;
+
+    @Input()
+    hallid: number;
 
     @Input()
     items: SchemeModel[];
 
     constructor(
         private confirmationService: ConfirmationService,
+        private fb: FormBuilder,
         private logger: Logger,
         private router: Router,
         private schemeService: SchemeService) { }
+
+    ngOnInit() {
+
+        this.schemeform = this.fb.group({
+            name: [null, Validators.required]
+        });
+    }
+
+    addScheme(scheme) {
+       
+        scheme.hallid = this.hallid;
+        this.schemeService
+            .add(scheme)
+            .subscribe(
+                key => {
+                    scheme.id = key;
+                    this.items.push(scheme);
+                    this.schemeformVisible = false;
+                    this.schemeform.reset();
+                },
+                error => this.logger.error(error));
+    }
 
     editScheme(id?: number) {
 

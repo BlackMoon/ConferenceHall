@@ -9,6 +9,9 @@ namespace domain.Scheme
     [Table("conf_hall.hall_scheme")]
     public class Scheme : KeyObject
     {
+        [Column("hall_id")]
+        public int Hall_Id { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
 

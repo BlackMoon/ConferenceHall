@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using domain.Common.Command;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
@@ -18,12 +17,17 @@ namespace domain.Scheme.Command
 
         public long Execute(CreateSchemeCommand command)
         {
-            throw new System.NotImplementedException();
+            DbManager.Open();
+            Scheme scheme = new Scheme();
+            return DbManager.DbConnection.Insert(command.Adapt(scheme));
         }
 
-        public Task<long> ExecuteAsync(CreateSchemeCommand command)
+        public async Task<long> ExecuteAsync(CreateSchemeCommand command)
         {
-            throw new System.NotImplementedException();
+            await DbManager.OpenAsync();
+
+            Scheme scheme = new Scheme();
+            return await DbManager.DbConnection.InsertAsync(command.Adapt(scheme));
         }
 
         public bool Execute(DeleteSchemeCommand command)

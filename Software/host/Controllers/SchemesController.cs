@@ -31,8 +31,9 @@ namespace host.Controllers
 
         
         [HttpPost]
-        public void Post([FromBody]CreateSchemeCommand value)
+        public Task<long> Post([FromBody]CreateSchemeCommand value)
         {
+            return _commandDispatcher.DispatchAsync<CreateSchemeCommand, long>(value);
         }
 
         
