@@ -46,10 +46,6 @@ export class HallDetailComponent implements OnInit {
             });
     }
 
-    cancel() {
-        this.location.back();
-    }
-
     editScheme(id) {
         this.router.navigate(['scheme', id]);
     }

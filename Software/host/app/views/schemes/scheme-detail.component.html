@@ -1,4 +1,57 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
+    
+    <div class="ui-g h100p">
+        <div class="ui-g-12 ui-md-2 ui-widget-content ui-g-nopad">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                <div class="ui-grid-row" >
+                    <div class="ui-grid-col-12">
+                        <p-autoComplete [styleClass]="'h100p w100p'" [inputStyleClass]="'h100p w100p'" placeholder="Поиск по каталогу"></p-autoComplete>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12" [ngStyle]="{'padding-top':0,'padding-bottom':0}">
+                        <p-toolbar [style]="{'padding':0}">
+                            <button pButton type="button" icon="fa-home"></button><button pButton type="button" icon="fa-undo"></button><button pButton type="button" icon="fa-th-large"></button><button pButton type="button" icon="fa-th"></button>
+                        </p-toolbar>
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12" [ngStyle]="{'padding-top':0,'padding-bottom':0}">
+                        <p-dataList>
+                           
+                        </p-dataList>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-md-10 h100p ui-widget-content ui-g-nopad">
+            <div class="ui-g-12 ui-g-nopad">
+                <p-toolbar>
+                    <div class="ui-g">
+                        <div class="ui-g-4 ui-g-nopad">
+                            <div class="ui-toolbar-group-left">
+                                <button pButton type="button" title="Схема" icon="fa-bars"></button>
+                            </div>
+                        </div>
+                        <div class="ui-g-4 ui-g-nopad">
+                            <button pButton type="button" title="Сохранить" icon="fa-floppy-o"></button>
+                            <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
+                        </div>
+                        <div class="ui-g-4 ui-g-nopad">
+                            <div class="ui-toolbar-group-right">
+                                <button pButton type="button" icon="fa-search-plus"></button><button pButton type="button" icon="fa-search-minus"></button><button pButton type="button" icon="fa-dot-circle-o" title="По центру"></button>
+                                <button pButton type="button" icon="fa-desktop" title="На весь экран"></button>
+                            </div>
+                        </div>
+                    </div>
+                </p-toolbar>
+            </div>
+            <div class="ui-g-12 ui-g-nopad">
+                <svg #canvas class="h100p w100p"></svg>
+            </div>
+        </div>
+    </div>
+    <!--
     <vertical-split-pane primary-component-minsize="200" primary-component-initialratio="0.2" secondary-component-minsize="400" separator-thickness="6">
         <div class="split-pane-content-primary" [ngStyle]="{'padding-right': '6px'}">
             <div class="w100">
@@ -21,5 +74,5 @@
             </p-toolbar>
             <svg #canvas></svg>
         </div>
-    </vertical-split-pane>
+    </vertical-split-pane>-->
 </div>
