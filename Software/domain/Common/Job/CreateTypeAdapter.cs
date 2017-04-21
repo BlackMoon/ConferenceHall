@@ -24,8 +24,7 @@ namespace domain.Common.Job
             #region Scheme
             // CreateSchemeCommand --> Scheme
             TypeAdapterConfig<CreateSchemeCommand, Scheme.Scheme>
-                .ForType()
-                .Map(dest => dest.Hall_Id, src => src.HallId);
+                .ForType();
 
             // DeleteSchemeCommand --> Scheme
             TypeAdapterConfig<DeleteSchemeCommand, Scheme.Scheme>

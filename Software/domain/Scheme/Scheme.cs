@@ -10,7 +10,7 @@ namespace domain.Scheme
     public class Scheme : KeyObject
     {
         [Column("hall_id")]
-        public int Hall_Id { get; set; }
+        public int HallId { get; set; }
 
         [Column("name")]
         public string Name { get; set; }

@@ -6,34 +6,26 @@ using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace host.Controllers
 {
     [Route("api/[controller]")]
-    public class SchemesController : Controller
+    public class SchemesController : CqrsController
     {
-        private readonly ICommandDispatcher _commandDispatcher;
-        private readonly IQueryDispatcher _queryDispatcher;
-
-        public SchemesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher)
+        public SchemesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
-            _commandDispatcher = commandDispatcher;
-            _queryDispatcher = queryDispatcher;
         }
 
-        
         [HttpGet("{id}")]
         public Task<Scheme> Get(int id)
         {
-            return _queryDispatcher.DispatchAsync<FindSchemeByIdQuery, Scheme>(new FindSchemeByIdQuery(){ Id = id });
+            return QueryDispatcher.DispatchAsync<FindSchemeByIdQuery, Scheme>(new FindSchemeByIdQuery(){ Id = id });
         }
 
         
         [HttpPost]
         public Task<long> Post([FromBody]CreateSchemeCommand value)
         {
-            return _commandDispatcher.DispatchAsync<CreateSchemeCommand, long>(value);
+            return CommandDispatcher.DispatchAsync<CreateSchemeCommand, long>(value);
         }
 
         
@@ -46,7 +38,7 @@ namespace host.Controllers
         [HttpDelete("{id}")]
         public Task Delete(int id)
         {
-            return _commandDispatcher.DispatchAsync<DeleteSchemeCommand, bool>(new DeleteSchemeCommand() { Id = id });
+            return CommandDispatcher.DispatchAsync<DeleteSchemeCommand, bool>(new DeleteSchemeCommand() { Id = id });
         }
     }
 }

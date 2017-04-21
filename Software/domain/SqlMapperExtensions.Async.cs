@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -149,7 +150,12 @@ namespace Dapper.Contrib.Extensions
             for (var i = 0; i < allPropertiesExceptKeyAndComputed.Count; i++)
             {
                 var property = allPropertiesExceptKeyAndComputed.ElementAt(i);
-                sqlAdapter.AppendColumnName(sbColumnList, property.Name);
+
+                // ColumnAttribute mapping
+                ColumnAttribute attr = (ColumnAttribute)property.GetCustomAttribute(typeof(ColumnAttribute));
+                string columnName = (attr != null) ? attr.Name : property.Name;
+
+                sqlAdapter.AppendColumnName(sbColumnList, columnName);
                 if (i < allPropertiesExceptKeyAndComputed.Count - 1)
                     sbColumnList.Append(", ");
             }
@@ -222,7 +228,11 @@ namespace Dapper.Contrib.Extensions
             for (var i = 0; i < nonIdProps.Count; i++)
             {
                 var property = nonIdProps.ElementAt(i);
-                adapter.AppendColumnNameEqualsValue(sb, property.Name);
+                // ColumnAttribute mapping
+                ColumnAttribute attr = (ColumnAttribute)property.GetCustomAttribute(typeof(ColumnAttribute));
+                string columnName = (attr != null) ? attr.Name : property.Name;
+
+                adapter.AppendColumnNameEqualsValue(sb, columnName);  //fix for issue #336
                 if (i < nonIdProps.Count - 1)
                     sb.AppendFormat(", ");
             }
