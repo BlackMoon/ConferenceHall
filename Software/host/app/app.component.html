@@ -202,11 +202,11 @@
         </div>
 
     </div>
-    <p-confirmDialog #cd width="425">
+    <p-confirmDialog #cd width="450">
         <p-footer>
             <button type="button" pButton icon="fa-close" label="Нет" (click)="cd.reject()"></button>
             <button type="button" pButton icon="fa-check" label="Да" (click)="cd.accept()"></button>
         </p-footer>
     </p-confirmDialog>
-    <p-growl></p-growl>
+    <p-growl [value]="msgs"></p-growl>
 </div>

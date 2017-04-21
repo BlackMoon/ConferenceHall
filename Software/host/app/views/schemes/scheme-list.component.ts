@@ -1,6 +1,7 @@
 ﻿import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/primeng';
+import { Logger } from "../../common/logger";
 import { SchemeModel } from '../../models/index';
 import { SchemeService } from './scheme.service';
 
@@ -34,6 +35,7 @@ export class SchemeListComponent {
 
     constructor(
         private confirmationService: ConfirmationService,
+        private logger: Logger,
         private router: Router,
         private schemeService: SchemeService) { }
 
@@ -61,7 +63,7 @@ export class SchemeListComponent {
                         let ix = this.items.findIndex(s => s.id === id);
                         this.items.splice(ix, 1);
                     },
-                    error => console.log(error))
+                    error => this.logger.error(error))
 
         });   
     }

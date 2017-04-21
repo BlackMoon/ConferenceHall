@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Logger } from "../../common/logger";
 import { HallModel, SchemeModel } from '../../models';
 import { HallService } from './hall.service';
 
@@ -18,6 +19,7 @@ export class HallDetailComponent implements OnInit {
         private fb: FormBuilder,
         private hallService: HallService,
         private location: Location,
+        private logger: Logger,
         private route: ActivatedRoute,
         private router: Router) { }
 
@@ -59,6 +61,7 @@ export class HallDetailComponent implements OnInit {
     save(hall) {
 
         this.hallService[hall.id ? 'update' : 'add'](hall)
-            .subscribe(_ => this.location.back());
+            .subscribe(_ => this.location.back(),
+                       error => this.logger.error(error));
     }
 }

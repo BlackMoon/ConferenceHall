@@ -2,6 +2,7 @@
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
+import { Logger } from "../../common/logger";
 import { HallModel } from '../../models';
 import { HallService } from './hall.service';
 
@@ -18,6 +19,7 @@ export class HallListComponent implements OnInit {
     constructor(
         private confirmationService: ConfirmationService,
         private hallService: HallService,
+        private logger: Logger,
         private router: Router) { }
 
     ngOnInit() {
@@ -26,7 +28,7 @@ export class HallListComponent implements OnInit {
             .getAll()
             .subscribe(
                 halls => this.halls = this.halls.concat(halls),
-                error => console.log(error));
+                error => this.logger.error(error));
     }
 
     editHall(id?: number) {
@@ -53,7 +55,7 @@ export class HallListComponent implements OnInit {
                             let ix = this.halls.findIndex(h => h.id === id);
                             this.halls.splice(ix, 1);
                         },
-                        error => console.log(error))
+                        error => this.logger.error(error))
             
         });
     }

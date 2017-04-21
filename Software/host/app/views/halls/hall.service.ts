@@ -34,8 +34,9 @@ export class HallService implements IDataService<HallModel> {
         return this.http
             .get(url)
             .map((r: Response) => r
-                .json()
-                .map(h => MapUtils.deserialize(HallModel, h)))
+                    .json()
+                    .map(h => MapUtils.deserialize(HallModel, h))
+            )
             .catch(handleResponseError);
     }
 
