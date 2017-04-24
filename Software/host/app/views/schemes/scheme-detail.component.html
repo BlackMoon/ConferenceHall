@@ -5,7 +5,7 @@
             <div class="ui-grid ui-grid-responsive ui-grid-pad">
                 <div class="ui-grid-row" >
                     <div class="ui-grid-col-12">
-                        <p-autoComplete [styleClass]="'w100p'" [inputStyleClass]="'w100p'" placeholder="Поиск по каталогу"></p-autoComplete>
+                        <p-autoComplete [styleClass]="'w100p'" [inputStyleClass]="'w100p'" placeholder="Поиск по каталогу" [(ngModel)]="filter"></p-autoComplete>
                     </div>
                 </div>
                 <div class="ui-grid-row">
@@ -22,7 +22,7 @@
                     <div class="ui-grid-col-12">
                         <element-detail *ngIf="operation==Operation.New"></element-detail>
                         <element-group-list *ngIf="operation==Operation.Group" (itemClicked)="elementGroupClicked($event)"></element-group-list>
-                        <element-list *ngIf="operation==Operation.Filter"></element-list>
+                        <element-list *ngIf="operation==Operation.Filter" [filter]="filter"></element-list>
                     </div>
                 </div>
             </div>

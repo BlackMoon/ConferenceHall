@@ -7,32 +7,30 @@ import { ElementModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-//const url = "/api/halls";
-const url = "http://webtest.aquilon.ru:810/api/elements";
+const url = "/api/elements";
+//const url = "http://webtest.aquilon.ru:810/api/elements";
 
 @Injectable()
 export class ElementService implements IDataService<ElementModel> {
 
     constructor(private http: Http) { }
 
-    add(hall): Observable<any> {
+    add(element): Observable<any> {
 
         return this.http
-            .post(url, hall)
+            .post(url, element)
             .catch(handleResponseError);
     }
 
     delete(key): Observable<any> {
 
-        return this.http
-            .delete(`${url}\\${key}`)
-            .catch(handleResponseError);
+        return Observable.empty();
     }
 
-    getAll(): Observable<any> {
+    getAll(group?:string, filter?: string): Observable<any> {
 
         return this.http
-            .get(url)
+            .get(`${url}\\filter=${filter}\\group=${group}`)
             .map((r: Response) => r
                 .json()
                 .map(h => MapUtils.deserialize(ElementModel, h))
@@ -42,16 +40,11 @@ export class ElementService implements IDataService<ElementModel> {
 
     get(key): Observable<any> {
 
-        return this.http
-            .get(`${url}\\${key}`)
-            .map((r: Response) => MapUtils.deserialize(ElementModel, r.json()))
-            .catch(handleResponseError);
+        return Observable.empty();
     }
 
     update(hall): Observable<any> {
 
-        return this.http
-            .put(`${url}\\${hall.id}`, hall)
-            .catch(handleResponseError);
+        return Observable.empty();
     }
 }

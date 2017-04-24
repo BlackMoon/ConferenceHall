@@ -24,7 +24,7 @@ import { ElementService } from './element.service';
 @NgModule({
     declarations: [ElementDetailComponent, ElementListComponent, ElementGroupListComponent],
     exports: [ElementDetailComponent, ElementListComponent, ElementGroupListComponent],
-    imports: [CommonModule, DataListModule],
+    imports: [CommonModule, DataGridModule, DataListModule],
     providers: [ElementService]
 })
 export class ElementsModule { }

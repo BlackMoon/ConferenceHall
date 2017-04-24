@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
@@ -8,16 +8,22 @@ import { ElementService } from './element.service';
 
 @Component({
     selector: 'element-list',
-    template: `
-        elementlist
+    template: `{{filter}}
+        <p-dataGrid [value]="elements">
+            <ng-template let-element pTemplate="item">
+                <div class="ui-g-12 ui-md-4">
+                    {{element.name}}
+                </div>
+            </ng-template>
+        </p-dataGrid>
         `
 })
 export class ElementListComponent implements OnInit {
 
-    elements: ElementModel[] = [
-        { name: 'Добавить', code: 'add', icon: 'fa fa-plus' },
-        { name: 'Избранное', code: 'favorite', icon: 'fa fa-star-o' }
-    ];
+    elements: ElementModel[] = [];
+
+    @Input()
+    filter:string;
 
     constructor(
         private elementService: ElementService,
@@ -25,31 +31,10 @@ export class ElementListComponent implements OnInit {
         private router: Router) { }
 
     ngOnInit() {
-        
-    }
-
-    itemClick(name:string) {
-        debugger;
-    }
-
-    removeElement(id: number, name?: string) {
-
-        /*this.confirmationService.confirm({
-            header: 'Вопрос',
-            icon: 'fa fa-trash',
-            message: `Удалить [${name}]?`,
-            accept: () =>
-
-                this.hallService
-                    .delete(id)
-                    .subscribe(
-                    _ => {
-
-                        let ix = this.halls.findIndex(h => h.id === id);
-                        this.halls.splice(ix, 1);
-                    },
-                    error => this.logger.error(error))
-
-        });*/
+        this.elementService
+            .getAll()
+            .subscribe(
+                elements => this.elements = elements,
+                error => this.logger.error(error));
     }
 }
