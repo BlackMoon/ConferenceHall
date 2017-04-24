@@ -1,11 +1,20 @@
 ﻿import { KeyModel } from './index';
+
+/**
+ * Модель. Группа элементов
+ */
+export class ElementGroupModel extends KeyModel {
+
+    code: string;
+    name: string;
+    icon?: string;
+}
+
 /**
  * Модель. Элемент схемы
  */
-export class ElementModel extends KeyModel {
+export class ElementModel extends ElementGroupModel {
     
-    code: string;
-    name: string;
     height?: number;
     width?: number;
 

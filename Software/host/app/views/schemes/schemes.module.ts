@@ -1,9 +1,21 @@
 ﻿import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { AutoCompleteModule, ButtonModule, DataGridModule, DataListModule, FieldsetModule, InputTextModule, InputTextareaModule, PanelModule, SpinnerModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
-import { SplitPaneModule } from 'ng2-split-pane';
+import {
+    AutoCompleteModule,
+    ButtonModule,
+    DataGridModule,
+    DataListModule,
+    FieldsetModule,
+    InputTextModule,
+    InputTextareaModule,
+    PanelModule,
+    SpinnerModule,
+    TabViewModule,
+    ToolbarModule
+} from 'primeng/primeng';
 
+import { ElementsModule } from "../elements/elements.module";
 import { SchemeDetailComponent } from "./scheme-detail.component";
 import { SchemeListComponent } from "./scheme-list.component";
 import { SchemeRoutingModule } from './schemes-routing.module';
@@ -19,6 +31,7 @@ import { SchemeService } from './scheme.service';
         CommonModule,
         DataGridModule,
         DataListModule,
+        ElementsModule,
         FieldsetModule,
         FormsModule,
         InputTextModule,
@@ -27,7 +40,6 @@ import { SchemeService } from './scheme.service';
         ReactiveFormsModule,
         SchemeRoutingModule,
         SpinnerModule,
-        SplitPaneModule,
         TabViewModule,
         ToolbarModule],
     providers: [SchemeService]

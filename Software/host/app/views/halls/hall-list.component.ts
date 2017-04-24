@@ -6,8 +6,6 @@ import { Logger } from "../../common/logger";
 import { HallModel } from '../../models';
 import { HallService } from './hall.service';
 
-const modelRoute = 'hall';
-
 @Component({
     styleUrls: [`hall-list.component.css`],
     templateUrl: 'hall-list.component.html'
