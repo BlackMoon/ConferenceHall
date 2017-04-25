@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
+using Kit.Core.CQRS.Command;
 
 namespace domain.Element
 {
     /// <summary>
     /// Модель. Элемент схемы
     /// </summary>
-    [Table("conf_hall.scheme_items")]
-    public class Element : KeyObject
+    [Table("conf_hall.scheme_elements")]
+    public class Element : KeyObject, ICommand
     {
         /// <summary>
         /// Код
@@ -22,7 +23,12 @@ namespace domain.Element
         /// <summary>
         /// Эскиз
         /// </summary>
-        public byte Data { get; set; }
+        public byte[] Data { get; set; }
+
+        /// <summary>
+        /// Миниатюра
+        /// </summary>
+        public byte[] Thumbnail { get; set; }
 
         /// <summary>
         /// Высота

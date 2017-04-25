@@ -6,7 +6,7 @@ import {
     ButtonModule,
     DataGridModule,
     DataListModule,
-    FieldsetModule,
+    FileUploadModule,
     InputTextModule,
     InputTextareaModule,
     PanelModule,
@@ -24,7 +24,16 @@ import { ElementService } from './element.service';
 @NgModule({
     declarations: [ElementDetailComponent, ElementListComponent, ElementGroupListComponent],
     exports: [ElementDetailComponent, ElementListComponent, ElementGroupListComponent],
-    imports: [CommonModule, DataGridModule, DataListModule],
+    imports: [
+        ButtonModule,
+        CommonModule,
+        DataGridModule,
+        DataListModule,
+        FileUploadModule,
+        FormsModule,
+        InputTextModule,
+        ReactiveFormsModule,
+        SpinnerModule],
     providers: [ElementService]
 })
 export class ElementsModule { }

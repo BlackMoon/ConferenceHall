@@ -14,7 +14,9 @@ export class ElementGroupModel extends KeyModel {
  * Модель. Элемент схемы
  */
 export class ElementModel extends ElementGroupModel {
-    
+
+    image: File;
+
     height?: number;
     width?: number;
 

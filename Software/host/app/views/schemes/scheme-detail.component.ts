@@ -1,5 +1,11 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, ViewChild } from '@angular/core';
 import { ButtonItem, ElementGroupModel } from '../../models';
+import { AutoComplete } from 'primeng/components/autocomplete/autocomplete';
+
+/**
+ * min кол-во символов фильтра
+ */
+const minChars = 3;
 
 /**
  * Операции 
@@ -10,9 +16,14 @@ enum Operation { Group, Filter, New };
     templateUrl: `scheme-detail.component.html`
 })
 export class SchemeDetailComponent {
-    
-    filter: string;
-    group: ElementGroupModel = <any>{ code: null };
+
+    @ViewChild('autoFilter') autoFilter: AutoComplete;
+
+    set filter(filter: string) {
+        (filter.length >= minChars) && (this.operation = Operation.Filter);
+    }
+
+    group: ElementGroupModel = <any>{};
     smallGridView: boolean = false;
 
 // ReSharper disable once InconsistentNaming
@@ -32,7 +43,7 @@ export class SchemeDetailComponent {
     /**
      * История навигации по группам 
      */
-    prevGroupCodes: string[] = [];
+    prevGroups: ElementGroupModel[] = [];
 
     get visibleNavButtons() {
         return this.navButtons.filter(b => !b.hasOwnProperty('visible') || b.visible);
@@ -42,7 +53,7 @@ export class SchemeDetailComponent {
 
     elementGroupClicked = (group: ElementGroupModel) => {
 
-        this.prevGroupCodes.push(this.group.code);
+        this.prevGroups.push(this.group);
         
         switch (group.code) {
 
@@ -62,19 +73,19 @@ export class SchemeDetailComponent {
     };
 
     backBtnClick = () => {
+        
+        this.group = this.prevGroups.pop();
 
-        this.group.code = this.prevGroupCodes.pop();
-
-        this.filter = null;
+        this.autoFilter.writeValue(null);
         this.operation = Operation.Group;
         this.toggleGridButtons();
     };
 
     homeBtnClick = () => {
-        this.group.code = null;
-        this.prevGroupCodes = [];
-        debugger;
-        this.filter = null;
+        this.group = <any>{};
+        this.prevGroups = [];
+        
+        this.autoFilter.writeValue(null);
         this.operation = Operation.Group;
         this.toggleGridButtons();
     };

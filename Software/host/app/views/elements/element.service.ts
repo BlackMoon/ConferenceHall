@@ -17,8 +17,14 @@ export class ElementService implements IDataService<ElementModel> {
 
     add(element): Observable<any> {
 
+        let formData: FormData = new FormData();
+        formData.append('name', element.name);
+        formData.append('data', element.image, element.image.name);
+        formData.append('height', element.height);
+        formData.append('width', element.width);
+
         return this.http
-            .post(url, element)
+            .post(url, formData)
             .catch(handleResponseError);
     }
 
@@ -30,7 +36,7 @@ export class ElementService implements IDataService<ElementModel> {
     getAll(group?:string, filter?: string): Observable<any> {
 
         return this.http
-            .get(`${url}\\filter=${filter}\\group=${group}`)
+            .get(`${url}?filter=${filter}&group=${group}`)
             .map((r: Response) => r
                 .json()
                 .map(h => MapUtils.deserialize(ElementModel, h))

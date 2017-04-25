@@ -1,23 +1,45 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+﻿import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { ConfirmationService } from 'primeng/primeng';
+import { FileUpload } from 'primeng/components/fileupload/fileupload';
 import { Logger } from "../../common/logger";
 import { ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
     selector: 'element-detail',
-    template: ` new`
+    styleUrls: ['element-detail.component.css'],
+    templateUrl: 'element-detail.component.html'
 })
 export class ElementDetailComponent implements OnInit {
-    
+
+    @ViewChild('fileUpload') fileUpload: FileUpload;
+
+    elementform: FormGroup;
+    uploadedFiles: any[] = [];
+
     constructor(
         private elementService: ElementService,
-        private logger: Logger,
-        private router: Router) { }
+        private fb: FormBuilder,
+        private logger: Logger) { }
 
     ngOnInit() {
 
+        this.elementform = this.fb.group({
+            name: [null, Validators.required],
+            height: [1, Validators.required],
+            width: [1, Validators.required]
+        });
+    }
+
+    save(element) {
+
+        element.image = this.fileUpload.files[0];
+
+        this.elementService
+            .add(element)
+            .subscribe(
+                _ => { },
+                error => this.logger.error(error));
     }
 }

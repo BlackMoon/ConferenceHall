@@ -8,15 +8,7 @@ import { ElementService } from './element.service';
 
 @Component({
     selector: 'element-list',
-    template: `{{filter}}
-        <p-dataGrid [value]="elements">
-            <ng-template let-element pTemplate="item">
-                <div class="ui-g-12 ui-md-4">
-                    {{element.name}}
-                </div>
-            </ng-template>
-        </p-dataGrid>
-        `
+    templateUrl: 'element-list.component.html'
 })
 export class ElementListComponent implements OnInit {
 
@@ -25,6 +17,9 @@ export class ElementListComponent implements OnInit {
     @Input()
     filter:string;
 
+    @Input()
+    group: string;
+
     constructor(
         private elementService: ElementService,
         private logger: Logger,
@@ -32,7 +27,7 @@ export class ElementListComponent implements OnInit {
 
     ngOnInit() {
         this.elementService
-            .getAll()
+            .getAll(this.filter, this.group)
             .subscribe(
                 elements => this.elements = elements,
                 error => this.logger.error(error));
