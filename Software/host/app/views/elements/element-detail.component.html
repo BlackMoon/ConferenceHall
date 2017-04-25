@@ -1,0 +1,51 @@
+﻿<form [formGroup]="elementform" (ngSubmit)="save(elementform.value)">
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
+        
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <input type="text" pInputText formControlName="name" placeholder="Название" />   
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                Изображение :
+                <div>
+                    <small>(макс. размер - 1мб)</small>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p-fileUpload #fileUpload chooseLabel="Выбрать" url="http://localhost:3000/upload" accept="image/*" maxFileSize="1000000" >
+                   
+                </p-fileUpload>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                Реальная высота, м :
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p-spinner formControlName="height" [min]="1"></p-spinner>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                Реальная ширина, м :
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <p-spinner formControlName="width" [min]="1"></p-spinner>
+            </div>
+        </div>
+        <hr class="ui-widget-content" style="border:0">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-12">
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!(elementform.valid && fileUpload.files.length > 0)"></button>
+            </div>
+        </div>
+    </div>
+</form>
