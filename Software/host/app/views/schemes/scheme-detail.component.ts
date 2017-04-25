@@ -1,6 +1,6 @@
 ﻿import { Component, ViewChild } from '@angular/core';
 import { ButtonItem, ElementGroupModel } from '../../models';
-import { AutoComplete } from 'primeng/components/autocomplete/autocomplete';
+import { ElementListComponent } from "../elements/element-list.component";
 
 /**
  * min кол-во символов фильтра
@@ -17,19 +17,26 @@ enum Operation { Group, Filter, New };
 })
 export class SchemeDetailComponent {
 
-    @ViewChild('autoFilter') autoFilter: AutoComplete;
-
-    set filter(filter: string) {
-        (filter.length >= minChars) && (this.operation = Operation.Filter);
-    }
-
-    group: ElementGroupModel = <any>{};
+    @ViewChild(ElementListComponent) elementList: ElementListComponent;
+    
+    filter: string;   
     smallGridView: boolean = false;
+    title: string;
+
+    set group(group: ElementGroupModel) {
+        
+        let title = null;
+        if (!!group) {
+            this.elementList.queryElements(null, group.code);
+            title = group.name;
+        }
+        this.title = title;
+    }
 
 // ReSharper disable once InconsistentNaming
     private Operation = Operation;
     operation: Operation = Operation.Group;
-
+    
     /**
      * Кнопки навигации
      */
@@ -51,6 +58,8 @@ export class SchemeDetailComponent {
 
     navToolbarClick = (bi: ButtonItem, event) => bi.click && bi.click.call(bi, event);
 
+    elementCreated = () => this.operation = Operation.Group;
+
     elementGroupClicked = (group: ElementGroupModel) => {
 
         this.prevGroups.push(this.group);
@@ -59,7 +68,7 @@ export class SchemeDetailComponent {
 
             case 'add':
                 this.operation = Operation.New;
-                this.group.name = 'Создать элемент';
+                this.title = 'Создать элемент';
                 break;
 
             default:
@@ -73,22 +82,44 @@ export class SchemeDetailComponent {
     };
 
     backBtnClick = () => {
-        
-        this.group = this.prevGroups.pop();
 
-        this.autoFilter.writeValue(null);
+        this.filter = null;
+        this.group = this.prevGroups.pop();
         this.operation = Operation.Group;
+        
         this.toggleGridButtons();
     };
 
     homeBtnClick = () => {
-        this.group = <any>{};
+       
+        this.filter = this.group = null;
+        this.operation = Operation.Group;
         this.prevGroups = [];
         
-        this.autoFilter.writeValue(null);
-        this.operation = Operation.Group;
         this.toggleGridButtons();
     };
+
+    /**
+     * Handle input text value change
+     * @param value
+     */
+    filterChange(value) {
+
+        this.filter = value;
+
+        if (value.length >= minChars) {
+            this.operation = Operation.Filter;
+            this.elementList.queryElements(value);
+            this.title = value;
+        }
+    }
+
+    /**
+     * Handle enter key press
+     */
+    inputKeyPressed(event) {
+        (event.keyCode === 13) && this.filterChange(event.target.value);
+    }
 
     toggleGridButtons = () =>
         this.navButtons

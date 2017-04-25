@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using domain.Common.Query;
 using domain.Element;
+using domain.Element.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace host.Controllers
 {
     [Route("api/[controller]")]
     public class ElementsController : CqrsController
     {
-        // GET: api/values
         public ElementsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
         }
@@ -24,14 +21,17 @@ namespace host.Controllers
         [HttpGet]
         public Task<IEnumerable<Element>> Get(string group, string filter)
         {
-            return QueryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Element>>(new GetAllQuery());
+            return QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(new FindElementsQuery() { Filter = filter, Group = group, UserId = 1 });
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("/api/thumbnail/{id}")]
+        public async Task<ActionResult> GetThumbnail(int id)
         {
-            return "value";
+            Element el = await QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery());
+            if (el != null)
+                return new FileContentResult(el.Thumbnail, el.MimeType);
+
+            return NoContent();
         }
 
         /// <summary>
@@ -46,10 +46,10 @@ namespace host.Controllers
                 using (MemoryStream ms = new MemoryStream())
                 {
                     await f.CopyToAsync(ms);
-                    value.Thumbnail = ms.ToArray();
+                    value.Data = value.Thumbnail = ms.ToArray();
                 }
             }
-
+            value.MimeType = "";
             await CommandDispatcher.DispatchAsync<Element, long>(value);
         }
 

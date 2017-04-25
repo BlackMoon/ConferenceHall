@@ -64,12 +64,23 @@ namespace host
             container.Register(
                 made: Made.Of(() => DbManagerFactory.CreateDbManager(Arg.Of<string>("ProviderName"), Arg.Of<string>("ConnectionString")), requestIgnored => string.Empty));
 
-            // cache manager
-            ICacheManagerConfiguration cacheConfiguration = Configuration.GetCacheConfiguration("secretCache");
+            // cache managers
+            #region object cache
+            ICacheManagerConfiguration objectCacheConfiguration = Configuration.GetCacheConfiguration("objectCache");
 
             container.Register(
                 reuse: Reuse.Singleton,
-                made: Made.Of(() => CacheFactory.FromConfiguration<SecretItem>("secretCache", cacheConfiguration)));
+                made: Made.Of(() => CacheFactory.FromConfiguration<object>("objectCache", objectCacheConfiguration)));
+            #endregion
+
+            #region secret cache
+            ICacheManagerConfiguration secretCacheConfiguration = Configuration.GetCacheConfiguration("secretCache");
+
+            container.Register(
+                reuse: Reuse.Singleton,
+                made: Made.Of(() => CacheFactory.FromConfiguration<SecretItem>("secretCache", secretCacheConfiguration)));
+
+            #endregion
 
             container.Register<SecretStorage>(Reuse.Singleton);
 

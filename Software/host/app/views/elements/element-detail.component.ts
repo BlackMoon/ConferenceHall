@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, EventEmitter,  OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FileUpload } from 'primeng/components/fileupload/fileupload';
@@ -14,6 +14,9 @@ import { ElementService } from './element.service';
 export class ElementDetailComponent implements OnInit {
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
+
+    // event Handlers
+    @Output() itemSaved: EventEmitter<any> = new EventEmitter();
 
     elementform: FormGroup;
     uploadedFiles: any[] = [];
@@ -39,7 +42,7 @@ export class ElementDetailComponent implements OnInit {
         this.elementService
             .add(element)
             .subscribe(
-                _ => { },
+                _ => this.itemSaved.emit(),
                 error => this.logger.error(error));
     }
 }

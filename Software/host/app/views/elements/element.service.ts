@@ -33,10 +33,15 @@ export class ElementService implements IDataService<ElementModel> {
         return Observable.empty();
     }
 
-    getAll(group?:string, filter?: string): Observable<any> {
+    getAll(filter?: string, group?:string): Observable<any> {
 
+        let queryParams = [];
+
+        filter && queryParams.push(`filter=${filter}`);
+        group && queryParams.push(`group=${group}`);
+        
         return this.http
-            .get(`${url}?filter=${filter}&group=${group}`)
+            .get(url + (queryParams.length > 0 ? `?${queryParams.join("&")}` : ""))
             .map((r: Response) => r
                 .json()
                 .map(h => MapUtils.deserialize(ElementModel, h))

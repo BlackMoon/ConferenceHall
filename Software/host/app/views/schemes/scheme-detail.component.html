@@ -5,7 +5,7 @@
             <div class="ui-grid ui-grid-responsive ui-grid-pad">
                 <div class="ui-grid-row" >
                     <div class="ui-grid-col-12">
-                        <p-autoComplete [styleClass]="'w100p'" [inputStyleClass]="'w100p'" placeholder="Поиск по каталогу" [(ngModel)]="filter" #autoFilter [minLength]="1"></p-autoComplete>
+                        <input type="text" pInputText placeholder="Поиск по каталогу" [ngModel]="filter" (ngModelChange)="filterChange($event)" [ngClass]="'w100p'" [ngStyle]="{'box-sizing':'border-box'}" (keypress)="inputKeyPressed($event)"/>
                     </div>
                 </div>
                 <div class="ui-grid-row">
@@ -15,14 +15,14 @@
                                 <button pButton type="button" *ngFor="let b of visibleNavButtons" icon="{{b.icon}}" (click)="navToolbarClick(b, $event)"></button>    
                             </div>
                         </p-toolbar>
-                        <div [ngStyle]="{'font-weight':'bold', 'padding':'.25em .5em'}">&nbsp;{{group.name}}</div>
+                        <div [ngStyle]="{'font-weight':'bold', 'padding':'.25em .5em'}">&nbsp;{{title}}</div>
                     </div>
                 </div>
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-12">
-                        <element-detail *ngIf="operation==Operation.New"></element-detail>
+                        <element-detail *ngIf="operation==Operation.New" (itemSaved)="elementCreated()"></element-detail>
                         <element-group-list *ngIf="operation==Operation.Group" (itemClicked)="elementGroupClicked($event)"></element-group-list>
-                        <element-list *ngIf="operation==Operation.Filter" [filter]="filter"></element-list>
+                        <element-list [hidden]="operation!=Operation.Filter"></element-list>
                     </div>
                 </div>
             </div>
