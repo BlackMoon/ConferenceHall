@@ -16,6 +16,9 @@ namespace domain.Element
         [Dapper.Contrib.Extensions.Write(false)]
         public string Code { get; set; }
 
+        [Column("mime_type")]
+        public string MimeType { get; set; }
+
         /// <summary>
         /// Наименование
         /// </summary>
