@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
 using Kit.Core.CQRS.Command;
+using Newtonsoft.Json;
 
 namespace domain.Element
 {
@@ -27,11 +28,13 @@ namespace domain.Element
         /// <summary>
         /// Эскиз
         /// </summary>
+        [JsonIgnore]
         public byte[] Data { get; set; }
 
         /// <summary>
         /// Миниатюра
         /// </summary>
+        [JsonIgnore]
         public byte[] Thumbnail { get; set; }
 
         /// <summary>

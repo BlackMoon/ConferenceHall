@@ -35,7 +35,7 @@ namespace domain.Hall.Query
                 return h;
             };
 
-            var halls = DbManager.DbConnection.Query($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
+            var halls = await DbManager.DbConnection.QueryAsync($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
 
             return halls.SingleOrDefault(h => h != null);
         }

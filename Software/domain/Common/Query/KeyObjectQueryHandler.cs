@@ -23,7 +23,7 @@ namespace domain.Common.Query
             return DbManager.DbConnection.Get<TResult>(query.Id);
         }
 
-        public IEnumerable<TResult> Execute(GetAllQuery query)
+        public virtual IEnumerable<TResult> Execute(GetAllQuery query)
         {
             DbManager.Open();
             return DbManager.DbConnection.GetAll<TResult>();
@@ -34,7 +34,7 @@ namespace domain.Common.Query
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.GetAsync<TResult>(query.Id);}
 
-        public async Task<IEnumerable<TResult>> ExecuteAsync(GetAllQuery query)
+        public virtual async Task<IEnumerable<TResult>> ExecuteAsync(GetAllQuery query)
         {
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.GetAllAsync<TResult>();

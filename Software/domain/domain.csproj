@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\kit\Kit.Core\Kit.Core.csproj" />
     <ProjectReference Include="..\..\..\kit\Kit.Dal.Postgre\Kit.Dal.Postgre.csproj" />
   </ItemGroup>
 

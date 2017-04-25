@@ -20,7 +20,7 @@ namespace domain.Element.Command
 
         public async Task<long> ExecuteAsync(Element command)
         {
-            command.Thumbnail = f(data)
+            
 
 
             await DbManager.OpenAsync();
