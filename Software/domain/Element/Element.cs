@@ -13,6 +13,7 @@ namespace domain.Element
         /// <summary>
         /// Код
         /// </summary>
+        [Dapper.Contrib.Extensions.Write(false)]
         public string Code { get; set; }
 
         /// <summary>
