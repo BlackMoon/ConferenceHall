@@ -34,7 +34,7 @@ namespace host.Controllers
             if (el != null)
             {
                 fileContents = el.Data;
-                contentType = "image/png";//el.MimeType;
+                contentType = el.MimeType;
             }
 
             return new FileContentResult(fileContents, contentType);
@@ -55,7 +55,7 @@ namespace host.Controllers
                     value.Data = value.Thumbnail = ms.ToArray();
                 }
             }
-            value.MimeType = "";
+            value.MimeType = "image/png";
             await CommandDispatcher.DispatchAsync<Element, long>(value);
         }
 

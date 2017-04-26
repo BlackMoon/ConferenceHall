@@ -57,8 +57,7 @@ namespace domain.Element.Command
            // command.Thumbnail = ResizeImageBySkiaSharp(command.Data,  command.Width)
 
 
-           // await DbManager.OpenAsync();
-
+            await DbManager.OpenAsync();
             return await DbManager.DbConnection.InsertAsync(command);
         }
     }

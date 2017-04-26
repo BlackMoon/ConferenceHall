@@ -1,9 +1,9 @@
-﻿<form [formGroup]="elementform" class="inputw100p" (ngSubmit)="save(elementform.value)">
+﻿<form [formGroup]="elementform" (ngSubmit)="save(elementform.value)">
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
         
-        <div class="ui-grid-row">
+        <div class="ui-grid-row inputw100p">
             <div class="ui-grid-col-12">
-                <input type="text" pInputText formControlName="name" placeholder="Название" />   
+                <input type="text" pInputText formControlName="name" placeholder="Название"  />   
             </div>
         </div>
         <div class="ui-grid-row">
@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="ui-grid-row">
+        <div class="ui-grid-row inputw100p">
             <div class="ui-grid-col-12">
                 <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" >
                 </p-fileUpload>
@@ -41,7 +41,7 @@
             </div>
         </div>
         <hr class="ui-widget-content" style="border:0">
-        <div class="ui-grid-row">
+        <div class="ui-grid-row inputw100p">
             <div class="ui-grid-col-12">
                 <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!(elementform.valid && fileUpload.files.length > 0)"></button>
             </div>
