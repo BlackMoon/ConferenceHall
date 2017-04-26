@@ -55,8 +55,7 @@ namespace domain.Element.Command
         public async Task<long> ExecuteAsync(Element command)
         {
 
-           // command.Thumbnail = ResizeImageBySkiaSharp(command.Data,  command.Width)
-           
+            command.Thumbnail = ResizeImageBySkiaSharp(command.Data, 48);           
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.InsertAsync(command);
         }
