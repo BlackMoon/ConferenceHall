@@ -33,8 +33,8 @@ namespace host.Controllers
             Element el = await QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery() { Id = id });
             if (el != null)
             {
-                fileContents = el.Data;
-                contentType = "image/png";//el.MimeType;
+                fileContents = el.Thumbnail;
+                contentType = el.MimeType;
             }
 
             return new FileContentResult(fileContents, contentType);
