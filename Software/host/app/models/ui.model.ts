@@ -6,6 +6,7 @@ export class ButtonItem {
     name?: string;
     icon?: string;
     iconUrl?: string;
+    tooltip?: string;
     visible?: boolean = true;
     click?: (e) => void;
 }

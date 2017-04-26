@@ -7,12 +7,7 @@ import { ElementService } from './element.service';
 
 @Component({
     selector: 'element-list',
-    styles: [`
-        .center > img {
-            display: table;
-            margin: 0 auto;
-        }`
-    ],
+    styleUrls: ['element-list.component.css'],
     templateUrl: 'element-list.component.html'
 })
 export class ElementListComponent  {
@@ -27,7 +22,7 @@ export class ElementListComponent  {
         private logger: Logger) { }
 
     queryElements(filter?: string, group?: string) {
-        debugger;
+        
         this.elementService
             .getAll(filter, group)
             .subscribe(
