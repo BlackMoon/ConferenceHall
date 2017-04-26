@@ -1,14 +1,14 @@
 ﻿<p-dataGrid [value]="elements" [styleClass]="'center'">
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6" *ngIf="!smallGrid">
-            <div [ngClass]="'ui-resizable'">
-                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="48" height="48" alt="{{element.name}}">
-                <i class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" title="Удалить"></i>
+            <div title="{{element.name}}" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '72px', 'padding':'12px'}">
+                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="48" height="48">
+                <i class="fa {{element.favorite ? 'fa-star-half-o' : 'fa-star-o'}} ui-favorite" [ngStyle]="{'cursor':'pointer'}" title="{{element.favorite ? 'Из избранного' : 'В избранное'}}" (click)="favoriteClick(element)"></i>
             </div>
         </div>
         <div class="ui-md-4" *ngIf="smallGrid">
             <div [ngClass]="'ui-resizable'">
-                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="32" height="32" alt="{{element.name}}">
+                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="32" height="32" title="{{element.name}}">
             </div>
         </div>
     </ng-template>    

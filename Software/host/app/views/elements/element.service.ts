@@ -54,7 +54,17 @@ export class ElementService implements IDataService<ElementModel> {
         return Observable.empty();
     }
 
-    update(hall): Observable<any> {
+    update(element): Observable<any> {
+
+        return Observable.empty();
+    }
+
+    /**
+     * В/Из избранное
+     */
+    toggleFavorite(element): Observable<any> {
+
+
 
         return Observable.empty();
     }

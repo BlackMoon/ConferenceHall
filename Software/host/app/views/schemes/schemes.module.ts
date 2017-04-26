@@ -12,6 +12,7 @@ import {
     PanelModule,
     SpinnerModule,
     TabViewModule,
+    ToggleButtonModule,
     ToolbarModule
 } from 'primeng/primeng';
 
@@ -41,6 +42,7 @@ import { SchemeService } from './scheme.service';
         SchemeRoutingModule,
         SpinnerModule,
         TabViewModule,
+        ToggleButtonModule,
         ToolbarModule],
     providers: [SchemeService]
 })
