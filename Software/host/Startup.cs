@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using CacheManager.Core;
+using domain.Element;
 using DryIoc;
 using host.Security;
 using host.Security.TokenProvider;
@@ -70,7 +71,8 @@ namespace host
 
             container.Register(
                 reuse: Reuse.Singleton,
-                made: Made.Of(() => CacheFactory.FromConfiguration<domain.Element.Element>("elementCache", elCacheConfiguration)));
+                made: Made.Of(() => CacheFactory.FromConfiguration<Element>("elementCache", elCacheConfiguration)));
+            
             #endregion
 
             #region secret cache
