@@ -1,4 +1,4 @@
-﻿form button, form input {
+﻿.inputw100p form button, .inputw100p form input {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;

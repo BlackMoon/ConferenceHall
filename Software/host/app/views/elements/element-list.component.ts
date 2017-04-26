@@ -12,6 +12,7 @@ import { ElementService } from './element.service';
 export class ElementListComponent  {
 
     elements: ElementModel[] = [];
+    smallGridView: boolean = false;
 
     constructor(
         private elementService: ElementService,

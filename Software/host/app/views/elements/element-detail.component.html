@@ -1,4 +1,4 @@
-﻿<form [formGroup]="elementform" (ngSubmit)="save(elementform.value)">
+﻿<form [formGroup]="elementform" class="inputw100p" (ngSubmit)="save(elementform.value)">
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
         
         <div class="ui-grid-row">
@@ -10,14 +10,13 @@
             <div class="ui-grid-col-12">
                 Изображение :
                 <div>
-                    <small>(макс. размер - 1мб)</small>
+                    <small>(макс. размер - 1024 x 1024)</small>
                 </div>
             </div>
         </div>
         <div class="ui-grid-row">
             <div class="ui-grid-col-12">
-                <p-fileUpload #fileUpload chooseLabel="Выбрать" url="http://localhost:3000/upload" accept="image/*" maxFileSize="1000000" >
-                   
+                <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" >
                 </p-fileUpload>
             </div>
         </div>
