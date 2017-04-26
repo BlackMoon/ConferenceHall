@@ -10,7 +10,7 @@ const minChars = 3;
 /**
  * Операции 
  */
-enum Operation { Group, Filter, New };
+enum Operation { Group, Filter, New, Scheme };
 
 @Component({
     templateUrl: `scheme-detail.component.html`
@@ -41,10 +41,10 @@ export class SchemeDetailComponent {
      * Кнопки навигации
      */
     navButtons:[ButtonItem] = [
-        { id: 'itemHome', icon: 'fa-home', click: () => this.homeBtnClick() },
-        { id: 'itemBack', icon: 'fa-undo', click: () => this.backBtnClick() },
-        { id: 'itemGrid', icon: 'fa-th-large', visible: false, click: () => this.smallGridView = false },
-        { id: 'itemSmallGrid', icon: 'fa-th', visible: false, click: () => this.smallGridView = true }
+        { id: 'itemHome', icon: 'fa-home', tooltip: 'Домой', click: () => this.homeBtnClick() },
+        { id: 'itemBack', icon: 'fa-undo', tooltip: 'Назад', click: () => this.backBtnClick() },
+        { id: 'itemGrid', icon: 'fa-th-large', tooltip: 'Ряд', visible: false, click: () => this.smallGridView = false },
+        { id: 'itemSmallGrid', icon: 'fa-th', tooltip: 'Сетка', visible: false, click: () => this.smallGridView = true }
     ];
 
     /**
@@ -61,8 +61,9 @@ export class SchemeDetailComponent {
     elementCreated = () => this.operation = Operation.Group;
 
     elementGroupClicked = (group: ElementGroupModel) => {
-
+        
         this.prevGroups.push(this.group);
+        this.smallGridView = false;
         
         switch (group.code) {
 

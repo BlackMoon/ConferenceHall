@@ -7,8 +7,8 @@ import { ElementModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-const url = "/api/elements";
-//const url = "http://webtest.aquilon.ru:810/api/elements";
+//const url = "/api/elements";
+const url = "http://webtest.aquilon.ru:810/api/elements";
 
 @Injectable()
 export class ElementService implements IDataService<ElementModel> {

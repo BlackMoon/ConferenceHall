@@ -1,11 +1,15 @@
-﻿{{smallGrid}}
-<p-dataGrid [value]="elements" [styleClass]="'center'">
+﻿<p-dataGrid [value]="elements" [styleClass]="'center'">
     <ng-template let-element pTemplate="item">
-        <div class="ui-g-12 ui-md-6" *ngIf="!smallGrid">
-            <img src="/api/thumbnail/{{element.id}}" width="48" height="48" alt="{{element.name}}">
+        <div class="ui-md-6" *ngIf="!smallGrid">
+            <div [ngClass]="'ui-resizable'">
+                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="48" height="48" alt="{{element.name}}">
+                <i class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" title="Удалить"></i>
+            </div>
         </div>
-        <div class="ui-g-12 ui-md-4" *ngIf="smallGrid">
-            <img src="/api/thumbnail/{{element.id}}" width="32" height="32" alt="{{element.name}}">
+        <div class="ui-md-4" *ngIf="smallGrid">
+            <div [ngClass]="'ui-resizable'">
+                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="32" height="32" alt="{{element.name}}">
+            </div>
         </div>
     </ng-template>    
 </p-dataGrid>
