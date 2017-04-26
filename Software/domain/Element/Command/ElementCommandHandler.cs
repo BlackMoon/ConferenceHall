@@ -85,7 +85,6 @@ namespace domain.Element.Command
         }
         public async Task<long> ExecuteAsync(Element command)
         {
-
             command.Thumbnail = ResizeImageBySkiaSharp(command.Data, 48);
             command.MimeType = getMimeType(command.Data);
             await DbManager.OpenAsync();
