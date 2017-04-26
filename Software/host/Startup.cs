@@ -66,11 +66,11 @@ namespace host
 
             // cache managers
             #region object cache
-            ICacheManagerConfiguration objectCacheConfiguration = Configuration.GetCacheConfiguration("objectCache");
+            ICacheManagerConfiguration elCacheConfiguration = Configuration.GetCacheConfiguration("elementCache");
 
             container.Register(
                 reuse: Reuse.Singleton,
-                made: Made.Of(() => CacheFactory.FromConfiguration<object>("objectCache", objectCacheConfiguration)));
+                made: Made.Of(() => CacheFactory.FromConfiguration<domain.Element.Element>("elementCache", elCacheConfiguration)));
             #endregion
 
             #region secret cache

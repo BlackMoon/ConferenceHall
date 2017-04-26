@@ -1,27 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CacheManager.Core;
 using domain.Common.Query;
 using Dapper;
 using Kit.Core.CQRS.Query;
-using Kit.Core.Interception.Attribute;
 using Kit.Dal.DbManager;
 
 namespace domain.Element.Query
 {
-    [InterceptedObject(InterceptorType = typeof(Kit.Core.Interception.CacheInterceptor), ServiceInterfaceType = typeof(IQueryHandler<FindElementByIdQuery, Element>))]
-    public class ElementQueryHandler : KeyObjectQueryHandler<FindElementByIdQuery, Element>, 
+    public class ElementQueryHandler : 
+        KeyObjectQueryHandler<FindElementByIdQuery, Element>, 
         IQueryHandler<FindElementsQuery, IEnumerable<Element>>
     {
         private const string SelectElements = "SELECT e.* FROM conf_hall.scheme_elements e";
 
-        public ElementQueryHandler(IDbManager dbManager) : base(dbManager)
-        {
-        }
+        private readonly ICacheManager<Element> _cacheManager;
 
-        [InterceptedMethod]
-        public override Task<Element> ExecuteAsync(FindElementByIdQuery query)
+        public ElementQueryHandler(IDbManager dbManager, ICacheManager<Element> cacheManager) : base(dbManager)
         {
-            return base.ExecuteAsync(query);
+            _cacheManager = cacheManager;
+        }
+        
+        public override async Task<Element> ExecuteAsync(FindElementByIdQuery query)
+        {
+            Element element = _cacheManager.Get(query.Id.ToString());
+            if (element == null)
+            {
+                element = await base.ExecuteAsync(query);
+                _cacheManager.Add(element.Id.ToString(), element);
+            }
+
+            return element;
         }
 
         public IEnumerable<Element> Execute(FindElementsQuery query)

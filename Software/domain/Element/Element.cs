@@ -38,13 +38,13 @@ namespace domain.Element
         public byte[] Thumbnail { get; set; }
 
         /// <summary>
-        /// Высота
+        /// Реальная высота, м
         /// </summary>
-        public double Height { get; set; }
+        public float Height { get; set; }
 
         /// <summary>
-        /// Ширина
+        /// Реальная ширина, м
         /// </summary>
-        public double Width { get; set; }
+        public float Width { get; set; }
     }
 }

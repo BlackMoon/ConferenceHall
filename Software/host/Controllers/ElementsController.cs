@@ -27,11 +27,17 @@ namespace host.Controllers
         [HttpGet("/api/thumbnail/{id}")]
         public async Task<ActionResult> GetThumbnail(int id)
         {
-            Element el = await QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery());
-            if (el != null)
-                return new FileContentResult(el.Thumbnail, el.MimeType);
+            byte[] fileContents = {};
+            string contentType = "text/html";
 
-            return NoContent();
+            Element el = await QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery() { Id = id });
+            if (el != null)
+            {
+                fileContents = el.Data;
+                contentType = "image/png";//el.MimeType;
+            }
+
+            return new FileContentResult(fileContents, contentType);
         }
 
         /// <summary>
