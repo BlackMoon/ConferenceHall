@@ -10,7 +10,7 @@ const minChars = 3;
 /**
  * Операции 
  */
-enum Operation { Group, Filter, New, Scheme };
+enum Operation { Edit, Group, Filter, New, Scheme };
 
 @Component({
     templateUrl: `scheme-detail.component.html`
@@ -70,6 +70,11 @@ export class SchemeDetailComponent {
             case 'add':
                 this.operation = Operation.New;
                 this.title = 'Создать элемент';
+                break;
+
+            case 'edit':
+                this.operation = Operation.Edit;
+                this.title = 'Редктировать';
                 break;
 
             default:

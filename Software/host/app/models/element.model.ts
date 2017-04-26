@@ -14,6 +14,9 @@ export class ElementGroupModel extends KeyModel {
  * Модель. Элемент схемы
  */
 export class ElementModel extends ElementGroupModel {
+    
+    hover: boolean;
+    favorite: boolean;
 
     image: File;
 

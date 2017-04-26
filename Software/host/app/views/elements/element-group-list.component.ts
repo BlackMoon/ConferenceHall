@@ -26,7 +26,8 @@ export class ElementGroupListComponent {
 
     groups: ElementGroupModel[] = [
         { name: 'Добавить', code: 'add', icon: 'fa fa-plus' },
-        { name: 'Избранное', code: 'favorite', icon: 'fa fa-star-o' }
+        { name: 'Редактировать', code: 'edit', icon: 'fa fa-pencil' },
+        { name: 'Избранное', code: 'favorite', icon: 'fa fa-star-half-o' }
     ];
 
     // event Handlers
