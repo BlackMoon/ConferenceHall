@@ -34,7 +34,7 @@ namespace host.Controllers
             if (el != null)
             {
                 fileContents = el.Data;
-                contentType = el.MimeType;
+                contentType = "image/png";//el.MimeType;
             }
 
             return new FileContentResult(fileContents, contentType);

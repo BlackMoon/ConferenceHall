@@ -1,7 +1,11 @@
-﻿<p-dataGrid [value]="elements">
+﻿{{smallGrid}}
+<p-dataGrid [value]="elements" [styleClass]="'center'">
     <ng-template let-element pTemplate="item">
-        <div class="ui-g-12 ui-md-3">
+        <div class="ui-g-12 ui-md-6" *ngIf="!smallGrid">
+            <img src="/api/thumbnail/{{element.id}}" width="48" height="48" alt="{{element.name}}">
+        </div>
+        <div class="ui-g-12 ui-md-4" *ngIf="smallGrid">
             <img src="/api/thumbnail/{{element.id}}" width="32" height="32" alt="{{element.name}}">
         </div>
-    </ng-template>
+    </ng-template>    
 </p-dataGrid>

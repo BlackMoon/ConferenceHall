@@ -23,8 +23,10 @@ namespace domain.Element.Command
 
         private byte[] ResizeImageBySkiaSharp(byte[] data, int size)
         {
+
             using (var ms = new MemoryStream(data))
             {
+               
                 var inputStream = new SKManagedStream(ms);
                 using (var original = SKBitmap.Decode(inputStream))
                 {
@@ -52,11 +54,9 @@ namespace domain.Element.Command
         }
         public async Task<long> ExecuteAsync(Element command)
         {
-            
 
            // command.Thumbnail = ResizeImageBySkiaSharp(command.Data,  command.Width)
-
-
+           
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.InsertAsync(command);
         }
