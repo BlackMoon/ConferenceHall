@@ -8,7 +8,7 @@ import { HallModel, SchemeModel } from '../../models';
 import { HallService } from './hall.service';
 
 @Component({
-    templateUrl: `hall-detail.component.html`
+    templateUrl: 'hall-detail.component.html'
 })
 export class HallDetailComponent implements OnInit {
 

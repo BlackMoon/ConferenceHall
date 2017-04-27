@@ -17,6 +17,7 @@ import {
 } from 'primeng/primeng';
 
 import { ElementsModule } from "../elements/elements.module";
+import { GroupsModule } from "../groups/groups.module";
 import { SchemeDetailComponent } from "./scheme-detail.component";
 import { SchemeMainComponent } from './scheme-main.component';
 import { SchemeListComponent } from "./scheme-list.component";
@@ -37,6 +38,7 @@ import { SchemeService } from './scheme.service';
         ElementsModule,
         FieldsetModule,
         FormsModule,
+        GroupsModule,
         InputTextModule,
         InputTextareaModule,
         PanelModule,
