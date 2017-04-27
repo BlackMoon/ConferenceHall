@@ -18,14 +18,16 @@ import {
 
 import { ElementsModule } from "../elements/elements.module";
 import { SchemeDetailComponent } from "./scheme-detail.component";
+import { SchemeMainComponent } from './scheme-main.component';
 import { SchemeListComponent } from "./scheme-list.component";
+import { SchemeToolboxComponent } from './scheme-toolbox.component';
 import { SchemeRoutingModule } from './schemes-routing.module';
 import { SchemeService } from './scheme.service';
 
 
 @NgModule({
-    declarations: [SchemeDetailComponent, SchemeListComponent],
-    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SchemeListComponent, SpinnerModule],
+    declarations: [SchemeDetailComponent, SchemeMainComponent, SchemeListComponent, SchemeToolboxComponent],
+    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SchemeListComponent, SchemeMainComponent, SchemeToolboxComponent, SpinnerModule],
     imports: [
         AutoCompleteModule,
         ButtonModule,

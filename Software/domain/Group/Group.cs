@@ -9,14 +9,14 @@ namespace domain.Group
     public enum GroupType
     {
         /// <summary>
-        /// Мои 
-        /// </summary>
-        User,
-
-        /// <summary>
         /// Глобальные
         /// </summary>
         Global,
+
+        /// <summary>
+        /// Мои 
+        /// </summary>
+        User,
 
         /// <summary>
         /// Избранное

@@ -15,13 +15,12 @@ import {
     ToolbarModule
 } from 'primeng/primeng';
 
-import { ElementDetailComponent } from "./element-detail.component";
-import { ElementListComponent } from "./element-list.component";
-import { ElementService } from "./element.service";
+import { GroupListComponent } from "./group-list.component";
+import { GroupService } from "./group.service";
 
 @NgModule({
-    declarations: [ElementDetailComponent, ElementListComponent],
-    exports: [ElementDetailComponent, ElementListComponent],
+    declarations: [],
+    exports: [],
     imports: [
         ButtonModule,
         CommonModule,
@@ -33,6 +32,6 @@ import { ElementService } from "./element.service";
         ReactiveFormsModule,
         SpinnerModule
     ],
-    providers: [ElementService]
+    providers: [GroupService]
 })
-export class ElementsModule { }
+export class GroupsModule { }
