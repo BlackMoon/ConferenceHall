@@ -1,5 +1,4 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
@@ -17,8 +16,7 @@ export class HallListComponent implements OnInit {
     constructor(
         private confirmationService: ConfirmationService,
         private hallService: HallService,
-        private logger: Logger,
-        private router: Router) { }
+        private logger: Logger) { }
 
     ngOnInit() {
 

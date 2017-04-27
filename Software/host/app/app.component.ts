@@ -24,10 +24,13 @@ export class AppComponent implements OnInit {
         private router: Router)
     {
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
-        logger.msgReсeived.subscribe((msgs: Message[]) => this.msgs = msgs);
+        
     }
 
     ngOnInit() {
+
+        this.logger.msgReсeived.subscribe((msgs: Message[]) => this.msgs = msgs);
+
         // start page --> navigate
         if (this.startView != undefined)
             this.router.navigateByUrl(this.startView);

@@ -1,37 +1,33 @@
 ﻿import { Component, EventEmitter, Output } from '@angular/core';
-
+import { Logger } from "../../common/logger";
 import { GroupModel } from '../../models';
+import { GroupService } from './group.service';
 
 @Component({
     selector: 'element-group-list',
-    template: `
-        <p-dataList [value]="groups" [styleClass]="'h100p'">
-            <ng-template let-element pTemplate="item">
-                <div class="ui-grid ui-grid-responsive ui-widget-content">
-                    <div class="ui-grid-row" [ngStyle]="{'cursor':'pointer', 'padding': '0.5em'}" (click)="itemClick(element)">
-                        <div class="ui-grid-col-2">
-                            <i class="{{element.icon}}"></i>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <div class="ui-helper-clearfix">{{element.name}}</div>
-                        </div>
-
-                    </div>
-                </div>
-            </ng-template>
-        </p-dataList>
-        `
+    templateUrl: 'group-list.component.html'
 })
 export class GroupListComponent {
 
-    groups: GroupModel[] = [
-        { name: 'Добавить', icon: 'fa fa-plus' },
-        { name: 'Избранное', icon: 'fa fa-star-half-o' }
-    ];
+    groups: GroupModel[];
 
     // event Handlers
     @Output() itemClicked: EventEmitter<GroupModel> = new EventEmitter();
-    
+
+    constructor(
+        private groupService: GroupService,
+        private logger: Logger) {
+        
+    }
+
+    ngOnInit() {
+
+        this.groupService
+            .getAll()
+            .subscribe(
+                groups => this.groups = groups,
+                error => this.logger.error(error));
+    }
 
     itemClick = (group: GroupModel) => this.itemClicked.emit(group);
 }
