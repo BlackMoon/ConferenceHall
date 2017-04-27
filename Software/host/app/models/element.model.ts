@@ -1,24 +1,15 @@
 ﻿import { KeyModel } from './index';
 
-/**
- * Модель. Группа элементов
- */
-export class ElementGroupModel extends KeyModel {
-
-    code: string;
-    name: string;
-    icon?: string;
-}
 
 /**
  * Модель. Элемент схемы
  */
-export class ElementModel extends ElementGroupModel {
+export class ElementModel extends KeyModel {
     
-    hover: boolean;
     favorite: boolean;
 
     image: File;
+    name: string;
 
     height?: number;
     width?: number;
@@ -26,7 +17,7 @@ export class ElementModel extends ElementGroupModel {
     constructor() {
         super();
 
-        this.code = undefined;
+        
         this.favorite = false;
         this.name = undefined;
         this.height = 1;

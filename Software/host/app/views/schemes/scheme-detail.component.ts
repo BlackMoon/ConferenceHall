@@ -44,7 +44,8 @@ export class SchemeDetailComponent {
         { id: 'itemHome', icon: 'fa-home', tooltip: 'Домой', click: () => this.homeBtnClick() },
         { id: 'itemBack', icon: 'fa-undo', tooltip: 'Назад', click: () => this.backBtnClick() },
         { id: 'itemGrid', icon: 'fa-th-large', tooltip: 'Ряд', visible: false, click: () => this.smallGridView = false },
-        { id: 'itemSmallGrid', icon: 'fa-th', tooltip: 'Сетка', visible: false, click: () => this.smallGridView = true }
+        { id: 'itemSmallGrid', icon: 'fa-th', tooltip: 'Сетка', visible: false, click: () => this.smallGridView = true },
+        { id: 'itemOptions', icon: 'fa-bars' }
     ];
 
     /**
