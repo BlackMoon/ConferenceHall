@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using domain.Element;
 using domain.Element.Command;
@@ -8,6 +9,8 @@ using domain.Element.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace host.Controllers
@@ -65,13 +68,17 @@ namespace host.Controllers
             await CommandDispatcher.DispatchAsync<CreateElementCommand, long>(value);
         }
 
-        [HttpPut("/api/favorite/{id}")]
-        public Task Put(int id, [FromBody] AddToFavoritesCommand value)
+        [HttpPatch("/api/favorite/{id}")]
+        public Task Patch(int id, [FromBody]JsonPatchDocument<AddToFavoritesCommand> patch)
         {
-            value.ElementId = id;
-            // todo from HttpContext.User
-            value.UserId = 1;
-            return CommandDispatcher.DispatchAsync(value);
+            AddToFavoritesCommand command = new AddToFavoritesCommand
+            {
+                ElementId = id,
+                UserId = 1  // todo from HttpContext.User
+            };
+            patch.ApplyTo(command, ModelState);
+            
+            return CommandDispatcher.DispatchAsync(command);
         }
         
         [HttpDelete("{id}")]

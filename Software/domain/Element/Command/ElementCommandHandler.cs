@@ -8,6 +8,7 @@ using Kit.Dal.DbManager;
 using SkiaSharp;
 using System.IO;
 using Mapster;
+using Microsoft.Extensions.Logging;
 
 namespace domain.Element.Command
 {
@@ -16,8 +17,11 @@ namespace domain.Element.Command
         ICommandHandler<AddToFavoritesCommand>,
         ICommandHandlerWithResult<CreateElementCommand, long>
     {
-        public ElementCommandHandler(IDbManager dbManager) : base(dbManager)
+        private readonly ILogger<ElementCommandHandler> _logger;
+
+        public ElementCommandHandler(IDbManager dbManager, ILogger<ElementCommandHandler> logger) : base(dbManager)
         {
+            _logger = logger;
         }
 
         private byte[] ResizeImageBySkiaSharp(byte[] data, int size)
@@ -68,7 +72,8 @@ namespace domain.Element.Command
                 "INSERT INTO conf_hall.scheme_element_favorites(scheme_element_id, user_id) VALUES(@elementid, @userid)" :
                 "DELETE FROM conf_hall.scheme_element_favorites WHERE scheme_element_id = @elementid AND user_id = @userid";
 
-            await DbManager.ExecuteNonQueryAsync(CommandType.Text, commandText);
+            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.Text, commandText);
+            _logger.LogInformation($"Modified {returnValue} records");
         }
 
         public long Execute(CreateElementCommand command)

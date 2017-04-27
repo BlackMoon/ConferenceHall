@@ -60,12 +60,12 @@ export class ElementService implements IDataService<ElementModel> {
     }
 
     /**
-     * Добавить/убрать в избранное
+     * Добавить/убрать в избранного
      */
     addToFavorite(key: number, favorite: boolean): Observable<any> {
-
+        
         return this.http
-            .put(`/api/favorite/${key}`, { favorite: favorite })
+            .patch(`/api/favorite/${key}`, [{ op: "replace", path: "/favorite", value: favorite }])
             .catch(handleResponseError);
     }
 }
