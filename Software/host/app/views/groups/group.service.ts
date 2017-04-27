@@ -7,8 +7,8 @@ import { GroupModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-const url = "/api/groups";
-//const url = "http://webtest.aquilon.ru:810/api/elements";
+//const url = "/api/groups";
+const url = "http://webtest.aquilon.ru:810/api/groups";
 
 @Injectable()
 export class GroupService implements IDataService<GroupModel> {

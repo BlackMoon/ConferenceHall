@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { IEmitEvent, Observer } from "../../common/observer";
+import { GroupModel } from '../../models';
 
 @Component({
     selector: 'scheme-toolbox',
@@ -8,8 +8,14 @@ import { Router } from '@angular/router';
 })
 export class SchemeToolboxComponent {
 
-    constructor(private router: Router) {
+    constructor(private observer: Observer) {
         
+        observer.notify("groupList_itemClicked")
+            .subscribe((event:IEmitEvent<GroupModel>) => {
+                
+                let group: GroupModel = event.value;
+                console.log(group);
+            });
     }
     
 }
