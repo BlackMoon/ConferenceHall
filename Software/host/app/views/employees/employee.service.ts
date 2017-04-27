@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { IDataService } from '../../common/data-service';
+import MapUtils from '../../common/map-utils';
 import { EmployeeModel } from '../../models/index';
 
 const url = "http://webtest.aquilon.ru:810/api/employees";
@@ -32,8 +33,11 @@ export class EmployeeService implements IDataService<EmployeeModel> {
 
         return this.http
             .get(url)
-            .map((r: Response) => r.json());
-
+            .map((r: Response) => {
+                let employee = MapUtils.deserialize(EmployeeModel, r.json());
+                employee.schemes = [{ id: 1, name: 'First' }, { id: 2, name: 'Second' }];
+                return employee;
+            });
     }
 
     update(employee): Observable<any> {
