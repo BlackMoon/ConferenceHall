@@ -1,5 +1,5 @@
 ﻿import { Component, ViewChild } from '@angular/core';
-import { ButtonItem, ElementGroupModel } from '../../models';
+import { ButtonItem, GroupModel } from '../../models';
 import { ElementListComponent } from "../elements/element-list.component";
 
 /**
@@ -13,7 +13,19 @@ const minChars = 3;
 enum Operation { Edit, Group, Filter, New, Scheme };
 
 @Component({
-    templateUrl: `scheme-detail.component.html`
+    template: `
+    <div style="position: absolute; left: -200px; height: 600px; width: 1400px">
+    
+        <div class="ui-g h100p">
+            <div class="ui-g-2 ui-md-2 ui-widget-content ui-g-nopad">
+                <scheme-toolbox></scheme-toolbox>
+            </div>
+            <div class="ui-g-10 ui-md-10 ui-widget-content ui-g-nopad">
+                <scheme-main></scheme-main>
+            </div>
+        </div>
+
+    </div>`
 })
 export class SchemeDetailComponent {
 
@@ -23,11 +35,11 @@ export class SchemeDetailComponent {
     smallGridView: boolean = false;
     title: string;
 
-    set group(group: ElementGroupModel) {
+    set group(group: GroupModel) {
         
         let title = null;
         if (!!group) {
-            this.elementList.queryElements(null, group.code);
+            //this.elementList.queryElements(null, group.code);
             title = group.name;
         }
         this.title = title;
@@ -51,7 +63,7 @@ export class SchemeDetailComponent {
     /**
      * История навигации по группам 
      */
-    prevGroups: ElementGroupModel[] = [];
+    prevGroups: GroupModel[] = [];
 
     get visibleNavButtons() {
         return this.navButtons.filter(b => !b.hasOwnProperty('visible') || b.visible);
@@ -61,12 +73,12 @@ export class SchemeDetailComponent {
 
     elementCreated = () => this.operation = Operation.Group;
 
-    elementGroupClicked = (group: ElementGroupModel) => {
+    elementGroupClicked = (group: GroupModel) => {
         
         this.prevGroups.push(this.group);
         this.smallGridView = false;
         
-        switch (group.code) {
+        /*switch (group.code) {
 
             case 'add':
                 this.operation = Operation.New;
@@ -82,7 +94,7 @@ export class SchemeDetailComponent {
                 this.group = group;
                 this.operation = Operation.Filter;
                 break;
-        }
+        }*/
 
         this.toggleGridButtons();
         
