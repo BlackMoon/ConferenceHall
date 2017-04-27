@@ -25,7 +25,7 @@ export class HallService implements IDataService<HallModel> {
     delete(key): Observable<any> {
 
         return this.http
-            .delete(`${url}\\${key}`)
+            .delete(`${url}/${key}`)
             .catch(handleResponseError);
     }
 
@@ -43,7 +43,7 @@ export class HallService implements IDataService<HallModel> {
     get(key): Observable<any> {
 
         return this.http
-            .get(`${url}\\${key}`)
+            .get(`${url}/${key}`)
             .map((r: Response) => MapUtils.deserialize(HallModel, r.json()))
             .catch(handleResponseError);
     }
@@ -51,7 +51,7 @@ export class HallService implements IDataService<HallModel> {
     update(hall): Observable<any> {
 
         return this.http
-            .put(`${url}\\${hall.id}`, hall)
+            .put(`${url}/${hall.id}`, hall)
             .catch(handleResponseError);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using domain.Element.Command;
 using domain.Hall.Command;
 using domain.Scheme.Command;
 using Kit.Core.CQRS.Job;
@@ -11,6 +12,14 @@ namespace domain.Common.Job
     {
         public void Run()
         {
+            #region Element
+            // CreateSchemeCommand --> Scheme
+            TypeAdapterConfig<CreateElementCommand, Element.Element>
+                .ForType()
+                .Map(dest => dest.MimeType, src => src.ContentType);
+
+            #endregion
+
             #region Hall
             // CreateHallCommand --> Hall
             TypeAdapterConfig<CreateHallCommand, Hall.Hall>

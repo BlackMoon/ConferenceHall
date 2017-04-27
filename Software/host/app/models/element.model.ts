@@ -27,6 +27,7 @@ export class ElementModel extends ElementGroupModel {
         super();
 
         this.code = undefined;
+        this.favorite = false;
         this.name = undefined;
         this.height = 1;
         this.width = 1;

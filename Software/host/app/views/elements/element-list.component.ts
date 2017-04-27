@@ -30,14 +30,22 @@ export class ElementListComponent  {
     isFavoriteGroup = () => this.group.toLowerCase() === favoriteGroup;
 
     favoriteClick(element) {
-        debugger;
+        
+        let favorite = element.favorite;
 
-        if (this.isFavoriteGroup() && element.favorite) {
-            let ix = this.elements.findIndex(el => el.id === element.id);
-            this.elements.splice(ix, 1);
-        }
-
-        element.favorite = !element.favorite;
+        this.elementService
+            .addToFavorite(element.id, !favorite)
+            .subscribe(
+                _ =>
+                {
+                    if (this.isFavoriteGroup() && favorite) {
+                        let ix = this.elements.findIndex(el => el.id === element.id);
+                        this.elements.splice(ix, 1);
+                    }
+                    element.favorite = !favorite;
+                },
+                error => this.logger.error(error)
+            );
     }
 
     queryElements(filter?: string, group?: string) {
@@ -47,10 +55,7 @@ export class ElementListComponent  {
         this.elementService
             .getAll(filter, group)
             .subscribe(
-                elements => {
-                    elements.forEach(el => el.favorite = this.isFavoriteGroup());
-                    this.elements = elements;
-                },
+                elements => this.elements = elements,
                 error => this.logger.error(error));    
     }
 }

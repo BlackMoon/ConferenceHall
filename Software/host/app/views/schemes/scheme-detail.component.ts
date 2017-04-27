@@ -117,6 +117,8 @@ export class SchemeDetailComponent {
             this.operation = Operation.Filter;
             this.elementList.queryElements(value);
             this.title = value;
+
+            this.toggleGridButtons();
         }
     }
 

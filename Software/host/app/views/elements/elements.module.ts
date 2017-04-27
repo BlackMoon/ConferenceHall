@@ -18,8 +18,7 @@ import {
 import { ElementGroupListComponent } from "./element-group-list.component";
 import { ElementDetailComponent } from "./element-detail.component";
 import { ElementListComponent } from "./element-list.component";
-import { ElementService } from './element.service';
-
+import { ElementService } from "./element.service";
 
 @NgModule({
     declarations: [ElementDetailComponent, ElementListComponent, ElementGroupListComponent],
@@ -33,7 +32,8 @@ import { ElementService } from './element.service';
         FormsModule,
         InputTextModule,
         ReactiveFormsModule,
-        SpinnerModule],
+        SpinnerModule
+    ],
     providers: [ElementService]
 })
 export class ElementsModule { }

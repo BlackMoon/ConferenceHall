@@ -1,24 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Data;
+using System.Threading.Tasks;
 using domain.Common.Command;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using SkiaSharp;
 using System.IO;
-
+using Mapster;
 
 namespace domain.Element.Command
 {
-    public class ElementCommandHandler: KeyObjectCommandHandler, ICommandHandlerWithResult<Element, long>
+    public class ElementCommandHandler: 
+        KeyObjectCommandHandler, 
+        ICommandHandler<AddToFavoritesCommand>,
+        ICommandHandlerWithResult<CreateElementCommand, long>
     {
         public ElementCommandHandler(IDbManager dbManager) : base(dbManager)
         {
-        }
-
-        public long Execute(Element command)
-        {
-            DbManager.Open();
-            return DbManager.DbConnection.Insert(command);
         }
 
         private byte[] ResizeImageBySkiaSharp(byte[] data, int size)
@@ -26,7 +25,7 @@ namespace domain.Element.Command
 
             using (var ms = new MemoryStream(data))
             {
-               
+
                 var inputStream = new SKManagedStream(ms);
                 using (var original = SKBitmap.Decode(inputStream))
                 {
@@ -52,12 +51,39 @@ namespace domain.Element.Command
                 }
             }
         }
-        public async Task<long> ExecuteAsync(Element command)
-        {
 
-            command.Thumbnail = ResizeImageBySkiaSharp(command.Data, 48);           
+        public void Execute(AddToFavoritesCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ExecuteAsync(AddToFavoritesCommand command)
+        {
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.InsertAsync(command);
+
+            DbManager.AddParameter("elementid", command.ElementId);
+            DbManager.AddParameter("userid", command.UserId);
+
+            string commandText = command.Favorite ? 
+                "INSERT INTO conf_hall.scheme_element_favorites(scheme_element_id, user_id) VALUES(@elementid, @userid)" :
+                "DELETE FROM conf_hall.scheme_element_favorites WHERE scheme_element_id = @elementid AND user_id = @userid";
+
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, commandText);
+        }
+
+        public long Execute(CreateElementCommand command)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<long> ExecuteAsync(CreateElementCommand command)
+        {
+            Element element = new Element();
+            command.Adapt(element);
+
+            element.Thumbnail = ResizeImageBySkiaSharp(command.Data, 48);           
+
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.InsertAsync(element);
         }
     }
 }

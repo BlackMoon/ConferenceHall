@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using domain.Element;
+using domain.Element.Command;
 using domain.Element.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
@@ -21,6 +22,10 @@ namespace host.Controllers
         [HttpGet]
         public Task<IEnumerable<Element>> Get(string group, string filter)
         {
+            // todo userId from HttpContext.User
+
+            var t = QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(new FindElementsQuery() { Filter = filter, Group = group, UserId = 1 }).Result;
+
             return QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(new FindElementsQuery() { Filter = filter, Group = group, UserId = 1 });
         }
 
@@ -28,13 +33,13 @@ namespace host.Controllers
         public async Task<ActionResult> GetThumbnail(int id)
         {
             byte[] fileContents = {};
-            string contentType = "text/html";
+            string contentType = "image/*";
 
             Element el = await QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery() { Id = id });
             if (el != null)
             {
                 fileContents = el.Data;
-                contentType = "image/*";//el.MimeType;
+                contentType = el.MimeType;
             }
 
             return new FileContentResult(fileContents, contentType);
@@ -44,7 +49,7 @@ namespace host.Controllers
         /// Отправляются файлы ('Content-Type', 'multipart/form-data')
         /// </summary>
         [HttpPost]
-        public async Task Post(Element value)
+        public async Task Post(CreateElementCommand value)
         {
             IFormFile f = Request.Form.Files.FirstOrDefault();
             if (f != null)
@@ -52,14 +57,23 @@ namespace host.Controllers
                 using (MemoryStream ms = new MemoryStream())
                 {
                     await f.CopyToAsync(ms);
-                    value.Data = value.Thumbnail = ms.ToArray();
+                    value.Data = ms.ToArray();
                 }
+                value.ContentType = f.ContentType;
             }
-            value.MimeType = "image/png";
-            await CommandDispatcher.DispatchAsync<Element, long>(value);
+            
+            await CommandDispatcher.DispatchAsync<CreateElementCommand, long>(value);
         }
 
-        // DELETE api/values/5
+        [HttpPut("/api/favorite/{id}")]
+        public Task Put(int id, [FromBody] AddToFavoritesCommand value)
+        {
+            value.ElementId = id;
+            // todo from HttpContext.User
+            value.UserId = 1;
+            return CommandDispatcher.DispatchAsync(value);
+        }
+        
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -12,8 +12,6 @@ namespace domain.Element.Query
         KeyObjectQueryHandler<FindElementByIdQuery, Element>, 
         IQueryHandler<FindElementsQuery, IEnumerable<Element>>
     {
-        private const string SelectElements = "SELECT e.* FROM conf_hall.scheme_elements e";
-
         private readonly ICacheManager<Element> _cacheManager;
 
         public ElementQueryHandler(IDbManager dbManager, ICacheManager<Element> cacheManager) : base(dbManager)
@@ -41,25 +39,35 @@ namespace domain.Element.Query
         
         public async Task<IEnumerable<Element>> ExecuteAsync(FindElementsQuery query)
         {
-            await DbManager.OpenAsync();
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.scheme_elements e")
+                .Column("e.id")
+                .Column("e.name")
+                .Column("e.height")
+                .Column("e.width")
+                .Column("f.scheme_element_id IS NOT NULL favorite");
 
-            object param = null;
-            string sql = SelectElements;
+            DynamicParameters param = new DynamicParameters();
+            param.Add("userid", query.UserId);
 
-            // может задваться либо фильтр
+            // может задаваться либо фильтр
             if (!string.IsNullOrEmpty(query.Filter))
             {
-                sql += " WHERE e.name LIKE @filter";
-                param = new { filter = query.Filter + "%" };
+                sqlBuilder
+                    .LeftJoin("conf_hall.scheme_element_favorites f ON f.scheme_element_id = e.id AND f.user_id = @userid")
+                    .Where("e.name LIKE @filter");
+                
+                param.Add("filter", query.Filter + "%");
             }
-            // либо группа(favorites)
+            // либо группа(группа favorites)
             if (!string.IsNullOrEmpty(query.Group))
             {
-                sql += " JOIN conf_hall.scheme_element_favorites f ON f.scheme_element_id = e.id WHERE f.user_id = @userid";
-                param = new { userid = query.UserId };
+                sqlBuilder
+                    .Column("true favorite")
+                    .Join("conf_hall.scheme_element_favorites f ON f.scheme_element_id = e.id AND f.user_id = @userid");
             }
 
-            return await DbManager.DbConnection.QueryAsync<Element>(sql, param);
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryAsync<Element>(sqlBuilder.ToString(), param);
         }
     }
 }

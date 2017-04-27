@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
+using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
 
@@ -8,17 +9,23 @@ namespace domain.Element
     /// <summary>
     /// Модель. Элемент схемы
     /// </summary>
-    [Table("conf_hall.scheme_elements")]
+    [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.scheme_elements")]
     public class Element : KeyObject, ICommand
     {
         /// <summary>
+        /// Элемент в [избранном]?
+        /// </summary>
+        [Write(false)]
+        public bool Favorite { get; set; }
+
+        /// <summary>
         /// Код
         /// </summary>
-        [Dapper.Contrib.Extensions.Write(false)]
+        [Write(false)]
         public string Code { get; set; }
 
         [Column("mime_type")]
-        public string MimeType { get; set; }
+        public string MimeType { get; set; } = "image/*";
 
         /// <summary>
         /// Наименование

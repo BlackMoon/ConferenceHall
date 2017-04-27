@@ -7,8 +7,8 @@ import { ElementModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-//const url = "/api/elements";
-const url = "http://webtest.aquilon.ru:810/api/elements";
+const url = "/api/elements";
+//const url = "http://webtest.aquilon.ru:810/api/elements";
 
 @Injectable()
 export class ElementService implements IDataService<ElementModel> {
@@ -18,10 +18,10 @@ export class ElementService implements IDataService<ElementModel> {
     add(element): Observable<any> {
 
         let formData: FormData = new FormData();
-        formData.append('name', element.name);
-        formData.append('data', element.image, element.image.name);
-        formData.append('height', element.height);
-        formData.append('width', element.width);
+        formData.append("name", element.name);
+        formData.append("data", element.image, element.image.name);
+        formData.append("height", element.height);
+        formData.append("width", element.width);
 
         return this.http
             .post(url, formData)
@@ -44,7 +44,7 @@ export class ElementService implements IDataService<ElementModel> {
             .get(url + (queryParams.length > 0 ? `?${queryParams.join("&")}` : ""))
             .map((r: Response) => r
                 .json()
-                .map(h => MapUtils.deserialize(ElementModel, h))
+                .map(el => MapUtils.deserialize(ElementModel, el))
             )
             .catch(handleResponseError);
     }
@@ -60,12 +60,12 @@ export class ElementService implements IDataService<ElementModel> {
     }
 
     /**
-     * В/Из избранное
+     * Добавить/убрать в избранное
      */
-    toggleFavorite(element): Observable<any> {
+    addToFavorite(key: number, favorite: boolean): Observable<any> {
 
-
-
-        return Observable.empty();
+        return this.http
+            .put(`/api/favorite/${key}`, { favorite: favorite })
+            .catch(handleResponseError);
     }
 }

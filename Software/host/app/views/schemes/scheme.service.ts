@@ -24,7 +24,7 @@ export class SchemeService implements IDataService<SchemeModel> {
     delete(key): Observable<any> {
 
         return this.http
-            .delete(`${url}\\${key}`)
+            .delete(`${url}/${key}`)
             .catch(handleResponseError);
     }
 
@@ -33,7 +33,7 @@ export class SchemeService implements IDataService<SchemeModel> {
     get(key): Observable<any> {
 
         return this.http
-            .get(`${url}\\${key}`)
+            .get(`${url}/${key}`)
             .map((r: Response) => r.json())
             .catch(handleResponseError);
     }
@@ -41,7 +41,7 @@ export class SchemeService implements IDataService<SchemeModel> {
     update(scheme): Observable<any> {
 
         return this.http
-            .put(`${url}\\${scheme.id}`, scheme)
+            .put(`${url}/${scheme.id}`, scheme)
             .catch(handleResponseError);
     }
 }
