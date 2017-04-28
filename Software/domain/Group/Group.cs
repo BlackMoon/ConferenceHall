@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
+using Newtonsoft.Json;
 
 namespace domain.Group
 {
@@ -9,11 +11,6 @@ namespace domain.Group
     public enum GroupType
     {
         /// <summary>
-        /// Глобальные
-        /// </summary>
-        Global,
-
-        /// <summary>
         /// Мои 
         /// </summary>
         User,
@@ -21,7 +18,12 @@ namespace domain.Group
         /// <summary>
         /// Избранное
         /// </summary>
-        Favorites
+        Favorites,
+
+        /// <summary>
+        /// Глобальные
+        /// </summary>
+        Global
     }
 
     /// <summary>
@@ -34,7 +36,20 @@ namespace domain.Group
 
         public string Icon { get; set; }
 
-        [Column("type")]
+        /// <summary>
+        /// Тип группы
+        /// </summary>
         public GroupType GroupType { get; set; }
+
+        [Column("type")]
+        [JsonIgnore]
+        public string Type {
+            set
+            {
+                GroupType groupType;
+                Enum.TryParse(value, true, out groupType);
+                GroupType = groupType;
+            }
+        }
     }
 }
