@@ -1,19 +1,18 @@
-﻿import { Component, Input } from '@angular/core';
+﻿import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
-const favoriteGroup = "favorite";
-
 @Component({
     selector: 'element-list',
     styleUrls: ['element-list.component.css'],
     templateUrl: 'element-list.component.html'
 })
-export class ElementListComponent  {
-
+export class ElementListComponent implements OnInit  {
+    
     group: string;
     elements: ElementModel[] = [];
 
@@ -22,40 +21,22 @@ export class ElementListComponent  {
 
     constructor(
         private elementService: ElementService,
-        private logger: Logger) { }
+        private logger: Logger,
+        private route: ActivatedRoute) { }
 
-    /**
-     * Отображается группа [Избранное]?
-     */
-    isFavoriteGroup = () => this.group.toLowerCase() === favoriteGroup;
 
-    favoriteClick(element) {
-        
-        let favorite = element.favorite;
+    ngOnInit() {
 
-        this.elementService
-            .addToFavorite(element.id, !favorite)
-            .subscribe(
-                _ =>
-                {
-                    if (this.isFavoriteGroup() && favorite) {
-                        let ix = this.elements.findIndex(el => el.id === element.id);
-                        this.elements.splice(ix, 1);
-                    }
-                    element.favorite = !favorite;
-                },
-                error => this.logger.error(error)
-            );
-    }
+        this.route.queryParams
+            .switchMap((params: Params) => {
 
-    queryElements(filter?: string, group?: string) {
+                let filter = params["filter"];
+                let groupid = +params["groupid"]; // (+) converts string 'id' to a number
 
-        this.group = group || "";
-
-        this.elementService
-            .getAll(filter, group)
+                return this.elementService.getAll(filter, groupid);
+            })
             .subscribe(
                 elements => this.elements = elements,
-                error => this.logger.error(error));    
+                error => this.logger.error(error));
     }
 }

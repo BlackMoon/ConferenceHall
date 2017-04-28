@@ -6,7 +6,7 @@ namespace domain.Element.Query
     {
         public string Filter { get; set; }
 
-        public string Group { get; set; }
+        public int? GroupId { get; set; }
 
         public int UserId { get; set; }
     }

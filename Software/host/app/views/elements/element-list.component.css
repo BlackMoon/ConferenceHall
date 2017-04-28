@@ -1,18 +1,15 @@
 ﻿img.center {
     display: table;
-    margin: 0 auto;
 }
 
-.ui-favorite, .ui-remove {
+.ui-select {
     position: absolute;
-}
-
-.ui-favorite {
-    bottom: 0;
-    left: 0;
-}
-
-.ui-remove {
-    top: 0;
+    top: 24px;
     right: 0;
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

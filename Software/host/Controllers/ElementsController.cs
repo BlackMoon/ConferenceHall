@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using domain.Element;
 using domain.Element.Command;
@@ -9,7 +8,6 @@ using domain.Element.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,13 +21,16 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Element>> Get(string group, string filter)
+        public Task<IEnumerable<Element>> Get(int? groupId, string filter)
         {
             // todo userId from HttpContext.User
-
-            var t = QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(new FindElementsQuery() { Filter = filter, Group = group, UserId = 1 }).Result;
-
-            return QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(new FindElementsQuery() { Filter = filter, Group = group, UserId = 1 });
+            FindElementsQuery query = new FindElementsQuery()
+            {
+                Filter = filter,
+                GroupId = groupId,
+                UserId = 1
+            };
+            return QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(query);
         }
 
         [HttpGet("/api/thumbnail/{id}")]

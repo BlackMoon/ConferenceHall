@@ -6,7 +6,7 @@
  */
 export class ElementModel extends KeyModel {
     
-    favorite: boolean;
+    selected: boolean = false;
 
     image: File;
     name: string;
@@ -16,9 +16,7 @@ export class ElementModel extends KeyModel {
 
     constructor() {
         super();
-
         
-        this.favorite = false;
         this.name = undefined;
         this.height = 1;
         this.width = 1;

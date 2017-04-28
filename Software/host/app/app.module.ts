@@ -3,13 +3,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from "./app.component";
 import { AuthModule } from "./common/auth/auth.module";
 import { Logger } from "./common/logger";
-import { Observer } from "./common/observer";
+import { MatchHeightDirective } from "./common/match-height.directive";
+import { Mediator } from "./common/mediator";
 import { NavigationModule } from './common/navigation/navigation.module';
 
 @NgModule({    
     bootstrap: [AppComponent],
-    declarations: [AppComponent],     
+    declarations: [AppComponent, MatchHeightDirective],     
     imports: [AuthModule.forRoot(), NavigationModule, BrowserAnimationsModule],
-    providers: [Logger, Observer]
+    providers: [Logger, Mediator]
 })
 export class AppModule { }

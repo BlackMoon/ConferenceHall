@@ -43,27 +43,27 @@ namespace domain.Element.Query
                 .Column("e.id")
                 .Column("e.name")
                 .Column("e.height")
-                .Column("e.width")
-                .Column("f.scheme_element_id IS NOT NULL favorite");
+                .Column("e.width");
 
             DynamicParameters param = new DynamicParameters();
-            param.Add("userid", query.UserId);
 
             // может задаваться либо фильтр
             if (!string.IsNullOrEmpty(query.Filter))
             {
-                sqlBuilder
-                    .LeftJoin("conf_hall.scheme_element_favorites f ON f.scheme_element_id = e.id AND f.user_id = @userid")
-                    .Where("e.name LIKE @filter");
+                sqlBuilder.Where("e.name LIKE @filter");
                 
                 param.Add("filter", query.Filter + "%");
             }
-            // либо группа(группа favorites)
-            if (!string.IsNullOrEmpty(query.Group))
+            // либо группа(groupId)
+            if (query.GroupId.HasValue)
             {
                 sqlBuilder
-                    .Column("true favorite")
-                    .Join("conf_hall.scheme_element_favorites f ON f.scheme_element_id = e.id AND f.user_id = @userid");
+                    .Join("scheme_element_locations l ON l.scheme_element_id = e.id")
+                    .Join("scheme_element_groups g ON g.id = l.scheme_element_group_id")
+                    .Where("g.id = @groupid AND (l.user_id = @userid OR l.user_id IS NULL)");
+
+                param.Add("groupid", query.GroupId);
+                param.Add("userid", query.UserId);
             }
 
             await DbManager.OpenAsync();

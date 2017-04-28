@@ -7,8 +7,8 @@ import { ElementModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-const url = "/api/elements";
-//const url = "http://webtest.aquilon.ru:810/api/elements";
+//const url = "/api/elements";
+const url = "http://webtest.aquilon.ru:810/api/elements";
 
 @Injectable()
 export class ElementService implements IDataService<ElementModel> {
@@ -33,12 +33,12 @@ export class ElementService implements IDataService<ElementModel> {
         return Observable.empty();
     }
 
-    getAll(filter?: string, group?:string): Observable<any> {
+    getAll(filter?: string, groupid?:number): Observable<any> {
 
         let queryParams = [];
 
         filter && queryParams.push(`filter=${filter}`);
-        group && queryParams.push(`group=${group}`);
+        groupid && queryParams.push(`groupid=${groupid}`);
         
         return this.http
             .get(url + (queryParams.length > 0 ? `?${queryParams.join("&")}` : ""))

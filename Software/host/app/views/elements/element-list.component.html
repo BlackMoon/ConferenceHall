@@ -1,9 +1,12 @@
-﻿<p-dataGrid [value]="elements" [styleClass]="'center'">
+﻿<p-dataGrid [value]="elements" [styleClass]="'center h100p'">
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6" *ngIf="!smallGrid">
-            <div title="{{element.name}}" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '72px', 'padding':'12px'}" >
+            <div [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" >
                 <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="48" height="48" title="{{element.name}}">
-                <i class="fa {{element.favorite ? 'fa-star-half-o' : 'fa-star-o'}} ui-favorite" [ngStyle]="{'cursor':'pointer'}" title="{{element.favorite ? 'Из избранного' : 'В избранное'}}" (click)="favoriteClick(element)"></i>
+                <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="element.selected = !element.selected"></i>
+                <div [ngClass]="'text-ellipsis'"[ngStyle]="{'width': '54px'}">
+                    <small>{{element.name}}</small>
+                </div>
             </div>
         </div>
         <div class="ui-md-4" *ngIf="smallGrid">

@@ -1,6 +1,6 @@
-﻿import { Component, EventEmitter, Output } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { Logger } from "../../common/logger";
-import { Observer } from "../../common/observer";
+import { Mediator } from "../../common/mediator";
 import { GroupModel } from '../../models';
 import { GroupService } from './group.service';
 
@@ -8,14 +8,14 @@ import { GroupService } from './group.service';
     selector: 'element-group-list',
     templateUrl: 'group-list.component.html'
 })
-export class GroupListComponent {
+export class GroupListComponent implements OnInit {
 
     groups: GroupModel[];
 
     constructor(
         private groupService: GroupService,
         private logger: Logger,
-        private observer: Observer) {
+        private mediator: Mediator) {
 
     }
 
@@ -28,5 +28,5 @@ export class GroupListComponent {
                 error => this.logger.error(error));
     }
 
-    itemClick = (group: GroupModel) => this.observer.send("groupList_itemClicked", group);
+    itemClick = (group: GroupModel) => this.mediator.send("groupList_itemClicked", group);
 }
