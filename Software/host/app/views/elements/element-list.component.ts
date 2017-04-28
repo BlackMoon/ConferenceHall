@@ -3,6 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
+import { Mediator } from "../../common/mediator";
 import { ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
@@ -13,17 +14,19 @@ import { ElementService } from './element.service';
 })
 export class ElementListComponent implements OnInit  {
     
-    group: string;
     elements: ElementModel[] = [];
-
-    @Input()
+    
     smallGrid: boolean;
 
     constructor(
         private elementService: ElementService,
         private logger: Logger,
-        private route: ActivatedRoute) { }
+        private mediator: Mediator,
+        private route: ActivatedRoute) {
 
+        mediator.notify("elementList_viewChanged")
+            .subscribe(sm => this.smallGrid = sm);
+    }
 
     ngOnInit() {
 

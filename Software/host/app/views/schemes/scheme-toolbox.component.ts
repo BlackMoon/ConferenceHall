@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Mediator } from "../../common/mediator";
 import { GroupModel } from '../../models';
+import { MenuItem } from 'primeng/primeng';
 
 /**
  * min кол-во символов фильтра
@@ -18,6 +19,9 @@ export class SchemeToolboxComponent implements AfterViewInit {
 
     filter: string;
     header: string;
+    gridButtonsVisible = false;
+
+    items: MenuItem[];
 
     @ViewChild('content') contentElRef: ElementRef;
     @ViewChild('wrapper') wrapperElRef: ElementRef;
@@ -34,7 +38,13 @@ export class SchemeToolboxComponent implements AfterViewInit {
                 this.router.navigate(["elements"], { queryParams: { groupid: g.id }, relativeTo: this.route });
                 this.filter = null;
                 this.header = g.name;
+                this.gridButtonsVisible = true;
             });
+
+        this.items = [
+            { label: 'New', icon: 'fa-plus' },
+            { label: 'Open', icon: 'fa-download' }
+        ];
     }
 
     ngAfterViewInit() {
@@ -44,6 +54,11 @@ export class SchemeToolboxComponent implements AfterViewInit {
     backButtonClick() {
         this.router.navigate(["groups"], { relativeTo: this.route });
         this.filter = this.header = null;
+        this.gridButtonsVisible = false;
+    }
+
+    toggleGridView(smallGrid) {
+        this.mediator.send("elementList_viewChanged", smallGrid);    
     }
 
     /**
@@ -58,6 +73,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
 
             this.router.navigate(["elements"], { queryParams: { filter: value }, relativeTo: this.route });
             this.header = value;
+            this.gridButtonsVisible = true;
         }
     }
 
