@@ -15,7 +15,7 @@ import { ElementService } from './element.service';
 export class ElementListComponent implements OnInit  {
     
     elements: ElementModel[] = [];
-    
+    selected: number = 0;
     smallGrid: boolean;
 
     constructor(
@@ -41,5 +41,11 @@ export class ElementListComponent implements OnInit  {
             .subscribe(
                 elements => this.elements = elements,
                 error => this.logger.error(error));
+    }
+
+    selectElement(element) {
+        element.selected = !element.selected;
+        this.selected += element.selected ? 1 : -1;
+        this.mediator.send("elementList_selectionChanged", this.selected);
     }
 }

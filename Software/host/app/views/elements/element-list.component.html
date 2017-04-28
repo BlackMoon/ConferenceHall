@@ -3,7 +3,7 @@
         <div class="ui-md-6" *ngIf="!smallGrid">
             <div [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" >
                 <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="48" height="48" title="{{element.name}}">
-                <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="element.selected = !element.selected"></i>
+                <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
                 <div [ngClass]="'text-ellipsis'"[ngStyle]="{'width': '54px'}">
                     <small>{{element.name}}</small>
                 </div>
