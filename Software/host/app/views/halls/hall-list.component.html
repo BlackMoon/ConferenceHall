@@ -13,7 +13,7 @@
                         <i *ngIf="hall.id" class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" (click)="removeHall(hall.id, hall.name)" title="Удалить"></i>
                     </p-header>
 
-                    <a [routerLink]="['/hall', hall.id || '']">
+                    <a [routerLink]="['/halls', hall.id || 'new']">
                         <img src="/assets/office_64x64.png">
                         <div class="hall-detail">
                             {{hall.description}}

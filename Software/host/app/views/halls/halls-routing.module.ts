@@ -6,8 +6,8 @@ import { HallListComponent } from './hall-list.component';
 
 const hallRoutes: Routes = [
     { path: 'halls', component: HallListComponent },
-    { path: 'hall', component: HallDetailComponent },    
-    { path: 'hall/:id', component: HallDetailComponent }
+    { path: 'halls/new', component: HallDetailComponent },    
+    { path: 'halls/:id', component: HallDetailComponent }
 ];
 
 @NgModule({

@@ -15,7 +15,7 @@ import { ElementService } from './element.service';
 export class ElementListComponent implements OnInit  {
     
     elements: ElementModel[] = [];
-    selected: number = 0;
+    selectedElementIds: number[] = [];
     smallGrid: boolean;
 
     constructor(
@@ -33,8 +33,8 @@ export class ElementListComponent implements OnInit  {
         this.route.queryParams
             .switchMap((params: Params) => {
 
-                let filter = params["filter"];
-                let groupid = +params["groupid"]; // (+) converts string 'id' to a number
+                let filter = params["f"];
+                let groupid = +params["gid"]; // (+) converts string 'id' to a number
 
                 return this.elementService.getAll(filter, groupid);
             })
@@ -45,7 +45,14 @@ export class ElementListComponent implements OnInit  {
 
     selectElement(element) {
         element.selected = !element.selected;
-        this.selected += element.selected ? 1 : -1;
-        this.mediator.send("elementList_selectionChanged", this.selected);
+
+        if (element.selected) 
+            this.selectedElementIds.push(element.id);
+        else {
+            let ix = this.selectedElementIds.indexOf(element.id);
+            this.selectedElementIds.splice(ix, 1);
+        }
+        
+        this.mediator.send("elementList_selectionChanged", this.selectedElementIds);
     }
 }

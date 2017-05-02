@@ -22,43 +22,35 @@ export class SchemeToolboxComponent implements AfterViewInit {
     header: string;
     groupType: GroupType;
     gridButtonsVisible = false;
+    selectedElementIds: number[] = [];
 
     menuItems: MenuItem[];
-    
-    @ViewChild('content') contentElRef: ElementRef;
-    @ViewChild('menuToggler') menuTogglerElRef: ElementRef;
-    @ViewChild('wrapper') wrapperElRef: ElementRef;
+
+    @ViewChild('content')
+    contentElRef: ElementRef;
+    @ViewChild('menuToggler')
+    menuTogglerElRef: ElementRef;
+    @ViewChild('wrapper')
+    wrapperElRef: ElementRef;
 
     constructor(
         private mediator: Mediator,
         private location: Location,
         private route: ActivatedRoute,
         private router: Router) {
-        
+
         mediator.notify("groupList_itemClicked")
             .subscribe((g: GroupModel) => {
 
-                this.router.navigate(["elements"], { queryParams: { groupid: g.id }, relativeTo: this.route });
+                this.router.navigate(["elements"], { queryParams: { gid: g.id }, relativeTo: this.route });
                 this.filter = null;
                 this.header = g.name;
                 this.gridButtonsVisible = true;
                 this.groupType = g.groupType;
-                debugger;
-                
             });
 
         mediator.notify("elementList_selectionChanged")
-            .subscribe(n => {
-
-                debugger;
-            });
-
-        this.menuItems = [
-            { label: 'В избранное', icon: 'fa-star' },
-            { label: 'Добавить', icon: 'fa-plus' },
-            { label: 'Изменить', icon: 'fa-pencil-square-o' },
-            { label: 'Удалить', icon: 'fa-trash' }
-        ];
+            .subscribe(n => this.selectedElementIds = n);
     }
 
     ngAfterViewInit() {
@@ -82,7 +74,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
 
         if (value.length >= minChars) {
 
-            this.router.navigate(["elements"], { queryParams: { filter: value }, relativeTo: this.route });
+            this.router.navigate(["elements"], { queryParams: { f: value }, relativeTo: this.route });
             this.header = value;
             this.gridButtonsVisible = true;
             this.groupType = null;
@@ -101,6 +93,43 @@ export class SchemeToolboxComponent implements AfterViewInit {
     }
 
     toggleMenu(event) {
+
+        this.menuItems = [];
+        
+        switch (this.groupType) {
+            // изменения только в пользовательской группе
+            case GroupType.User:
+                
+                this.menuItems.push({ label: 'Добавить', icon: 'fa-plus', routerLink: "elements/new" });
+
+                if (this.selectedElementIds.length > 0) {
+                    this.menuItems.push({ label: 'Изменить', icon: 'fa-pencil-square-o' });
+                    this.menuItems.push({ label: 'Удалить', icon: 'fa-trash' });
+                    this.menuItems.push({ label: 'В избранное', icon: 'fa-star' });
+                }
+                break;
+
+            case GroupType.Favorites:
+                this.menuItems.push({ label: 'Удалить из избранного', icon: 'fa-star' });
+            
+                break;
+
+            default:
+
+                if (this.selectedElementIds.length > 0) {
+
+                    this.menuItems.push({
+                        label: 'В избранное',
+                        icon: 'fa-star',
+                        command: () => {
+                            debugger;
+                        }
+                    });
+                }
+                break;
+
+        }
+
         if (this.menuItems.length > 0) {
             this.menuTogglerElRef.nativeElement.click();
             event.stopPropagation();
