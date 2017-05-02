@@ -85,7 +85,15 @@ namespace domain.Element.Command
             element.Thumbnail = ResizeImageBySkiaSharp(command.Data, 48);           
 
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.InsertAsync(element);
+            int newId = await DbManager.DbConnection.InsertAsync(element);
+            
+            DbManager.AddParameter("pscheme_element_id", new []{ newId });
+            DbManager.AddParameter("puser_id", command.UserId);
+
+            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_user_add");
+            _logger.LogInformation($"Modified {returnValue} records");
+
+            return newId;
         }
 
         public void Execute(DeleteElementsCommand command)

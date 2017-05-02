@@ -14,7 +14,7 @@ export class Mediator {
 
     private eventBus = new Subject<IBroadcastEvent>();
 
-    broadcast = (key: any, data: any) => this.eventBus.next({ key, data });
+    broadcast = (key: any, data?: any) => this.eventBus.next({ key, data });
 
     /**
      * Подписаться на уведомление

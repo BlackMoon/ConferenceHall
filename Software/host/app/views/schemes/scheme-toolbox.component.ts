@@ -31,8 +31,10 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild('content')
     contentElRef: ElementRef;
+
     @ViewChild('menuToggler')
     menuTogglerElRef: ElementRef;
+
     @ViewChild('wrapper')
     wrapperElRef: ElementRef;
 
@@ -60,6 +62,12 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
 
         this.subscription.add(
             mediator
+                .on("elementDetail_itemSaved")
+                .subscribe(_ => this.homeButtonClick())
+        );
+
+        this.subscription.add(
+            mediator
                 .on<number[]>("elementList_selectionChanged")
                 .subscribe(n => this.selectedElementIds = n)
         );
@@ -73,7 +81,7 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    homeButtonClick(event) {
+    homeButtonClick() {
         this.router.navigate(["groups"], { relativeTo: this.route });
         this.filter = this.header = null;
         this.gridButtonsVisible = false;
@@ -115,14 +123,28 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
         this.menuItems = [];
         
         switch (this.groupType) {
-            // изменения только в пользовательской группе
+            // изменения только в пользовательской группе!
             case GroupType.User:
                 
-                this.menuItems.push({ label: 'Добавить', icon: 'fa-plus', routerLink: "elements/new" });
+                this.menuItems.push({
+                    label: 'Добавить',
+                    icon: 'fa-plus',
+                    command: (event) => {
+                        this.header = event.item.label;
+                        this.router.navigate(["elements/new"], { relativeTo: this.route });
+                    }
+                });
                
                 if (this.selectedElementIds.length > 0) {
 
-                    this.menuItems.push({ label: "Изменить", icon: 'fa-pencil-square-o', routerLink: `elements/${this.selectedElementIds[0]}` });
+                    this.menuItems.push({
+                        label: "Изменить",
+                        icon: 'fa-pencil-square-o',
+                        command: (event) => {
+                            this.header = event.item.label;
+                            this.router.navigate([`elements/${this.selectedElementIds[0]}`], { relativeTo: this.route });
+                        }
+                    });
 
                     this.menuItems.push({
                         label: 'Удалить',

@@ -9,7 +9,7 @@
             <div class="ui-grid-col-12" [ngStyle]="{'padding-top':0, 'padding-bottom':0}">
                 <p-toolbar>
                     <div class="ui-toolbar-group-left">
-                        <button pButton type="button" icon="fa-home" (click)="homeButtonClick($event)"></button><button pButton type="button" icon="fa-th-large" title="Ряд" (click)="toggleGridView(false)" *ngIf="gridButtonsVisible"></button><button pButton type="button" icon="fa-th" title="Сетка" (click)="toggleGridView(true)" *ngIf="gridButtonsVisible"></button>
+                        <button pButton type="button" icon="fa-home" (click)="homeButtonClick()"></button><button pButton type="button" icon="fa-th-large" title="Ряд" (click)="toggleGridView(false)" *ngIf="gridButtonsVisible"></button><button pButton type="button" icon="fa-th" title="Сетка" (click)="toggleGridView(true)" *ngIf="gridButtonsVisible"></button>
                         <div ></div>
                     </div>
                     <div class="ui-toolbar-group-right">

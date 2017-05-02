@@ -7,8 +7,8 @@ import { ElementGroupCommand, ElementModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
-//const url = "/api/elements";
-const url = "http://webtest.aquilon.ru:810/api/elements";
+const url = "/api/elements";
+//const url = "http://webtest.aquilon.ru:810/api/elements";
 
 @Injectable()
 export class ElementService implements IDataService<ElementModel> {
@@ -36,6 +36,7 @@ export class ElementService implements IDataService<ElementModel> {
         
         return this.http
             .post("/api/elements/delete", c)
+            .map(_ => c.ids)
             .catch(handleResponseError);
     }
 

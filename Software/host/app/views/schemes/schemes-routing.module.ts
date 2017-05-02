@@ -13,7 +13,8 @@ const schemeRoutes: Routes = [
             { path: "", redirectTo: "groups", pathMatch: "full" },
             { path: "groups", component: GroupListComponent, data: { preload: true } },
             { path: "elements", component: ElementListComponent },
-            { path: "elements/new", component: ElementDetailComponent }
+            { path: "elements/new", component: ElementDetailComponent },
+            { path: "elements/:id", component: ElementDetailComponent }
         ]
     }
 ];

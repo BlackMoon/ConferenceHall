@@ -1,8 +1,8 @@
 ﻿import { Component, EventEmitter,  OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { FileUpload } from 'primeng/components/fileupload/fileupload';
 import { Logger } from "../../common/logger";
+import { Mediator } from "../../common/mediator";
 import { ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
@@ -15,16 +15,13 @@ export class ElementDetailComponent implements OnInit {
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
 
-    // event Handlers
-    @Output() itemSaved: EventEmitter<any> = new EventEmitter();
-
     elementform: FormGroup;
-    uploadedFiles: any[] = [];
 
     constructor(
         private elementService: ElementService,
         private fb: FormBuilder,
-        private logger: Logger) { }
+        private logger: Logger,
+        private mediator: Mediator) { }
 
     ngOnInit() {
 
@@ -42,7 +39,7 @@ export class ElementDetailComponent implements OnInit {
         this.elementService
             .add(element)
             .subscribe(
-                _ => this.itemSaved.emit(),
+                _ => this.mediator.broadcast("elementDetail_itemSaved"),
                 error => this.logger.error(error));
     }
 }

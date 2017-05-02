@@ -60,6 +60,8 @@ namespace host.Controllers
         [HttpPost]
         public async Task Post(CreateElementCommand value)
         {
+            value.UserId = 1;  // todo from HttpContext.User
+
             IFormFile f = Request.Form.Files.FirstOrDefault();
             if (f != null)
             {

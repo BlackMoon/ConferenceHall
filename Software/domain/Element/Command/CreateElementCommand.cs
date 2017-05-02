@@ -4,6 +4,8 @@ namespace domain.Element.Command
 {
     public class CreateElementCommand : ICommand
     {
+        public int UserId { get; set; }
+
         public string ContentType { get; set; } = "image/*";
 
         /// <summary>
@@ -15,7 +17,6 @@ namespace domain.Element.Command
         /// Эскиз
         /// </summary>
         public byte[] Data { get; set; }
-        
 
         /// <summary>
         /// Реальная высота, м

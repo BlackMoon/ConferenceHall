@@ -31,22 +31,22 @@ export class ElementListComponent implements OnInit, OnDestroy  {
                 .on<ElementGroupCommand>("elementList_addToFavorites")
                 .flatMap((c:ElementGroupCommand) => this.elementService.addToFavorites(c))
                 .subscribe(
-                    _ => {},
+                    _ => { },
                     error => this.logger.error(error))
         );
 
         this.subscription.add(
             mediator
-            .on<ElementGroupCommand>("elementList_deleteElements")
-            .flatMap((c:ElementGroupCommand) => this.elementService.delete(c))
-            .subscribe((ids: number[]) =>
-            {
-                for (let id of ids) {
-                    let ix = this.elements.findIndex(e => e.id === id);
-                    this.elements.splice(ix, 1);
-                }
-            },
-            error => this.logger.error(error))
+                .on<ElementGroupCommand>("elementList_deleteElements")
+                .flatMap((c:ElementGroupCommand) => this.elementService.delete(c))
+                .subscribe((ids: number[]) => {
+                       
+                    for (let id of ids) {
+                        let ix = this.elements.findIndex(e => e.id === id);
+                        this.elements.splice(ix, 1);
+                    }
+                },
+                error => this.logger.error(error))
         );
 
         this.subscription.add(
@@ -63,7 +63,7 @@ export class ElementListComponent implements OnInit, OnDestroy  {
             .switchMap((params: Params) => {
 
                 let filter = params["f"];
-                let groupid = +params["gid"]; // (+) converts string 'id' to a number
+                let groupid = +params["gid"]; // (+) converts string 'gid' to a number
 
                 return this.elementService.getAll(filter, groupid);
             })
