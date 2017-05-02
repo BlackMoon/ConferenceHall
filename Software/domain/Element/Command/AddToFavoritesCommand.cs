@@ -2,13 +2,11 @@
 
 namespace domain.Element.Command
 {
+    /// <summary>
+    /// Команда. Добавить в избранное
+    /// </summary>
     public class AddToFavoritesCommand : ICommand
     {
-        /// <summary>
-        /// Добавить/удалить
-        /// </summary>
-        public bool Add { get; set; }
-
         /// <summary>
         /// id элементов
         /// </summary>

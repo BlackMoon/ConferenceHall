@@ -1,8 +1,11 @@
 ﻿import { KeyModel } from './index';
 
-export class AddToFavoritesModel {
-    add: boolean;
+/**
+ * Команда мульти-обработки элементов
+ */
+export class ElementGroupCommand {
     ids: number[];
+    groupid?: number;
 }
 
 

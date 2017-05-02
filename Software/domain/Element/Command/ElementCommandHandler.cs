@@ -7,7 +7,6 @@ using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using SkiaSharp;
 using System.IO;
-using System.Text;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
@@ -19,8 +18,6 @@ namespace domain.Element.Command
         ICommandHandlerWithResult<CreateElementCommand, long>,
         ICommandHandler<DeleteElementsCommand>
     {
-        private const int FavoritesGroupId = 3;
-
         private readonly ILogger<ElementCommandHandler> _logger;
 
         public ElementCommandHandler(IDbManager dbManager, ILogger<ElementCommandHandler> logger) : base(dbManager)
@@ -67,45 +64,12 @@ namespace domain.Element.Command
 
         public async Task ExecuteAsync(AddToFavoritesCommand command)
         {
-            DbManager.AddParameter("scheme_element_group_id", FavoritesGroupId);
-            DbManager.AddParameter("userid", command.UserId);
-
-            int i;
-            StringBuilder sb = new StringBuilder();
-            string commandText;
-            if (command.Add)
-            {
-                commandText = "INSERT INTO conf_hall.scheme_element_locations(scheme_element_id, user_id, scheme_element_group_id) VALUES";
-                
-                for (i = 0; i < command.Ids.Length - 1; i++)
-                {
-                    sb.Append($"(@elementid{i}, @userid, @scheme_element_group_id),");
-                    DbManager.AddParameter($"@elementid{i}", command.Ids[i]);
-                }
-
-                sb.Append($"(@elementid{i}, @userid, @scheme_element_group_id)");
-                DbManager.AddParameter($"@elementid{i}", command.Ids[i]);
-
-                commandText += sb;
-            }
-            else
-            {
-                commandText = "DELETE FROM conf_hall.scheme_element_locations WHERE scheme_element_id IN (";
-                for (i = 0; i < command.Ids.Length - 1; i++)
-                {
-                    sb.Append($"@elementid{i},");
-                    DbManager.AddParameter($"@elementid{i}", command.Ids[i]);
-                }
-
-                sb.Append($"@elementid{i})");
-                DbManager.AddParameter($"@elementid{i}", command.Ids[i]);
-
-                commandText += sb + " AND user_id = @userid AND scheme_element_group_id = @scheme_element_group_id";
-            }
+            DbManager.AddParameter("pscheme_element_id", command.Ids);
+            DbManager.AddParameter("puser_id", command.UserId);
 
             await DbManager.OpenAsync();
 
-            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.Text, commandText);
+            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_favorites_add");
             _logger.LogInformation($"Modified {returnValue} records");
         }
 
@@ -131,23 +95,12 @@ namespace domain.Element.Command
 
         public async Task ExecuteAsync(DeleteElementsCommand command)
         {
-            DbManager.AddParameter("userid", command.UserId);
-
-            int i;
-            StringBuilder sb = new StringBuilder();
-            string commandText = "DELETE FROM conf_hall.scheme_element_locations WHERE user_id = @user_id AND scheme_element_id IN (";
-
-            for (i = 0; i < command.Ids.Length - 1; i++)
-            {
-                sb.Append($"@id{i},");
-                DbManager.AddParameter($"@id{i}", command.Ids[i]);
-            }
-
-            DbManager.AddParameter($"@id{i}", command.Ids[i]);
-            commandText += sb + ")";
+            DbManager.AddParameter("pscheme_element_id", command.Ids);
+            DbManager.AddParameter("pscheme_element_group_id", command.GroupId);
+            DbManager.AddParameter("puser_id", command.UserId);
 
             await DbManager.OpenAsync();
-            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.Text, commandText);
+            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_location_del");
             _logger.LogInformation($"Modified {returnValue} records");
         }
     }

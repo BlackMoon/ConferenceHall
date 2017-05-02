@@ -1,9 +1,10 @@
-﻿import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from "rxjs";
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { AddToFavoritesModel, GroupModel, GroupType } from '../../models';
+import { ElementGroupCommand, GroupModel, GroupType } from '../../models';
 import { MenuItem } from 'primeng/primeng';
 import { Menu } from 'primeng/components/menu/menu';
 
@@ -17,10 +18,11 @@ const minChars = 3;
     selector: 'scheme-toolbox',
     templateUrl: 'scheme-toolbox.component.html'
 })
-export class SchemeToolboxComponent implements AfterViewInit {
+export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
 
     filter: string;
     header: string;
+    groupId: number;
     groupType: GroupType;
     gridButtonsVisible = false;
     selectedElementIds: number[] = [];
@@ -34,6 +36,8 @@ export class SchemeToolboxComponent implements AfterViewInit {
     @ViewChild('wrapper')
     wrapperElRef: ElementRef;
 
+    private subscription: Subscription = new Subscription();
+
     constructor(
         private location: Location,
         private logger: Logger,
@@ -41,24 +45,34 @@ export class SchemeToolboxComponent implements AfterViewInit {
         private route: ActivatedRoute,
         private router: Router) {
 
-        mediator.notify("groupList_itemClicked")
-            .subscribe((g: GroupModel) => {
+        this.subscription.add(
+            mediator
+                .on<GroupModel>("groupList_itemClicked")
+                .subscribe(g => {
+                    this.router.navigate(["elements"], { queryParams: { gid: g.id }, relativeTo: this.route });
+                    this.filter = null;
+                    this.header = g.name;
+                    this.gridButtonsVisible = true;
+                    this.groupId = g.id;
+                    this.groupType = g.groupType;
+                })
+        );
 
-                this.router.navigate(["elements"], { queryParams: { gid: g.id }, relativeTo: this.route });
-                this.filter = null;
-                this.header = g.name;
-                this.gridButtonsVisible = true;
-                this.groupType = g.groupType;
-            });
-
-        mediator.notify("elementList_selectionChanged")
-            .subscribe(n => this.selectedElementIds = n);
+        this.subscription.add(
+            mediator
+                .on<number[]>("elementList_selectionChanged")
+                .subscribe(n => this.selectedElementIds = n)
+        );
     }
 
     ngAfterViewInit() {
         this.onResize();
     }
-    
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
     homeButtonClick(event) {
         this.router.navigate(["groups"], { relativeTo: this.route });
         this.filter = this.header = null;
@@ -80,6 +94,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
             this.router.navigate(["elements"], { queryParams: { f: value }, relativeTo: this.route });
             this.header = value;
             this.gridButtonsVisible = true;
+            this.groupId = null;
             this.groupType = null;
         }
     }
@@ -92,7 +107,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
     }
 
     toggleGridView(smallGrid) {
-        this.mediator.send("elementList_viewChanged", smallGrid);
+        this.mediator.broadcast("elementList_viewChanged", smallGrid);
     }
 
     toggleMenu(event) {
@@ -104,15 +119,22 @@ export class SchemeToolboxComponent implements AfterViewInit {
             case GroupType.User:
                 
                 this.menuItems.push({ label: 'Добавить', icon: 'fa-plus', routerLink: "elements/new" });
-                debugger;
+               
                 if (this.selectedElementIds.length > 0) {
-                    this.menuItems.push({label: "Изменить", icon: 'fa-pencil-square-o', routerLink: `elements/${this.selectedElementIds[0]}`});
+
+                    this.menuItems.push({ label: "Изменить", icon: 'fa-pencil-square-o', routerLink: `elements/${this.selectedElementIds[0]}` });
+
                     this.menuItems.push({
                         label: 'Удалить',
                         icon: 'fa-trash',
-                        command: () => this.mediator.send("elementList_deleteElements", this.selectedElementIds)
+                        command: () => this.mediator.broadcast("elementList_deleteElements", { ids: this.selectedElementIds, groupid: this.groupId})
                     });
-                    this.menuItems.push({ label: 'В избранное', icon: 'fa-star' });
+
+                    this.menuItems.push({
+                        label: 'В избранное',
+                        icon: 'fa-star',
+                        command: () => this.mediator.broadcast("elementList_addToFavorites", { ids: this.selectedElementIds, groupid: this.groupId })
+                    });
                 }
                 break;
 
@@ -123,7 +145,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
                     this.menuItems.push({
                         label: 'Удалить из избранного',
                         icon: 'fa-star',
-                        command: () => this.mediator.send<AddToFavoritesModel>("elementList_addToFavorites", { ids: this.selectedElementIds, add: false })
+                        command: () => this.mediator.broadcast("elementList_deleteElements", { ids: this.selectedElementIds, groupid: this.groupId })
                     });
                 }
 
@@ -136,7 +158,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
                     this.menuItems.push({
                         label: 'В избранное',
                         icon: 'fa-star',
-                        command: () => this.mediator.send<AddToFavoritesModel>("elementList_addToFavorites", { ids: this.selectedElementIds, add: true })
+                        command: () => this.mediator.broadcast("elementList_addToFavorites", { ids: this.selectedElementIds, groupid: this.groupId })
                     });
                 }
                 break;

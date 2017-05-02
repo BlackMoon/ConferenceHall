@@ -3,12 +3,12 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { IDataService } from '../../common/data-service';
-import { AddToFavoritesModel, ElementModel } from '../../models';
+import { ElementGroupCommand, ElementModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
-const url = "/api/elements";
-//const url = "http://webtest.aquilon.ru:810/api/elements";
+//const url = "/api/elements";
+const url = "http://webtest.aquilon.ru:810/api/elements";
 
 @Injectable()
 export class ElementService implements IDataService<ElementModel> {
@@ -28,15 +28,14 @@ export class ElementService implements IDataService<ElementModel> {
             .catch(handleResponseError);
     }
 
-    delete(ids:number[]): Observable<any> {
-
-        let queryParams = [];
-        for (let id of ids) {
-            queryParams.push(`ids=${id}`);
-        }
-
+    /**
+     * Удалить элементы из группы
+     * @param c
+     */
+    delete(c: ElementGroupCommand): Observable<any> {
+        
         return this.http
-            .delete(url + (queryParams.length > 0 ? `?${queryParams.join("&")}` : ""))
+            .post("/api/elements/delete", c)
             .catch(handleResponseError);
     }
 
@@ -69,11 +68,10 @@ export class ElementService implements IDataService<ElementModel> {
     /**
      * Добавить/убрать из избранного
      */
-    addToFavorites(m:AddToFavoritesModel): Observable<any> {
+    addToFavorites(c:ElementGroupCommand): Observable<any> {
         
         return this.http
-            .post(`/api/favorites`, m)
-            .map(_ => m)
+            .post(`/api/favorites`, c)
             .catch(handleResponseError);
     }
 }

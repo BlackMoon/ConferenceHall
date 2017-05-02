@@ -1,10 +1,10 @@
-﻿import { Component, Input, OnInit } from '@angular/core';
+﻿import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { AddToFavoritesModel, ElementModel } from '../../models';
+import { ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
@@ -12,11 +12,13 @@ import { ElementService } from './element.service';
     styleUrls: ['element-list.component.css'],
     templateUrl: 'element-list.component.html'
 })
-export class ElementListComponent implements OnInit  {
+export class ElementListComponent implements OnInit, OnDestroy  {
     
     elements: ElementModel[] = [];
     selectedElementIds: number[] = [];
     smallGrid: boolean;
+
+    private subscription: Subscription = new Subscription();
 
     constructor(
         private elementService: ElementService,
@@ -24,33 +26,35 @@ export class ElementListComponent implements OnInit  {
         private mediator: Mediator,
         private route: ActivatedRoute) {
 
-        mediator.notify("elementList_addToFavorites")
-            .mergeMap((f:AddToFavoritesModel) => this.elementService.addToFavorites(f))
-            .subscribe(
-                (f: AddToFavoritesModel) =>
-                {
-                    if (!f.add) {
+        this.subscription.add(
+            mediator
+                .on<ElementGroupCommand>("elementList_addToFavorites")
+                .flatMap((c:ElementGroupCommand) => this.elementService.addToFavorites(c))
+                .subscribe(
+                    _ => {},
+                    error => this.logger.error(error))
+        );
 
-                        for (let id of f.ids) {
-                            let ix = this.elements.findIndex(e => e.id === id);
-                            this.elements.splice(ix, 1);
-                        }
-
-                    }
-                },
-                error => this.logger.error(error));
-
-        mediator.notify("elementList_deleteElements")
-            .subscribe((ids: number[]) => {
-
+        this.subscription.add(
+            mediator
+            .on<ElementGroupCommand>("elementList_deleteElements")
+            .flatMap((c:ElementGroupCommand) => this.elementService.delete(c))
+            .subscribe((ids: number[]) =>
+            {
                 for (let id of ids) {
                     let ix = this.elements.findIndex(e => e.id === id);
                     this.elements.splice(ix, 1);
-                }    
-            });
+                }
+            },
+            error => this.logger.error(error))
+        );
 
-        mediator.notify("elementList_viewChanged")
-            .subscribe(sm => this.smallGrid = sm);
+        this.subscription.add(
+            mediator
+                .on<boolean>("elementList_viewChanged")
+                .subscribe(sm => this.smallGrid = sm,
+                           error => this.logger.error(error))
+        );
     }
 
     ngOnInit() {
@@ -68,6 +72,10 @@ export class ElementListComponent implements OnInit  {
                 error => this.logger.error(error));
     }
 
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
     selectElement(element) {
         element.selected = !element.selected;
 
@@ -78,6 +86,6 @@ export class ElementListComponent implements OnInit  {
             this.selectedElementIds.splice(ix, 1);
         }
         
-        this.mediator.send("elementList_selectionChanged", this.selectedElementIds);
+        this.mediator.broadcast("elementList_selectionChanged", this.selectedElementIds);
     }
 }

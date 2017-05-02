@@ -74,16 +74,11 @@ namespace host.Controllers
             await CommandDispatcher.DispatchAsync<CreateElementCommand, long>(value);
         }
         
-        [HttpDelete]
-        public Task Delete(int[] ids)
+        [HttpPost("/api/[controller]/delete")]
+        public Task DeleteElements([FromBody]DeleteElementsCommand value)
         {
-            DeleteElementsCommand command = new DeleteElementsCommand()
-            {
-                UserId = 1,          // todo userId from HttpContext.User
-                Ids = ids
-            };
-
-            return CommandDispatcher.DispatchAsync(command);
+            value.UserId = 1;          // todo userId from HttpContext.User
+            return CommandDispatcher.DispatchAsync(value);
         }
     }
 }

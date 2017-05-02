@@ -28,5 +28,5 @@ export class GroupListComponent implements OnInit {
                 error => this.logger.error(error));
     }
 
-    itemClick = (group: GroupModel) => this.mediator.send("groupList_itemClicked", group);
+    itemClick = (group: GroupModel) => this.mediator.broadcast("groupList_itemClicked", group);
 }

@@ -1,10 +1,9 @@
 ﻿import { EventEmitter, Output, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { Subject } from "rxjs/subject";
+import { Observable, Subject } from "rxjs";
 
-interface IEmitEvent<T> {
-    name: string;
-    value: T;
+interface IBroadcastEvent {
+    key: any;
+    data?: any;
 }
 
 /**
@@ -13,24 +12,19 @@ interface IEmitEvent<T> {
 @Injectable()
 export class Mediator {
 
-    private emitter: EventEmitter<any> = new EventEmitter();
+    private eventBus = new Subject<IBroadcastEvent>();
+
+    broadcast = (key: any, data: any) => this.eventBus.next({ key, data });
 
     /**
-     * Уведомить получателей
+     * Подписаться на уведомление
      * @param name
      */
-    notify(name: string): Observable<any> {
+    on<T>(key: any): Observable<T> {
 
-        return this.emitter
+        return this.eventBus
             .asObservable()
-            .filter((event: IEmitEvent<any>) => event.name === name)
-            .map((event: IEmitEvent<any>) => event.value);
-    }
-
-    send<T>(name: string, value?: T) {
-
-        let subject: IEmitEvent<T> = { name: name, value: value };
-        
-        this.emitter.emit(subject);
+            .filter(event => event.key === key)
+            .map(event => <T>event.data);
     }
 }
