@@ -60,7 +60,7 @@ namespace domain.Element.Query
                 sqlBuilder
                     .Join("scheme_element_locations l ON l.scheme_element_id = e.id")
                     .Join("scheme_element_groups g ON g.id = l.scheme_element_group_id")
-                    .Where("g.id = @groupid AND (l.user_id = @userid OR l.user_id IS NULL)");
+                    .Where("g.id = @groupid AND (l.user_id = @userid OR l.user_id = user_system_id())");
 
                 param.Add("groupid", query.GroupId);
                 param.Add("userid", query.UserId);

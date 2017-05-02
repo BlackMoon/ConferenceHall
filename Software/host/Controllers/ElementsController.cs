@@ -8,7 +8,6 @@ using domain.Element.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace host.Controllers
@@ -23,12 +22,11 @@ namespace host.Controllers
         [HttpGet]
         public Task<IEnumerable<Element>> Get(int? groupId, string filter)
         {
-            // todo userId from HttpContext.User
             FindElementsQuery query = new FindElementsQuery()
             {
                 Filter = filter,
                 GroupId = groupId,
-                UserId = 1
+                UserId = 1          // todo userId from HttpContext.User
             };
             return QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(query);
         }
@@ -47,6 +45,13 @@ namespace host.Controllers
             }
 
             return new FileContentResult(fileContents, contentType);
+        }
+
+        [HttpPost("/api/favorites")]
+        public Task AddToFavorites([FromBody]AddToFavoritesCommand value)
+        {
+            value.UserId = 1;  // todo from HttpContext.User
+            return CommandDispatcher.DispatchAsync(value);
         }
 
         /// <summary>
@@ -68,23 +73,17 @@ namespace host.Controllers
             
             await CommandDispatcher.DispatchAsync<CreateElementCommand, long>(value);
         }
-
-        [HttpPatch("/api/favorite/{id}")]
-        public Task Patch(int id, [FromBody]JsonPatchDocument<AddToFavoritesCommand> patch)
-        {
-            AddToFavoritesCommand command = new AddToFavoritesCommand
-            {
-                ElementId = id,
-                UserId = 1  // todo from HttpContext.User
-            };
-            patch.ApplyTo(command, ModelState);
-            
-            return CommandDispatcher.DispatchAsync(command);
-        }
         
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public Task Delete(int[] ids)
         {
+            DeleteElementsCommand command = new DeleteElementsCommand()
+            {
+                UserId = 1,          // todo userId from HttpContext.User
+                Ids = ids
+            };
+
+            return CommandDispatcher.DispatchAsync(command);
         }
     }
 }

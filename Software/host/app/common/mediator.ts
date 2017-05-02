@@ -27,7 +27,7 @@ export class Mediator {
             .map((event: IEmitEvent<any>) => event.value);
     }
 
-    send<T>(name: string, value: T) {
+    send<T>(name: string, value?: T) {
 
         let subject: IEmitEvent<T> = { name: name, value: value };
         

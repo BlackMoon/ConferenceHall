@@ -4,9 +4,15 @@ namespace domain.Element.Command
 {
     public class AddToFavoritesCommand : ICommand
     {
-        public bool Favorite { get; set; }
+        /// <summary>
+        /// Добавить/удалить
+        /// </summary>
+        public bool Add { get; set; }
 
-        public int ElementId { get; set; }
+        /// <summary>
+        /// id элементов
+        /// </summary>
+        public int[] Ids { get; set; }
 
         public int UserId { get; set; }
 

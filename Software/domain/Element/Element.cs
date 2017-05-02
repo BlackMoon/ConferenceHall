@@ -13,12 +13,6 @@ namespace domain.Element
     public class Element : KeyObject, ICommand
     {
         /// <summary>
-        /// Элемент в [избранном]?
-        /// </summary>
-        [Write(false)]
-        public bool Favorite { get; set; }
-
-        /// <summary>
         /// Код
         /// </summary>
         [Write(false)]

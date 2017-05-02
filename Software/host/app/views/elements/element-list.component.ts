@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { ElementModel } from '../../models';
+import { AddToFavoritesModel, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
@@ -23,6 +23,31 @@ export class ElementListComponent implements OnInit  {
         private logger: Logger,
         private mediator: Mediator,
         private route: ActivatedRoute) {
+
+        mediator.notify("elementList_addToFavorites")
+            .mergeMap((f:AddToFavoritesModel) => this.elementService.addToFavorites(f))
+            .subscribe(
+                (f: AddToFavoritesModel) =>
+                {
+                    if (!f.add) {
+
+                        for (let id of f.ids) {
+                            let ix = this.elements.findIndex(e => e.id === id);
+                            this.elements.splice(ix, 1);
+                        }
+
+                    }
+                },
+                error => this.logger.error(error));
+
+        mediator.notify("elementList_deleteElements")
+            .subscribe((ids: number[]) => {
+
+                for (let id of ids) {
+                    let ix = this.elements.findIndex(e => e.id === id);
+                    this.elements.splice(ix, 1);
+                }    
+            });
 
         mediator.notify("elementList_viewChanged")
             .subscribe(sm => this.smallGrid = sm);

@@ -1,5 +1,10 @@
 ﻿import { KeyModel } from './index';
 
+export class AddToFavoritesModel {
+    add: boolean;
+    ids: number[];
+}
+
 
 /**
  * Модель. Элемент схемы

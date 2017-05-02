@@ -1,8 +1,9 @@
 ﻿import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { GroupModel, GroupType } from '../../models';
+import { AddToFavoritesModel, GroupModel, GroupType } from '../../models';
 import { MenuItem } from 'primeng/primeng';
 import { Menu } from 'primeng/components/menu/menu';
 
@@ -34,8 +35,9 @@ export class SchemeToolboxComponent implements AfterViewInit {
     wrapperElRef: ElementRef;
 
     constructor(
-        private mediator: Mediator,
         private location: Location,
+        private logger: Logger,
+        private mediator: Mediator,
         private route: ActivatedRoute,
         private router: Router) {
 
@@ -56,12 +58,13 @@ export class SchemeToolboxComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.onResize();
     }
-
+    
     homeButtonClick(event) {
         this.router.navigate(["groups"], { relativeTo: this.route });
         this.filter = this.header = null;
         this.gridButtonsVisible = false;
         this.groupType = null;
+        this.selectedElementIds = [];
     }
 
     /**
@@ -101,17 +104,29 @@ export class SchemeToolboxComponent implements AfterViewInit {
             case GroupType.User:
                 
                 this.menuItems.push({ label: 'Добавить', icon: 'fa-plus', routerLink: "elements/new" });
-
+                debugger;
                 if (this.selectedElementIds.length > 0) {
-                    this.menuItems.push({ label: 'Изменить', icon: 'fa-pencil-square-o' });
-                    this.menuItems.push({ label: 'Удалить', icon: 'fa-trash' });
+                    this.menuItems.push({label: "Изменить", icon: 'fa-pencil-square-o', routerLink: `elements/${this.selectedElementIds[0]}`});
+                    this.menuItems.push({
+                        label: 'Удалить',
+                        icon: 'fa-trash',
+                        command: () => this.mediator.send("elementList_deleteElements", this.selectedElementIds)
+                    });
                     this.menuItems.push({ label: 'В избранное', icon: 'fa-star' });
                 }
                 break;
 
             case GroupType.Favorites:
-                this.menuItems.push({ label: 'Удалить из избранного', icon: 'fa-star' });
-            
+
+                if (this.selectedElementIds.length > 0) {
+
+                    this.menuItems.push({
+                        label: 'Удалить из избранного',
+                        icon: 'fa-star',
+                        command: () => this.mediator.send<AddToFavoritesModel>("elementList_addToFavorites", { ids: this.selectedElementIds, add: false })
+                    });
+                }
+
                 break;
 
             default:
@@ -121,9 +136,7 @@ export class SchemeToolboxComponent implements AfterViewInit {
                     this.menuItems.push({
                         label: 'В избранное',
                         icon: 'fa-star',
-                        command: () => {
-                            debugger;
-                        }
+                        command: () => this.mediator.send<AddToFavoritesModel>("elementList_addToFavorites", { ids: this.selectedElementIds, add: true })
                     });
                 }
                 break;
