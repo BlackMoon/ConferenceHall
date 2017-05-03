@@ -52,7 +52,7 @@ namespace host.Controllers
             Element el = await Get(id);
             if (el != null)
             {
-                fileContents = el.Data;
+                fileContents = el.Thumbnail;
                 contentType = el.MimeType;
             }
 
