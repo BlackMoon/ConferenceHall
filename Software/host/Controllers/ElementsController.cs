@@ -19,6 +19,12 @@ namespace host.Controllers
         {
         }
 
+        /// <summary>
+        /// Список элементов в группе или по фильтру
+        /// </summary>
+        /// <param name="groupId"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         public Task<IEnumerable<Element>> Get(int? groupId, string filter)
         {
@@ -31,13 +37,19 @@ namespace host.Controllers
             return QueryDispatcher.DispatchAsync<FindElementsQuery, IEnumerable<Element>>(query);
         }
 
+        [HttpGet("{id}")]
+        public Task<Element> Get(int id)
+        {
+            return QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery() { Id = id });
+        }
+
         [HttpGet("/api/thumbnail/{id}")]
         public async Task<ActionResult> GetThumbnail(int id)
         {
             byte[] fileContents = {};
             string contentType = "image/*";
 
-            Element el = await QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery() { Id = id });
+            Element el = await Get(id);
             if (el != null)
             {
                 fileContents = el.Data;

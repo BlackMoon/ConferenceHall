@@ -58,7 +58,10 @@ export class ElementService implements IDataService<ElementModel> {
 
     get(key): Observable<any> {
 
-        return Observable.empty();
+        return this.http
+            .get(`${url}/${key}`)
+            .map((r: Response) => r.json())
+            .catch(handleResponseError);
     }
 
     update(element): Observable<any> {

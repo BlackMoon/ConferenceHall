@@ -1,5 +1,7 @@
 ﻿import { Component, EventEmitter,  OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Observable } from 'rxjs';
 import { FileUpload } from 'primeng/components/fileupload/fileupload';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
@@ -21,7 +23,8 @@ export class ElementDetailComponent implements OnInit {
         private elementService: ElementService,
         private fb: FormBuilder,
         private logger: Logger,
-        private mediator: Mediator) { }
+        private mediator: Mediator,
+        private route: ActivatedRoute) { }
 
     ngOnInit() {
 
@@ -30,6 +33,15 @@ export class ElementDetailComponent implements OnInit {
             height: [1, Validators.required],
             width: [1, Validators.required]
         });
+
+        this.route.params
+
+            .switchMap((params: Params) => {
+                // (+) converts string 'id' to a number
+                let key = +params['id'];
+                return key ? this.elementService.get(key) : Observable.empty();
+            })
+            .subscribe((element: ElementModel) => this.elementform.patchValue(element));
     }
 
     save(element) {
