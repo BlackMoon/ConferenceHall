@@ -78,7 +78,7 @@ export class ElementListComponent implements OnInit, OnDestroy  {
 
     selectElement(element) {
         element.selected = !element.selected;
-
+        
         if (element.selected) 
             this.selectedElementIds.push(element.id);
         else {

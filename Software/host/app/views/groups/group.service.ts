@@ -10,7 +10,7 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class GroupService extends HttpDataService<GroupModel> {
 
-    //const url = "/api/groups";
+    //url:string = "/api/groups";
     url: string = "http://webtest.aquilon.ru:810/api/groups";
 
     constructor(http: Http) { super(http); }

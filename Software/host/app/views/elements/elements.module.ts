@@ -18,9 +18,10 @@ import {
 import { ElementDetailComponent } from "./element-detail.component";
 import { ElementListComponent } from "./element-list.component";
 import { ElementService } from "./element.service";
+import { UniqueSuffixPipe } from "../../common/unique-suffix.pipe";
 
 @NgModule({
-    declarations: [ElementDetailComponent, ElementListComponent],
+    declarations: [ElementDetailComponent, ElementListComponent, UniqueSuffixPipe],
     exports: [ElementDetailComponent, ElementListComponent],
     imports: [
         ButtonModule,
