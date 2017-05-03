@@ -1,4 +1,4 @@
-﻿<form [formGroup]="elementform" (ngSubmit)="save(elementform.value)">
+﻿<form [formGroup]="elementform" (ngSubmit)="save($event, elementform.value)">
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
         <input type="hidden" formControlName="id" />
         <div class="ui-grid-row inputw100p">

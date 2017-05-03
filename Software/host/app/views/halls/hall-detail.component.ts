@@ -50,7 +50,9 @@ export class HallDetailComponent implements OnInit {
         this.router.navigate(['schemes', id]);
     }
 
-    save(hall) {
+    save(event, hall) {
+
+        event.preventDefault();
 
         this.hallService[hall.id ? 'update' : 'add'](hall)
             .subscribe(_ => this.location.back(),

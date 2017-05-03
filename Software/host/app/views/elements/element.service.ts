@@ -10,8 +10,8 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class ElementService extends HttpDataService<ElementModel> {
 
-    //url: string = "api/elements";
-    url:string = "http://webtest.aquilon.ru:810/api/elements";
+    url: string = "api/elements";
+    //url:string = "http://webtest.aquilon.ru:810/api/elements";
 
     constructor(http: Http) { super(http);  }
 
@@ -60,9 +60,10 @@ export class ElementService extends HttpDataService<ElementModel> {
 
         let formData: FormData = new FormData();
         formData.append("name", element.name);
-        formData.append("data", element.image, element.image.name);
         formData.append("height", element.height);
         formData.append("width", element.width);
+
+        element.image && formData.append("data", element.image, element.image.name);
 
         return this.http
             .put(`${this.url}/${element.id}`, formData)

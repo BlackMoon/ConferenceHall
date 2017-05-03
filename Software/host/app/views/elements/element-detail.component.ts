@@ -50,14 +50,16 @@ export class ElementDetailComponent implements OnInit {
 
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                params.hasOwnProperty('id') && (this.id = +params['id']);
+                params.hasOwnProperty("id") && (this.id = +params["id"]);
                 return this.id ? this.elementService.get(this.id) : Observable.empty();
             })
             .subscribe((element: ElementModel) => this.elementform.patchValue(element));
     }
 
-    save(element) {
-
+    save(event, element) {
+        
+        event.preventDefault();
+        
         (this.fileUpload.files.length > 0) && (element.image = this.fileUpload.files[0]);
 
         this.elementService[element.id ? "update" : "add"](element)
