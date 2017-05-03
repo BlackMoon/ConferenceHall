@@ -20,6 +20,9 @@ namespace domain.Element.Command
         ICommandHandlerWithResult<Element, bool>, 
         ICommandHandler<DeleteElementsCommand>
     {
+        private const int H = 48;
+        private const int W = 48;
+
         private readonly ICacheManager<Element> _cacheManager;
         private readonly ILogger<ElementCommandHandler> _logger;
 
@@ -29,34 +32,57 @@ namespace domain.Element.Command
             _logger = logger;
         }
 
-        private byte[] ResizeImageBySkiaSharp(byte[] data, int size)
+        private void ResizeImage(Element element, int width, int height, int quality = 75)
         {
+            if (element.Data == null)
+                return;
 
-            using (var ms = new MemoryStream(data))
+            using (MemoryStream dataStream = new MemoryStream(element.Data))
             {
-
-                var inputStream = new SKManagedStream(ms);
-                using (var original = SKBitmap.Decode(inputStream))
+                SKManagedStream inputStream = new SKManagedStream(dataStream);
+                using (SKBitmap original = SKBitmap.Decode(inputStream))
                 {
-                    int width, height;
+                    int w, h;
                     if (original.Width > original.Height)
                     {
-                        width = size;
-                        height = original.Height * size / original.Width;
+                        w = width;
+                        h = original.Height * height / original.Width;
                     }
                     else
                     {
-                        width = original.Width * size / original.Height;
-                        height = size;
+                        w = original.Width * width / original.Height;
+                        h = height;
                     }
 
-                    using (var resized = original
-                           .Resize(new SKImageInfo(width, height), SKBitmapResizeMethod.Lanczos3))
+                    using (SKBitmap resized = original.Resize(new SKImageInfo(w, h), SKBitmapResizeMethod.Lanczos3))
                     {
-                        if (resized == null) return data;
-                        return resized.Bytes;
-                    }
+                        if (resized != null)
+                        {
+                            using (SKImage image = SKImage.FromBitmap(resized))
+                            {
+                                SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Bmp;
 
+                                switch (element.MimeType)
+                                {
+                                    case "image/gif":
+                                        imageFormat = SKEncodedImageFormat.Gif;
+                                        break;
+
+                                    case "image/jpeg":
+                                        imageFormat = SKEncodedImageFormat.Jpeg;
+                                        break;
+
+                                    case "image/png":
+                                        imageFormat = SKEncodedImageFormat.Png;
+                                        break;
+                                }
+
+                                element.Thumbnail = image
+                                    .Encode(imageFormat, quality)
+                                    .ToArray();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -86,7 +112,7 @@ namespace domain.Element.Command
             Element element = new Element();
             command.Adapt(element);
 
-            element.Thumbnail = ResizeImageBySkiaSharp(command.Data, 48);           
+            ResizeImage(element, W, H);           
 
             await DbManager.OpenAsync();
             int newId = await DbManager.DbConnection.InsertAsync(element);
@@ -129,7 +155,7 @@ namespace domain.Element.Command
 
         public async Task<bool> ExecuteAsync(Element command)
         {
-            command.Thumbnail = command.Data;
+            ResizeImage(command, W, H);
 
             await DbManager.OpenAsync();
             await DbManager.DbConnection.UpdateAsync(command);
