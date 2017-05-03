@@ -32,6 +32,13 @@ namespace domain.Element.Command
             _logger = logger;
         }
 
+        /// <summary>
+        /// Изменяет размер эскиза элемента схемы
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="quality"></param>
         private void ResizeImage(Element element, int width, int height, int quality = 75)
         {
             if (element.Data == null)
