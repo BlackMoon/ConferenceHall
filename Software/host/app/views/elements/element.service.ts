@@ -10,8 +10,8 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class ElementService extends HttpDataService<ElementModel> {
 
-    url: string = "api/elements";
-    //url:string = "http://webtest.aquilon.ru:810/api/elements";
+    //url: string = "api/elements";
+    url:string = "http://webtest.aquilon.ru:810/api/elements";
 
     constructor(http: Http) { super(http);  }
 

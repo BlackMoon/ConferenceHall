@@ -1,7 +1,7 @@
 ﻿<p-dataGrid [value]="elements" [styleClass]="'center h100p'" *ngIf="!smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6">
-            <div [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" >
+            <div pDraggable="dd" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" >
                 <img class="center" src="/api/thumbnail/{{element.id | uniquesuffix}}" width="48" height="48" title="{{element.name}}">
                 <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
                 <div class="text-ellipsis">
@@ -14,7 +14,7 @@
 <p-dataList [value]="elements" [styleClass]="'h100p'" *ngIf="smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">
-            <div class="ui-grid-row" [ngStyle]="{'cursor':'pointer', 'padding': '0.5em'}" >
+            <div pDraggable="dd" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" >
                 <div class="ui-grid-col-3">
                     <img class="center" src="/api/thumbnail/{{element.id | uniquesuffix}}" width="32" height="32" title="{{element.name}}">    
                 </div>
