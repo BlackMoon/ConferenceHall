@@ -2,7 +2,7 @@
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6" *ngIf="!smallGrid">
             <div [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" >
-                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="48" height="48" title="{{element.name}}">
+                <img class="center" src="/api/thumbnail/{{element.id}}" width="48" height="48" title="{{element.name}}">
                 <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
                 <div [ngClass]="'text-ellipsis'"[ngStyle]="{'width': '54px'}">
                     <small>{{element.name}}</small>
@@ -11,7 +11,7 @@
         </div>
         <div class="ui-md-4" *ngIf="smallGrid">
             <div [ngClass]="'ui-resizable'">
-                <img class="center" src="http://webtest.aquilon.ru:810/api/thumbnail/{{element.id}}" width="32" height="32" title="{{element.name}}">
+                <img class="center" src="/api/thumbnail/{{element.id}}" width="32" height="32" title="{{element.name}}">
             </div>
         </div>
     </ng-template>    

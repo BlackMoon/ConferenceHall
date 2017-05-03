@@ -317,7 +317,8 @@ namespace Dapper.Contrib.Extensions
                 ColumnAttribute attr = (ColumnAttribute)property.GetCustomAttribute(typeof(ColumnAttribute));
                 string columnName = (attr != null) ? attr.Name : property.Name;
 
-                adapter.AppendColumnName(sbColumnList, columnName);  //fix for issue #336
+                sbColumnList.AppendFormat("{0} = @{1}", columnName, property.Name);       // for postgres
+                //adapter.AppendColumnName(sbColumnList, columnName);  //fix for issue #336
                 if (i < allPropertiesExceptKeyAndComputed.Count - 1)
                     sbColumnList.Append(", ");
             }

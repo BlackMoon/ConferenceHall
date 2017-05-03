@@ -7,6 +7,7 @@ using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using SkiaSharp;
 using System.IO;
+using CacheManager.Core;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
@@ -15,13 +16,16 @@ namespace domain.Element.Command
     public class ElementCommandHandler: 
         KeyObjectCommandHandler, 
         ICommandHandler<AddToFavoritesCommand>,
-        ICommandHandlerWithResult<CreateElementCommand, long>,
+        ICommandHandlerWithResult<CreateElementCommand, int>,
+        ICommandHandlerWithResult<Element, bool>, 
         ICommandHandler<DeleteElementsCommand>
     {
+        private readonly ICacheManager<Element> _cacheManager;
         private readonly ILogger<ElementCommandHandler> _logger;
 
-        public ElementCommandHandler(IDbManager dbManager, ILogger<ElementCommandHandler> logger) : base(dbManager)
+        public ElementCommandHandler(IDbManager dbManager, ICacheManager<Element> cacheManager, ILogger<ElementCommandHandler> logger) : base(dbManager)
         {
+            _cacheManager = cacheManager;
             _logger = logger;
         }
 
@@ -73,11 +77,11 @@ namespace domain.Element.Command
             _logger.LogInformation($"Modified {returnValue} records");
         }
 
-        public long Execute(CreateElementCommand command)
+        public int Execute(CreateElementCommand command)
         {
             throw new NotImplementedException();
         }
-        public async Task<long> ExecuteAsync(CreateElementCommand command)
+        public async Task<int> ExecuteAsync(CreateElementCommand command)
         {
             Element element = new Element();
             command.Adapt(element);
@@ -110,6 +114,28 @@ namespace domain.Element.Command
             await DbManager.OpenAsync();
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_location_del");
             _logger.LogInformation($"Modified {returnValue} records");
+
+            // clear cache
+            foreach (int id in command.Ids)
+            {
+                _cacheManager.Remove(id.ToString());
+            }
+        }
+
+        public bool Execute(Element command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> ExecuteAsync(Element command)
+        {
+            command.Thumbnail = command.Data;
+
+            await DbManager.OpenAsync();
+            await DbManager.DbConnection.UpdateAsync(command);
+
+            // clear cache
+            return _cacheManager.Remove(command.Id.ToString());
         }
     }
 }

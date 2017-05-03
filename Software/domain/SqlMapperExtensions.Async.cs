@@ -232,7 +232,9 @@ namespace Dapper.Contrib.Extensions
                 ColumnAttribute attr = (ColumnAttribute)property.GetCustomAttribute(typeof(ColumnAttribute));
                 string columnName = (attr != null) ? attr.Name : property.Name;
 
-                adapter.AppendColumnNameEqualsValue(sb, columnName);  //fix for issue #336
+                sb.AppendFormat("{0} = @{1}", columnName, property.Name);       // for postgres
+
+                //adapter.AppendColumnNameEqualsValue(sb, columnName);  //fix for issue #336
                 if (i < nonIdProps.Count - 1)
                     sb.AppendFormat(", ");
             }

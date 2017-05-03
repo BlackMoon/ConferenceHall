@@ -17,6 +17,7 @@ export class ElementDetailComponent implements OnInit {
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
 
+    id?:number;
     elementform: FormGroup;
 
     constructor(
@@ -26,9 +27,20 @@ export class ElementDetailComponent implements OnInit {
         private mediator: Mediator,
         private route: ActivatedRoute) { }
 
+    get submitDisabled():boolean {
+
+        let enabled: boolean = this.elementform.valid;
+        if (this.id === void 0) {
+            enabled = enabled && (this.fileUpload.files.length > 0);
+        }
+
+        return !enabled;
+    } 
+
     ngOnInit() {
 
         this.elementform = this.fb.group({
+            id: [null],
             name: [null, Validators.required],
             height: [1, Validators.required],
             width: [1, Validators.required]
@@ -38,18 +50,17 @@ export class ElementDetailComponent implements OnInit {
 
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                let key = +params['id'];
-                return key ? this.elementService.get(key) : Observable.empty();
+                params.hasOwnProperty('id') && (this.id = +params['id']);
+                return this.id ? this.elementService.get(this.id) : Observable.empty();
             })
             .subscribe((element: ElementModel) => this.elementform.patchValue(element));
     }
 
     save(element) {
 
-        element.image = this.fileUpload.files[0];
+        (this.fileUpload.files.length > 0) && (element.image = this.fileUpload.files[0]);
 
-        this.elementService
-            .add(element)
+        this.elementService[element.id ? "update" : "add"](element)
             .subscribe(
                 _ => this.mediator.broadcast("elementDetail_itemSaved"),
                 error => this.logger.error(error));

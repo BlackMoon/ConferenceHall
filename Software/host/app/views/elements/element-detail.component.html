@@ -1,6 +1,6 @@
 ﻿<form [formGroup]="elementform" (ngSubmit)="save(elementform.value)">
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
-        
+        <input type="hidden" formControlName="id" />
         <div class="ui-grid-row inputw100p">
             <div class="ui-grid-col-12">
                 <input type="text" pInputText formControlName="name" placeholder="Название"  />   
@@ -18,24 +18,16 @@
             <div class="ui-grid-col-12">
                 <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" previewWidth="48" >
                 </p-fileUpload>
-                <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" ng-reflect-ng-class="[object Object]">
-                    
+                <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="id && (fileUpload.files.length == 0)">
                     <div class="ui-fileupload-files">
-                    
                         <div>
                             <div class="ui-fileupload-row">
                                 <div>
-                                    <img src="http://localhost:64346/c59dbaa7-41b2-4fec-8847-1852104220e0" width="48">
+                                    <img class="center" src="/api/thumbnail/{{id}}" width="48" height="48">
                                 </div>
-                                <div>server_directory_green.png</div>
-                                <div>2.813 KB</div>
-                                <div><button icon="fa-close" pbutton="" type="button" ng-reflect-icon="fa-close" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only"><span class="ui-button-icon-left ui-c fa fa-fw fa-close"></span><span class="ui-button-text ui-c">ui-button</span></button></div>
                             </div>
                         </div>
-                    
                     </div>
-
-                    
                 </div>
             </div>
         </div>
@@ -46,7 +38,7 @@
         </div>
         <div class="ui-grid-row">
             <div class="ui-grid-col-12">
-                <p-spinner formControlName="height" [min]="1"></p-spinner>
+                <p-spinner formControlName="height" [min]="0.1"></p-spinner>
             </div>
         </div>
         <div class="ui-grid-row">
@@ -56,13 +48,13 @@
         </div>
         <div class="ui-grid-row">
             <div class="ui-grid-col-12">
-                <p-spinner formControlName="width" [min]="1"></p-spinner>
+                <p-spinner formControlName="width" [min]="0.1"></p-spinner>
             </div>
         </div>
         <hr class="ui-widget-content" style="border:0">
         <div class="ui-grid-row inputw100p">
             <div class="ui-grid-col-12">
-                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!(elementform.valid && fileUpload.files.length > 0)"></button>
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled"></button>
             </div>
         </div>
     </div>

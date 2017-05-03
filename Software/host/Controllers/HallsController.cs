@@ -36,7 +36,7 @@ namespace host.Controllers
         [HttpPost]
         public Task Post([FromBody]CreateHallCommand value)
         {
-            return CommandDispatcher.DispatchAsync<CreateHallCommand, long>(value);
+            return CommandDispatcher.DispatchAsync<CreateHallCommand, int>(value);
         }
 
         // PUT api/halls/5

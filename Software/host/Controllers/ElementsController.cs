@@ -85,9 +85,29 @@ namespace host.Controllers
                 value.ContentType = f.ContentType;
             }
             
-            await CommandDispatcher.DispatchAsync<CreateElementCommand, long>(value);
+            await CommandDispatcher.DispatchAsync<CreateElementCommand, int>(value);
         }
-        
+
+        /// <summary>
+        /// Отправляются файлы ('Content-Type', 'multipart/form-data')
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task Put(int id, Element value)
+        {
+            IFormFile f = Request.Form.Files.FirstOrDefault();
+            if (f != null)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    await f.CopyToAsync(ms);
+                    value.Data = ms.ToArray();
+                }
+                value.MimeType = f.ContentType;
+            }
+
+            await CommandDispatcher.DispatchAsync<Element, bool>(value);
+        }
+
         [HttpPost("/api/[controller]/delete")]
         public Task DeleteElements([FromBody]DeleteElementsCommand value)
         {

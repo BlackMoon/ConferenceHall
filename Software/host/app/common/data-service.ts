@@ -16,3 +16,8 @@ export interface IDataService<T> {
     update(entity: T): Observable<any>;
     
 }
+
+export interface IHttpDataService<T> extends IDataService<T> {
+
+    url: string;
+}

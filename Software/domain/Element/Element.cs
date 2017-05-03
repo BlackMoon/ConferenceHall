@@ -17,7 +17,7 @@ namespace domain.Element
         /// </summary>
         [Write(false)]
         public string Code { get; set; }
-
+      
         [Column("mime_type")]
         public string MimeType { get; set; } = "image/*";
 

@@ -9,7 +9,7 @@ using Mapster;
 namespace domain.Hall.Command
 {
     public class HallCommandHandler : KeyObjectCommandHandler,
-        ICommandHandlerWithResult<CreateHallCommand, long>,
+        ICommandHandlerWithResult<CreateHallCommand, int>,
         ICommandHandlerWithResult<DeleteHallCommand, bool>,
         ICommandHandlerWithResult<Hall, bool>
     {
@@ -22,15 +22,12 @@ namespace domain.Hall.Command
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public long Execute(CreateHallCommand command)
+        public int Execute(CreateHallCommand command)
         {
-            DbManager.Open();
-
-            Hall hall = new Hall();
-            return DbManager.DbConnection.Insert(command.Adapt(hall));
+            throw new NotImplementedException();
         }
 
-        public async Task<long> ExecuteAsync(CreateHallCommand command)
+        public async Task<int> ExecuteAsync(CreateHallCommand command)
         {
             await DbManager.OpenAsync();
 
@@ -44,7 +41,7 @@ namespace domain.Hall.Command
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public  bool Execute(DeleteHallCommand command)
+        public bool Execute(DeleteHallCommand command)
         {
             DbManager.Open();
             return DbManager.DbConnection.Delete(new Hall() {Id = command.Id});
