@@ -2,49 +2,29 @@
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
-import { IDataService } from '../../common/data-service';
+import { HttpDataService } from '../../common/data-service';
 import { GroupModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
-//const url = "/api/groups";
-const url = "http://webtest.aquilon.ru:810/api/groups";
-
 @Injectable()
-export class GroupService implements IDataService<GroupModel> {
+export class GroupService extends HttpDataService<GroupModel> {
 
-    constructor(private http: Http) { }
+    //const url = "/api/groups";
+    url: string = "http://webtest.aquilon.ru:810/api/groups";
 
-    add(group): Observable<any> {
-
-        return this.http
-            .post(url, group)
-            .catch(handleResponseError);
-    }
-
-    delete(key): Observable<any> {
-
-        return Observable.empty();
-    }
+    constructor(http: Http) { super(http); }
 
     getAll(): Observable<any> {
-        
+
         return this.http
-            .get(url)
+            .get(this.url)
             .map((r: Response) => r
                 .json()
                 .map(g => MapUtils.deserialize(GroupModel, g))
             )
             .catch(handleResponseError);
     }
-
-    get(key): Observable<any> {
-
-        return Observable.empty();
-    }
-
-    update(element): Observable<any> {
-
-        return Observable.empty();
-    }
 }
+
+    

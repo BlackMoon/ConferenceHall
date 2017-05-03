@@ -16,8 +16,7 @@
         </div>
         <div class="ui-grid-row inputw100p">
             <div class="ui-grid-col-12">
-                <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" previewWidth="48" >
-                </p-fileUpload>
+                <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" previewWidth="48" ></p-fileUpload>
                 <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="id && (fileUpload.files.length == 0)">
                     <div class="ui-fileupload-files">
                         <div>

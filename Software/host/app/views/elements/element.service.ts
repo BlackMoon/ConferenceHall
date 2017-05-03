@@ -2,18 +2,18 @@
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
-import { IHttpDataService } from '../../common/data-service';
+import { HttpDataService } from '../../common/data-service';
 import { ElementGroupCommand, ElementModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
 @Injectable()
-export class ElementService implements IHttpDataService<ElementModel> {
+export class ElementService extends HttpDataService<ElementModel> {
 
-    url: string = "api/elements";
-    //url:string = "http://webtest.aquilon.ru:810/api/elements";
+    //url: string = "api/elements";
+    url:string = "http://webtest.aquilon.ru:810/api/elements";
 
-    constructor(private http: Http) { }
+    constructor(http: Http) { super(http);  }
 
     add(element): Observable<any> {
 
@@ -53,14 +53,6 @@ export class ElementService implements IHttpDataService<ElementModel> {
                 .json()
                 .map(el => MapUtils.deserialize(ElementModel, el))
             )
-            .catch(handleResponseError);
-    }
-
-    get(key): Observable<any> {
-
-        return this.http
-            .get(`${this.url}/${key}`)
-            .map((r: Response) => r.json())
             .catch(handleResponseError);
     }
 
