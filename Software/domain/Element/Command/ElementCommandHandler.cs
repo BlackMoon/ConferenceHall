@@ -22,6 +22,7 @@ namespace domain.Element.Command
     {
         private const int H = 48;
         private const int W = 48;
+
         /// <summary>
         ///Максимально допустимые высота и ширина элемента схемы
         /// </summary>
@@ -38,72 +39,74 @@ namespace domain.Element.Command
         }
 
         /// <summary>
-        /// Изменяет размер элемента схемы, если isResizeOriginal==true, и эскиза элемента схемы, в противном случае. Размер элемента схемы меняется только если его высота или ширина больше параметров height и width соответственно
+        /// Изменяет размер изображения. Размер меняется только, если его высота или ширина больше параметров height и width соответственно
         /// </summary>
-        /// <param name="element"></param>
+        /// <param name="blob"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="quality"></param>
-        private void ResizeImage(bool isResizeOriginal, Element element, int width, int height, int quality = 75)
+        /// <param name="mimeType">mime тип</param>
+        /// <param name="quality">качество сжатия</param>
+        /// <returns></returns>
+        private byte[] ResizeImage(byte [] blob, int width, int height, string mimeType = "", int quality = 75)
         {
-            if (element.Data == null)
-                return;
+            byte[] buff = blob;
 
-            using (MemoryStream dataStream = new MemoryStream(element.Data))
+            if (blob != null)
             {
-                SKManagedStream inputStream = new SKManagedStream(dataStream);
-                using (SKBitmap original = SKBitmap.Decode(inputStream))
+                using (MemoryStream dataStream = new MemoryStream(blob))
                 {
-                    if (!isResizeOriginal||(original.Width > width || original.Height > height))
+                    SKManagedStream inputStream = new SKManagedStream(dataStream);
+                    using (SKBitmap original = SKBitmap.Decode(inputStream))
                     {
-                        int w, h;
-                        if (original.Width > original.Height)
+                        if (original.Width > width || original.Height > height)
                         {
-                            w = width;
-                            h = original.Height * height / original.Width;
-                        }
-                        else
-                        {
-                            w = original.Width * width / original.Height;
-                            h = height;
-                        }
-
-                        using (SKBitmap resized = original.Resize(new SKImageInfo(w, h), SKBitmapResizeMethod.Lanczos3))
-                        {
-                            if (resized != null)
+                            int w, h;
+                            if (original.Width > original.Height)
                             {
-                                using (SKImage image = SKImage.FromBitmap(resized))
+                                w = width;
+                                h = original.Height * height / original.Width;
+                            }
+                            else
+                            {
+                                w = original.Width * width / original.Height;
+                                h = height;
+                            }
+
+                            using (SKBitmap resized = original.Resize(new SKImageInfo(w, h), SKBitmapResizeMethod.Lanczos3))
+                            {
+                                if (resized != null)
                                 {
-                                    SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Bmp;
-
-                                    switch (element.MimeType)
+                                    using (SKImage image = SKImage.FromBitmap(resized))
                                     {
-                                        case "image/gif":
-                                            imageFormat = SKEncodedImageFormat.Gif;
-                                            break;
+                                        SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Bmp;
 
-                                        case "image/jpeg":
-                                            imageFormat = SKEncodedImageFormat.Jpeg;
-                                            break;
+                                        switch (mimeType)
+                                        {
+                                            case "image/gif":
+                                                imageFormat = SKEncodedImageFormat.Gif;
+                                                break;
 
-                                        case "image/png":
-                                            imageFormat = SKEncodedImageFormat.Png;
-                                            break;
+                                            case "image/jpeg":
+                                                imageFormat = SKEncodedImageFormat.Jpeg;
+                                                break;
+
+                                            case "image/png":
+                                                imageFormat = SKEncodedImageFormat.Png;
+                                                break;
+                                        }
+
+                                        buff = image
+                                            .Encode(imageFormat, quality)
+                                            .ToArray();
                                     }
-                                    if (isResizeOriginal)
-                                        element.Data = image
-                                        .Encode(imageFormat, quality)
-                                        .ToArray();
-                                    else
-                                        element.Thumbnail = image
-                                        .Encode(imageFormat, quality)
-                                        .ToArray();
                                 }
                             }
                         }
                     }
                 }
             }
+
+            return buff;
         }
 
         public void Execute(AddToFavoritesCommand command)
@@ -130,9 +133,12 @@ namespace domain.Element.Command
         {
             Element element = new Element();
             command.Adapt(element);
-            ResizeImage(true,element, MaxW, MaxH);
-            ResizeImage(false,element, W, H);           
+
+            element.Data = ResizeImage(element.Data, MaxW, MaxH, element.MimeType);
+            element.Thumbnail = ResizeImage(element.Data, W, H, element.MimeType, 50);
+            
             await DbManager.OpenAsync();
+
             int newId = await DbManager.DbConnection.InsertAsync(element);
             
             DbManager.AddParameter("pscheme_element_id", new []{ newId });
@@ -173,8 +179,9 @@ namespace domain.Element.Command
 
         public async Task<bool> ExecuteAsync(Element command)
         {
-            ResizeImage(true, command, MaxW, MaxH);
-            ResizeImage(false,command, W, H);
+            command.Data = ResizeImage(command.Data, MaxW, MaxH, command.MimeType);
+            command.Thumbnail = ResizeImage(command.Data, W, H, command.MimeType, 50);
+
             await DbManager.OpenAsync();
             await DbManager.DbConnection.UpdateAsync(command);
 

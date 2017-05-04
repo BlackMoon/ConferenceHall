@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CacheManager.Core;
 using domain.Common.Query;
@@ -33,7 +34,7 @@ namespace domain.Element.Query
 
         public IEnumerable<Element> Execute(FindElementsQuery query)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         
@@ -43,7 +44,8 @@ namespace domain.Element.Query
                 .Column("e.id")
                 .Column("e.name")
                 .Column("e.height")
-                .Column("e.width");
+                .Column("e.width")
+                .OrderBy("e.name");
 
             DynamicParameters param = new DynamicParameters();
 
