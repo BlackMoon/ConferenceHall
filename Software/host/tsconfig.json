@@ -7,7 +7,7 @@
     "noEmitOnError": false,
     "noImplicitAny": false,
     "sourceMap": true,
-    "target": "es6",
+    "target": "es5",
     "lib": [ "es2017", "dom" ]
   },
   "exclude": [ "node_modules" ]    

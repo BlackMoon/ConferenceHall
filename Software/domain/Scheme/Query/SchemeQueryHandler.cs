@@ -1,5 +1,8 @@
-﻿using domain.Common.Query;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using domain.Common.Query;
 using Kit.Dal.DbManager;
+using Dapper;
 
 namespace domain.Scheme.Query
 {
@@ -7,6 +10,22 @@ namespace domain.Scheme.Query
     {
         public SchemeQueryHandler(IDbManager dbManager) : base(dbManager)
         {
+        }
+
+        public override async Task<Scheme> ExecuteAsync(FindSchemeByIdQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.hall_scheme s")
+                .Column("s.id")
+                .Column("s.name")
+                .Column("s.plan")
+                .Column("h.width")
+                .Column("h.height")
+                .Join("conf_hall.halls h ON h.id = s.hall_id")
+                .Where("s.id = @id");
+
+            await DbManager.OpenAsync();
+            var schemes = await DbManager.DbConnection.QueryAsync<Scheme>(sqlBuilder.ToString(), new { id = query.Id });
+            return schemes.SingleOrDefault();
         }
     }
 }

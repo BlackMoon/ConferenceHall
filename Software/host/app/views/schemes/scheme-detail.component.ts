@@ -1,10 +1,5 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-
-/**
- * Операции 
- */
-enum Operation { Edit, Group, Filter, New, Scheme };
 
 @Component({
     template: `
@@ -15,27 +10,24 @@ enum Operation { Edit, Group, Filter, New, Scheme };
                 <scheme-toolbox></scheme-toolbox>
             </div>
             <div class="ui-g-10 ui-md-10 ui-widget-content ui-g-nopad">
-                <scheme-main></scheme-main>
+                <scheme-main [schemeid]="id"></scheme-main>
             </div>
         </div>
 
     </div>`
 })
-export class SchemeDetailComponent {
+export class SchemeDetailComponent implements OnInit {
 
-    /**
-     * id элемента
-     */
-    id?: number;
+    id: number;
 
     constructor(private route: ActivatedRoute) { }
 
     ngOnInit() {
-       
+
         this.route.params
             .subscribe((params: Params) => {
                 // (+) converts string 'id' to a number
-                params.hasOwnProperty("id") && (this.id = +params["id"]);    
+                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
             });
     }
     

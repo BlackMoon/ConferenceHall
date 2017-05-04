@@ -18,8 +18,6 @@ namespace domain.Hall.Query
 
         public override async Task<Hall> ExecuteAsync(FindHallByIdQuery query)
         {
-            await DbManager.OpenAsync();
-                
             Hall prev = null;
             Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
             {
@@ -35,6 +33,7 @@ namespace domain.Hall.Query
                 return h;
             };
 
+            await DbManager.OpenAsync();
             var halls = await DbManager.DbConnection.QueryAsync($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
 
             return halls.SingleOrDefault(h => h != null);

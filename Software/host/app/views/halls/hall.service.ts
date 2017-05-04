@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, isDevMode } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
@@ -9,9 +9,8 @@ import MapUtils from '../../common/map-utils';
 
 @Injectable()
 export class HallService extends HttpDataService<HallModel> {
-
-    url: string = "api/halls";
-    //url: string = "http://webtest.aquilon.ru:810/api/halls";
+    
+    url: string = isDevMode() ? "http://localhost:64346/api/halls" : "api/halls";
 
     constructor(http: Http) { super(http); }
 
