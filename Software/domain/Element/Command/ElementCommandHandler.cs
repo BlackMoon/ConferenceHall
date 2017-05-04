@@ -22,6 +22,11 @@ namespace domain.Element.Command
     {
         private const int H = 48;
         private const int W = 48;
+        /// <summary>
+        ///Максимально допустимые высота и ширина элемента схемы
+        /// </summary>
+        private const int MaxH = 1024;
+        private const int MaxW = 1024;
 
         private readonly ICacheManager<Element> _cacheManager;
         private readonly ILogger<ElementCommandHandler> _logger;
@@ -33,13 +38,13 @@ namespace domain.Element.Command
         }
 
         /// <summary>
-        /// Изменяет размер эскиза элемента схемы
+        /// Изменяет размер элемента схемы, если isResizeOriginal==true, и эскиза элемента схемы, в противном случае. Размер элемента схемы меняется только если его высота или ширина больше параметров height и width соответственно
         /// </summary>
         /// <param name="element"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="quality"></param>
-        private void ResizeImage(Element element, int width, int height, int quality = 75)
+        private void ResizeImage(bool isResizeOriginal, Element element, int width, int height, int quality = 75)
         {
             if (element.Data == null)
                 return;
@@ -49,44 +54,51 @@ namespace domain.Element.Command
                 SKManagedStream inputStream = new SKManagedStream(dataStream);
                 using (SKBitmap original = SKBitmap.Decode(inputStream))
                 {
-                    int w, h;
-                    if (original.Width > original.Height)
+                    if (!isResizeOriginal||(original.Width > width || original.Height > height))
                     {
-                        w = width;
-                        h = original.Height * height / original.Width;
-                    }
-                    else
-                    {
-                        w = original.Width * width / original.Height;
-                        h = height;
-                    }
-
-                    using (SKBitmap resized = original.Resize(new SKImageInfo(w, h), SKBitmapResizeMethod.Lanczos3))
-                    {
-                        if (resized != null)
+                        int w, h;
+                        if (original.Width > original.Height)
                         {
-                            using (SKImage image = SKImage.FromBitmap(resized))
+                            w = width;
+                            h = original.Height * height / original.Width;
+                        }
+                        else
+                        {
+                            w = original.Width * width / original.Height;
+                            h = height;
+                        }
+
+                        using (SKBitmap resized = original.Resize(new SKImageInfo(w, h), SKBitmapResizeMethod.Lanczos3))
+                        {
+                            if (resized != null)
                             {
-                                SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Bmp;
-
-                                switch (element.MimeType)
+                                using (SKImage image = SKImage.FromBitmap(resized))
                                 {
-                                    case "image/gif":
-                                        imageFormat = SKEncodedImageFormat.Gif;
-                                        break;
+                                    SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Bmp;
 
-                                    case "image/jpeg":
-                                        imageFormat = SKEncodedImageFormat.Jpeg;
-                                        break;
+                                    switch (element.MimeType)
+                                    {
+                                        case "image/gif":
+                                            imageFormat = SKEncodedImageFormat.Gif;
+                                            break;
 
-                                    case "image/png":
-                                        imageFormat = SKEncodedImageFormat.Png;
-                                        break;
+                                        case "image/jpeg":
+                                            imageFormat = SKEncodedImageFormat.Jpeg;
+                                            break;
+
+                                        case "image/png":
+                                            imageFormat = SKEncodedImageFormat.Png;
+                                            break;
+                                    }
+                                    if (isResizeOriginal)
+                                        element.Data = image
+                                        .Encode(imageFormat, quality)
+                                        .ToArray();
+                                    else
+                                        element.Thumbnail = image
+                                        .Encode(imageFormat, quality)
+                                        .ToArray();
                                 }
-
-                                element.Thumbnail = image
-                                    .Encode(imageFormat, quality)
-                                    .ToArray();
                             }
                         }
                     }
@@ -118,9 +130,8 @@ namespace domain.Element.Command
         {
             Element element = new Element();
             command.Adapt(element);
-
-            ResizeImage(element, W, H);           
-
+            ResizeImage(true,element, MaxW, MaxH);
+            ResizeImage(false,element, W, H);           
             await DbManager.OpenAsync();
             int newId = await DbManager.DbConnection.InsertAsync(element);
             
@@ -162,8 +173,8 @@ namespace domain.Element.Command
 
         public async Task<bool> ExecuteAsync(Element command)
         {
-            ResizeImage(command, W, H);
-
+            ResizeImage(true, command, MaxW, MaxH);
+            ResizeImage(false,command, W, H);
             await DbManager.OpenAsync();
             await DbManager.DbConnection.UpdateAsync(command);
 
