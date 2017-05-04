@@ -11,7 +11,7 @@ import { HallService } from './hall.service';
     templateUrl: 'hall-detail.component.html'
 })
 export class HallDetailComponent implements OnInit {
-
+    
     hallform: FormGroup;
     schemes: SchemeModel[];
 
@@ -37,7 +37,7 @@ export class HallDetailComponent implements OnInit {
             
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                let key = +params['id'];
+                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? this.hallService.get(key) : Observable.empty();
             })
             .subscribe((hall: HallModel) => {

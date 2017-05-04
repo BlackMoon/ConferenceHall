@@ -10,8 +10,8 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class HallService extends HttpDataService<HallModel> {
 
-    //url: string = "api/halls";
-    url: string = "http://webtest.aquilon.ru:810/api/halls";
+    url: string = "api/halls";
+    //url: string = "http://webtest.aquilon.ru:810/api/halls";
 
     constructor(http: Http) { super(http); }
 

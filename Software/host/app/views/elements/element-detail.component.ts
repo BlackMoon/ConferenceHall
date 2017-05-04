@@ -17,6 +17,9 @@ export class ElementDetailComponent implements OnInit {
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
 
+    /**
+     * id элемента
+     */
     id?:number;
     elementform: FormGroup;
 

@@ -1,11 +1,5 @@
-﻿import { Component, ViewChild } from '@angular/core';
-import { ButtonItem, GroupModel } from '../../models';
-import { ElementListComponent } from "../elements/element-list.component";
-
-/**
- * min кол-во символов фильтра
- */
-const minChars = 3;
+﻿import { Component } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 
 /**
  * Операции 
@@ -28,5 +22,21 @@ enum Operation { Edit, Group, Filter, New, Scheme };
     </div>`
 })
 export class SchemeDetailComponent {
+
+    /**
+     * id элемента
+     */
+    id?: number;
+
+    constructor(private route: ActivatedRoute) { }
+
+    ngOnInit() {
+       
+        this.route.params
+            .subscribe((params: Params) => {
+                // (+) converts string 'id' to a number
+                params.hasOwnProperty("id") && (this.id = +params["id"]);    
+            });
+    }
     
 }
