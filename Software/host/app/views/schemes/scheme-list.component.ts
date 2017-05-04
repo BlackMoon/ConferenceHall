@@ -57,18 +57,17 @@ export class SchemeListComponent {
             header: 'Вопрос',
             icon: 'fa fa-trash',
             message: `Удалить [${name}]?`,
-            accept: () =>
-
-                this.schemeService
+            accept: _ => {
+                return this.schemeService
                     .delete(id)
                     .subscribe(
-                    _ => {
+                        _ => {
 
-                        let ix = this.items.findIndex(s => s.id === id);
-                        this.items.splice(ix, 1);
-                    },
-                    error => this.logger.error(error))
-
+                            let ix = this.items.findIndex(s => s.id === id);
+                            this.items.splice(ix, 1);
+                        },
+                        error => this.logger.error(error));
+            }
         });   
     }
 }

@@ -2,46 +2,15 @@
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
-import { IDataService } from '../../common/data-service';
-import { SchemeModel } from '../../models/index';
+import { HttpDataService } from '../../common/data-service';
+import { SchemeModel } from '../../models';
 
-const url = "/api/schemes";
-//const url = "http://webtest.aquilon.ru:810/api/halls";
 
 @Injectable()
-export class SchemeService implements IDataService<SchemeModel> {
+export class SchemeService extends HttpDataService<SchemeModel> {
 
-    constructor(private http: Http) { }
+    url = "/api/schemes";
+    //url = "http://webtest.aquilon.ru:810/api/schemes";
 
-    add(scheme): Observable<any> {
-
-        return this.http
-            .post(url, scheme)
-            .map((r: Response) => r.json())
-            .catch(handleResponseError);
-    }
-
-    delete(key): Observable<any> {
-
-        return this.http
-            .delete(`${url}/${key}`)
-            .catch(handleResponseError);
-    }
-
-    getAll = ():Observable<any> => Observable.empty();
-
-    get(key): Observable<any> {
-
-        return this.http
-            .get(`${url}/${key}`)
-            .map((r: Response) => r.json())
-            .catch(handleResponseError);
-    }
-
-    update(scheme): Observable<any> {
-
-        return this.http
-            .put(`${url}/${scheme.id}`, scheme)
-            .catch(handleResponseError);
-    }
+    constructor(http: Http) { super(http); }
 }

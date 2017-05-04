@@ -30,13 +30,15 @@ export abstract class HttpDataService<T extends KeyModel> implements IDataServic
     constructor(protected http: Http) { }
 
     add(entity: T): Observable<any> {
+
         return this.http
             .post(this.url, entity)
+            .map((r: Response) => r.json())
             .catch(handleResponseError);
     }
 
     delete(key): Observable<any> {
-
+        
         return this.http
             .delete(`${this.url}/${key}`)
             .catch(handleResponseError);
@@ -59,8 +61,10 @@ export abstract class HttpDataService<T extends KeyModel> implements IDataServic
     }
 
     update(entity: T): Observable<any> {
+
         return this.http
             .put(`${this.url}/${entity.id}`, entity)
+            .map((r: Response) => r.json())
             .catch(handleResponseError); }
 
     
