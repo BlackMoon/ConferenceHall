@@ -40,19 +40,20 @@ namespace domain.Element.Query
         
         public async Task<IEnumerable<Element>> ExecuteAsync(FindElementsQuery query)
         {
+            // index = lower(name)
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.scheme_elements e")
                 .Column("e.id")
                 .Column("e.name")
                 .Column("e.height")
                 .Column("e.width")
-                .OrderBy("e.name");
+                .OrderBy("lower(e.name)");
 
             DynamicParameters param = new DynamicParameters();
 
             // может задаваться либо фильтр
             if (!string.IsNullOrEmpty(query.Filter))
             {
-                sqlBuilder.Where("e.name LIKE @filter");
+                sqlBuilder.Where("lower(e.name) LIKE lower(@filter)");
                 
                 param.Add("filter", query.Filter + "%");
             }
