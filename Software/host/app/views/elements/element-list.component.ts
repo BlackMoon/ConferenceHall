@@ -7,6 +7,8 @@ import { Mediator } from "../../common/mediator";
 import { ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
+const dragType = "element";
+
 @Component({
     selector: 'element-list',
     styleUrls: ['element-list.component.css'],
@@ -75,6 +77,8 @@ export class ElementListComponent implements OnInit, OnDestroy  {
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+
+    dragStart = (event, element) => event.dataTransfer.setData(dragType, JSON.stringify(element));
 
     selectElement(element) {
         element.selected = !element.selected;

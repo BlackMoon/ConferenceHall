@@ -21,11 +21,10 @@
         <form [formGroup]="schemeForm">
             <div class="ui-autocomplete-panel ui-widget-header ui-toolbar ui-g-6" style="z-index: 2">
                 <input type="hidden" formControlName="id" />
-                <input type="hidden" formControlName="hallId" />
                 <input pInputText type="text" formControlName="name" class="ui-g-12"/>
             </div>
         </form>
     </div>
-    <div #canvasbox class="ui-g-12">
+    <div #canvasbox pDroppable="dd" class="ui-g-12" (mousemove)="mouseMove($event)" (onDrop)="drop($event)">
     </div>
 </div>

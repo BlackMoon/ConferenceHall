@@ -17,7 +17,6 @@ namespace domain.Element.Command
         KeyObjectCommandHandler<Element>, 
         ICommandHandler<AddToFavoritesCommand>,
         ICommandHandlerWithResult<CreateElementCommand, int>,
-        ICommandHandlerWithResult<Element, bool>, 
         ICommandHandler<DeleteElementsCommand>
     {
         private const int H = 48;
@@ -162,8 +161,8 @@ namespace domain.Element.Command
             DbManager.AddParameter("puser_id", command.UserId);
 
             await DbManager.OpenAsync();
-            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_location_del");
-            _logger.LogInformation($"Modified {returnValue} records");
+            int deleted = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_location_del");
+            _logger.LogInformation($"Modified {deleted} records");
 
             // clear cache
             foreach (int id in command.Ids)

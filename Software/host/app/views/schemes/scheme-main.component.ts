@@ -1,9 +1,13 @@
-﻿import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+﻿import { isDevMode, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
+import { Mediator } from "../../common/mediator";
 
-import { SchemeModel } from "../../models";
+import { ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
+
+const dragType = "element";
 
 @Component({
     host: { '(window:resize)': 'onResize($event)' },
@@ -11,7 +15,7 @@ import { SchemeService } from "./scheme.service";
     templateUrl: 'scheme-main.component.html'
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
-
+    
     @Input()
     schemeid:number;
 
@@ -33,7 +37,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     constructor(
         private fb: FormBuilder,
         private logger: Logger,
-        private schemeService: SchemeService) { }
+        private schemeService: SchemeService) {}
 
     ngAfterViewInit() {
         this.onResize();
@@ -43,8 +47,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.schemeForm = this.fb.group({
             id: [null],
-            hallId: [null],
-            name: [null]
+            name: [null, Validators.required]
         });
 
         this.canvasbox = this.canvasboxElRef.nativeElement;
@@ -55,10 +58,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     this.canvasbox.insertAdjacentHTML('beforeend', scheme.plan);
                     
                     this.canvas = this.canvasbox.querySelector('svg');
-                    if (this.canvas != null) {                        
-                        this.canvas.addEventListener("click", this.canvasClick);
-                        //this.canvas.classList.add("ui-toolbar");
+
+                    if (this.canvas != null) {
+                        // размеры в см
+                        this.canvas.setAttribute("viewbox", `0 0 ${scheme.width * 100} ${scheme.height * 100}`);
                         this.canvas.style.height = this.canvas.style.width = "100%";
+
+                        this.canvas.addEventListener("mousedown", this.mouseDown);
                     }
 
                     this.schemeForm.patchValue(scheme);
@@ -67,12 +73,32 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngOnDestroy() {
-        this.canvas.removeEventListener("click");
+        this.canvas.removeEventListener("mousedown");
     }
 
-    canvasClick(event) {
-        debugger;
+    mouseDown(event) {
+        //debugger;
         console.log(event.x);
+    }
+
+    mouseMove(event) {
+        //debugger;
+        //console.log(event.offsetX);
+    }
+
+    drop(event) {
+        debugger;
+        let element: ElementModel = JSON.parse(event.dataTransfer.getData(dragType));
+
+        let shape = document.createElementNS(this.canvas.namespaceURI, "image");
+        // размеры в см
+        shape.setAttributeNS(null, "height", `${element.height * 100}`);
+        shape.setAttributeNS(null, "width", `${element.width * 100}`);
+        shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", isDevMode() ? `http://webtest.aquilon.ru:810/api/thumbnail/${element.id}` : `/api/thumbnail/${element.id}`);
+        shape.setAttributeNS(null, "x", event.offsetX);
+        shape.setAttributeNS(null, "y", event.offsetY);
+
+        this.canvas.appendChild(shape);
     }
 
     saveScheme(scheme) {

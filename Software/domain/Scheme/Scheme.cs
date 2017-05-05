@@ -2,6 +2,7 @@
 using domain.Common;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
+using Newtonsoft.Json;
 
 namespace domain.Scheme
 {
@@ -12,6 +13,7 @@ namespace domain.Scheme
     public class Scheme : KeyObject, ICommand
     {
         [Column("hall_id")]
+        [JsonIgnore]
         public int HallId { get; set; }
        
         public string Name { get; set; }

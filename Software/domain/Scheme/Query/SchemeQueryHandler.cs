@@ -17,7 +17,6 @@ namespace domain.Scheme.Query
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.hall_scheme s")
                 .Column("s.id")
-                .Column("s.hall_id")
                 .Column("s.name")
                 .Column("s.plan")
                 .Column("h.width")

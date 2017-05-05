@@ -1,9 +1,9 @@
 ﻿<p-dataGrid [value]="elements" [styleClass]="'center h100p'" *ngIf="!smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6">
-            <div pDraggable="dd" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" >
+            <div pDraggable="dd" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" (onDragStart)="dragStart($event,element)" >
                 <img class="center" src="/api/thumbnail/{{element.id | uniquesuffix}}" width="48" height="48" title="{{element.name}}">
-                <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
+                <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)" ></i>
                 <div class="text-ellipsis">
                     <small>{{element.name}}</small>
                 </div>
@@ -14,7 +14,7 @@
 <p-dataList [value]="elements" [styleClass]="'h100p'" *ngIf="smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">
-            <div pDraggable="dd" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" >
+            <div pDraggable="dd" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
                 <div class="ui-grid-col-3">
                     <img class="center" src="/api/thumbnail/{{element.id | uniquesuffix}}" width="32" height="32" title="{{element.name}}">    
                 </div>
@@ -23,7 +23,7 @@
                     <small>{{element.width + ' x ' + element.height}}</small>
                 </div>
                 <div class="ui-grid-col-1">
-                    <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }}" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
+                    <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }}" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)" draggable="false"></i>
                 </div>
             </div>
         </div>
