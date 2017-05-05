@@ -43,8 +43,14 @@ namespace host.Controllers
             return QueryDispatcher.DispatchAsync<FindElementByIdQuery, Element>(new FindElementByIdQuery() { Id = id });
         }
 
-        [HttpGet("/api/thumbnail/{id}")]
-        public async Task<ActionResult> GetThumbnail(int id)
+        /// <summary>
+        /// Получить файл образа элемента
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="thumbnail">в миниатюре?</param>
+        /// <returns></returns>
+        [HttpGet("/api/shape/{id}/{thumbnail?}")]
+        public async Task<ActionResult> GetShape(int id, bool thumbnail = true)
         {
             byte[] fileContents = {};
             string contentType = "image/*";
@@ -52,7 +58,7 @@ namespace host.Controllers
             Element el = await Get(id);
             if (el != null)
             {
-                fileContents = el.Thumbnail;
+                fileContents = thumbnail ? el.Thumbnail : el.Data;
                 contentType = el.MimeType;
             }
 

@@ -40,7 +40,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         private schemeService: SchemeService) {}
 
     ngAfterViewInit() {
-        this.onResize();
+        this.onResize(); 
     }
 
     ngOnInit() {
@@ -64,6 +64,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         this.canvas.setAttribute("viewbox", `0 0 ${scheme.width * 100} ${scheme.height * 100}`);
                         this.canvas.style.height = this.canvas.style.width = "100%";
 
+                        this.canvas.addEventListener("mousemove", this.mouseMove);
                         this.canvas.addEventListener("mousedown", this.mouseDown);
                     }
 
@@ -94,9 +95,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // размеры в см
         shape.setAttributeNS(null, "height", `${element.height * 100}`);
         shape.setAttributeNS(null, "width", `${element.width * 100}`);
-        shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", isDevMode() ? `http://webtest.aquilon.ru:810/api/thumbnail/${element.id}` : `/api/thumbnail/${element.id}`);
-        shape.setAttributeNS(null, "x", event.offsetX);
-        shape.setAttributeNS(null, "y", event.offsetY);
+        shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", isDevMode() ? `http://localhost:64346/api/shape/${element.id}/false` : `/api/shape/${element.id}/false`);
+
+        let pt = this.canvas.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
+        shape.setAttributeNS(null, "x", pt.x);
+        shape.setAttributeNS(null, "y", pt.y);
 
         this.canvas.appendChild(shape);
     }
