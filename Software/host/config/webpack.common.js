@@ -1,4 +1,5 @@
 ﻿var webpack = require('webpack');
+var ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var helpers = require('./helpers');
@@ -38,6 +39,11 @@ module.exports = {
     },
 
     plugins: [     
+
+        new ContextReplacementPlugin(
+            /angular(\\|\/)core(\\|\/)@angular/,
+            helpers.root('./app')
+        ),
 
       new CopyWebpackPlugin([
             { from: './images', to: './assets', ignore: 'bg.jpg' },

@@ -5,7 +5,7 @@
  */
 export class ElementGroupCommand {
     ids: number[];
-    groupid?: number;
+    groupId?: number;
 }
 
 

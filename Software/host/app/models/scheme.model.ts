@@ -5,6 +5,9 @@
 export class SchemeModel extends KeyModel {
 
     hallid: number;
+    height: number;
+    width: number;
+
     name: string;
     plan: string;   
 

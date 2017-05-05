@@ -9,8 +9,7 @@ namespace domain.Scheme.Command
 {
     public class SchemeCommandHandler : KeyObjectCommandHandler<Scheme>,
         ICommandHandlerWithResult<CreateSchemeCommand, long>, 
-        ICommandHandlerWithResult<DeleteSchemeCommand, bool>,
-        ICommandHandlerWithResult<Scheme, bool>
+        ICommandHandlerWithResult<DeleteSchemeCommand, bool>
     {
         public SchemeCommandHandler(IDbManager dbManager) : base(dbManager)
         {

@@ -18,8 +18,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvas: any;
     canvasbox: any;
     
-    schemeform: FormGroup;
-    schemeformVisible: boolean;
+    schemeForm: FormGroup;
+    schemeFormVisible: boolean;
 
     @ViewChild('canvas')
     canvasElRef: ElementRef;
@@ -41,8 +41,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     ngOnInit() {
 
-        this.schemeform = this.fb.group({
+        this.schemeForm = this.fb.group({
             id: [null],
+            hallId: [null],
             name: [null]
         });
 
@@ -56,10 +57,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     this.canvas = this.canvasbox.querySelector('svg');
                     if (this.canvas != null) {                        
                         this.canvas.addEventListener("click", this.canvasClick);
+                        //this.canvas.classList.add("ui-toolbar");
                         this.canvas.style.height = this.canvas.style.width = "100%";
                     }
 
-                    this.schemeform.patchValue(scheme);
+                    this.schemeForm.patchValue(scheme);
                 },
                 error => this.logger.error(error));
     }
@@ -74,8 +76,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     saveScheme(scheme) {
-
-        scheme.plan = this.canvas.innerHTML;
+        debugger;
+        scheme.plan = this.canvas.outerHTML;
 
         this.schemeService
             .update(scheme)

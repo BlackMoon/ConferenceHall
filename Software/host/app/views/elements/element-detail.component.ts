@@ -21,7 +21,7 @@ export class ElementDetailComponent implements OnInit {
      * id элемента
      */
     id?:number;
-    elementform: FormGroup;
+    elementForm: FormGroup;
 
     constructor(
         private elementService: ElementService,
@@ -32,7 +32,7 @@ export class ElementDetailComponent implements OnInit {
 
     get submitDisabled():boolean {
 
-        let enabled: boolean = this.elementform.valid;
+        let enabled: boolean = this.elementForm.valid;
         if (this.id === void 0) {
             enabled = enabled && (this.fileUpload.files.length > 0);
         }
@@ -42,7 +42,7 @@ export class ElementDetailComponent implements OnInit {
 
     ngOnInit() {
 
-        this.elementform = this.fb.group({
+        this.elementForm = this.fb.group({
             id: [null],
             name: [null, Validators.required],
             height: [1, Validators.required],
@@ -56,7 +56,7 @@ export class ElementDetailComponent implements OnInit {
                 params.hasOwnProperty("id") && (this.id = +params["id"]);
                 return this.id ? this.elementService.get(this.id) : Observable.empty();
             })
-            .subscribe((element: ElementModel) => this.elementform.patchValue(element));
+            .subscribe((element: ElementModel) => this.elementForm.patchValue(element));
     }
 
     save(event, element) {
