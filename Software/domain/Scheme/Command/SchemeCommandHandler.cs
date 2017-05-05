@@ -54,7 +54,7 @@ namespace domain.Scheme.Command
         {
             DbManager.AddParameter("id", command.Id);
             DbManager.AddParameter("name", command.Name);
-            DbManager.AddParameter("plan", command.Plan);
+            DbManager.AddParameter("plan", command.Plan.Trim('\r', '\n'));
 
             await DbManager.OpenAsync();
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.hall_scheme SET name = @name, plan = @plan WHERE id = @id");

@@ -10,7 +10,7 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class ElementService extends HttpDataService<ElementModel> {
 
-    url: string = isDevMode() ? "http://localhost:64346/api/elements" : "api/elememts";
+    url: string = isDevMode() ? "http://localhost:64346/api/elements" : "api/elements";
 
     constructor(http: Http) { super(http);  }
 
