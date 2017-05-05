@@ -3,7 +3,7 @@
         <form [formGroup]="schemeform" (ngSubmit)="addScheme(schemeform.value)" (reset)="schemeformVisible=false">
             <div class="ui-helper-clearfix" style="width: 100%">
                 <button type="button" pButton icon="fa-plus" style="float: left" label="Добавить" (click) ="schemeformVisible=true"></button>
-                <div *ngIf="schemeformVisible" class="ui-grid ui-grid-responsive ui-grid-pad">
+                <div *ngIf="schemeformVisible" class="ui-grid ui-grid-responsive">
                     <hr class="ui-widget-content" style="border-top:0">
                     
                     <div class="ui-grid-row">

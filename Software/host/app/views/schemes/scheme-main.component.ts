@@ -1,4 +1,5 @@
-﻿import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Logger } from "../../common/logger";
 
 import { SchemeModel } from "../../models";
@@ -9,12 +10,16 @@ import { SchemeService } from "./scheme.service";
     selector: 'scheme-main',
     templateUrl: 'scheme-main.component.html'
 })
-export class SchemeMainComponent implements AfterViewInit, OnInit {
+export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     @Input()
     schemeid:number;
 
     canvas: any;
+    canvasbox: any;
+    
+    schemeform: FormGroup;
+    schemeformVisible: boolean;
 
     @ViewChild('canvas')
     canvasElRef: ElementRef;
@@ -26,6 +31,7 @@ export class SchemeMainComponent implements AfterViewInit, OnInit {
     wrapperElRef: ElementRef;
 
     constructor(
+        private fb: FormBuilder,
         private logger: Logger,
         private schemeService: SchemeService) { }
 
@@ -35,20 +41,53 @@ export class SchemeMainComponent implements AfterViewInit, OnInit {
 
     ngOnInit() {
 
-        this.canvas = this.canvasElRef.nativeElement;
+        this.schemeform = this.fb.group({
+            id: [null],
+            name: [null]
+        });
+
+        this.canvasbox = this.canvasboxElRef.nativeElement;
 
         this.schemeService
             .get(this.schemeid)
-            .subscribe((scheme:SchemeModel) => {
+            .subscribe((scheme: SchemeModel) => {
+                    this.canvasbox.insertAdjacentHTML('beforeend', scheme.plan);
+                    
+                    this.canvas = this.canvasbox.querySelector('svg');
+                    if (this.canvas != null) {                        
+                        this.canvas.addEventListener("click", this.canvasClick);
+                        this.canvas.style.height = this.canvas.style.width = "100%";
+                    }
 
-                    this.canvas.setAttribute("viewBox", `0 0 ${scheme.width} ${scheme.height}`);
-
-                    this.canvas.insertAdjacentHTML('afterbegin', scheme.plan);
+                    this.schemeform.patchValue(scheme);
                 },
                 error => this.logger.error(error));
     }
 
+    ngOnDestroy() {
+        this.canvas.removeEventListener("click");
+    }
+
+    canvasClick(event) {
+        debugger;
+        console.log(event.x);
+    }
+
+    saveScheme(scheme) {
+
+        scheme.plan = this.canvas.innerHTML;
+
+        this.schemeService
+            .update(scheme)
+            .subscribe(_ => {},
+                    error => this.logger.error(error));
+    }
+
+    selectBtnClick() {
+        debugger;
+    }
+
     onResize() {
-        this.canvasboxElRef.nativeElement.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.canvasboxElRef.nativeElement.offsetTop}px`;
+        this.canvasbox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.canvasbox.offsetTop}px`;
     }
 }

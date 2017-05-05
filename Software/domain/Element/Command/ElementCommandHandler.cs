@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace domain.Element.Command
 {
     public class ElementCommandHandler: 
-        KeyObjectCommandHandler, 
+        KeyObjectCommandHandler<Element>, 
         ICommandHandler<AddToFavoritesCommand>,
         ICommandHandlerWithResult<CreateElementCommand, int>,
         ICommandHandlerWithResult<Element, bool>, 
@@ -171,13 +171,9 @@ namespace domain.Element.Command
                 _cacheManager.Remove(id.ToString());
             }
         }
+        
 
-        public bool Execute(Element command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> ExecuteAsync(Element command)
+        public override async Task<bool> ExecuteAsync(Element command)
         {
             command.Data = ResizeImage(command.Data, MaxW, MaxH, command.MimeType);
             command.Thumbnail = ResizeImage(command.Data, W, H, command.MimeType, 50);

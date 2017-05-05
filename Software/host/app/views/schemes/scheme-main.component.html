@@ -2,11 +2,11 @@
     <div class="ui-g-12 ui-g-nopad">
         <p-toolbar>
             <div class="ui-g-4 ui-g-nopad">
-                <button pButton type="button" title="Сохранить" icon="fa-floppy-o"></button>
+                <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
+                <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme()"></button>
             </div>
             <div class="ui-g-4 ui-g-nopad">
-
-                <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
+                <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer" (click)="selectBtnClick()"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
             </div>
             <div class="ui-g-4 ui-g-nopad">
                 <div class="ui-toolbar-group-right">
@@ -16,7 +16,12 @@
             </div>
         </p-toolbar>
     </div>
-    <div #canvasbox class="ui-g-12 ui-g-nopad">
-        <svg #canvas class="h100p w100p"></svg>    
+    <div #canvasbox class="ui-g-12 ui-resizable ui-g-nopad"  [ngStyle]="{'z-index':2}">
+        <form [formGroup]="schemeform">
+            <div *ngIf="schemeformVisible" class="ui-autocomplete-panel ui-widget-header ui-toolbar ui-g-6">
+                <input type="hidden" formControlName="id" />
+                <input pInputText type="text" formControlName="name" class="ui-g-12"/>
+            </div>
+        </form>
     </div>
 </div>

@@ -8,7 +8,7 @@ using Mapster;
 
 namespace domain.Hall.Command
 {
-    public class HallCommandHandler : KeyObjectCommandHandler,
+    public class HallCommandHandler : KeyObjectCommandHandler<Hall>,
         ICommandHandlerWithResult<CreateHallCommand, int>,
         ICommandHandlerWithResult<DeleteHallCommand, bool>,
         ICommandHandlerWithResult<Hall, bool>
@@ -53,24 +53,6 @@ namespace domain.Hall.Command
 
             Hall hall = new Hall();
             return await DbManager.DbConnection.DeleteAsync(command.Adapt(hall));
-        }
-
-        /// <summary>
-        /// Обновление холла
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-
-        public bool Execute(Hall command)
-        {
-            DbManager.Open();
-            return DbManager.DbConnection.Update(command);
-        }
-
-        public async Task<bool> ExecuteAsync(Hall command)
-        {
-            await DbManager.OpenAsync();
-            return await DbManager.DbConnection.UpdateAsync(command);
         }
     }
 }

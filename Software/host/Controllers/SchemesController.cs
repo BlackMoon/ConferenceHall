@@ -30,8 +30,9 @@ namespace host.Controllers
 
         
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Scheme value)
+        public Task Put(int id, [FromBody]Scheme value)
         {
+            return CommandDispatcher.DispatchAsync<Scheme, bool>(value);
         }
 
         
