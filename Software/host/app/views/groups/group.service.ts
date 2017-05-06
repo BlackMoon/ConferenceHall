@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, isDevMode } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
@@ -10,9 +10,8 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class GroupService extends HttpDataService<GroupModel> {
 
-    //url:string = "/api/groups";
-    url: string = "http://webtest.aquilon.ru:810/api/groups";
-
+    url = isDevMode() ? "http://localhost:64346/api/groups" : "/api/schemes";
+    
     constructor(http: Http) { super(http); }
 
     getAll(): Observable<any> {

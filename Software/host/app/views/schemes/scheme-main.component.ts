@@ -7,6 +7,7 @@ import { Mediator } from "../../common/mediator";
 import { ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
+const dragOffset = "offset";
 const dragType = "element";
 
 @Component({
@@ -89,7 +90,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     drop(event) {
         debugger;
-        let element: ElementModel = JSON.parse(event.dataTransfer.getData(dragType));
+        let element: ElementModel = JSON.parse(event.dataTransfer.getData(dragType)),
+            offset = JSON.parse(event.dataTransfer.getData(dragOffset));
 
         let shape = document.createElementNS(this.canvas.namespaceURI, "image");
         // размеры в см
@@ -102,8 +104,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         pt.y = event.clientY;
         pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
-        shape.setAttributeNS(null, "x", pt.x);
-        shape.setAttributeNS(null, "y", pt.y);
+        shape.setAttributeNS(null, "x", `${pt.x - offset.x}`);
+        shape.setAttributeNS(null, "y", `${pt.y - offset.y}`);
 
         this.canvas.appendChild(shape);
     }

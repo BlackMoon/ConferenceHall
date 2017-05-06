@@ -7,6 +7,7 @@ import { Mediator } from "../../common/mediator";
 import { ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
+const dragOffset = "offset";
 const dragType = "element";
 
 @Component({
@@ -76,9 +77,17 @@ export class ElementListComponent implements OnInit, OnDestroy  {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
-    }
+    }    
 
-    dragStart = (event, element) => event.dataTransfer.setData(dragType, JSON.stringify(element));
+    dragStart(event, element) {
+        
+        let cr: ClientRect = event.currentTarget.getBoundingClientRect(),
+            offsetX = event.clientX - cr.left,
+            offsetY = event.clientY - cr.top;
+
+        event.dataTransfer.setData(dragOffset, JSON.stringify({ x: offsetX, y: offsetY }));
+        event.dataTransfer.setData(dragType, JSON.stringify(element));
+    }
 
     selectElement(element) {
         element.selected = !element.selected;
