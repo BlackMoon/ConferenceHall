@@ -10,7 +10,7 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class GroupService extends HttpDataService<GroupModel> {
 
-    url = isDevMode() ? "http://localhost:64346/api/groups" : "/api/schemes";
+    url = isDevMode() ? "http://localhost:64346/api/groups" : "/api/groups";
     
     constructor(http: Http) { super(http); }
 
