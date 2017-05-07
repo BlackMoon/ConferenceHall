@@ -58,7 +58,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         });
 
         this.canvasbox = this.canvasboxElRef.nativeElement;
-
+                
         this.schemeService
             .get(this.schemeid)
             .subscribe((scheme: SchemeModel) => {
@@ -74,9 +74,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     // размеры в см
                     this.centerView();
                     this.canvas.style.height = this.canvas.style.width = "100%";
+                                        
+                    this.canvas
+                        .addEventListener("mousemove", (event) => this.mouseMove(event));                        
+                    this.canvas
+                        .addEventListener("mouseup", (event) => this.mouseUp(event));                        
 
-                    this.canvas.addEventListener("mousemove", (event) => this.mouseMove(event));                        
-                    this.canvas.addEventListener("mouseup", (event) => this.mouseUp(event));                        
+                    for (let img of this.canvas.querySelectorAll('image')) {
+                        img.addEventListener("mousedown", (event) => this.mouseDown(event));
+                    }
                 }
 
                 this.schemeForm.patchValue(scheme);
@@ -85,11 +91,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngOnDestroy() {
-        this.canvas.removeEventListener("mousedown");
+        this.canvas.removeEventListener("mousemove");
+        this.canvas.removeEventListener("mouseup");
     }
 
     mouseDown(event) {
-       
+        
         event.stopPropagation();
         this.svgElement = event.currentTarget;   
 
