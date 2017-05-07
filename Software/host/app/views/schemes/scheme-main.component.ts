@@ -3,12 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
+import Point from "../../common/point";
 
-import { ElementModel, SchemeModel } from "../../models";
+import { DragOffset, DragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
-const dragOffset = "offset";
-const dragType = "element";
+const shapeClass = "el";
 
 @Component({
     host: { '(window:resize)': 'onResize($event)' },
@@ -17,14 +17,20 @@ const dragType = "element";
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     
-    @Input()
-    schemeid:number;
-
     canvas: any;
-    canvasbox: any;
+    canvasbox: any;    
+
+    initialHeight: number;
+    initialWidth: number;
+
+    svgElement: HTMLElement = null;                // selected svgElement
+    svgElementOffset: Point;
     
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
+
+    @Input()
+    schemeid: number;
 
     @ViewChild('canvas')
     canvasElRef: ElementRef;
@@ -45,7 +51,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngOnInit() {
-
+        
         this.schemeForm = this.fb.group({
             id: [null],
             name: [null, Validators.required]
@@ -56,22 +62,26 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.schemeService
             .get(this.schemeid)
             .subscribe((scheme: SchemeModel) => {
-                    this.canvasbox.insertAdjacentHTML('beforeend', scheme.plan);
+
+                this.canvasbox.insertAdjacentHTML('beforeend', scheme.plan);
+                // размеры в см
+                this.initialHeight = scheme.height * 100;
+                this.initialWidth = scheme.width * 100;                
                     
-                    this.canvas = this.canvasbox.querySelector('svg');
+                this.canvas = this.canvasbox.querySelector('svg');
 
-                    if (this.canvas != null) {
-                        // размеры в см
-                        this.canvas.setAttribute("viewbox", `0 0 ${scheme.width * 100} ${scheme.height * 100}`);
-                        this.canvas.style.height = this.canvas.style.width = "100%";
+                if (this.canvas != null) {
+                    // размеры в см
+                    this.centerView();
+                    this.canvas.style.height = this.canvas.style.width = "100%";
 
-                        this.canvas.addEventListener("mousemove", this.mouseMove);
-                        this.canvas.addEventListener("mousedown", this.mouseDown);
-                    }
+                    this.canvas.addEventListener("mousemove", (event) => this.mouseMove(event));                        
+                    this.canvas.addEventListener("mouseup", (event) => this.mouseUp(event));                        
+                }
 
-                    this.schemeForm.patchValue(scheme);
-                },
-                error => this.logger.error(error));
+                this.schemeForm.patchValue(scheme);
+            },
+            error => this.logger.error(error));
     }
 
     ngOnDestroy() {
@@ -79,24 +89,44 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     mouseDown(event) {
-        //debugger;
-        console.log(event.x);
+       
+        event.stopPropagation();
+        this.svgElement = event.currentTarget;   
+
+        let cr: ClientRect = this.svgElement.getBoundingClientRect();
+        this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
     }
 
     mouseMove(event) {
-        //debugger;
-        //console.log(event.offsetX);
+
+        event.preventDefault();
+
+        if (this.svgElement !== null) {
+            let pt = this.canvas.createSVGPoint();
+            pt.x = event.clientX;
+            pt.y = event.clientY;
+            pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
+            this.svgElement.setAttributeNS(null, "x", `${pt.x - this.svgElementOffset.x}`);
+            this.svgElement.setAttributeNS(null, "y", `${pt.y - this.svgElementOffset.y}`);  
+        }
+    }
+
+    mouseUp(event) {        
+        this.svgElement = null;
     }
 
     drop(event) {
-        debugger;
-        let element: ElementModel = JSON.parse(event.dataTransfer.getData(dragType)),
-            offset = JSON.parse(event.dataTransfer.getData(dragOffset));
+        
+        let element: ElementModel = JSON.parse(event.dataTransfer.getData(DragType)),
+            offset:Point = JSON.parse(event.dataTransfer.getData(DragOffset));
 
         let shape = document.createElementNS(this.canvas.namespaceURI, "image");
+        shape.addEventListener("mousedown", (event) => this.mouseDown(event));
+
         // размеры в см
         shape.setAttributeNS(null, "height", `${element.height * 100}`);
-        shape.setAttributeNS(null, "width", `${element.width * 100}`);
+        shape.setAttributeNS(null, "width", `${element.width * 100}`);        
         shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", isDevMode() ? `http://localhost:64346/api/shape/${element.id}/false` : `/api/shape/${element.id}/false`);
 
         let pt = this.canvas.createSVGPoint();
@@ -105,10 +135,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
         shape.setAttributeNS(null, "x", `${pt.x - offset.x}`);
-        shape.setAttributeNS(null, "y", `${pt.y - offset.y}`);
+        shape.setAttributeNS(null, "y", `${pt.y - offset.y}`);        
 
         this.canvas.appendChild(shape);
     }
+
+    centerView = () => this.canvas.setAttribute("viewbox", `0 0 ${this.initialWidth} ${this.initialHeight}`);    
 
     saveScheme(scheme) {
         debugger;
@@ -118,11 +150,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             .update(scheme)
             .subscribe(_ => {},
                     error => this.logger.error(error));
-    }
-
-    selectBtnClick() {
-        debugger;
-    }
+    }    
 
     onResize() {
         this.canvasbox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.canvasbox.offsetTop}px`;

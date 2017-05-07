@@ -1,6 +1,12 @@
 ﻿import { KeyModel } from './index';
 
 /**
+ * Константы для операций Drag & Drop
+ */
+export const DragOffset = "offset";
+export const DragType = "element";
+
+/**
  * Команда мульти-обработки элементов
  */
 export class ElementGroupCommand {

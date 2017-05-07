@@ -8,11 +8,10 @@
             </div>
             <div class="ui-g-4 ui-g-nopad">
                 <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer" (click)="selectBtnClick()"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
-            </div>
-            <div class="ui-g-4 ui-g-nopad">
+            </div>            
+            <div class="ui-g-4 ui-g-nopad">                    
                 <div class="ui-toolbar-group-right">
-                    <button pButton type="button" icon="fa-search-plus"></button><button pButton type="button" icon="fa-search-minus"></button><button pButton type="button" icon="fa-dot-circle-o" title="По центру"></button>
-                    <button pButton type="button" icon="fa-desktop" title="На весь экран"></button>
+                    <button pButton type="button" icon="fa-dot-circle-o" title="По центру" (click)="centerView()"></button><button pButton type="button" icon="fa-desktop" title="На весь экран"></button>
                 </div>
             </div>
         </p-toolbar>

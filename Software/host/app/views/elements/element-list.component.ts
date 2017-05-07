@@ -4,11 +4,10 @@ import { Subscription } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { ElementGroupCommand, ElementModel } from '../../models';
-import { ElementService } from './element.service';
+import Point from "../../common/point";
 
-const dragOffset = "offset";
-const dragType = "element";
+import { DragOffset, DragType, ElementGroupCommand, ElementModel } from '../../models';
+import { ElementService } from './element.service';
 
 @Component({
     selector: 'element-list',
@@ -82,11 +81,10 @@ export class ElementListComponent implements OnInit, OnDestroy  {
     dragStart(event, element) {
         
         let cr: ClientRect = event.currentTarget.getBoundingClientRect(),
-            offsetX = event.clientX - cr.left,
-            offsetY = event.clientY - cr.top;
+            offset: Point = new Point(event.clientX - cr.left, event.clientY - cr.top);
 
-        event.dataTransfer.setData(dragOffset, JSON.stringify({ x: offsetX, y: offsetY }));
-        event.dataTransfer.setData(dragType, JSON.stringify(element));
+        event.dataTransfer.setData(DragOffset, JSON.stringify(offset));
+        event.dataTransfer.setData(DragType, JSON.stringify(element));
     }
 
     selectElement(element) {
