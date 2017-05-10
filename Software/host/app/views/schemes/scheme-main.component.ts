@@ -123,13 +123,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     canvasMouseDown(event) {
         if (event.which === 1) {
-
-            let pt = this.canvas.createSVGPoint();
-
-            pt.x = event.clientX;
-            pt.y = event.clientY;
-
-            this.clickPoint = new Point(event.clientX, event.clientY);//pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+            this.clickPoint = new Point(event.clientX, event.clientY);
             this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
         }
     }
@@ -157,16 +151,16 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // перемещение canvas'a
             else {
 
-                let pt1 = this.canvas.createSVGPoint();
-
-                pt1.x = this.clickPoint.x;
-                pt1.y = this.clickPoint.y;
-                console.log(pt1);
-                pt1 = pt1.matrixTransform(this.canvas.getScreenCTM().inverse());
                 pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                console.log(pt.x - this.clickPoint.x);
+
+                let clickPt = this.canvas.createSVGPoint();
+                clickPt.x = this.clickPoint.x;
+                clickPt.y = this.clickPoint.y;
+                // трансформация здесь --> т.к. уже изменился viewbox
+                clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
                 this.canvas.setAttribute("viewBox",
-                    `${this.svgOrigin.x - pt.x + pt1.x} ${this.svgOrigin.y} ${this.initialWidth} ${this.initialHeight}`);    
+                    `${this.svgOrigin.x - pt.x + clickPt.x} ${this.svgOrigin.y - pt.y + clickPt.y} ${this.initialWidth} ${this.initialHeight}`);    
             }
         }
     }
