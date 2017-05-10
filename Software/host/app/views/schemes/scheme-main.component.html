@@ -7,7 +7,7 @@
             </div>
             <div class="ui-g-4 ui-g-nopad">
                 <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer" (click)="selectBtnClick()"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
-                <p-dropdown #dropDown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг сетки, м" [style]="{'width':'120px'}"></p-dropdown>
+                <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг сетки, м" [style]="{'width':'120px'}"></p-dropdown>
             </div>            
             <div class="ui-g-4 ui-g-nopad">                    
                 <div class="ui-toolbar-group-right">

@@ -1,8 +1,7 @@
 ﻿import { isDevMode, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { SelectItem } from 'primeng/primeng'
-import { Dropdown } from 'primeng/components/dropdown/dropdown';
+import { SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import Point from "../../common/point";
@@ -10,11 +9,13 @@ import Point from "../../common/point";
 import { DragOffset, DragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
+const borderClass = "box";
 const lineClass = "grid";
-const shapeClass = "el";
+
+enum SvgOperation { CanvasMove, ShapeMove };
 
 @Component({
-    host: { '(window:resize)': 'onResize($event)' },
+    host: { '(window:resize)': "onResize($event)" },
     selector: 'scheme-main',
     templateUrl: 'scheme-main.component.html'
 })
@@ -23,12 +24,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvas: any;
     canvasbox: any;    
 
+    clickPoint: Point;                    // захват точки canvas'a (для смещения)
+
     gridInterval: number;
     initialHeight: number;
     initialWidth: number;
-
-    svgElement: HTMLElement = null;                // selected svgElement
-    svgElementOffset: Point;
+    
+    svgElement: any = null;                // selected svgElement
+    svgElementOffset: Point;               // mouse offset внутри svgElement'a
+    svgOrigin: Point;                      // viewBox origin (для смещения)
     
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
@@ -46,8 +50,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     @ViewChild('wrapper')
     wrapperElRef: ElementRef;
 
-    @ViewChild('dropDown') dropDown: Dropdown;
-
     constructor(
         private fb: FormBuilder,
         private logger: Logger,
@@ -55,10 +57,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.intervals = [
         
-            { label: 'Нет', value: 0 },
-            { label: '1', value: 1 },
-            { label: '0.5', value: 0.5 },
-            { label: '0.25', value: 0.25 }
+            { label: "Нет", value: 0 },
+            { label: "1", value: 1 },
+            { label: "0.5", value: 0.5 },
+            { label: "0.25", value: 0.25 }
         ];
     }
 
@@ -79,29 +81,36 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             .get(this.schemeid)
             .subscribe((scheme: SchemeModel) => {
 
-                this.canvasbox.insertAdjacentHTML('beforeend', scheme.plan);
+                this.canvasbox.insertAdjacentHTML("beforeend", scheme.plan);
                 this.gridInterval = scheme.gridInterval;
                 // размеры в см
                 this.initialHeight = scheme.height * 100;
                 this.initialWidth = scheme.width * 100;                
                     
-                this.canvas = this.canvasbox.querySelector('svg');
+                this.canvas = this.canvasbox.querySelector("svg");
 
                 if (this.canvas != null) {
-                    // размеры в см
-                    this.centerView();
                     this.canvas.style.height = this.canvas.style.width = "100%";
-                                        
-                    this.canvas
-                        .addEventListener("mousemove", (event) => this.mouseMove(event));                        
-                    this.canvas
-                        .addEventListener("mouseup", (event) => this.mouseUp(event));                        
 
-                    for (let img of this.canvas.querySelectorAll("image")) {
-                        img.addEventListener("mousedown", (event) => this.mouseDown(event));
-                    }
+                    this.centerView();
+                    this.drawBorder();
+                    this.drawGrid();
+
+                    this.canvas
+                        .addEventListener("mousedown", (event) => this.canvasMouseDown(event));  
+
+                    this.canvas
+                        .addEventListener("mousemove", (event) => this.canvasMouseMove(event));  
+                    
+                    this.canvas
+                        .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
+
+                    let shapes = this.canvas.querySelectorAll("image");
+                    [].forEach.call(shapes,
+                        shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
+                    
                 }
-
+                
                 this.schemeForm.patchValue(scheme);
             },
             error => this.logger.error(error));
@@ -112,31 +121,117 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.canvas.removeEventListener("mouseup");
     }
 
+    canvasMouseDown(event) {
+        if (event.which === 1) {
+
+            let pt = this.canvas.createSVGPoint();
+
+            pt.x = event.clientX;
+            pt.y = event.clientY;
+
+            this.clickPoint = new Point(event.clientX, event.clientY);//pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+            this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
+        }
+    }
+
+    canvasMouseMove(event) {
+
+        event.preventDefault();
+
+        if (event.which === 1) {
+
+            let pt:SVGPoint = this.canvas.createSVGPoint();
+            pt.x = event.clientX;
+            pt.y = event.clientY;
+
+            // перемещение shape
+            if (this.svgElement !== null) {
+             
+                pt.x -= this.svgElementOffset.x;
+                pt.y -= this.svgElementOffset.y;
+                pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
+                this.svgElement.setAttributeNS(null, "x", pt.x);
+                this.svgElement.setAttributeNS(null, "y", pt.y);
+            }
+            // перемещение canvas'a
+            else {
+
+                let pt1 = this.canvas.createSVGPoint();
+
+                pt1.x = this.clickPoint.x;
+                pt1.y = this.clickPoint.y;
+                console.log(pt1);
+                pt1 = pt1.matrixTransform(this.canvas.getScreenCTM().inverse());
+                pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+                console.log(pt.x - this.clickPoint.x);
+                this.canvas.setAttribute("viewBox",
+                    `${this.svgOrigin.x - pt.x + pt1.x} ${this.svgOrigin.y} ${this.initialWidth} ${this.initialHeight}`);    
+            }
+        }
+    }
+
+    canvasMouseUp(event) {
+        
+        event.preventDefault();
+        // позиционирование по сетке
+        if (event.which === 1) {
+
+            if (this.svgElement !== null && this.gridInterval > 0) {
+
+                let box: SVGRect = this.svgElement.getBBox(),
+                    int = this.gridInterval * 100; // размеры в см
+
+                this.svgElement.setAttributeNS(null, "x", Math.floor(box.x / int) * int);
+                this.svgElement.setAttributeNS(null, "y", Math.floor(box.y / int) * int);
+            }
+
+            this.svgElement = null;
+        }
+    }
+
     /**
-     * Установить схему по центру
+     * Установить схему по центру 
      */
-    centerView = () => this.canvas.setAttribute("viewbox", `0 0 ${this.initialWidth} ${this.initialHeight}`);    
+    centerView = () => this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);    
+
+    /**
+     * Рисовать границы viewBox'a
+     */
+    drawBorder() {
+        let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
+
+        rect.setAttribute("class", borderClass);
+
+        rect.setAttributeNS(null, "x", "0");
+        rect.setAttributeNS(null, "y", "0");
+        rect.setAttributeNS(null, "width", `${this.initialWidth}`);
+        rect.setAttributeNS(null, "height", `${this.initialHeight}`);
+
+        rect.setAttributeNS(null, "fill", "none");
+        rect.setAttributeNS(null, "stroke", "black");
+        rect.setAttributeNS(null, "stroke-width", "1");
+
+        this.canvas.appendChild(rect);
+    }
 
     /**
      * Рисовать сетку с шагом {interval}
      * @param interval
      */
-    drawGrid(interval:number) {
-        debugger;
-        let lines = this.canvas.querySelectorAll(`line.${lineClass}`);
-        [].forEach.call(lines, (line) => this.canvas.removeChild(line));
-        debugger;
+    drawGrid() {
+        
         let i, line: HTMLElement,
-            int = interval * 100,                // размеры в см
-            box = this.canvas.viewBox.baseVal,
-            x1 = Math.floor(box.x / int + 1) * int,
-            x2 = Math.ceil(box.width / int - 1) * int,
-            y1 = Math.floor(box.y / int + 1) * int,
-            y2 = Math.ceil(box.height / int - 1) * int;
+            int = this.gridInterval * 100,                // размеры в см
+            viewBox = this.canvas.viewBox.baseVal,
+            x1 = Math.ceil(viewBox.x / int + 1) * int,
+            x2 = Math.floor(viewBox.width / int - 1) * int,
+            y1 = Math.ceil(viewBox.y / int + 1) * int,
+            y2 = Math.floor(viewBox.height / int - 1) * int;
 
         let style = {
             "stroke": "rgb(0, 0, 0)",
-            "stroke-dasharray": "5, 10",
+            "stroke-dasharray": "5",
             "stroke-width": "0.5"
         };
         // горизонтальные линии
@@ -145,9 +240,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             line.setAttribute("class", lineClass);
             
             line.setAttributeNS(null, "x1", i);
-            line.setAttributeNS(null, "y1", box.y);
+            line.setAttributeNS(null, "y1", viewBox.y);
             line.setAttributeNS(null, "x2", i);
-            line.setAttributeNS(null, "y2", box.height);
+            line.setAttributeNS(null, "y2", viewBox.height);
 
             for (let key in style) {
                 if (style.hasOwnProperty(key)) {
@@ -162,9 +257,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             line = document.createElementNS(this.canvas.namespaceURI, "line");
             line.setAttribute("class", lineClass);
 
-            line.setAttributeNS(null, "x1", box.x);
+            line.setAttributeNS(null, "x1", viewBox.x);
             line.setAttributeNS(null, "y1", i);
-            line.setAttributeNS(null, "x2", box.width);
+            line.setAttributeNS(null, "x2", viewBox.width);
             line.setAttributeNS(null, "y2", i);
 
             for (let key in style) {
@@ -178,47 +273,17 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     }
 
-    intervalChange = (event) => this.drawGrid(event.value);
-
-    mouseDown(event) {
-        
-        event.stopPropagation();
-        this.svgElement = event.currentTarget;   
-
-        let cr: ClientRect = this.svgElement.getBoundingClientRect();
-        this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
-    }
-
-    mouseMove(event) {
-
-        event.preventDefault();
-
-        if (this.svgElement !== null) {
-            let pt = this.canvas.createSVGPoint();
-            pt.x = event.clientX;
-            pt.y = event.clientY;
-            pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-
-            this.svgElement.setAttributeNS(null, "x", `${pt.x - this.svgElementOffset.x}`);
-            this.svgElement.setAttributeNS(null, "y", `${pt.y - this.svgElementOffset.y}`);  
-        }
-    }
-
-    mouseUp(event) {        
-        this.svgElement = null;
-    }
-
     drop(event) {
-        
+
         let element: ElementModel = JSON.parse(event.dataTransfer.getData(DragType)),
-            offset:Point = JSON.parse(event.dataTransfer.getData(DragOffset));
+            offset: Point = JSON.parse(event.dataTransfer.getData(DragOffset));
 
         let shape = document.createElementNS(this.canvas.namespaceURI, "image");
-        shape.addEventListener("mousedown", (event) => this.mouseDown(event));
+        shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
         // размеры в см
         shape.setAttributeNS(null, "height", `${element.height * 100}`);
-        shape.setAttributeNS(null, "width", `${element.width * 100}`);        
+        shape.setAttributeNS(null, "width", `${element.width * 100}`);
         shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", isDevMode() ? `http://localhost:64346/api/shape/${element.id}/false` : `/api/shape/${element.id}/false`);
 
         let pt = this.canvas.createSVGPoint();
@@ -227,15 +292,47 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
         shape.setAttributeNS(null, "x", `${pt.x - offset.x}`);
-        shape.setAttributeNS(null, "y", `${pt.y - offset.y}`);        
+        shape.setAttributeNS(null, "y", `${pt.y - offset.y}`);
 
         this.canvas.appendChild(shape);
     }
 
+    intervalChange = _ => {
+        // удалить старую сетку
+        let lines = this.canvas.querySelectorAll(`line.${lineClass}`);
+        [].forEach.call(lines, (line) => this.canvas.removeChild(line));
+
+        this.drawGrid();
+    };
+
+    shapeMouseDown(event) {
+        
+        if (event.button === 0) {
+            event.stopPropagation();
+            this.svgElement = event.currentTarget;
+
+            let cr: ClientRect = this.svgElement.getBoundingClientRect();
+            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
+        }
+    }
+
     saveScheme(scheme) {
-        debugger;
-        scheme.gridInterval = this.dropDown.value;
-        scheme.plan = this.canvas.outerHTML;
+        
+        let svg = this.canvas.cloneNode(true);
+
+        // сохраняется начальный план
+        while (svg.attributes.length > 0)
+            svg.removeAttribute(svg.attributes[0].name);
+
+        // сетку и границу не нужно сохранять
+        let lines = svg.querySelectorAll(`line.${lineClass}`);
+        [].forEach.call(lines, (line) => svg.removeChild(line));
+
+        let box = svg.querySelector(`rect.${borderClass}`);
+        svg.removeChild(box);
+
+        scheme.gridInterval = this.gridInterval;
+        scheme.plan = svg.outerHTML;
 
         this.schemeService
             .update(scheme)
