@@ -54,10 +54,11 @@ namespace domain.Scheme.Command
         {
             DbManager.AddParameter("id", command.Id);
             DbManager.AddParameter("name", command.Name);
+            DbManager.AddParameter("gridInterval", command.GridInterval);
             DbManager.AddParameter("plan", command.Plan.Trim('\r', '\n'));
 
             await DbManager.OpenAsync();
-            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.hall_scheme SET name = @name, plan = @plan WHERE id = @id");
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.hall_scheme SET name = @name, grid_interval = @gridInterval, plan = @plan WHERE id = @id");
 
             _logger.LogInformation($"Modified {updated} records");
 

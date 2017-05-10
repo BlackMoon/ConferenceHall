@@ -15,19 +15,25 @@ namespace domain.Scheme
         [Column("hall_id")]
         [JsonIgnore]
         public int HallId { get; set; }
-       
+
+        /// <summary>
+        /// Шаг сетки (0 - сетка не рисуется)
+        /// </summary>
+        [Column("grid_interval")]
+        public float GridInterval { get; set; }
+
         public string Name { get; set; }
         
         public string Plan { get; set; }
 
         /// <summary>
-        /// Реальная высота, м
+        /// Реальная высота, м (копируется из Холла)
         /// </summary>
         [Write(false)]
         public float Height { get; set; }
 
         /// <summary>
-        /// Реальная ширина, м
+        /// Реальная ширина, м (копируется из Холла)
         /// </summary>
         [Write(false)]
         public float Width { get; set; }

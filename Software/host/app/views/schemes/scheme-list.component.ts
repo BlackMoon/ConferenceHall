@@ -17,7 +17,7 @@ export class SchemeListComponent {
     schemeform: FormGroup;
 
     @Input()
-    hallid: number;
+    hallId: number;
 
     @Input()
     items: SchemeModel[];
@@ -38,7 +38,7 @@ export class SchemeListComponent {
 
     addScheme(scheme) {
        
-        scheme.hallid = this.hallid;
+        scheme.hallId = this.hallId;
         this.schemeService
             .add(scheme)
             .subscribe(

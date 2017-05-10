@@ -4,7 +4,8 @@
  */
 export class SchemeModel extends KeyModel {
 
-    hallid: number;
+    hallId: number;
+    gridInterval: number;
     height: number;
     width: number;
 

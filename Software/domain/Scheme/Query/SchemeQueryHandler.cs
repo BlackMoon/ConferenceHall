@@ -19,6 +19,7 @@ namespace domain.Scheme.Query
                 .Column("s.id")
                 .Column("s.name")
                 .Column("s.plan")
+                .Column("s.grid_interval")
                 .Column("h.width")
                 .Column("h.height")
                 .Join("conf_hall.halls h ON h.id = s.hall_id")
