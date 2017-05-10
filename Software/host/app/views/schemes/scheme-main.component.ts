@@ -20,20 +20,20 @@ enum SvgOperation { CanvasMove, ShapeMove };
     templateUrl: 'scheme-main.component.html'
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
-    
-    canvas: any;
-    canvasbox: any;    
 
-    clickPoint: Point;                    // захват точки canvas'a (для смещения)
+    canvas: any;
+    canvasBox: any;
+
+    clickPoint: Point; // захват точки canvas'a (для смещения)
 
     gridInterval: number;
     initialHeight: number;
     initialWidth: number;
-    
-    svgElement: any = null;                // selected svgElement
-    svgElementOffset: Point;               // mouse offset внутри svgElement'a
-    svgOrigin: Point;                      // viewBox origin (для смещения)
-    
+
+    svgElement: any = null; // selected svgElement
+    svgElementOffset: Point; // mouse offset внутри svgElement'a
+    svgOrigin: Point; // viewBox origin (для смещения)
+
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
     intervals: SelectItem[];
@@ -44,8 +44,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     @ViewChild('canvas')
     canvasElRef: ElementRef;
 
-    @ViewChild('canvasbox')
-    canvasboxElRef: ElementRef;
+    @ViewChild('canvasBox')
+    canvasBoxElRef: ElementRef;
 
     @ViewChild('wrapper')
     wrapperElRef: ElementRef;
@@ -56,7 +56,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         private schemeService: SchemeService) {
 
         this.intervals = [
-        
             { label: "Нет", value: 0 },
             { label: "1", value: 1 },
             { label: "0.5", value: 0.5 },
@@ -65,55 +64,55 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngAfterViewInit() {
-        this.onResize(); 
+        this.onResize();
     }
 
     ngOnInit() {
-        
+
         this.schemeForm = this.fb.group({
             id: [null],
             name: [null, Validators.required]
         });
 
-        this.canvasbox = this.canvasboxElRef.nativeElement;
-                
+        this.canvasBox = this.canvasBoxElRef.nativeElement;
+
         this.schemeService
             .get(this.schemeid)
             .subscribe((scheme: SchemeModel) => {
 
-                this.canvasbox.insertAdjacentHTML("beforeend", scheme.plan);
-                this.gridInterval = scheme.gridInterval;
-                // размеры в см
-                this.initialHeight = scheme.height * 100;
-                this.initialWidth = scheme.width * 100;                
-                    
-                this.canvas = this.canvasbox.querySelector("svg");
+                    this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
+                    this.gridInterval = scheme.gridInterval;
+                    // размеры в см
+                    this.initialHeight = scheme.height * 100;
+                    this.initialWidth = scheme.width * 100;
 
-                if (this.canvas != null) {
-                    this.canvas.style.height = this.canvas.style.width = "100%";
+                    this.canvas = this.canvasBox.querySelector("svg");
 
-                    this.centerView();
-                    this.drawBorder();
-                    this.drawGrid();
+                    if (this.canvas != null) {
+                        this.canvas.style.height = this.canvas.style.width = "100%";
 
-                    this.canvas
-                        .addEventListener("mousedown", (event) => this.canvasMouseDown(event));  
+                        this.centerView();
+                        this.drawBorder();
+                        this.drawGrid();
 
-                    this.canvas
-                        .addEventListener("mousemove", (event) => this.canvasMouseMove(event));  
-                    
-                    this.canvas
-                        .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
+                        this.canvas
+                            .addEventListener("mousedown", (event) => this.canvasMouseDown(event));
 
-                    let shapes = this.canvas.querySelectorAll("image");
-                    [].forEach.call(shapes,
-                        shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
-                    
-                }
-                
-                this.schemeForm.patchValue(scheme);
-            },
-            error => this.logger.error(error));
+                        this.canvas
+                            .addEventListener("mousemove", (event) => this.canvasMouseMove(event));
+
+                        this.canvas
+                            .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
+
+                        let shapes = this.canvas.querySelectorAll("image");
+                        [].forEach.call(shapes,
+                            shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
+
+                    }
+
+                    this.schemeForm.patchValue(scheme);
+                },
+                error => this.logger.error(error));
     }
 
     ngOnDestroy() {
@@ -134,13 +133,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         if (event.which === 1) {
 
-            let pt:SVGPoint = this.canvas.createSVGPoint();
+            let pt: SVGPoint = this.canvas.createSVGPoint();
             pt.x = event.clientX;
             pt.y = event.clientY;
 
             // перемещение shape
             if (this.svgElement !== null) {
-             
+
                 pt.x -= this.svgElementOffset.x;
                 pt.y -= this.svgElementOffset.y;
                 pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
@@ -150,7 +149,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             }
             // перемещение canvas'a
             else {
-
+                
                 pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
                 let clickPt = this.canvas.createSVGPoint();
@@ -159,14 +158,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 // трансформация здесь --> т.к. уже изменился viewbox
                 clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
-                this.canvas.setAttribute("viewBox",
-                    `${this.svgOrigin.x - pt.x + clickPt.x} ${this.svgOrigin.y - pt.y + clickPt.y} ${this.initialWidth} ${this.initialHeight}`);    
+                let viewBox = this.canvas.viewBox.baseVal;
+                viewBox.x = this.svgOrigin.x - pt.x + clickPt.x;
+                viewBox.y = this.svgOrigin.y - pt.y + clickPt.y;
             }
         }
     }
 
     canvasMouseUp(event) {
-        
+
         event.preventDefault();
         // позиционирование по сетке
         if (event.which === 1) {
@@ -187,7 +187,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     /**
      * Установить схему по центру 
      */
-    centerView = () => this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);    
+    centerView = () => this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
 
     /**
      * Рисовать границы viewBox'a
@@ -214,46 +214,26 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      * @param interval
      */
     drawGrid() {
-        
-        let i, line: HTMLElement,
-            int = this.gridInterval * 100,                // размеры в см
-            viewBox = this.canvas.viewBox.baseVal,
-            x1 = Math.ceil(viewBox.x / int + 1) * int,
-            x2 = Math.floor(viewBox.width / int - 1) * int,
-            y1 = Math.ceil(viewBox.y / int + 1) * int,
-            y2 = Math.floor(viewBox.height / int - 1) * int;
+
+        let i,
+            line: HTMLElement,
+            int = this.gridInterval * 100, // размеры в см
+            viewBox = this.canvas.viewBox.baseVal;
 
         let style = {
             "stroke": "rgb(0, 0, 0)",
             "stroke-dasharray": "5",
             "stroke-width": "0.5"
         };
+
         // горизонтальные линии
-        for (i = x1; i <= x2; i += int) {
-            line = document.createElementNS(this.canvas.namespaceURI, "line");    
-            line.setAttribute("class", lineClass);
-            
-            line.setAttributeNS(null, "x1", i);
-            line.setAttributeNS(null, "y1", viewBox.y);
-            line.setAttributeNS(null, "x2", i);
-            line.setAttributeNS(null, "y2", viewBox.height);
-
-            for (let key in style) {
-                if (style.hasOwnProperty(key)) {
-                    line.setAttributeNS(null, key, style[key]);
-                }
-            }
-
-            this.canvas.appendChild(line);
-        }
-        // вертикальные линии
-        for (i = y1; i <= y2; i += int) {
+        for (i = 0; i <= this.initialHeight; i += int) {
             line = document.createElementNS(this.canvas.namespaceURI, "line");
             line.setAttribute("class", lineClass);
 
-            line.setAttributeNS(null, "x1", viewBox.x);
+            line.setAttributeNS(null, "x1", "0");
             line.setAttributeNS(null, "y1", i);
-            line.setAttributeNS(null, "x2", viewBox.width);
+            line.setAttributeNS(null, "x2", `${viewBox.width}`);
             line.setAttributeNS(null, "y2", i);
 
             for (let key in style) {
@@ -265,6 +245,24 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             this.canvas.appendChild(line);
         }
 
+        // вертикальные линии
+        for (i = 0; i <= this.initialWidth; i += int) {
+            line = document.createElementNS(this.canvas.namespaceURI, "line");
+            line.setAttribute("class", lineClass);
+
+            line.setAttributeNS(null, "x1", i);
+            line.setAttributeNS(null, "y1", "0");
+            line.setAttributeNS(null, "x2", i);
+            line.setAttributeNS(null, "y2", `${viewBox.height}`);
+
+            for (let key in style) {
+                if (style.hasOwnProperty(key)) {
+                    line.setAttributeNS(null, key, style[key]);
+                }
+            }
+
+            this.canvas.appendChild(line);
+        }
     }
 
     drop(event) {
@@ -278,7 +276,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // размеры в см
         shape.setAttributeNS(null, "height", `${element.height * 100}`);
         shape.setAttributeNS(null, "width", `${element.width * 100}`);
-        shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", isDevMode() ? `http://localhost:64346/api/shape/${element.id}/false` : `/api/shape/${element.id}/false`);
+        shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${element.id}/false`);
 
         let pt = this.canvas.createSVGPoint();
         pt.x = event.clientX;
@@ -300,7 +298,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     };
 
     shapeMouseDown(event) {
-        
+
         if (event.button === 0) {
             event.stopPropagation();
             this.svgElement = event.currentTarget;
@@ -311,7 +309,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     saveScheme(scheme) {
-        
+
         let svg = this.canvas.cloneNode(true);
 
         // сохраняется начальный план
@@ -331,10 +329,29 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.schemeService
             .update(scheme)
             .subscribe(_ => {},
-                    error => this.logger.error(error));
-    }    
+                error => this.logger.error(error));
+    }
+
+    zoomIn() {
+        debugger;
+
+        let viewBox = this.canvas.viewBox.baseVal,
+            zoomW = viewBox.width * (1 - 0.1),
+            zoomH = viewBox.height * (1 - 0.1);
+        
+        let x = viewBox.width * 0.1,
+            y = viewBox.height * 0.1,
+            w = zoomW,
+            h = zoomH;
+        
+        this.canvas.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+    }
+
+    zoomOut() {
+
+    }
 
     onResize() {
-        this.canvasbox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.canvasbox.offsetTop}px`;
+        this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.canvasBox.offsetTop}px`;
     }
 }
