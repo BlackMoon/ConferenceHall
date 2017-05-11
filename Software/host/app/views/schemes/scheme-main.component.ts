@@ -128,6 +128,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         if (event.buttons === 1) {
             this.clickPoint = new Point(event.clientX, event.clientY);
+            this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
         }
     }
 
