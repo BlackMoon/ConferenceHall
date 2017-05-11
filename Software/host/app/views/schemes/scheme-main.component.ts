@@ -125,7 +125,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     canvasMouseDown(event) {
-        if (event.which === 1) {
+        
+        if (event.buttons === 1) {
             this.clickPoint = new Point(event.clientX, event.clientY);
         }
     }
@@ -133,8 +134,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvasMouseMove(event) {
 
         event.preventDefault();
-
-        if (event.which === 1) {
+        
+        if (event.buttons === 1) {
 
             let pt: SVGPoint = this.canvas.createSVGPoint();
             pt.x = event.clientX;
@@ -168,7 +169,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     canvasMouseUp(event) {
-
+        
         event.preventDefault();
         // позиционирование по сетке
         if (event.which === 1) {
