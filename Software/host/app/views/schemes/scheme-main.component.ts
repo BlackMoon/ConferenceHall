@@ -31,11 +31,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     initialHeight: number;
     initialWidth: number;
 
-    svgElement: any = null;         // selected svgElement
-    svgElementOffset: Point;        // mouse offset внутри svgElement'a
-    svgOrigin: Point;               // viewBox origin (для смещения)
+    svgElement: any = null;              // selected svgElement
+    svgElementOffset: Point;             // mouse offset внутри svgElement'a
+    svgOrigin: Point;                    // viewBox origin (для смещения)
 
-    zoomCoef: number;               // коэф. масштабирования
+    zoomCoef: number;                    // коэф. масштабирования
 
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
@@ -119,6 +119,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngOnDestroy() {
+        this.canvas.removeEventListener("mousedown");
         this.canvas.removeEventListener("mousemove");
         this.canvas.removeEventListener("mouseup");
     }
@@ -126,7 +127,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvasMouseDown(event) {
         if (event.which === 1) {
             this.clickPoint = new Point(event.clientX, event.clientY);
-            this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
         }
     }
 
@@ -160,9 +160,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 clickPt.y = this.clickPoint.y;
                 // трансформация здесь --> т.к. уже изменился viewbox
                 clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                
-                this.canvas.viewBox.baseVal.x = this.svgOrigin.x - pt.x + clickPt.x;
-                this.canvas.viewBox.baseVal.y = this.svgOrigin.y - pt.y + clickPt.y;
+
+                let vbox = this.canvas.viewBox.baseVal;
+                this.canvas.setAttribute("viewBox", `${this.svgOrigin.x - pt.x + clickPt.x} ${this.svgOrigin.y - pt.y + clickPt.y} ${vbox.width} ${vbox.height}`);
             }
         }
     }
@@ -173,15 +173,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // позиционирование по сетке
         if (event.which === 1) {
 
-            if (this.svgElement !== null && this.gridInterval > 0) {
-
+            if (this.svgElement !== null && this.gridInterval > 0)
+            {
                 let box: SVGRect = this.svgElement.getBBox(),
                     int = this.gridInterval * 100; // размеры в см
 
                 this.svgElement.setAttributeNS(null, "x", Math.floor(box.x / int) * int);
                 this.svgElement.setAttributeNS(null, "y", Math.floor(box.y / int) * int);
             }
-
+            this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
             this.svgElement = null;
         }
     }
@@ -191,6 +191,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     centerView = () => {
         this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
+        this.svgOrigin = new Point(0, 0);
         this.zoomCoef = 1;
     };
 
@@ -348,14 +349,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     zoom() {
         let zoomW = Math.round(this.initialWidth * this.zoomCoef),
-            zoomH = Math.round(this.initialHeight * this.zoomCoef);
+            zoomH = Math.round(this.initialHeight * this.zoomCoef),
+            x = this.svgOrigin.x + (this.initialWidth - zoomW) / 2,
+            y = this.svgOrigin.y + (this.initialHeight - zoomH) / 2;
 
-        let x = (this.initialWidth - zoomW) / 2,
-            y = (this.initialHeight - zoomH) / 2,
-            w = zoomW,
-            h = zoomH;
-
-        this.canvas.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+        this.canvas.setAttribute("viewBox", `${x} ${y} ${zoomW} ${zoomH}`);
     }
 
     zoomIn = () => {
@@ -364,7 +362,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     zoomOut = () => {
-        this.zoomCoef = Math.min(4, this.zoomCoef + zoomStep);
+        this.zoomCoef = Math.min(1, this.zoomCoef + zoomStep);
         this.zoom();
     }
 
