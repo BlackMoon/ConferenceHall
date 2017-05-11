@@ -6,12 +6,12 @@
                 <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme(schemeForm.value)"></button>
             </div>
             <div class="ui-g-4 ui-g-nopad">
-                <button pButton type="button" title="Выбор и перемещение объектов" icon="fa-mouse-pointer" (click)="selectBtnClick()"></button><button pButton type="button" title="Отменить" icon="fa-undo"></button><button pButton type="button" title="Вернуть" icon="fa-repeat"></button>
+                <button pButton type="button" icon="fa-search-plus" (click)="zoomIn()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoomOut()"></button>
                 <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг сетки, м" [style]="{'width':'140px'}"></p-dropdown>
             </div>            
             <div class="ui-g-4 ui-g-nopad">
                 <div class="ui-toolbar-group-right">
-                    <button pButton type="button" icon="fa-search-plus" (click)="zoomIn()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoomOut()"></button>
+                    
                     <button pButton type="button" icon="fa-dot-circle-o" title="По центру" (click)="centerView()"></button><button pButton type="button" icon="fa-desktop" title="На весь экран"></button>
                 </div>
             </div>

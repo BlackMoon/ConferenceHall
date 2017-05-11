@@ -11,6 +11,7 @@ import { SchemeService } from "./scheme.service";
 
 const borderClass = "box";
 const lineClass = "grid";
+const zoomStep = 0.1;
 
 enum SvgOperation { CanvasMove, ShapeMove };
 
@@ -30,9 +31,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     initialHeight: number;
     initialWidth: number;
 
-    svgElement: any = null; // selected svgElement
-    svgElementOffset: Point; // mouse offset внутри svgElement'a
-    svgOrigin: Point; // viewBox origin (для смещения)
+    svgElement: any = null;         // selected svgElement
+    svgElementOffset: Point;        // mouse offset внутри svgElement'a
+    svgOrigin: Point;               // viewBox origin (для смещения)
+
+    zoomCoef: number;               // коэф. масштабирования
 
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
@@ -68,7 +71,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngOnInit() {
-
+        
         this.schemeForm = this.fb.group({
             id: [null],
             name: [null, Validators.required]
@@ -157,10 +160,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 clickPt.y = this.clickPoint.y;
                 // трансформация здесь --> т.к. уже изменился viewbox
                 clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
-
-                let viewBox = this.canvas.viewBox.baseVal;
-                viewBox.x = this.svgOrigin.x - pt.x + clickPt.x;
-                viewBox.y = this.svgOrigin.y - pt.y + clickPt.y;
+                
+                this.canvas.viewBox.baseVal.x = this.svgOrigin.x - pt.x + clickPt.x;
+                this.canvas.viewBox.baseVal.y = this.svgOrigin.y - pt.y + clickPt.y;
             }
         }
     }
@@ -187,7 +189,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     /**
      * Установить схему по центру 
      */
-    centerView = () => this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
+    centerView = () => {
+        this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
+        this.zoomCoef = 1;
+    };
 
     /**
      * Рисовать границы viewBox'a
@@ -217,8 +222,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         let i,
             line: HTMLElement,
-            int = this.gridInterval * 100, // размеры в см
-            viewBox = this.canvas.viewBox.baseVal;
+            int = this.gridInterval * 100; // размеры в см
 
         let style = {
             "stroke": "rgb(0, 0, 0)",
@@ -233,7 +237,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
             line.setAttributeNS(null, "x1", "0");
             line.setAttributeNS(null, "y1", i);
-            line.setAttributeNS(null, "x2", `${viewBox.width}`);
+            line.setAttributeNS(null, "x2", `${this.initialWidth}`);
             line.setAttributeNS(null, "y2", i);
 
             for (let key in style) {
@@ -253,7 +257,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             line.setAttributeNS(null, "x1", i);
             line.setAttributeNS(null, "y1", "0");
             line.setAttributeNS(null, "x2", i);
-            line.setAttributeNS(null, "y2", `${viewBox.height}`);
+            line.setAttributeNS(null, "y2", `${this.initialHeight}`);
 
             for (let key in style) {
                 if (style.hasOwnProperty(key)) {
@@ -283,8 +287,18 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         pt.y = event.clientY;
         pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
-        shape.setAttributeNS(null, "x", `${pt.x - offset.x}`);
-        shape.setAttributeNS(null, "y", `${pt.y - offset.y}`);
+        pt.x -= offset.x;
+        pt.y -= offset.y;
+        
+        if (this.gridInterval > 0) {
+            let int = this.gridInterval * 100; // размеры в см
+
+            pt.x = Math.floor(pt.x / int) * int;
+            pt.y = Math.floor(pt.y / int) * int;    
+        }
+
+        shape.setAttributeNS(null, "x", pt.x);
+        shape.setAttributeNS(null, "y", pt.y);
 
         this.canvas.appendChild(shape);
     }
@@ -332,23 +346,26 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 error => this.logger.error(error));
     }
 
-    zoomIn() {
-        debugger;
+    zoom() {
+        let zoomW = Math.round(this.initialWidth * this.zoomCoef),
+            zoomH = Math.round(this.initialHeight * this.zoomCoef);
 
-        let viewBox = this.canvas.viewBox.baseVal,
-            zoomW = viewBox.width * (1 - 0.1),
-            zoomH = viewBox.height * (1 - 0.1);
-        
-        let x = viewBox.width * 0.1,
-            y = viewBox.height * 0.1,
+        let x = (this.initialWidth - zoomW) / 2,
+            y = (this.initialHeight - zoomH) / 2,
             w = zoomW,
             h = zoomH;
-        
+
         this.canvas.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
     }
 
-    zoomOut() {
+    zoomIn = () => {
+        this.zoomCoef = Math.max(0.1, this.zoomCoef - zoomStep);
+        this.zoom();
+    }
 
+    zoomOut = () => {
+        this.zoomCoef = Math.min(4, this.zoomCoef + zoomStep);
+        this.zoom();
     }
 
     onResize() {
