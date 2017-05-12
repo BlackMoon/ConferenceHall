@@ -42,13 +42,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     set svgElement(shape: any) {
         
         // снять все ранее выделенные объекты
-        let frames = this.canvas.querySelectorAll(frameClass);
+        let frames = this.canvas.querySelectorAll(`.${frameClass}`);
         [].forEach.call(frames,
             frame => frame.setAttributeNS(null, "visibility", "hidden"));
 
         if (!!shape) {
             // выделить
-            let frame = shape.querySelector(frameClass);
+            let frame = shape.querySelector(`.${frameClass}`);
             if (frame != null)
                 frame.setAttributeNS(null, "visibility", "visible");
         }
