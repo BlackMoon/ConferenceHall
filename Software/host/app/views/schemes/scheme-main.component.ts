@@ -255,8 +255,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         rect.setAttributeNS(null, "fill", "none");
         rect.setAttributeNS(null, "stroke", "black");
         rect.setAttributeNS(null, "stroke-width", "1");
-
-        this.canvas.appendChild(rect);
+        
+        this.canvas.insertBefore(rect, this.canvas.firstChild);
     }
 
     /**
@@ -292,7 +292,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     }
                 }
 
-                this.canvas.appendChild(line);
+                this.canvas.insertBefore(line, this.canvas.firstChild);
             }
 
             // вертикальные линии
@@ -310,8 +310,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         line.setAttributeNS(null, key, style[key]);
                     }
                 }
-
-                this.canvas.appendChild(line);
+                
+                this.canvas.insertBefore(line, this.canvas.firstChild);
             }
         }
     }
@@ -346,8 +346,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         shape.setAttributeNS(null, "x", pt.x);
         shape.setAttributeNS(null, "y", pt.y);
-
-        this.canvas.appendChild(shape);
+        debugger;
+        // вставка перед метками
+        let firstMark = this.canvas.querySelector(`g.${markClass}`);
+        this.canvas.insertBefore(shape, firstMark);
     }
 
     intervalChange = _ => {
