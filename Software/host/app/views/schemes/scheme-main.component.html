@@ -2,7 +2,9 @@
     <div class="ui-g-12 ui-g-nopad">
         <p-toolbar>
             <div class="ui-g-4 ui-g-nopad">
+                <button pButton type="button" title="Добавить метку" icon="fa-map-marker" (click)="addMark()"></button>
                 <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
+                
                 <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme(schemeForm.value)"></button>
             </div>
             <div class="ui-g-4 ui-g-nopad">
