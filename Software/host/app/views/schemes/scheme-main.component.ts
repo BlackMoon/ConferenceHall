@@ -33,11 +33,32 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     initialHeight: number;
     initialWidth: number;
 
-    svgElement: any = null;              // selected svgElement
-    svgElementOffset: Point;             // mouse offset внутри svgElement'a
-    svgOrigin: Point;                    // viewBox origin (для смещения)
+// ReSharper disable once InconsistentNaming
+    private _svgElement: any = null;                // selected svgElement
 
-    zoomCoef: number;                    // коэф. масштабирования
+    get svgElement() {
+        return this._svgElement;
+    }
+    set svgElement(shape: any) {
+        
+        // снять все ранее выделенные объекты
+        let frames = this.canvas.querySelectorAll(`rect.${frameClass}`);
+        [].forEach.call(frames,
+            frame => frame.setAttributeNS(null, "visibility", "hidden"));
+
+        if (!!shape) {
+            // выделить
+            let frame = shape.querySelector(`rect.${frameClass}`);
+            frame.setAttributeNS(null, "visibility", "visible");
+        }
+
+        this._svgElement = shape;
+    }
+
+    svgElementOffset: Point;                        // mouse offset внутри svgElement'a
+    svgOrigin: Point;                               // viewBox origin (для смещения)
+
+    zoomCoef: number;                               // коэф. масштабирования [0..1]
 
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
@@ -168,6 +189,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         if (event.buttons === 1) {
             this.clickPoint = new Point(event.clientX, event.clientY);
+            this.svgElement = null;
             this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
         }
     }
@@ -177,7 +199,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         event.preventDefault();
         
         if (event.buttons === 1) {
-
+            
             let pt: SVGPoint = this.canvas.createSVGPoint();
             pt.x = event.clientX;
             pt.y = event.clientY;
@@ -218,9 +240,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
             if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass))
             {
-                let frameRect = this.svgElement.querySelector(`rect.${frameClass}`);
-                frameRect.setAttributeNS(null, "visibility", "hidden");
-
                 if (this.gridInterval > 0) {
                     let matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
                         int = this.gridInterval * 100; // размеры в см
@@ -231,7 +250,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     
                 }
             }
-            this.svgElement = null;
         }
     }
 
@@ -321,7 +339,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     drop(event) {
-
+        
         let element: ElementModel = JSON.parse(event.dataTransfer.getData(DragType)),
             offset: Point = JSON.parse(event.dataTransfer.getData(DragOffset)),
             // размеры в см
@@ -365,13 +383,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         rect.setAttributeNS(null, "fill", "none");
         rect.setAttributeNS(null, "stroke", "blue");
         rect.setAttributeNS(null, "stroke-width", "1");
-        rect.setAttributeNS(null, "visibility", "hidden");
 
         g.appendChild(rect);
-
+        
         // вставка перед метками
         let firstMark = this.canvas.querySelector(`g.${markClass}`);
         this.canvas.insertBefore(g, firstMark);
+
+        this.svgElement = g;
     }
 
     intervalChange = _ => {
@@ -381,22 +400,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.drawGrid();
     };
-
-    shapeMouseDown(event) {
-        
-        event.stopPropagation();
-
-        if (event.button === 0) {
-            
-            this.svgElement = event.currentTarget;
-            
-            let cr: ClientRect = this.svgElement.getBoundingClientRect(),
-                frameRect = this.svgElement.querySelector(`rect.${frameClass}`);
-
-            frameRect.setAttributeNS(null, "visibility", "visible");
-            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
-        }
-    }
 
     saveScheme(scheme) {
 
@@ -419,8 +422,43 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.schemeService
             .update(scheme)
-            .subscribe(_ => {},
-                error => this.logger.error(error));
+            .subscribe(_ => { },
+            error => this.logger.error(error));
+    }
+
+    /**
+     * Клонировать элемент схемы
+     */
+    shapeClone() {
+        let clone = this.svgElement.cloneNode(true),
+            matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
+            // размеры в см
+            offset = 50;
+
+        clone.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
+
+        clone.setAttributeNS(null,
+            "transform",
+            `translate(${matrix.e + offset}, ${matrix.f  + offset})`);
+
+        // вставка перед метками
+        let firstMark = this.canvas.querySelector(`g.${markClass}`);
+        this.canvas.insertBefore(clone, firstMark);
+
+        this.svgElement = clone;
+    }
+
+    shapeMouseDown(event) {
+        
+        event.stopPropagation();
+
+        if (event.button === 0) {
+            
+            this.svgElement = event.currentTarget;
+
+            let cr: ClientRect = this.svgElement.getBoundingClientRect();
+            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
+        }
     }
 
     /**
