@@ -6,13 +6,13 @@
                 <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme(schemeForm.value)"></button>
             </div>
             <div class="ui-g-4 ui-g-nopad">
-                <button pButton type="button" icon="fa-search-plus" (click)="zoomIn()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoomOut()"></button>
-                <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг сетки, м" [style]="{'width':'140px'}"></p-dropdown>
+                Сетка
+                <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг, м" [style]="{'width':'140px'}"></p-dropdown>
             </div>            
             <div class="ui-g-4 ui-g-nopad">
                 <div class="ui-toolbar-group-right">
-                    
-                    <button pButton type="button" icon="fa-dot-circle-o" title="По центру" (click)="centerView()"></button><button pButton type="button" icon="fa-desktop" title="На весь экран"></button>
+                    <button pButton type="button" icon="fa-search-plus" (click)="zoom()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoom(false)"></button>
+                    <button pButton type="button" icon="fa-dot-circle-o" title="По центру" (click)="centerView()"></button>
                 </div>
             </div>
         </p-toolbar>

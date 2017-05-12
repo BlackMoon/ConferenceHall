@@ -13,8 +13,6 @@ const borderClass = "box";
 const lineClass = "grid";
 const zoomStep = 0.1;
 
-enum SvgOperation { CanvasMove, ShapeMove };
-
 @Component({
     host: { '(window:resize)': "onResize($event)" },
     selector: 'scheme-main',
@@ -62,7 +60,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             { label: "Нет", value: 0 },
             { label: "1", value: 1 },
             { label: "0.5", value: 0.5 },
-            { label: "0.25", value: 0.25 }
+            { label: "0.25", value: 0.25 },
+            { label: "0.1", value: 0.1 }
         ];
     }
 
@@ -183,7 +182,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 this.svgElement.setAttributeNS(null, "x", Math.floor(box.x / int) * int);
                 this.svgElement.setAttributeNS(null, "y", Math.floor(box.y / int) * int);
             }
-            this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
             this.svgElement = null;
         }
     }
@@ -193,7 +191,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     centerView = () => {
         this.canvas.setAttribute("viewBox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
-        this.svgOrigin = new Point(0, 0);
         this.zoomCoef = 1;
     };
 
@@ -223,52 +220,55 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     drawGrid() {
 
-        let i,
-            line: HTMLElement,
-            int = this.gridInterval * 100; // размеры в см
+        if (this.gridInterval > 0) {
 
-        let style = {
-            "stroke": "rgb(0, 0, 0)",
-            "stroke-dasharray": "5",
-            "stroke-width": "0.5"
-        };
+            let i,
+                line: HTMLElement,
+                int = this.gridInterval * 100; // размеры в см
 
-        // горизонтальные линии
-        for (i = 0; i <= this.initialHeight; i += int) {
-            line = document.createElementNS(this.canvas.namespaceURI, "line");
-            line.setAttribute("class", lineClass);
+            let style = {
+                "stroke": "rgb(0, 0, 0)",
+                "stroke-dasharray": "5",
+                "stroke-width": "0.5"
+            };
 
-            line.setAttributeNS(null, "x1", "0");
-            line.setAttributeNS(null, "y1", i);
-            line.setAttributeNS(null, "x2", `${this.initialWidth}`);
-            line.setAttributeNS(null, "y2", i);
+            // горизонтальные линии
+            for (i = 0; i <= this.initialHeight; i += int) {
+                line = document.createElementNS(this.canvas.namespaceURI, "line");
+                line.setAttribute("class", lineClass);
 
-            for (let key in style) {
-                if (style.hasOwnProperty(key)) {
-                    line.setAttributeNS(null, key, style[key]);
+                line.setAttributeNS(null, "x1", "0");
+                line.setAttributeNS(null, "y1", i);
+                line.setAttributeNS(null, "x2", `${this.initialWidth}`);
+                line.setAttributeNS(null, "y2", i);
+
+                for (let key in style) {
+                    if (style.hasOwnProperty(key)) {
+                        line.setAttributeNS(null, key, style[key]);
+                    }
                 }
+
+                this.canvas.appendChild(line);
             }
 
-            this.canvas.appendChild(line);
-        }
+            // вертикальные линии
+            for (i = 0; i <= this.initialWidth; i += int) {
+                line = document.createElementNS(this.canvas.namespaceURI, "line");
+                line.setAttribute("class", lineClass);
 
-        // вертикальные линии
-        for (i = 0; i <= this.initialWidth; i += int) {
-            line = document.createElementNS(this.canvas.namespaceURI, "line");
-            line.setAttribute("class", lineClass);
+                line.setAttributeNS(null, "x1", i);
+                line.setAttributeNS(null, "y1", "0");
+                line.setAttributeNS(null, "x2", i);
+                line.setAttributeNS(null, "y2", `${this.initialHeight}`);
 
-            line.setAttributeNS(null, "x1", i);
-            line.setAttributeNS(null, "y1", "0");
-            line.setAttributeNS(null, "x2", i);
-            line.setAttributeNS(null, "y2", `${this.initialHeight}`);
-
-            for (let key in style) {
-                if (style.hasOwnProperty(key)) {
-                    line.setAttributeNS(null, key, style[key]);
+                for (let key in style) {
+                    if (style.hasOwnProperty(key)) {
+                        line.setAttributeNS(null, key, style[key]);
+                    }
                 }
-            }
 
-            this.canvas.appendChild(line);
+                this.canvas.appendChild(line);
+            }
         }
     }
 
@@ -349,23 +349,33 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 error => this.logger.error(error));
     }
 
-    zoom() {
-        let zoomW = Math.round(this.initialWidth * this.zoomCoef),
-            zoomH = Math.round(this.initialHeight * this.zoomCoef),
-            x = this.svgOrigin.x + (this.initialWidth - zoomW) / 2,
-            y = this.svgOrigin.y + (this.initialHeight - zoomH) / 2;
+    /**
+     * Масштабирование
+     * @param large - увеличение/уменьшение
+     */
+    zoom(large:boolean = true) {
+        debugger;
 
-        this.canvas.setAttribute("viewBox", `${x} ${y} ${zoomW} ${zoomH}`);
-    }
+        let x = this.canvas.viewBox.baseVal.x,
+            y = this.canvas.viewBox.baseVal.y;
 
-    zoomIn = () => {
-        this.zoomCoef = Math.max(0.1, this.zoomCoef - zoomStep);
-        this.zoom();
-    }
+        if (large) {
+            this.zoomCoef = Math.max(0.1, this.zoomCoef - zoomStep);        // max увеличение в 10 раз!
 
-    zoomOut = () => {
-        this.zoomCoef = Math.min(1, this.zoomCoef + zoomStep);
-        this.zoom();
+            if (this.zoomCoef > 0.1) {
+                x += this.initialWidth * zoomStep / 2;
+                y += this.initialHeight * zoomStep / 2;
+            }
+        }
+        else {
+            this.zoomCoef = Math.min(1, this.zoomCoef + zoomStep);    
+            if (this.zoomCoef < 1) {
+                x -= this.initialWidth * zoomStep / 2;
+                y -= this.initialHeight * zoomStep / 2;
+            }
+        }
+
+        this.canvas.setAttribute("viewBox", `${x} ${y} ${Math.round(this.initialWidth * this.zoomCoef)} ${Math.round(this.initialHeight * this.zoomCoef)}`);
     }
 
     onResize() {

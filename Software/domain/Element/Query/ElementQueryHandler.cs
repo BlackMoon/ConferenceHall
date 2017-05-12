@@ -26,7 +26,9 @@ namespace domain.Element.Query
             if (element == null)
             {
                 element = await base.ExecuteAsync(query);
-                _cacheManager.Add(element.Id.ToString(), element);
+
+                if (element != null)
+                    _cacheManager.Add(element.Id.ToString(), element);
             }
 
             return element;

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Dal", "..\..\kit\Kit.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Dal.Postgre", "..\..\kit\Kit.Dal.Postgre\Kit.Dal.Postgre.csproj", "{863667E0-8FBE-4B29-9EAF-EAF2126B85D5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Core.Web", "..\..\kit\Kit.Core.Web\Kit.Core.Web.csproj", "{FD18D69E-03BD-4379-8ECA-DEC5006CF37D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{863667E0-8FBE-4B29-9EAF-EAF2126B85D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{863667E0-8FBE-4B29-9EAF-EAF2126B85D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{863667E0-8FBE-4B29-9EAF-EAF2126B85D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD18D69E-03BD-4379-8ECA-DEC5006CF37D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD18D69E-03BD-4379-8ECA-DEC5006CF37D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD18D69E-03BD-4379-8ECA-DEC5006CF37D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD18D69E-03BD-4379-8ECA-DEC5006CF37D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -40,13 +40,16 @@ namespace host
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-
+            // CORS в режиме debug'a
             services.AddCors(o => o.AddPolicy("AllowAll", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
             services.Configure<TokenProviderOptions>(Configuration.GetSection("TokenAuthentication"));
-
+            
             services
-                .AddMvc()
+                .AddMvc(options => 
+                {
+                    options.ModelBinderProviders.Insert(0, new Kit.Core.Web.Binders.InvariantDecimalModelBinderProvider());
+                })
                 .AddJsonOptions(option =>
                 {
                     option.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;

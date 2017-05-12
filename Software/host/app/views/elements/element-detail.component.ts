@@ -45,8 +45,8 @@ export class ElementDetailComponent implements OnInit {
         this.elementForm = this.fb.group({
             id: [null],
             name: [null, Validators.required],
-            height: [1, Validators.required],
-            width: [1, Validators.required]
+            height: [0.1, Validators.required],
+            width: [0.1, Validators.required]
         });
 
         this.route.params
@@ -60,7 +60,7 @@ export class ElementDetailComponent implements OnInit {
     }
 
     save(event, element) {
-        
+        debugger;
         event.preventDefault();
         
         (this.fileUpload.files.length > 0) && (element.image = this.fileUpload.files[0]);
