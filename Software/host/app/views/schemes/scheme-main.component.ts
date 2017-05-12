@@ -49,7 +49,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         if (!!shape) {
             // выделить
             let frame = shape.querySelector(`rect.${frameClass}`);
-            frame.setAttributeNS(null, "visibility", "visible");
+            if (frame != null)
+                frame.setAttributeNS(null, "visibility", "visible");
         }
 
         this._svgElement = shape;
@@ -131,7 +132,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         this.canvas
                             .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
 
-                        let shapes = this.canvas.querySelectorAll("g");
+                        let shapes = this.canvas.querySelectorAll(`g.${markClass}, g.${shapeClass}`);
                         [].forEach.call(shapes,
                             shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
 
