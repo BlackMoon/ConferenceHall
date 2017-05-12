@@ -42,13 +42,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     set svgElement(shape: any) {
         
         // снять все ранее выделенные объекты
-        let frames = this.canvas.querySelectorAll(`rect.${frameClass}`);
+        let frames = this.canvas.querySelectorAll(frameClass);
         [].forEach.call(frames,
             frame => frame.setAttributeNS(null, "visibility", "hidden"));
 
         if (!!shape) {
             // выделить
-            let frame = shape.querySelector(`rect.${frameClass}`);
+            let frame = shape.querySelector(frameClass);
             if (frame != null)
                 frame.setAttributeNS(null, "visibility", "visible");
         }
@@ -89,6 +89,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             { label: "0.25", value: 0.25 },
             { label: "0.1", value: 0.1 }
         ];
+    }
+
+    get cloneButtonEnable(): boolean {
+        return (this.svgElement != null && this.svgElement.classList.contains(shapeClass));
     }
 
     ngAfterViewInit() {
