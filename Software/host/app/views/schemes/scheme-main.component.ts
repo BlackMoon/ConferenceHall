@@ -10,9 +10,11 @@ import { DragOffset, DragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
 const borderClass = "box";
+const frameClass = "frame";
 const lineClass = "grid";
 const markClass = "mark";
 const shapeClass = "shape";
+
 const zoomStep = 0.1;
 
 @Component({
@@ -214,15 +216,20 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // позиционирование по сетке
         if (event.which === 1) {
 
-            if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass) && this.gridInterval > 0)
+            if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass))
             {
-                let matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
-                    int = this.gridInterval * 100; // размеры в см
+                let frameRect = this.svgElement.querySelector(`rect.${frameClass}`);
+                frameRect.setAttributeNS(null, "visibility", "hidden");
+
+                if (this.gridInterval > 0) {
+                    let matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
+                        int = this.gridInterval * 100; // размеры в см
 
                     this.svgElement.setAttributeNS(null,
                         "transform",
                         `translate(${Math.floor(matrix.e / int) * int}, ${Math.floor(matrix.f / int) * int})`);
-
+    
+                }
             }
             this.svgElement = null;
         }
@@ -350,13 +357,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.appendChild(image);
 
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
-      
+        rect.setAttribute("class", frameClass);
+
         rect.setAttributeNS(null, "height", `${h}`);
         rect.setAttributeNS(null, "width", `${w}`);
 
         rect.setAttributeNS(null, "fill", "none");
         rect.setAttributeNS(null, "stroke", "blue");
         rect.setAttributeNS(null, "stroke-width", "1");
+        rect.setAttributeNS(null, "visibility", "hidden");
 
         g.appendChild(rect);
 
@@ -380,8 +389,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         if (event.button === 0) {
             
             this.svgElement = event.currentTarget;
+            
+            let cr: ClientRect = this.svgElement.getBoundingClientRect(),
+                frameRect = this.svgElement.querySelector(`rect.${frameClass}`);
 
-            let cr: ClientRect = this.svgElement.getBoundingClientRect();
+            frameRect.setAttributeNS(null, "visibility", "visible");
             this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
         }
     }
