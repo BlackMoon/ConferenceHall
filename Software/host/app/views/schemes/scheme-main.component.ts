@@ -144,7 +144,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         circle.setAttributeNS(null, "r", "30");
 
-        circle.setAttributeNS(null, "fill", "rgba(109, 204, 163, 0.9)");
+        circle.setAttributeNS(null, "fill", "rgba(0, 115, 234, 0.9)");
         group.appendChild(circle);
 
         let text = document.createElementNS(this.canvas.namespaceURI, "text");
@@ -346,7 +346,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         shape.setAttributeNS(null, "x", pt.x);
         shape.setAttributeNS(null, "y", pt.y);
-        debugger;
+        
         // вставка перед метками
         let firstMark = this.canvas.querySelector(`g.${markClass}`);
         this.canvas.insertBefore(shape, firstMark);

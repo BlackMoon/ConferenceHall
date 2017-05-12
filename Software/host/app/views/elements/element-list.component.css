@@ -1,5 +1,5 @@
 ﻿img.center {
-    display: table;
+    vertical-align: middle;
 }
 
 .ui-select {
@@ -12,4 +12,18 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+div._32, div._48 {
+    overflow: hidden;
+}
+
+div._32 {
+    height: 32px;
+    width: 32px;
+}
+
+div._48 {
+    height: 48px;
+    width: 48px;
 }
