@@ -461,8 +461,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             
             this.svgElement = event.currentTarget;
 
+            // на передний план --> вставка перед метками
+            let firstMark = this.canvas.querySelector(`g.${markClass}`);
+            this.canvas.insertBefore(this.svgElement, firstMark);
+
             let cr: ClientRect = this.svgElement.getBoundingClientRect();
-            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
+            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);            
         }
     }
 
