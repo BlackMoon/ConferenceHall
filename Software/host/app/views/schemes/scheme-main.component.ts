@@ -12,6 +12,7 @@ import { SchemeService } from "./scheme.service";
 const borderClass = "box";
 const lineClass = "grid";
 const markClass = "mark";
+const shapeClass = "shape";
 const zoomStep = 0.1;
 
 @Component({
@@ -107,7 +108,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         this.canvas
                             .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
 
-                        let shapes = this.canvas.querySelectorAll("image");
+                        let shapes = this.canvas.querySelectorAll("g");
                         [].forEach.call(shapes,
                             shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
 
@@ -133,11 +134,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     addMark() {
 
-        let group = document.createElementNS(this.canvas.namespaceURI, "g");
-        group.setAttribute("class", markClass);
+        let g = document.createElementNS(this.canvas.namespaceURI, "g");
+        g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
-        group.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
-        group.setAttributeNS(null, "transform", "translate(100, 100)");
+        g.setAttribute("class", markClass);
+        g.setAttributeNS(null, "transform", "translate(100, 100)");
 
         // размеры в см
         let circle = document.createElementNS(this.canvas.namespaceURI, "circle");
@@ -145,17 +146,20 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         circle.setAttributeNS(null, "r", "30");
 
         circle.setAttributeNS(null, "fill", "rgba(0, 115, 234, 0.9)");
-        group.appendChild(circle);
+        g.appendChild(circle);
 
-        let text = document.createElementNS(this.canvas.namespaceURI, "text");
-        text.textContent = this.canvas.querySelectorAll(`g.${markClass}`).length + 1;
+        let text = document.createElementNS(this.canvas.namespaceURI, "text"),
+            id = this.canvas.querySelectorAll(`g.${markClass}`).length + 1;
+
+        text.setAttribute("class", `_${id}`);
+        text.textContent = id;
 
         text.setAttributeNS(null, "alignment-baseline", "middle");
         text.setAttributeNS(null, "text-anchor", "middle");
         
-        group.appendChild(text);
+        g.appendChild(text);
 
-        this.canvas.appendChild(group);    
+        this.canvas.appendChild(g);    
     }
 
     canvasMouseDown(event) {
@@ -179,20 +183,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // перемещение shape
             if (this.svgElement !== null) {
 
-                if (this.svgElement.classList.contains(markClass)) {
-                    pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                    this.svgElement.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
-                }
-                else
-                {
-
+                if (this.svgElement.classList.contains(shapeClass)) {
                     pt.x -= this.svgElementOffset.x;
                     pt.y -= this.svgElementOffset.y;
-                    pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-
-                    this.svgElement.setAttributeNS(null, "x", pt.x);
-                    this.svgElement.setAttributeNS(null, "y", pt.y);
                 }
+
+                pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+                this.svgElement.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
             }
             // перемещение canvas'a
             else {
@@ -217,15 +214,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // позиционирование по сетке
         if (event.which === 1) {
 
-            if (this.svgElement !== null && this.gridInterval > 0)
+            if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass) && this.gridInterval > 0)
             {
-                let box: SVGRect = this.svgElement.getBBox(),
+                let matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
                     int = this.gridInterval * 100; // размеры в см
 
-                if (this.svgElement.nodeName === "image") {
-                    this.svgElement.setAttributeNS(null, "x", Math.floor(box.x / int) * int);
-                    this.svgElement.setAttributeNS(null, "y", Math.floor(box.y / int) * int);
-                }
+                    this.svgElement.setAttributeNS(null,
+                        "transform",
+                        `translate(${Math.floor(matrix.e / int) * int}, ${Math.floor(matrix.f / int) * int})`);
+
             }
             this.svgElement = null;
         }
@@ -319,37 +316,53 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     drop(event) {
 
         let element: ElementModel = JSON.parse(event.dataTransfer.getData(DragType)),
-            offset: Point = JSON.parse(event.dataTransfer.getData(DragOffset));
+            offset: Point = JSON.parse(event.dataTransfer.getData(DragOffset)),
+            // размеры в см
+            h = element.height * 100,
+            w = element.width * 100;
 
-        let shape = document.createElementNS(this.canvas.namespaceURI, "image");
-        shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
+        let g = document.createElementNS(this.canvas.namespaceURI, "g");
+        g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
-        // размеры в см
-        shape.setAttributeNS(null, "height", `${element.height * 100}`);
-        shape.setAttributeNS(null, "width", `${element.width * 100}`);
-        shape.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${element.id}/false`);
+        g.setAttribute("class", shapeClass);
 
         let pt = this.canvas.createSVGPoint();
-        pt.x = event.clientX;
-        pt.y = event.clientY;
+        pt.x = event.clientX - offset.x;
+        pt.y = event.clientY - offset.y;
+
         pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
-        pt.x -= offset.x;
-        pt.y -= offset.y;
-        
         if (this.gridInterval > 0) {
             let int = this.gridInterval * 100; // размеры в см
 
             pt.x = Math.floor(pt.x / int) * int;
-            pt.y = Math.floor(pt.y / int) * int;    
+            pt.y = Math.floor(pt.y / int) * int;
         }
 
-        shape.setAttributeNS(null, "x", pt.x);
-        shape.setAttributeNS(null, "y", pt.y);
-        
+        g.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
+
+        let image = document.createElementNS(this.canvas.namespaceURI, "image");
+        // размеры в см
+        image.setAttributeNS(null, "height", `${h}`);
+        image.setAttributeNS(null, "width", `${w}`);
+        image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${element.id}/false`);
+
+        g.appendChild(image);
+
+        let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
+      
+        rect.setAttributeNS(null, "height", `${h}`);
+        rect.setAttributeNS(null, "width", `${w}`);
+
+        rect.setAttributeNS(null, "fill", "none");
+        rect.setAttributeNS(null, "stroke", "blue");
+        rect.setAttributeNS(null, "stroke-width", "1");
+
+        g.appendChild(rect);
+
         // вставка перед метками
         let firstMark = this.canvas.querySelector(`g.${markClass}`);
-        this.canvas.insertBefore(shape, firstMark);
+        this.canvas.insertBefore(g, firstMark);
     }
 
     intervalChange = _ => {
