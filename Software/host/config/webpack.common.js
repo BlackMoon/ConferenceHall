@@ -40,7 +40,7 @@ module.exports = {
 
     plugins: [     
 
-        new ContextReplacementPlugin(
+     new ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)@angular/,
             helpers.root('./app')
         ),
