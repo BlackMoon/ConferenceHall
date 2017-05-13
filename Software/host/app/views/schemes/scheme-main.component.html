@@ -1,20 +1,17 @@
 ﻿<div #wrapper class="h100p">
     <div class="ui-g-12 ui-g-nopad">
         <p-toolbar>
-            <div class="ui-g-4 ui-g-nopad">
-                <button pButton type="button" title="Добавить метку" icon="fa-map-marker" (click)="addMark()"></button>
+            <div class="ui-g-8 ui-g-nopad">
                 <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
+                <button pButton type="button" title="Добавить метку" icon="fa-map-marker" (click)="addMark()"></button>                
                 <button pButton type="button" title="Клонировать" icon="fa-clone" [disabled]="!cloneButtonEnable" (click)="shapeClone()"></button>
                 <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme(schemeForm.value)"></button>
-            </div>
-            <div class="ui-g-4 ui-g-nopad">
-                Сетка
-                <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг, м" [style]="{'width':'140px'}"></p-dropdown>
             </div>            
-            <div class="ui-g-4 ui-g-nopad">
+            <div class="ui-g-4 ui-g-nopad">                
                 <div class="ui-toolbar-group-right">
-                    <button pButton type="button" icon="fa-search-plus" (click)="zoom()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoom(false)"></button>
+                    <button pButton type="button" icon="fa-search-plus" (click)="zoom()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoom(false)"></button>                    
                     <button pButton type="button" icon="fa-dot-circle-o" title="По центру" (click)="centerView()"></button>
+                    <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг, м" title="Сетка"></p-dropdown>                                        
                 </div>
             </div>
         </p-toolbar>

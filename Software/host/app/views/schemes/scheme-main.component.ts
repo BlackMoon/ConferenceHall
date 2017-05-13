@@ -216,7 +216,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     pt.x -= this.svgElementOffset.x;
                     pt.y -= this.svgElementOffset.y;
                 }
-
+                
                 pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
                 this.svgElement.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
             }
@@ -410,9 +410,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         let svg = this.canvas.cloneNode(true);
 
-        // сохраняется начальный план
+        // сохраняется начальный план (без трансформации)
         while (svg.attributes.length > 0)
             svg.removeAttribute(svg.attributes[0].name);
+
+        svg.setAttribute("viewbox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
 
         // сетку и границу не нужно сохранять
         let lines = svg.querySelectorAll(`line.${lineClass}`);
@@ -420,8 +422,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         let box = svg.querySelector(`rect.${borderClass}`);
         svg.removeChild(box);
-
-        svg.setAttribute("viewbox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
+        
+        // снять все ранее выделенные объекты
+        let frames = svg.querySelectorAll(`.${frameClass}`);
+        [].forEach.call(frames,
+            frame => frame.setAttributeNS(null, "visibility", "hidden"));
+        
         scheme.gridInterval = this.gridInterval;
         scheme.plan = svg.outerHTML;
 
