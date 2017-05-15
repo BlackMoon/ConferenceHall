@@ -2,7 +2,7 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import {
-    AutoCompleteModule,
+    AccordionModule,
     ButtonModule,
     DataGridModule,
     DataListModule,
@@ -28,12 +28,13 @@ import { SchemeToolboxComponent } from './scheme-toolbox.component';
 import { SchemeRoutingModule } from './schemes-routing.module';
 import { SchemeService } from './scheme.service';
 
+import { ShapePropertiesComponent } from './shape-properties.component';
 
 @NgModule({
-    declarations: [SchemeDetailComponent, SchemeMainComponent, SchemeListComponent, SchemeToolboxComponent],
-    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SchemeListComponent, SchemeMainComponent, SchemeToolboxComponent, SpinnerModule],
+    declarations: [SchemeDetailComponent, SchemeMainComponent, SchemeListComponent, SchemeToolboxComponent, ShapePropertiesComponent],
+    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SchemeListComponent, SchemeMainComponent, SchemeToolboxComponent, ShapePropertiesComponent, SpinnerModule],
     imports: [
-        AutoCompleteModule,
+        AccordionModule,
         ButtonModule,
         CommonModule,
         DataGridModule,

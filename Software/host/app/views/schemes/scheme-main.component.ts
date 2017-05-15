@@ -1,19 +1,16 @@
-﻿import { isDevMode, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
+
 import Point from "../../common/point";
+import * as SVG from "../../common/svg-utils";
 
 import { DragOffset, DragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
-
-const borderClass = "box";
-const frameClass = "frame";
-const lineClass = "grid";
-const markClass = "mark";
-const shapeClass = "shape";
 
 const zoomStep = 0.1;
 
@@ -27,7 +24,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvas: any;
     canvasBox: any;
 
-    clickPoint: Point; // захват точки canvas'a (для смещения)
+    clickPoint: Point;                              // захват точки canvas'a (для смещения)
 
     gridInterval: number;
     initialHeight: number;
@@ -42,16 +39,24 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     set svgElement(shape: any) {
         
         // снять все ранее выделенные объекты
-        let frames = this.canvas.querySelectorAll(`.${frameClass}`);
+        let frames = this.canvas.querySelectorAll(`.${SVG.frameClass}`);
         [].forEach.call(frames,
             frame => frame.setAttributeNS(null, "visibility", "hidden"));
 
         if (!!shape) {
+
+            this.router
+                .navigate(['shape'], { relativeTo: this.route })
+                .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", shape));
+
             // выделить
-            let frame = shape.querySelector(`.${frameClass}`);
+            let frame = shape.querySelector(`.${SVG.frameClass}`);
             if (frame != null)
                 frame.setAttributeNS(null, "visibility", "visible");
         }
+        else 
+            this.router.navigate(["groups"], { relativeTo: this.route });
+        
 
         this._svgElement = shape;
     }
@@ -80,6 +85,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     constructor(
         private fb: FormBuilder,
         private logger: Logger,
+        private mediator: Mediator,
+        private route: ActivatedRoute,
+        private router: Router,
         private schemeService: SchemeService) {
 
         this.intervals = [
@@ -91,8 +99,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         ];
     }
 
-    get cloneButtonEnable(): boolean {
-        return (this.svgElement != null && this.svgElement.classList.contains(shapeClass));
+    get cloneButtonDisabled(): boolean {
+        return (this.removeButtonDisabled || !this.svgElement.classList.contains(SVG.shapeClass));
+    }
+
+    get removeButtonDisabled(): boolean {
+        return (this.svgElement == null);
     }
 
     ngAfterViewInit() {
@@ -136,7 +148,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         this.canvas
                             .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
 
-                        let shapes = this.canvas.querySelectorAll(`g.${markClass}, g.${shapeClass}`);
+                        let shapes = this.canvas.querySelectorAll(`g.${SVG.markClass}, g.${SVG.shapeClass}`);
                         [].forEach.call(shapes,
                             shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
 
@@ -165,19 +177,20 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
-        g.setAttribute("class", markClass);
+        g.setAttribute("class", SVG.markClass);
         g.setAttributeNS(null, "transform", "translate(100, 100)");
 
         // размеры в см
-        let circle = document.createElementNS(this.canvas.namespaceURI, "circle");
+        let circle = document.createElementNS(this.canvas.namespaceURI, "ellipse");
         
-        circle.setAttributeNS(null, "r", "30");
+        circle.setAttributeNS(null, "rx", "30");
+        circle.setAttributeNS(null, "ry", "30");
 
         circle.setAttributeNS(null, "fill", "rgba(0, 115, 234, 0.9)");
         g.appendChild(circle);
 
         let text = document.createElementNS(this.canvas.namespaceURI, "text"),
-            id = this.canvas.querySelectorAll(`g.${markClass}`).length + 1;
+            id = this.canvas.querySelectorAll(`g.${SVG.markClass}`).length + 1;
 
         text.setAttribute("class", `_${id}`);
         text.textContent = id;
@@ -187,7 +200,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         g.appendChild(text);
 
-        this.canvas.appendChild(g);    
+        this.canvas.appendChild(g);
+
+        this.svgElement = g;
     }
 
     canvasMouseDown(event) {
@@ -212,13 +227,35 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // перемещение shape
             if (this.svgElement !== null) {
 
-                if (this.svgElement.classList.contains(shapeClass)) {
+                if (this.svgElement.classList.contains(SVG.shapeClass)) {
                     pt.x -= this.svgElementOffset.x;
                     pt.y -= this.svgElementOffset.y;
                 }
                 
                 pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-                this.svgElement.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
+
+                let attr = [];
+                for (let t of this.svgElement.transform.baseVal) {
+
+                    let m: SVGMatrix = t.matrix;
+
+                    switch (t.type) {
+                        
+                        case SVGTransform.SVG_TRANSFORM_TRANSLATE:
+                            attr.push(`translate(${pt.x} ${pt.y})`);
+                            break;
+                            
+                        case SVGTransform.SVG_TRANSFORM_ROTATE:
+
+                            let box = this.svgElement.getBBox();
+                            attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`);
+
+                            break;
+                        
+                    }
+                }
+
+                this.svgElement.setAttributeNS(null, "transform", attr.join(","));
             }
             // перемещение canvas'a
             else {
@@ -243,17 +280,49 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // позиционирование по сетке
         if (event.which === 1) {
 
-            if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass))
-            {
-                if (this.gridInterval > 0) {
-                    let matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
-                        int = this.gridInterval * 100; // размеры в см
+            if (this.svgElement !== null && this.svgElement.classList.contains(SVG.shapeClass)) {
+                
+                let attr = [],
+                    x = 0, y = 0; 
+                    
+                for (let t of this.svgElement.transform.baseVal) {
 
-                    this.svgElement.setAttributeNS(null,
-                        "transform",
-                        `translate(${Math.floor(matrix.e / int) * int}, ${Math.floor(matrix.f / int) * int})`);
-    
+                    let m: SVGMatrix = t.matrix;
+
+                    switch (t.type) {
+                            
+                        case SVGTransform.SVG_TRANSFORM_TRANSLATE:
+
+                            x = m.e;
+                            y = m.f;
+
+                            if (this.gridInterval > 0) {
+                                let int = this.gridInterval * 100;              // размеры в см
+
+                                x = Math.floor(x / int) * int;
+                                y = Math.floor(y / int) * int;
+                            }
+                            attr.push(`translate(${x} ${y})`);
+
+                            break;
+                            
+                        case SVGTransform.SVG_TRANSFORM_SCALE:
+
+                            attr.push(`scale(${m.a}, ${m.d})`);
+                            break;
+                            
+                        case SVGTransform.SVG_TRANSFORM_ROTATE:
+                            let box = this.svgElement.getBBox();
+                            attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`);
+                            break;
+                            
+                        default:
+                            attr.push(`matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${m.e}, ${m.f})`);
+                            break;
+                    }
                 }
+                    
+                this.svgElement.setAttributeNS(null, "transform", attr.join(","));
             }
         }
     }
@@ -272,7 +341,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     drawBorder() {
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
 
-        rect.setAttribute("class", borderClass);
+        rect.setAttribute("class", SVG.borderClass);
 
         rect.setAttributeNS(null, "x", "0");
         rect.setAttributeNS(null, "y", "0");
@@ -306,7 +375,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // горизонтальные линии
             for (i = 0; i <= this.initialHeight; i += int) {
                 line = document.createElementNS(this.canvas.namespaceURI, "line");
-                line.setAttribute("class", lineClass);
+                line.setAttribute("class", SVG.lineClass);
 
                 line.setAttributeNS(null, "x1", "0");
                 line.setAttributeNS(null, "y1", i);
@@ -325,7 +394,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // вертикальные линии
             for (i = 0; i <= this.initialWidth; i += int) {
                 line = document.createElementNS(this.canvas.namespaceURI, "line");
-                line.setAttribute("class", lineClass);
+                line.setAttribute("class", SVG.lineClass);
 
                 line.setAttributeNS(null, "x1", i);
                 line.setAttributeNS(null, "y1", "0");
@@ -354,7 +423,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
-        g.setAttribute("class", shapeClass);
+        g.setAttribute("class", SVG.shapeClass);
 
         let pt = this.canvas.createSVGPoint();
         pt.x = event.clientX - offset.x;
@@ -380,7 +449,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.appendChild(image);
 
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
-        rect.setAttribute("class", frameClass);
+        rect.setAttribute("class", SVG.frameClass);
 
         rect.setAttributeNS(null, "height", `${h}`);
         rect.setAttributeNS(null, "width", `${w}`);
@@ -392,7 +461,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.appendChild(rect);
         
         // вставка перед метками
-        let firstMark = this.canvas.querySelector(`g.${markClass}`);
+        let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
         this.canvas.insertBefore(g, firstMark);
 
         this.svgElement = g;
@@ -400,7 +469,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     intervalChange = _ => {
         // удалить старую сетку
-        let lines = this.canvas.querySelectorAll(`line.${lineClass}`);
+        let lines = this.canvas.querySelectorAll(`line.${SVG.lineClass}`);
         [].forEach.call(lines, (line) => this.canvas.removeChild(line));
 
         this.drawGrid();
@@ -417,14 +486,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         svg.setAttribute("viewbox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
 
         // сетку и границу не нужно сохранять
-        let lines = svg.querySelectorAll(`line.${lineClass}`);
+        let lines = svg.querySelectorAll(`line.${SVG.lineClass}`);
         [].forEach.call(lines, (line) => svg.removeChild(line));
 
-        let box = svg.querySelector(`rect.${borderClass}`);
+        let box = svg.querySelector(`rect.${SVG.borderClass}`);
         svg.removeChild(box);
         
         // снять все ранее выделенные объекты
-        let frames = svg.querySelectorAll(`.${frameClass}`);
+        let frames = svg.querySelectorAll(`.${SVG.frameClass}`);
         [].forEach.call(frames,
             frame => frame.setAttributeNS(null, "visibility", "hidden"));
         
@@ -453,7 +522,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             `translate(${matrix.e + offset}, ${matrix.f  + offset})`);
 
         // вставка перед метками
-        let firstMark = this.canvas.querySelector(`g.${markClass}`);
+        let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
         this.canvas.insertBefore(clone, firstMark);
 
         this.svgElement = clone;
@@ -468,12 +537,17 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             this.svgElement = event.currentTarget;
 
             // на передний план --> вставка перед метками
-            let firstMark = this.canvas.querySelector(`g.${markClass}`);
+            let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
             this.canvas.insertBefore(this.svgElement, firstMark);
 
             let cr: ClientRect = this.svgElement.getBoundingClientRect();
             this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);            
         }
+    }
+
+    shapeRemove() {
+        this.canvas.removeChild(this.svgElement);
+        this.svgElement = null;
     }
 
     /**
