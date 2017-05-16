@@ -248,7 +248,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         case SVGTransform.SVG_TRANSFORM_ROTATE:
 
                             let box = this.svgElement.getBBox();
-                            attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`);
+
+                            this.svgElement.classList.contains(SVG.shapeClass)
+                                ? attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`)
+                                : attr.push(`rotate(${t.angle} 0 0)`);
 
                             break;
                         
@@ -277,14 +280,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvasMouseUp(event) {
         
         event.preventDefault();
-        // позиционирование по сетке
+        
         if (event.which === 1) {
 
             if (this.svgElement !== null && this.svgElement.classList.contains(SVG.shapeClass)) {
+
+                let attr = [];
                 
-                let attr = [],
-                    x = 0, y = 0; 
-                    
                 for (let t of this.svgElement.transform.baseVal) {
 
                     let m: SVGMatrix = t.matrix;
@@ -293,31 +295,28 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                             
                         case SVGTransform.SVG_TRANSFORM_TRANSLATE:
 
-                            x = m.e;
-                            y = m.f;
+                            let tx = m.e,
+                                ty = m.f;
 
+                            // позиционирование по сетке
                             if (this.gridInterval > 0) {
                                 let int = this.gridInterval * 100;              // размеры в см
 
-                                x = Math.floor(x / int) * int;
-                                y = Math.floor(y / int) * int;
+                                tx = Math.round(tx / int) * int;
+                                ty = Math.round(ty / int) * int;
                             }
-                            attr.push(`translate(${x} ${y})`);
+                            attr.push(`translate(${tx} ${ty})`);
 
-                            break;
-                            
-                        case SVGTransform.SVG_TRANSFORM_SCALE:
-
-                            attr.push(`scale(${m.a}, ${m.d})`);
                             break;
                             
                         case SVGTransform.SVG_TRANSFORM_ROTATE:
+
                             let box = this.svgElement.getBBox();
-                            attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`);
-                            break;
-                            
-                        default:
-                            attr.push(`matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${m.e}, ${m.f})`);
+
+                            this.svgElement.classList.contains(SVG.shapeClass)
+                                ? attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`)
+                                : attr.push(`rotate(${t.angle})`);
+
                             break;
                     }
                 }
@@ -434,8 +433,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         if (this.gridInterval > 0) {
             let int = this.gridInterval * 100; // размеры в см
 
-            pt.x = Math.floor(pt.x / int) * int;
-            pt.y = Math.floor(pt.y / int) * int;
+            pt.x = Math.round(pt.x / int) * int;
+            pt.y = Math.round(pt.y / int) * int;
         }
 
         g.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
@@ -541,7 +540,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             this.canvas.insertBefore(this.svgElement, firstMark);
 
             let cr: ClientRect = this.svgElement.getBoundingClientRect();
-            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);            
+            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
         }
     }
 
