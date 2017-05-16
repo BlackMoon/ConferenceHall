@@ -174,7 +174,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     addMark() {
 
-        let g = document.createElementNS(this.canvas.namespaceURI, "g");
+        let g = document.createElementNS(this.canvas.namespaceURI, "g"),
+            r = 15;
+
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
         g.setAttribute("class", SVG.markClass);
@@ -183,22 +185,22 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // размеры в см
         let circle = document.createElementNS(this.canvas.namespaceURI, "ellipse");
         
-        circle.setAttributeNS(null, "rx", "30");
-        circle.setAttributeNS(null, "ry", "30");
+        circle.setAttributeNS(null, "rx", `${r}`);
+        circle.setAttributeNS(null, "ry", `${r}`);
 
         circle.setAttributeNS(null, "fill", "rgba(0, 115, 234, 0.9)");
         g.appendChild(circle);
 
         let text = document.createElementNS(this.canvas.namespaceURI, "text"),
             id = this.canvas.querySelectorAll(`g.${SVG.markClass}`).length + 1;
-
-        text.setAttribute("class", `_${id}`);
+        
         text.textContent = id;
-
+        
         text.setAttributeNS(null, "alignment-baseline", "middle");
         text.setAttributeNS(null, "text-anchor", "middle");
         
         g.appendChild(text);
+        g.setAttribute("data-id", id);
 
         this.canvas.appendChild(g);
 
@@ -286,7 +288,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             if (this.svgElement !== null && this.svgElement.classList.contains(SVG.shapeClass)) {
 
                 let attr = [];
-                
                 for (let t of this.svgElement.transform.baseVal) {
 
                     let m: SVGMatrix = t.matrix;
@@ -423,6 +424,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
         g.setAttribute("class", SVG.shapeClass);
+        g.setAttribute("data-name", element.name);
 
         let pt = this.canvas.createSVGPoint();
         pt.x = event.clientX - offset.x;
@@ -462,8 +464,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // вставка перед метками
         let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
         this.canvas.insertBefore(g, firstMark);
-
-        this.svgElement = g;
     }
 
     intervalChange = _ => {
@@ -516,9 +516,28 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         clone.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
-        clone.setAttributeNS(null,
-            "transform",
-            `translate(${matrix.e + offset}, ${matrix.f  + offset})`);
+        let attr = [];
+        for (let t of this.svgElement.transform.baseVal) {
+
+            let m: SVGMatrix = t.matrix;
+
+            switch (t.type) {
+                            
+                case SVGTransform.SVG_TRANSFORM_TRANSLATE:
+
+                    attr.push(`translate(${m.e + offset} ${m.f + offset})`);
+                    break;
+                            
+                case SVGTransform.SVG_TRANSFORM_ROTATE:
+
+                    let box = this.svgElement.getBBox();
+                    attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`);
+
+                    break;
+            }
+        }
+
+        clone.setAttributeNS(null, "transform", attr);
 
         // вставка перед метками
         let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);

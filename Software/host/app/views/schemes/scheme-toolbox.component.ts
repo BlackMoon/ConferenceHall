@@ -71,6 +71,12 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
                 .on<number[]>("elementList_selectionChanged")
                 .subscribe(n => this.selectedElementIds = n)
         );
+
+        this.subscription.add(
+            mediator
+                .on<any>("schemeMain_shapeSelected")
+                .subscribe(s => this.header = s.getAttribute("data-name"))
+        );
     }
 
     ngAfterViewInit() {
