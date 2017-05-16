@@ -14,7 +14,9 @@
                     </p-header>
 
                     <a [routerLink]="['/halls', hall.id || 'new']">
-                        <img src="/assets/office_64x64.png">
+                        <div>
+                            <img src="/assets/office_64x64.png">
+                        </div>
                         <div class="hall-detail">
                             {{hall.description}}
                         </div>
