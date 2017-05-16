@@ -9,7 +9,7 @@ import { Mediator } from "../../common/mediator";
 import Point from "../../common/point";
 import * as SVG from "../../common/svg-utils";
 
-import { DragOffset, DragType, ElementModel, SchemeModel } from "../../models";
+import { dragOffset as DragOffset, dragType as DragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
 const zoomStep = 0.1;

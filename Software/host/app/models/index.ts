@@ -1,4 +1,7 @@
-﻿export * from "./key.model";
+﻿// KeyModel comes first!
+export * from "./key.model";
+
+export * from "./conference.model";
 export * from "./element.model";
 export * from "./employee.model";
 export * from "./group.model";

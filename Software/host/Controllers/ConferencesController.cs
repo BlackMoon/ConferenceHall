@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +11,7 @@ namespace host.Controllers
     [Route("api/[controller]")]
     public class ConferencesController : Controller
     {
-        private IQueryDispatcher _queryDispatcher;
+        private readonly IQueryDispatcher _queryDispatcher;
 
         public ConferencesController(IQueryDispatcher queryDispatcher)
         {

@@ -1,7 +1,5 @@
 ﻿import { Injectable, isDevMode } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import { handleResponseError } from '../../common/http-error';
+import { Http } from '@angular/http';
 import { HttpDataService } from '../../common/data-service';
 import { SchemeModel } from '../../models';
 

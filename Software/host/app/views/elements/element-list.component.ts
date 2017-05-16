@@ -6,7 +6,7 @@ import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import Point from "../../common/point";
 
-import { DragOffset, DragType, ElementGroupCommand, ElementModel } from '../../models';
+import { dragOffset as DragOffset, dragType as DragType, ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
