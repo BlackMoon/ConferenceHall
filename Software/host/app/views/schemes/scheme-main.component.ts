@@ -357,14 +357,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             pattern.setAttribute("id", `_${id}`);
             
             pattern.setAttributeNS(null, "patternContentUnits", "objectBoundingBox");
-            pattern.setAttributeNS(null, "height", `1`);
-            pattern.setAttributeNS(null, "width", `1`);
+            pattern.setAttributeNS(null, "height", "1");
+            pattern.setAttributeNS(null, "width", "1");
             pattern.setAttributeNS(null, "viewBox", "0 0 1 1");
 
             let image = document.createElementNS(this.canvas.namespaceURI, "image");
             // размеры в см
-            image.setAttributeNS(null, "height", `${1}`);
-            image.setAttributeNS(null, "width", `${1}`);
+            image.setAttributeNS(null, "height", "1");
+            image.setAttributeNS(null, "width", "1");
             image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${id}/false`);
 
             pattern.appendChild(image);
@@ -454,11 +454,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         let element: ElementModel = JSON.parse(event.dataTransfer.getData(DragType)),
             offset: Point = JSON.parse(event.dataTransfer.getData(DragOffset)),
+            id = element.id, 
             // размеры в см
             h = element.height * 100,
             w = element.width * 100;
         
-        this.createPattern(element.id, h, w);
+        this.createPattern(id, h, w);
 
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
@@ -481,20 +482,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         g.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
 
-        let img = document.createElementNS(this.canvas.namespaceURI, "image");
-
-        img.setAttributeNS(null, "height", `${h}`);
-        img.setAttributeNS(null, "width", `${w}`);
-        img.setAttributeNS("http://www.w3.org/1999/xlink", "href", `http://localhost:64346/api/shape/${element.id}/false`);
-
-        this.canvas.appendChild(img);
-
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
         rect.setAttribute("class", SVG.frameClass);
 
         rect.setAttributeNS(null, "height", `${h}`);
         rect.setAttributeNS(null, "width", `${w}`);
-        rect.setAttributeNS(null, "fill", `url(#_${element.id})`);
+        rect.setAttributeNS(null, "fill", `url(#_${id})`);
 
         g.appendChild(rect);
 
