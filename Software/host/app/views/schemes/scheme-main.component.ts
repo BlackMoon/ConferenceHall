@@ -15,7 +15,8 @@ import { SchemeService } from "./scheme.service";
 const zoomStep = 0.1;
 
 @Component({
-    host: { '(window:resize)': "onResize($event)" },
+    host: { '(window:keydown)': "onKeyDown($event)",
+            '(window:resize)' : "onResize($event)" },
     selector: 'scheme-main',
     templateUrl: 'scheme-main.component.html'
 })
@@ -150,7 +151,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                         let shapes = this.canvas.querySelectorAll(`g.${SVG.markClass}, g.${SVG.shapeClass}`);
                         [].forEach.call(shapes,
-                            shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
+                            shape => {
+                                shape.addEventListener("keypress",
+                                    (event) => {
+                                        debugger;
+                                        this.shapeMouseDown(event);
+                                    });
+                                shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
+                            });
 
                     }
 
@@ -163,6 +171,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.canvas.removeEventListener("mousedown");
         this.canvas.removeEventListener("mousemove");
         this.canvas.removeEventListener("mouseup");
+    }
+
+    onKeyDown(event) {
+        // delete key
+        event.keyCode === 46 && this.svgElement != null && this.shapeRemove();
     }
 
     onResize() {
@@ -336,32 +349,27 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     };
 
     private createPattern(id, h:number, w:number) {
-        let defs = this.canvas.querySelector("defs");
-
-        if (defs == null) {
-            defs = document.createElementNS(this.canvas.namespaceURI, "defs");
-            this.canvas.insertBefore(defs, this.canvas.firstChild);
-        }
         
-        let pattern = defs.querySelector(`#_${id}`);
+        let pattern = this.canvas.querySelector(`#_${id}`);
 
         if (pattern == null) {
             pattern = document.createElementNS(this.canvas.namespaceURI, "pattern");
             pattern.setAttribute("id", `_${id}`);
             
-            pattern.setAttribute("patternContentUnits", "objectBoundingBox");
-            pattern.setAttributeNS(null, "height", "1");
-            pattern.setAttributeNS(null, "width", "1");
+            pattern.setAttributeNS(null, "patternContentUnits", "objectBoundingBox");
+            pattern.setAttributeNS(null, "height", `1`);
+            pattern.setAttributeNS(null, "width", `1`);
+            pattern.setAttributeNS(null, "viewBox", "0 0 1 1");
 
             let image = document.createElementNS(this.canvas.namespaceURI, "image");
             // размеры в см
-            image.setAttributeNS(null, "height", `1`);
-            image.setAttributeNS(null, "width", `1`);
+            image.setAttributeNS(null, "height", `${1}`);
+            image.setAttributeNS(null, "width", `${1}`);
             image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${id}/false`);
 
             pattern.appendChild(image);
 
-            defs.appendChild(pattern);
+            this.canvas.insertBefore(pattern, this.canvas.firstChild);
         }
     }
 
@@ -449,7 +457,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // размеры в см
             h = element.height * 100,
             w = element.width * 100;
-
+        
         this.createPattern(element.id, h, w);
 
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
@@ -472,7 +480,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         }
 
         g.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
-        
+
+        let img = document.createElementNS(this.canvas.namespaceURI, "image");
+
+        img.setAttributeNS(null, "height", `${h}`);
+        img.setAttributeNS(null, "width", `${w}`);
+        img.setAttributeNS("http://www.w3.org/1999/xlink", "href", `http://localhost:64346/api/shape/${element.id}/false`);
+
+        this.canvas.appendChild(img);
+
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
         rect.setAttribute("class", SVG.frameClass);
 
