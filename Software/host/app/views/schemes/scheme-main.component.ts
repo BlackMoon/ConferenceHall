@@ -356,16 +356,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             pattern = document.createElementNS(this.canvas.namespaceURI, "pattern");
             pattern.setAttribute("id", `_${id}`);
             
-            pattern.setAttributeNS(null, "patternContentUnits", "objectBoundingBox");
             pattern.setAttributeNS(null, "height", "1");
             pattern.setAttributeNS(null, "width", "1");
-            pattern.setAttributeNS(null, "viewBox", "0 0 1 1");
+            pattern.setAttributeNS(null, "viewBox", `0 0 ${w} ${h}`);
 
             let image = document.createElementNS(this.canvas.namespaceURI, "image");
             // размеры в см
-            image.setAttributeNS(null, "height", "1");
-            image.setAttributeNS(null, "width", "1");
-            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${id}/false`);
+            image.setAttributeNS(null, "height", `${h}`);
+            image.setAttributeNS(null, "width", `${w}`);
+            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `http://localhost:64346/api/shape/${id}/false`);
 
             pattern.appendChild(image);
 

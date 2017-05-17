@@ -1,7 +1,7 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
     <div class="ui-g h100p" #grid>
         <div class="ui-g-8">
-            <p-schedule #schedule locale="ru" [height]="grid.offsetHeight" [header]="headerConfig"></p-schedule>
+            <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [height]="grid.offsetHeight" [header]="headerConfig"></p-schedule>
         </div>
         <div class="ui-g-4">
             <p-accordion [multiple]="true">

@@ -16,7 +16,7 @@ export class ConferenceScheduleComponent implements OnInit {
         this.headerConfig = {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay,listMonth'
+            right: 'month,agendaWeek,agendaDay,listWeek'
         };
 
     }
