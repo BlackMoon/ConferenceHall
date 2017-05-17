@@ -41,7 +41,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // снять все ранее выделенные объекты
         let frames = this.canvas.querySelectorAll(`.${SVG.frameClass}`);
         [].forEach.call(frames,
-            frame => frame.setAttributeNS(null, "visibility", "hidden"));
+            frame => frame.removeAttributeNS(null, "stroke"));
 
         if (!!shape) {
 
@@ -52,7 +52,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // выделить
             let frame = shape.querySelector(`.${SVG.frameClass}`);
             if (frame != null)
-                frame.setAttributeNS(null, "visibility", "visible");
+                frame.setAttributeNS(null, "stroke", "blue");
         }
         else 
             this.router.navigate(["groups"], { relativeTo: this.route });
@@ -335,6 +335,36 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.zoomCoef = 1;
     };
 
+    private createPattern(id, h:number, w:number) {
+        let defs = this.canvas.querySelector("defs");
+
+        if (defs == null) {
+            defs = document.createElementNS(this.canvas.namespaceURI, "defs");
+            this.canvas.insertBefore(defs, this.canvas.firstChild);
+        }
+        
+        let pattern = defs.querySelector(`#_${id}`);
+
+        if (pattern == null) {
+            pattern = document.createElementNS(this.canvas.namespaceURI, "pattern");
+            pattern.setAttribute("id", `_${id}`);
+            
+            pattern.setAttribute("patternContentUnits", "objectBoundingBox");
+            pattern.setAttributeNS(null, "height", "1");
+            pattern.setAttributeNS(null, "width", "1");
+
+            let image = document.createElementNS(this.canvas.namespaceURI, "image");
+            // размеры в см
+            image.setAttributeNS(null, "height", `1`);
+            image.setAttributeNS(null, "width", `1`);
+            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${id}/false`);
+
+            pattern.appendChild(image);
+
+            defs.appendChild(pattern);
+        }
+    }
+
     /**
      * Рисовать границы viewBox'a
      */
@@ -420,6 +450,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             h = element.height * 100,
             w = element.width * 100;
 
+        this.createPattern(element.id, h, w);
+
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
@@ -440,27 +472,16 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         }
 
         g.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
-
-        let image = document.createElementNS(this.canvas.namespaceURI, "image");
-        // размеры в см
-        image.setAttributeNS(null, "height", `${h}`);
-        image.setAttributeNS(null, "width", `${w}`);
-        image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${element.id}/false`);
-
-        g.appendChild(image);
-
+        
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
         rect.setAttribute("class", SVG.frameClass);
 
         rect.setAttributeNS(null, "height", `${h}`);
         rect.setAttributeNS(null, "width", `${w}`);
-
-        rect.setAttributeNS(null, "fill", "none");
-        rect.setAttributeNS(null, "stroke", "blue");
-        rect.setAttributeNS(null, "stroke-width", "1");
+        rect.setAttributeNS(null, "fill", `url(#_${element.id})`);
 
         g.appendChild(rect);
-        
+
         // вставка перед метками
         let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
         this.canvas.insertBefore(g, firstMark);
@@ -494,7 +515,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // снять все ранее выделенные объекты
         let frames = svg.querySelectorAll(`.${SVG.frameClass}`);
         [].forEach.call(frames,
-            frame => frame.setAttributeNS(null, "visibility", "hidden"));
+            frame => frame.removeAttributeNS(null, "stroke-width"));
         
         scheme.gridInterval = this.gridInterval;
         scheme.plan = svg.outerHTML;

@@ -1,0 +1,39 @@
+﻿<form [formGroup]="shapeForm" >
+    <p-accordion [multiple]="true">
+        <p-accordionTab header="Код" [selected]="true" *ngIf="shapeForm.value.id">
+            <input type="text" pInputText formControlName="id" placeholder="Код" />
+        </p-accordionTab>
+        <p-accordionTab header="Поворот" [selected]="true">
+            <div class="ui-grid ui-grid-pad">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        угол :
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <p-spinner formControlName="angle"></p-spinner>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Размер" [selected]="true">
+            <div class="ui-grid ui-grid-pad">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        длина :
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <p-spinner formControlName="length" [min]="0"></p-spinner>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        ширина :
+                    </div>
+                </div>
+                <div class="ui-grid-row">
+                    <p-spinner formControlName="width" [min]="0"></p-spinner>
+                </div>
+            </div>
+        </p-accordionTab>
+</p-accordion>
+</form>

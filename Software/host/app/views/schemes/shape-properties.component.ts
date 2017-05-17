@@ -78,8 +78,7 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                             x.setAttributeNS(null, "ry", `${model.length / 2}`);
 
                             break;
-
-                        case "image":
+                       
                         case "rect":
 
                             x.setAttributeNS(null, "height", `${model.length}`);

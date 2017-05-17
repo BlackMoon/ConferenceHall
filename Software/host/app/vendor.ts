@@ -14,8 +14,9 @@ import 'ng2-split-pane';
 import 'crypto-js';
 
 // FullCalendar
-import 'fullcalendar/dist/fullcalendar.js';
+import 'fullcalendar/dist/fullcalendar.min.js';
 import 'fullcalendar/dist/fullcalendar.min.css';
+import 'fullcalendar/dist/locale/ru.js';
 
 // PrimeNG
 import 'primeng/resources/primeng.min.css';
