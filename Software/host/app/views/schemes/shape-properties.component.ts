@@ -36,13 +36,10 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                         };
                     
                     for (let t of this.svgElement.transform.baseVal) {
-
-                        let m: SVGMatrix = t.matrix;
-
+                        
                         switch (t.type) {
                            
-                            // rotate
-                            case 4:
+                            case SVGTransform.SVG_TRANSFORM_ROTATE:
                                 shape.angle = t.angle;
                                 break;
                         }
@@ -72,6 +69,7 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                 for (let t of this.svgElement.transform.baseVal) {
                     
                     if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+
                         let box = this.svgElement.getBBox();
                         attr.push(`translate(${t.matrix.e - (model.width - box.width) / 2} ${t.matrix.f - (model.length - box.height) / 2})`);
                         break;
@@ -93,6 +91,7 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                     text.textContent = model.code;
                 }
 
+                // children's size
                 Array.from(this.svgElement.childNodes).forEach((x: HTMLElement) => {
 
                     switch (x.nodeName) {

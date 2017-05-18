@@ -1,16 +1,19 @@
 ﻿<div #wrapper class="h100p">
     <div class="ui-g-12 ui-g-nopad">
         <p-toolbar>
-            <div class="ui-g-8 ui-g-nopad">
+            <div class="ui-g-6 ui-g-nopad">
                 <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
                 <button pButton type="button" title="Добавить метку" icon="fa-map-marker" (click)="addMark()"></button><button pButton type="button" title="Дублировать" icon="fa-clone" [disabled]="cloneButtonDisabled" (click)="shapeClone()"></button><button pButton type="button" title="Удалить" icon="fa-trash-o" [disabled]="removeButtonDisabled" (click)="shapeRemove()"></button>
+                <button pButton type="button" title="Повернуть на 45&deg; влево" icon="fa-undo" [disabled]="cloneButtonDisabled" (click)="shapeRotate(-45)"></button><button pButton type="button" title="Повернуть на 45&deg; вправо" icon="fa-repeat" [disabled]="cloneButtonDisabled" (click)="shapeRotate(45)"></button>
                 <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme(schemeForm.value)"></button>
             </div>            
-            <div class="ui-g-4 ui-g-nopad">                
+            
+            <div class="ui-g-6 ui-g-nopad">                
                 <div class="ui-toolbar-group-right">
-                    <button pButton type="button" icon="fa-search-plus" (click)="zoom()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoom(false)"></button>                    
+                    
+                    <button pButton type="button" icon="fa-search-plus" (click)="zoom()"></button><button pButton type="button" icon="fa-search-minus" (click)="zoom(false)"></button>
                     <button pButton type="button" icon="fa-dot-circle-o" title="По центру" (click)="centerView()"></button>
-                    <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг, м" title="Сетка"></p-dropdown>                                        
+                    <p-dropdown [options]="intervals" [(ngModel)]="gridInterval" (onChange)="intervalChange($event)" placeholder="Шаг, м" title="Сетка"></p-dropdown>
                 </div>
             </div>
         </p-toolbar>

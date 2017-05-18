@@ -76,7 +76,7 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
             mediator
                 .on<any>("schemeMain_shapeSelected")
                 .subscribe(s => {
-                    this.header = s.getAttribute("data-name");
+                    this.header = s ? s.getAttribute("data-name") : null;
                     this.gridButtonsVisible = false;
                 })
         );

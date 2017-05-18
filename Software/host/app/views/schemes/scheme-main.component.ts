@@ -59,7 +59,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 frame.setAttributeNS(null, "stroke", "blue");
         }
         else 
-            this.router.navigate(["groups"], { relativeTo: this.route });
+            this.router
+                .navigate(["groups"], { relativeTo: this.route })
+                .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", shape));
         
 
         this._svgElement = shape;
@@ -146,12 +148,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                         this.canvas
                             .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
-
-                        let shapes = this.canvas.querySelectorAll(`g.${SVG.markClass}, g.${SVG.shapeClass}`);
-                        //[].forEach.call(shapes,
-                          //  shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
-
-                    }
+                        }
 
                     this.schemeForm.patchValue(scheme);
                 },
@@ -552,8 +549,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      * Клонировать элемент схемы
      */
     shapeClone() {
-        let clone = this.svgElement.cloneNode(true),
-            offset = 50;            // размеры в см
+        debugger;
+        let clone = this.svgElement.cloneNode(true);
 
         let attr = [];
         for (let t of this.svgElement.transform.baseVal) {
@@ -561,8 +558,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             switch (t.type) {
                             
                 case SVGTransform.SVG_TRANSFORM_TRANSLATE:
-
-                    attr.push(`translate(${t.matrix.e + offset} ${t.matrix.f + offset})`);
+                    let vbox = this.canvas.viewBox.baseVal;
+                    attr.push(`translate(${vbox.x} ${vbox.y})`);
                     break;
                             
                 case SVGTransform.SVG_TRANSFORM_ROTATE:
@@ -599,6 +596,35 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.canvas.removeChild(this.svgElement);
         this.svgElement = null;
     }
+
+    shapeRotate(angle) {
+
+        let attr = [];
+        for (let t of this.svgElement.transform.baseVal) {
+
+            switch (t.type) {
+
+                case SVGTransform.SVG_TRANSFORM_TRANSLATE:
+                    attr.push(`translate(${t.matrix.e} ${t.matrix.f})`);
+                    break;
+
+                case SVGTransform.SVG_TRANSFORM_ROTATE:
+
+                    let box = this.svgElement.getBBox();
+
+                    this.svgElement.classList.contains(SVG.shapeClass)
+                        ? attr.push(`rotate(${t.angle + angle} ${box.width / 2} ${box.height / 2})`)
+                        : attr.push(`rotate(${t.angle + angle})`);
+
+                    break;
+
+            }
+        }
+
+        this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
+        this.mediator.broadcast("schemeMain_shapeSelected", this.svgElement);
+    }
+
 
     /**
      * Масштабирование
