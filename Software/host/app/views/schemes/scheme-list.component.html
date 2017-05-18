@@ -33,7 +33,8 @@
                     {{scheme.name}}
                 </div>
                 <div class="ui-grid-col-1">
-                    <i class="fa fa-trash" (click)="removeScheme(scheme.id, scheme.name)" style="cursor: pointer;" title="Удалить"></i>
+                    <i class="fa fa-files-o" (click)="copyScheme(scheme.id)" style="cursor: pointer;" title="Копировать"></i>
+                    <i class="fa fa-trash-o" (click)="removeScheme(scheme.id, scheme.name)" style="cursor: pointer;" title="Удалить"></i>
                 </div>
             </div>
         </div>

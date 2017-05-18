@@ -20,6 +20,7 @@ namespace domain.Scheme
         /// Шаг сетки (0 - сетка не рисуется)
         /// </summary>
         [Column("grid_interval")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public float GridInterval { get; set; }
 
         public string Name { get; set; }
@@ -29,12 +30,14 @@ namespace domain.Scheme
         /// <summary>
         /// Реальная высота, м (копируется из Холла)
         /// </summary>
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [Write(false)]
         public float Height { get; set; }
 
         /// <summary>
         /// Реальная ширина, м (копируется из Холла)
         /// </summary>
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [Write(false)]
         public float Width { get; set; }
     }

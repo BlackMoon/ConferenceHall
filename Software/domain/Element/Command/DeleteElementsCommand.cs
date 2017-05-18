@@ -1,5 +1,4 @@
-﻿using Kit.Core.CQRS.Command;
-
+﻿
 namespace domain.Element.Command
 {
     /// <summary>

@@ -1,4 +1,12 @@
 ﻿import { KeyModel } from './index';
+
+/**
+ * Команда копирования схемы
+ */
+export class CopyCommand extends KeyModel {
+    
+}
+
 /**
  * Модель. Схема холла
  */

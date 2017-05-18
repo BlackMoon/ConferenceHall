@@ -21,7 +21,12 @@ namespace host.Controllers
             return QueryDispatcher.DispatchAsync<FindSchemeByIdQuery, Scheme>(new FindSchemeByIdQuery(){ Id = id });
         }
 
-        
+        [HttpPost("/api/[controller]/copy")]
+        public Task<Scheme> Copy([FromBody]CopySchemeCommand value)
+        {
+            return CommandDispatcher.DispatchAsync<CopySchemeCommand, Scheme>(value);
+        }
+
         [HttpPost]
         public Task<int> Post([FromBody]CreateSchemeCommand value)
         {

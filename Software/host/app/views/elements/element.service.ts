@@ -28,6 +28,16 @@ export class ElementService extends HttpDataService<ElementModel> {
     }
 
     /**
+     * Добавить/убрать из избранного
+     */
+    addToFavorites(c: ElementGroupCommand): Observable<any> {
+
+        return this.http
+            .post(`/api/favorites`, c)
+            .catch(handleResponseError);
+    }
+
+    /**
      * Удалить элементы из группы
      * @param c
      */
@@ -66,16 +76,6 @@ export class ElementService extends HttpDataService<ElementModel> {
 
         return this.http
             .put(`${this.url}/${element.id}`, formData)
-            .catch(handleResponseError);
-    }
-
-    /**
-     * Добавить/убрать из избранного
-     */
-    addToFavorites(c:ElementGroupCommand): Observable<any> {
-        
-        return this.http
-            .post(`/api/favorites`, c)
             .catch(handleResponseError);
     }
 }

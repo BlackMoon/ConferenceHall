@@ -51,6 +51,12 @@ export class SchemeListComponent {
                 error => this.logger.error(error));
     }
 
+    copyScheme(id: number) {
+        this.schemeService
+            .copy({ id: id })
+            .subscribe(scheme => this.items.push(scheme));
+    }
+
     removeScheme(id: number, name?: string) {
 
         this.confirmationService.confirm({

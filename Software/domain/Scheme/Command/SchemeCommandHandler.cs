@@ -8,9 +8,11 @@ using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
+// ReSharper disable ExpressionIsAlwaysNull
 namespace domain.Scheme.Command
 {
     public class SchemeCommandHandler : KeyObjectCommandHandler<Scheme>,
+        ICommandHandlerWithResult<CopySchemeCommand, Scheme>,
         ICommandHandlerWithResult<CreateSchemeCommand, int>, 
         ICommandHandlerWithResult<DeleteSchemeCommand, bool>
     {
@@ -19,6 +21,35 @@ namespace domain.Scheme.Command
         public SchemeCommandHandler(IDbManager dbManager, ILogger<SchemeCommandHandler> logger) : base(dbManager)
         {
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Копировать схему
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public Scheme Execute(CopySchemeCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Scheme> ExecuteAsync(CopySchemeCommand command)
+        {
+            int id = 0;
+            string name = null;
+
+            DbManager.AddParameter("phall_scheme_source_id", command.Id);
+            DbManager.AddParameter("phall_scheme_new_id", id, ParameterDirection.Output);
+            DbManager.AddParameter("phall_scheme_new_name", name, ParameterDirection.Output);
+
+            await DbManager.OpenAsync();
+            await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "hall_scheme_copy");
+
+            return new Scheme()
+            {
+                Id = id,
+                Name = name
+            };
         }
 
         public int Execute(CreateSchemeCommand command)

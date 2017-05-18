@@ -172,7 +172,6 @@ namespace domain.Element.Command
             }
         }
         
-
         public override async Task<bool> ExecuteAsync(Element command)
         {
             command.Data = ResizeImage(command.Data, MaxW, MaxH, command.MimeType);
