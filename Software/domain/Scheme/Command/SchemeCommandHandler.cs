@@ -43,7 +43,9 @@ namespace domain.Scheme.Command
             DbManager.AddParameter("phall_scheme_new_name", name, ParameterDirection.Output);
 
             await DbManager.OpenAsync();
-            await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "hall_scheme_copy");
+            int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "hall_scheme_copy");
+
+            _logger.LogInformation($"Modified {returnValue} records");
 
             return new Scheme()
             {
