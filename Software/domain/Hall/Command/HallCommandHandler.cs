@@ -10,8 +10,7 @@ namespace domain.Hall.Command
 {
     public class HallCommandHandler : KeyObjectCommandHandler<Hall>,
         ICommandHandlerWithResult<CreateHallCommand, int>,
-        ICommandHandlerWithResult<DeleteHallCommand, bool>,
-        ICommandHandlerWithResult<Hall, bool>
+        ICommandHandlerWithResult<DeleteHallCommand, bool>
     {
         public HallCommandHandler(IDbManager dbManager) : base(dbManager)
         {

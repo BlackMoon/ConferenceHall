@@ -1,7 +1,7 @@
 ﻿<form [formGroup]="shapeForm" >
     <p-accordion [multiple]="true">
-        <p-accordionTab header="Код" [selected]="true" *ngIf="shapeForm.value.id">
-            <input type="text" pInputText formControlName="id" placeholder="Код" />
+        <p-accordionTab header="Код" [selected]="true" *ngIf="shapeForm.value.code">
+            <input type="text" pInputText formControlName="code" placeholder="Код" />
         </p-accordionTab>
         <p-accordionTab header="Поворот" [selected]="true">
             <div class="ui-grid ui-grid-pad">

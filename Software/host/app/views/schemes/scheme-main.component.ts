@@ -174,6 +174,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onKeyDown(event) {
+        
+        if (event.target.nodeName.toLocaleLowerCase() === "input")
+            return;
+
         // delete key
         event.keyCode === 46 && this.svgElement != null && this.shapeRemove();
     }
@@ -205,18 +209,17 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.appendChild(circle);
 
         let text = document.createElementNS(this.canvas.namespaceURI, "text"),
-            id = this.canvas.querySelectorAll(`g.${SVG.markClass}`).length + 1;
+            code = this.canvas.querySelectorAll(`g.${SVG.markClass}`).length + 1;
         
-        text.textContent = id;
+        text.textContent = code;
         
         text.setAttributeNS(null, "alignment-baseline", "middle");
         text.setAttributeNS(null, "text-anchor", "middle");
         
         g.appendChild(text);
-        g.setAttribute("data-id", id);
+        g.setAttribute("data-code", code);
 
         this.canvas.appendChild(g);
-
         this.svgElement = g;
     }
 
@@ -364,7 +367,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // размеры в см
             image.setAttributeNS(null, "height", `${h}`);
             image.setAttributeNS(null, "width", `${w}`);
-            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `http://localhost:64346/api/shape/${id}/false`);
+            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", `/api/shape/${id}/false`);
 
             pattern.appendChild(image);
 
@@ -464,6 +467,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
         g.setAttribute("class", SVG.shapeClass);
+        g.setAttribute("data-id", `${id}`);
         g.setAttribute("data-name", element.name);
 
         let pt = this.canvas.createSVGPoint();
@@ -539,7 +543,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     shapeClone() {
         let clone = this.svgElement.cloneNode(true),
-            matrix: SVGMatrix = this.svgElement.transform.baseVal.getItem(0).matrix,
             // размеры в см
             offset = 50;
 
@@ -593,6 +596,18 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     shapeRemove() {
+        
+        let id = this.svgElement.getAttribute("data-id");
+        if (id) {
+            let groups = this.canvas.querySelectorAll(`g[data-id="${id}"]`);
+
+            // больше никто не использует шаблон --> можно удалить
+            if (groups.length === 1) {
+                let pattern = this.canvas.querySelector(`pattern[id="_${id}"]`);
+                this.canvas.removeChild(pattern);
+            }
+        }
+
         this.canvas.removeChild(this.svgElement);
         this.svgElement = null;
     }

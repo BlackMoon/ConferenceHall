@@ -26,11 +26,11 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                 .subscribe(s => {
 
                     this.svgElement = s;
-              
+               
                     let box = s.getBBox(),
                         shape: any = {
                             angle: 0,
-                            id: s.getAttribute("data-id"),
+                            code: s.getAttribute("data-code"),
                             length: box.height,
                             width: box.width
                         };
@@ -57,7 +57,7 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
 
         this.shapeForm = this.fb.group({
             angle: [0],
-            id: [null],
+            code: [null],
             length: [0],
             width: [0]
         });
@@ -96,7 +96,7 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                     // translate
                     if (t.type === 2) {
 
-                        attr.push(`translate(${m.e} ${m.f})`);
+                        attr.push(`translate(${m.e - model.width / 2} ${m.f - model.length / 2})`);
                         break;
                     }
                 }
@@ -109,8 +109,8 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                 this.svgElement.setAttributeNS(null, "transform", attr.join(","));
 
                 // метка
-                if (model.id != null) {
-                    this.svgElement.setAttribute("data-id", model.id);
+                if (model.code != null) {
+                    this.svgElement.setAttribute("data-code", model.code);
 
                     let text = this.svgElement.querySelector("text");
                     text.textContent = model.id;

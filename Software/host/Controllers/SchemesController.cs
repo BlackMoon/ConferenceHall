@@ -23,9 +23,9 @@ namespace host.Controllers
 
         
         [HttpPost]
-        public Task<long> Post([FromBody]CreateSchemeCommand value)
+        public Task<int> Post([FromBody]CreateSchemeCommand value)
         {
-            return CommandDispatcher.DispatchAsync<CreateSchemeCommand, long>(value);
+            return CommandDispatcher.DispatchAsync<CreateSchemeCommand, int>(value);
         }
 
         

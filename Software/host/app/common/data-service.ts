@@ -33,6 +33,7 @@ export abstract class HttpDataService<T extends KeyModel> implements IDataServic
 
         return this.http
             .post(this.url, entity)
+            .map((r: Response) => r.json())
             .catch(handleResponseError);
     }
 

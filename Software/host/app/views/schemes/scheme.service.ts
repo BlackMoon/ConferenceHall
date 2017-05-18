@@ -1,5 +1,5 @@
 ﻿import { Injectable, isDevMode } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { HttpDataService } from '../../common/data-service';
 import { SchemeModel } from '../../models';
 

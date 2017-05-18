@@ -76,7 +76,7 @@ namespace host.Controllers
         /// Отправляются файлы ('Content-Type', 'multipart/form-data')
         /// </summary>
         [HttpPost]
-        public async Task Post(CreateElementCommand value)
+        public async Task<int> Post(CreateElementCommand value)
         {
             value.UserId = 1;  // todo from HttpContext.User
 
@@ -91,7 +91,7 @@ namespace host.Controllers
                 value.ContentType = f.ContentType;
             }
             
-            await CommandDispatcher.DispatchAsync<CreateElementCommand, int>(value);
+            return await CommandDispatcher.DispatchAsync<CreateElementCommand, int>(value);
         }
 
         /// <summary>

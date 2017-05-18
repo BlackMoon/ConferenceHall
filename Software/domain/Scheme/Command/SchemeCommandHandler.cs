@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using domain.Common.Command;
 using Dapper.Contrib.Extensions;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace domain.Scheme.Command
 {
     public class SchemeCommandHandler : KeyObjectCommandHandler<Scheme>,
-        ICommandHandlerWithResult<CreateSchemeCommand, long>, 
+        ICommandHandlerWithResult<CreateSchemeCommand, int>, 
         ICommandHandlerWithResult<DeleteSchemeCommand, bool>
     {
         private readonly ILogger<SchemeCommandHandler> _logger;
@@ -20,14 +21,12 @@ namespace domain.Scheme.Command
             _logger = logger;
         }
 
-        public long Execute(CreateSchemeCommand command)
+        public int Execute(CreateSchemeCommand command)
         {
-            DbManager.Open();
-            Scheme scheme = new Scheme();
-            return DbManager.DbConnection.Insert(command.Adapt(scheme));
+            throw new NotImplementedException();
         }
 
-        public async Task<long> ExecuteAsync(CreateSchemeCommand command)
+        public async Task<int> ExecuteAsync(CreateSchemeCommand command)
         {
             await DbManager.OpenAsync();
 
