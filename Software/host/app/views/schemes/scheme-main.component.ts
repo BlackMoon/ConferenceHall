@@ -25,11 +25,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     canvas: any;
     canvasBox: any;
 
-    clickPoint: Point;                              // захват точки canvas'a (для смещения)
+    clickPoint: Point;                              // захват точки canvas'a (для перемещения)
+    svgOrigin: Point;                               // начало координат canvas/element (для перемещения)
 
     gridInterval: number;
     initialHeight: number;
     initialWidth: number;
+
+    zoomCoef: number;                               // коэф. масштабирования [0..1]
 
 // ReSharper disable once InconsistentNaming
     private _svgElement: any = null;                // selected svgElement
@@ -61,12 +64,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this._svgElement = shape;
     }
-
-    svgElementOffset: Point;                        // mouse offset внутри svgElement'a
-    svgOrigin: Point;                               // viewBox origin (для смещения)
-
-    zoomCoef: number;                               // коэф. масштабирования [0..1]
-
+    
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
     intervals: SelectItem[];
@@ -150,15 +148,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                             .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
 
                         let shapes = this.canvas.querySelectorAll(`g.${SVG.markClass}, g.${SVG.shapeClass}`);
-                        [].forEach.call(shapes,
-                            shape => {
-                                shape.addEventListener("keypress",
-                                    (event) => {
-                                        debugger;
-                                        this.shapeMouseDown(event);
-                                    });
-                                shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
-                            });
+                        //[].forEach.call(shapes,
+                          //  shape => shape.addEventListener("mousedown", (event) => this.shapeMouseDown(event)));
 
                     }
 
@@ -194,8 +185,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let g = document.createElementNS(this.canvas.namespaceURI, "g"),
             r = 15;
 
-        g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
-
         g.setAttribute("class", SVG.markClass);
         g.setAttributeNS(null, "transform", "translate(100, 100)");
 
@@ -225,11 +214,41 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     canvasMouseDown(event) {
 
+        event.stopPropagation();
+
         if (event.buttons === 1) {
+
             this.clickPoint = new Point(event.clientX, event.clientY);
-            this.svgElement = null;
-            this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
+
+            // выбор shape
+            if (event.target.parentElement.nodeName === "g") {
+                this.svgElement = event.target.parentElement;
+
+                // на передний план --> вставка перед метками
+                let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
+                this.canvas.insertBefore(this.svgElement, firstMark);
+
+                let x = 0, y = 0;
+                for (let t of this.svgElement.transform.baseVal) {
+
+                    if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+
+                        x = t.matrix.e;
+                        y = t.matrix.f;
+                        break;
+                    }
+                }
+
+                this.svgOrigin = new Point(x, y);
+            }
+            // выбор canvas
+            else {
+                this.svgElement = null;
+                this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
+            }
         }
+
+       
     }
 
     canvasMouseMove(event) {
@@ -238,25 +257,30 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         if (event.buttons === 1) {
             
-            let pt: SVGPoint = this.canvas.createSVGPoint();
+            let clickPt = this.canvas.createSVGPoint(),
+                pt: SVGPoint = this.canvas.createSVGPoint();
+
+            clickPt.x = this.clickPoint.x;
+            clickPt.y = this.clickPoint.y;
+
+            // трансформация здесь --> т.к. уже изменился viewbox
+            clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
             pt.x = event.clientX;
             pt.y = event.clientY;
 
+            pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+
             // перемещение shape
             if (this.svgElement !== null) {
-
-                pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
                 
-                pt.x -= this.svgElementOffset.x;
-                pt.y -= this.svgElementOffset.y;
-
                 let attr = [];
                 for (let t of this.svgElement.transform.baseVal) {
                     
                     switch (t.type) {
                         
                         case SVGTransform.SVG_TRANSFORM_TRANSLATE:
-                            attr.push(`translate(${pt.x} ${pt.y})`);
+                            attr.push(`translate(${this.svgOrigin.x + pt.x - clickPt.x} ${this.svgOrigin.y + pt.y - clickPt.y})`);
                             break;
                             
                         case SVGTransform.SVG_TRANSFORM_ROTATE:
@@ -276,15 +300,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             }
             // перемещение canvas'a
             else {
-                
-                pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-
-                let clickPt = this.canvas.createSVGPoint();
-                clickPt.x = this.clickPoint.x;
-                clickPt.y = this.clickPoint.y;
-                // трансформация здесь --> т.к. уже изменился viewbox
-                clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
-
                 let vbox = this.canvas.viewBox.baseVal;
                 this.canvas.setAttribute("viewBox", `${this.svgOrigin.x - pt.x + clickPt.x} ${this.svgOrigin.y - pt.y + clickPt.y} ${vbox.width} ${vbox.height}`);
             }
@@ -460,7 +475,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.createPattern(id, h, w);
 
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
-        g.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
         g.setAttribute("class", SVG.shapeClass);
         g.setAttribute("data-id", `${id}`);
@@ -541,8 +555,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let clone = this.svgElement.cloneNode(true),
             offset = 50;            // размеры в см
 
-        clone.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
-
         let attr = [];
         for (let t of this.svgElement.transform.baseVal) {
             
@@ -570,39 +582,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.svgElement = clone;
     }
-
-    shapeMouseDown(event) {
-        
-        event.stopPropagation();
-
-        if (event.button === 0) {
-            
-            this.svgElement = event.currentTarget;
-
-            // на передний план --> вставка перед метками
-            let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
-            this.canvas.insertBefore(this.svgElement, firstMark);
-
-            let x = 0, y = 0;
-            for (let t of this.svgElement.transform.baseVal) {
-                
-                if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
-
-                    x = t.matrix.e;
-                    y = t.matrix.f;
-                    break;
-                }
-            }
-
-            let pt: SVGPoint = this.canvas.createSVGPoint();
-            pt.x = event.clientX;
-            pt.y = event.clientY;
-
-            pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
-            this.svgElementOffset = new Point(pt.x - x, pt.y - y);
-        }
-    }
-
+    
     shapeRemove() {
         
         let id = this.svgElement.getAttribute("data-id");
