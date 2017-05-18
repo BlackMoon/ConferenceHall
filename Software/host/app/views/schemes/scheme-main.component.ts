@@ -599,7 +599,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     shapeRotate(angle) {
 
-        let attr = [];
+        let alpha = 0, attr = [];
         for (let t of this.svgElement.transform.baseVal) {
 
             switch (t.type) {
@@ -610,17 +610,19 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                 case SVGTransform.SVG_TRANSFORM_ROTATE:
 
-                    let box = this.svgElement.getBBox();
-
-                    this.svgElement.classList.contains(SVG.shapeClass)
-                        ? attr.push(`rotate(${t.angle + angle} ${box.width / 2} ${box.height / 2})`)
-                        : attr.push(`rotate(${t.angle + angle})`);
-
+                    alpha = t.angle;
                     break;
 
             }
         }
 
+        let box = this.svgElement.getBBox();
+        alpha += angle;
+
+        this.svgElement.classList.contains(SVG.shapeClass)
+            ? attr.push(`rotate(${alpha} ${box.width / 2} ${box.height / 2})`)
+            : attr.push(`rotate(${alpha})`);
+        
         this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
         this.mediator.broadcast("schemeMain_shapeSelected", this.svgElement);
     }
