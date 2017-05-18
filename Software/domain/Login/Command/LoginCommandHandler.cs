@@ -68,8 +68,7 @@ namespace domain.Login.Command
             {
                 DbManager.AddParameter("plogin", command.UserName);
                 DbManager.AddParameter("ppassword", command.Password);
-
-                await DbManager.OpenAsync();
+               
                 await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conf_hall.user_logon");
             }
             catch (PostgresException ex)

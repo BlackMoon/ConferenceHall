@@ -118,8 +118,6 @@ namespace domain.Element.Command
             DbManager.AddParameter("pscheme_element_id", command.Ids);
             DbManager.AddParameter("puser_id", command.UserId);
 
-            await DbManager.OpenAsync();
-
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_favorites_add");
             _logger.LogInformation($"Modified {returnValue} records");
         }
@@ -136,8 +134,6 @@ namespace domain.Element.Command
 
             element.Data = ResizeImage(element.Data, MaxW, MaxH, element.MimeType);
             element.Thumbnail = ResizeImage(element.Data, W, H, element.MimeType, 50);
-            
-            await DbManager.OpenAsync();
 
             int newId = await DbManager.DbConnection.InsertAsync(element);
             
@@ -160,8 +156,7 @@ namespace domain.Element.Command
             DbManager.AddParameter("pscheme_element_id", command.Ids);
             DbManager.AddParameter("pscheme_element_group_id", command.GroupId);
             DbManager.AddParameter("puser_id", command.UserId);
-
-            await DbManager.OpenAsync();
+           
             int deleted = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_location_del");
             _logger.LogInformation($"Modified {deleted} records");
 

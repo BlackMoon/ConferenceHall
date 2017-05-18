@@ -35,22 +35,21 @@ namespace domain.Scheme.Command
 
         public async Task<Scheme> ExecuteAsync(CopySchemeCommand command)
         {
-            int id = 0;
-            string name = null;
-
             DbManager.AddParameter("phall_scheme_source_id", command.Id);
-            DbManager.AddParameter("phall_scheme_new_id", id, ParameterDirection.Output);
-            DbManager.AddParameter("phall_scheme_new_name", name, ParameterDirection.Output);
 
-            await DbManager.OpenAsync();
+            IDataParameter pId = DbManager.AddParameter("phall_scheme_new_id");
+            pId.Direction = ParameterDirection.Output;
+
+            IDataParameter pName = DbManager.AddParameter("phall_scheme_new_name");
+            pName.Direction = ParameterDirection.Output;
+            
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "hall_scheme_copy");
-
             _logger.LogInformation($"Modified {returnValue} records");
 
             return new Scheme()
             {
-                Id = id,
-                Name = name
+                Id = Convert.ToInt32(pId.Value),
+                Name = (string)pName.Value
             };
         }
 
@@ -88,8 +87,7 @@ namespace domain.Scheme.Command
             DbManager.AddParameter("name", command.Name);
             DbManager.AddParameter("gridInterval", command.GridInterval);
             DbManager.AddParameter("plan", command.Plan.Trim('\r', '\n'));
-
-            await DbManager.OpenAsync();
+           
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.hall_scheme SET name = @name, grid_interval = @gridInterval, plan = @plan WHERE id = @id");
 
             _logger.LogInformation($"Modified {updated} records");

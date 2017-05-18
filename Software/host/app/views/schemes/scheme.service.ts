@@ -20,6 +20,7 @@ export class SchemeService extends HttpDataService<SchemeModel> {
 
         return this.http
             .post(`/api/schemes/copy`, key)
+            .map((r: Response) => r.json())
             .catch(handleResponseError);
     }
 }

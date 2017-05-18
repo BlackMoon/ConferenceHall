@@ -2,6 +2,7 @@
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace domain.Common.Query
@@ -32,7 +33,8 @@ namespace domain.Common.Query
         public virtual async Task<TResult> ExecuteAsync(TQuery query)
         {
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.GetAsync<TResult>(query.Id);}
+            return await DbManager.DbConnection.GetAsync<TResult>(query.Id);
+        }
 
         public virtual async Task<IEnumerable<TResult>> ExecuteAsync(GetAllQuery query)
         {
