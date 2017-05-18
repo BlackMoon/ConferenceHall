@@ -67,36 +67,13 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
             .subscribe(model => {
 
                 model.angle = model.angle || 0;
-
-                Array.from(this.svgElement.childNodes).forEach((x: HTMLElement) => {
-
-                    switch (x.nodeName) {
-
-                        case "ellipse":
-                            
-                            x.setAttributeNS(null, "rx", `${model.width / 2}`);
-                            x.setAttributeNS(null, "ry", `${model.length / 2}`);
-
-                            break;
-                       
-                        case "rect":
-
-                            x.setAttributeNS(null, "height", `${model.length}`);
-                            x.setAttributeNS(null, "width", `${model.width}`);
-
-                            break;
-                    }
-                });
-
+                
                 let attr = [];
                 for (let t of this.svgElement.transform.baseVal) {
-
-                    let m: SVGMatrix = t.matrix;
-
-                    // translate
-                    if (t.type === 2) {
-
-                        attr.push(`translate(${m.e - model.width / 2} ${m.f - model.length / 2})`);
+                    
+                    if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+                        let box = this.svgElement.getBBox();
+                        attr.push(`translate(${t.matrix.e - (model.width - box.width) / 2} ${t.matrix.f - (model.length - box.height) / 2})`);
                         break;
                     }
                 }
@@ -106,15 +83,35 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                     ? attr.push(`rotate(${model.angle} ${model.width / 2} ${model.length / 2})`)
                     : attr.push(`rotate(${model.angle})`);    
 
-                this.svgElement.setAttributeNS(null, "transform", attr.join(","));
+                this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
 
                 // метка
                 if (model.code != null) {
                     this.svgElement.setAttribute("data-code", model.code);
 
                     let text = this.svgElement.querySelector("text");
-                    text.textContent = model.id;
+                    text.textContent = model.code;
                 }
+
+                Array.from(this.svgElement.childNodes).forEach((x: HTMLElement) => {
+
+                    switch (x.nodeName) {
+
+                        case "ellipse":
+
+                            x.setAttributeNS(null, "rx", `${model.width / 2}`);
+                            x.setAttributeNS(null, "ry", `${model.length / 2}`);
+
+                            break;
+
+                        case "rect":
+
+                            x.setAttributeNS(null, "height", `${model.length}`);
+                            x.setAttributeNS(null, "width", `${model.width}`);
+
+                            break;
+                    }
+                });
             });
     }
 

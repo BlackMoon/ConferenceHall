@@ -245,18 +245,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // перемещение shape
             if (this.svgElement !== null) {
 
-                if (this.svgElement.classList.contains(SVG.shapeClass)) {
-                    pt.x -= this.svgElementOffset.x;
-                    pt.y -= this.svgElementOffset.y;
-                }
-                
                 pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+                
+                pt.x -= this.svgElementOffset.x;
+                pt.y -= this.svgElementOffset.y;
 
                 let attr = [];
                 for (let t of this.svgElement.transform.baseVal) {
-
-                    let m: SVGMatrix = t.matrix;
-
+                    
                     switch (t.type) {
                         
                         case SVGTransform.SVG_TRANSFORM_TRANSLATE:
@@ -269,14 +265,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                             this.svgElement.classList.contains(SVG.shapeClass)
                                 ? attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`)
-                                : attr.push(`rotate(${t.angle} 0 0)`);
+                                : attr.push(`rotate(${t.angle})`);
 
                             break;
                         
                     }
                 }
 
-                this.svgElement.setAttributeNS(null, "transform", attr.join(","));
+                this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
             }
             // перемещение canvas'a
             else {
@@ -338,7 +334,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     }
                 }
                     
-                this.svgElement.setAttributeNS(null, "transform", attr.join(","));
+                this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
             }
         }
     }
@@ -363,7 +359,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             pattern.setAttributeNS(null, "width", "1");
             pattern.setAttributeNS(null, "viewBox", `0 0 ${w} ${h}`);
 
-            let image = document.createElementNS(this.canvas.namespaceURI, "image");
+            const image = document.createElementNS(this.canvas.namespaceURI, "image");
             // размеры в см
             image.setAttributeNS(null, "height", `${h}`);
             image.setAttributeNS(null, "width", `${w}`);
@@ -379,7 +375,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      * Рисовать границы viewBox'a
      */
     drawBorder() {
-        let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
+        const rect = document.createElementNS(this.canvas.namespaceURI, "rect");
 
         rect.setAttribute("class", SVG.borderClass);
 
@@ -407,7 +403,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 line: HTMLElement,
                 int = this.gridInterval * 100; // размеры в см
 
-            let style = {
+            const style = {
                 "stroke": "rgb(0, 0, 0)",
                 "stroke-width": "0.25"
             };
@@ -527,7 +523,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // снять все ранее выделенные объекты
         let frames = svg.querySelectorAll(`.${SVG.frameClass}`);
         [].forEach.call(frames,
-            frame => frame.removeAttributeNS(null, "stroke-width"));
+            frame => frame.removeAttributeNS(null, "stroke"));
         
         scheme.gridInterval = this.gridInterval;
         scheme.plan = svg.outerHTML;
@@ -543,21 +539,18 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      */
     shapeClone() {
         let clone = this.svgElement.cloneNode(true),
-            // размеры в см
-            offset = 50;
+            offset = 50;            // размеры в см
 
         clone.addEventListener("mousedown", (event) => this.shapeMouseDown(event));
 
         let attr = [];
         for (let t of this.svgElement.transform.baseVal) {
-
-            let m: SVGMatrix = t.matrix;
-
+            
             switch (t.type) {
                             
                 case SVGTransform.SVG_TRANSFORM_TRANSLATE:
 
-                    attr.push(`translate(${m.e + offset} ${m.f + offset})`);
+                    attr.push(`translate(${t.matrix.e + offset} ${t.matrix.f + offset})`);
                     break;
                             
                 case SVGTransform.SVG_TRANSFORM_ROTATE:
@@ -590,8 +583,23 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
             this.canvas.insertBefore(this.svgElement, firstMark);
 
-            let cr: ClientRect = this.svgElement.getBoundingClientRect();
-            this.svgElementOffset = new Point(event.clientX - cr.left, event.clientY - cr.top);
+            let x = 0, y = 0;
+            for (let t of this.svgElement.transform.baseVal) {
+                
+                if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+
+                    x = t.matrix.e;
+                    y = t.matrix.f;
+                    break;
+                }
+            }
+
+            let pt: SVGPoint = this.canvas.createSVGPoint();
+            pt.x = event.clientX;
+            pt.y = event.clientY;
+
+            pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
+            this.svgElementOffset = new Point(pt.x - x, pt.y - y);
         }
     }
 
