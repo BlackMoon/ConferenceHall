@@ -616,13 +616,16 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             }
         }
 
-        let box = this.svgElement.getBBox();
         alpha += angle;
-
-        this.svgElement.classList.contains(SVG.shapeClass)
-            ? attr.push(`rotate(${alpha} ${box.width / 2} ${box.height / 2})`)
-            : attr.push(`rotate(${alpha})`);
         
+        if (alpha !== 0.0) {
+            let box = this.svgElement.getBBox();
+
+            this.svgElement.classList.contains(SVG.shapeClass)
+                ? attr.push(`rotate(${alpha} ${box.width / 2} ${box.height / 2})`)
+                : attr.push(`rotate(${alpha})`);
+        }
+
         this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
         this.mediator.broadcast("schemeMain_shapeSelected", this.svgElement);
     }

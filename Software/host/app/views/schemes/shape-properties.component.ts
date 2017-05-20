@@ -77,9 +77,11 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                 }
                 
                 // rotate around svgElement center
-                this.svgElement.classList.contains(SVG.shapeClass)
-                    ? attr.push(`rotate(${model.angle} ${model.width / 2} ${model.length / 2})`)
-                    : attr.push(`rotate(${model.angle})`);    
+                if (model.angle !== 0.0) {
+                    this.svgElement.classList.contains(SVG.shapeClass)
+                        ? attr.push(`rotate(${model.angle} ${model.width / 2} ${model.length / 2})`)
+                        : attr.push(`rotate(${model.angle})`);
+                }
 
                 this.svgElement.setAttributeNS(null, "transform", attr.join(" "));
 
