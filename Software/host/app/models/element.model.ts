@@ -3,8 +3,8 @@
 /**
  * Константы для операций Drag & Drop
  */
-export const dragOffset = "offset";
-export const dragType = "element";
+export const elemDragOffset = "offset";
+export const elemDragType = "element";
 
 /**
  * Команда мульти-обработки элементов

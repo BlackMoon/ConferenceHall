@@ -9,7 +9,7 @@ import { Mediator } from "../../common/mediator";
 import Point from "../../common/point";
 import * as SVG from "../../common/svg-utils";
 
-import { dragOffset as DragOffset, dragType as DragType, ElementModel, SchemeModel } from "../../models";
+import { elemDragOffset, elemDragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
 const zoomStep = 0.1;
@@ -462,8 +462,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     drop(event) {
         
-        let element: ElementModel = JSON.parse(event.dataTransfer.getData(DragType)),
-            offset: Point = JSON.parse(event.dataTransfer.getData(DragOffset)),
+        let element: ElementModel = JSON.parse(event.dataTransfer.getData(elemDragType)),
+            offset: Point = JSON.parse(event.dataTransfer.getData(elemDragOffset)),
             id = element.id, 
             // размеры в см
             h = element.height * 100,

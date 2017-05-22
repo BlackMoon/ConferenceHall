@@ -1,5 +1,7 @@
 ﻿import { KeyModel } from './index';
 
+export const confDragType = "conference";
+
 /**
  * Модель. Конференция
  */

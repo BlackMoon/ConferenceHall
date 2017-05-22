@@ -1,7 +1,7 @@
 ﻿<p-dataGrid [value]="elements" [styleClass]="'center h100p'" *ngIf="!smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6">
-            <div pDraggable="dd" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" (onDragStart)="dragStart($event, element)">
+            <div pDraggable="dd_elem" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" (onDragStart)="dragStart($event, element)">
                 <div class="_48">
                     <img class="center" src="/api/shape/{{element.id | uniquesuffix}}" width="48" title="{{element.name}}">
                 </div>
@@ -16,7 +16,7 @@
 <p-dataList [value]="elements" [styleClass]="'h100p'" *ngIf="smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">
-            <div pDraggable="dd" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
+            <div pDraggable="dd_elem" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
                 <div class="ui-grid-col-3">
                     <img class="center" src="/api/shape/{{element.id | uniquesuffix}}" width="32" title="{{element.name}}">
                 </div>

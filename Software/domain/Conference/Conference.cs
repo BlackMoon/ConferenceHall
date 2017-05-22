@@ -1,17 +1,42 @@
 ﻿using System;
 using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
-using domain.Hall;
+using domain.Group;
+using Newtonsoft.Json;
 
 namespace domain.Conference
 {
+    /// <summary>
+    /// Состояние конференции
+    /// </summary>
+    public enum ConfState
+    {
+        /// <summary>
+        /// Планируемая
+        /// </summary>
+        Planned,
+
+        /// <summary>
+        /// На подготовке
+        /// </summary>
+        Preparing,
+
+        /// <summary>
+        /// Активная
+        /// </summary>
+        Active,
+
+        /// <summary>
+        /// Завершенная
+        /// </summary>
+        Closed
+    };
+
     [Table("conf_hall.conferences")]
     public class Conference : KeyObject
     {
-        [Column("subject")]
         public string Subject { get; set; }
-
-        [Column("description")]
+     
         public string Description { get; set; }
 
         [Column("date_start")]
@@ -19,21 +44,20 @@ namespace domain.Conference
 
         [Column("date_end")]
         public DateTime? DateEnd { get; set; }
+        
+        public ConfState ConfState { get; set; }
 
         [Column("state")]
-        public StateType State { get; set; }
-
-        [Column("hall_id")]
-        public Hall.Hall Hall { get; set; }
-
-        [Column("hall_scheme_id")]
-        public Scheme.Scheme Scheme { get; set; }
+        [JsonIgnore]
+        public string State
+        {
+            set
+            {
+                ConfState confState;
+                Enum.TryParse(value, true, out confState);
+                ConfState = confState;
+            }
+        }
     }
-
-    public enum StateType {
-         State0 = 0,
-         State1 = 1,
-         State2 = 2
-     };
 
 }

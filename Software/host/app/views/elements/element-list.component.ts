@@ -6,7 +6,7 @@ import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import Point from "../../common/point";
 
-import { dragOffset as DragOffset, dragType as DragType, ElementGroupCommand, ElementModel } from '../../models';
+import { elemDragOffset, elemDragType, ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
@@ -83,8 +83,8 @@ export class ElementListComponent implements OnInit, OnDestroy  {
         let cr: ClientRect = event.currentTarget.getBoundingClientRect(),
             offset: Point = new Point(event.clientX - cr.left, event.clientY - cr.top);
 
-        event.dataTransfer.setData(DragOffset, JSON.stringify(offset));
-        event.dataTransfer.setData(DragType, JSON.stringify(element));
+        event.dataTransfer.setData(elemDragOffset, JSON.stringify(offset));
+        event.dataTransfer.setData(elemDragType, JSON.stringify(element));
     }
 
     selectElement(element) {
