@@ -1,4 +1,11 @@
 ﻿/**
+ * Интерфейс selected объекта
+ */
+export interface ISelected {
+    selected: boolean;
+}
+
+/**
  * Базовая модель объекта
  */
 export class KeyModel {

@@ -5,7 +5,8 @@
                 <div class="_48">
                     <img class="center" src="/api/shape/{{element.id | uniquesuffix}}" width="48" title="{{element.name}}">
                 </div>
-                <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)" ></i>
+
+                <i class="fa {{element.selected ? 'fa-check-square-o' : 'fa-square-o' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)" ></i>
                 <div class="text-ellipsis">
                     <small>{{element.name}}</small>
                 </div>
@@ -25,7 +26,7 @@
                     <small>{{element.width + ' x ' + element.height}}</small>
                 </div>
                 <div class="ui-grid-col-1">
-                    <i class="fa {{element.selected ? 'fa-check-circle-o' : 'fa-circle-thin' }}" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
+                    <i class="fa {{element.selected ? 'fa-check-square-o' : 'fa-square-o' }}" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
                 </div>
             </div>
         </div>

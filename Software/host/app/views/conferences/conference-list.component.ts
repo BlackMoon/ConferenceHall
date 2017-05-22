@@ -28,4 +28,9 @@ export class ConferenceListComponent implements OnInit {
     dragStart(event, conference) {
         event.dataTransfer.setData(confDragType, JSON.stringify(conference));
     }
+
+    selectConference(conference) {
+        conference.selected = !conference.selected;
+        
+    }
 }

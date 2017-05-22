@@ -1,9 +1,14 @@
 ﻿<p-dataList [value]="conferences" [rows]="10">
+    <p-header>
+        <div class="ui-helper-clearfix">
+            <button type="button" pButton icon="fa-plus" style="float: left" label="Добавить" (click)="schemeformVisible=true"></button>
+        </div>
+    </p-header>
     <ng-template let-conference pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">
             <div pDraggable="dd_conf" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event, conference)">
                 <div class="ui-grid-col-2">
-                    <i class="fa fa-circle-thin"></i>
+                    <i class="fa fa-2x {{conference.selected ? 'fa-check-square-o' : 'fa-square-o'}}" (click)="selectConference(conference)"></i>
                 </div>
                 <div class="ui-grid-col-11">
                     <div>{{conference.subject}}</div>

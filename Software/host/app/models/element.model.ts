@@ -1,4 +1,4 @@
-﻿import { KeyModel } from './index';
+﻿import { ISelected, KeyModel } from './index';
 
 /**
  * Константы для операций Drag & Drop
@@ -18,7 +18,7 @@ export class ElementGroupCommand {
 /**
  * Модель. Элемент схемы
  */
-export class ElementModel extends KeyModel {
+export class ElementModel extends KeyModel implements ISelected {
     
     selected: boolean = false;
 
