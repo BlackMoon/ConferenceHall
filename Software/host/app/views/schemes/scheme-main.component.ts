@@ -549,7 +549,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
      * Клонировать элемент схемы
      */
     shapeClone() {
-        debugger;
+        
         let clone = this.svgElement.cloneNode(true);
 
         let attr = [];

@@ -1,7 +1,6 @@
 ﻿using System;
 using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
-using domain.Group;
 using Newtonsoft.Json;
 
 namespace domain.Conference

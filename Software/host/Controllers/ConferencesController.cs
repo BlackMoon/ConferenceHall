@@ -4,7 +4,6 @@ using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Conference;
 using domain.Conference.Query;
-using domain.Common.Query;
 
 namespace host.Controllers
 {
@@ -20,9 +19,10 @@ namespace host.Controllers
 
         // GET api/conferences
         [HttpGet]
-        public Task<IEnumerable<Conference>> Get()
+        public Task<IEnumerable<Conference>> Get(ConfState state)
         {
-            return _queryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Conference>>(new GetAllQuery());
+            FindConferencesQuery query = new FindConferencesQuery() { State = state };
+            return _queryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
         // GET api/conferences/5

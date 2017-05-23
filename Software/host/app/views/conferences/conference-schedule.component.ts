@@ -50,8 +50,12 @@ export class ConferenceScheduleComponent implements OnInit {
         ];
     }
 
-    drop(event) {
+    drop(date, event) {
         debugger;
-        let conference = JSON.parse(event.dataTransfer.getData(confDragType));
+        //let conference = JSON.parse(event.dataTransfer.getData(confDragType));
+    }
+
+    eventDrop(event) {
+        debugger;
     }
 }

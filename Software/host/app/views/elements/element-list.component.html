@@ -17,7 +17,7 @@
 <p-dataList [value]="elements" [styleClass]="'h100p'" *ngIf="smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">
-            <div pDraggable="dd_elem" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
+            <div class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
                 <div class="ui-grid-col-3">
                     <img class="center" src="/api/shape/{{element.id | uniquesuffix}}" width="32" title="{{element.name}}">
                 </div>

@@ -46,8 +46,8 @@ module.exports = {
         ),
 
       new CopyWebpackPlugin([
-            { from: './images', to: './assets', ignore: 'bg.jpg' },
-            { from: 'favicon.ico' }
+          { from: 'favicon.ico' },
+          { from: './images', to: './assets', ignore: 'bg.jpg' }
         ]),
 
       new webpack.optimize.CommonsChunkPlugin({

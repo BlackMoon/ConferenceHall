@@ -8,13 +8,12 @@ import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
 import '@angular/router';
 import 'angular2-jwt';
-import 'ng2-split-pane';
 
 // CryptoJS
 import 'crypto-js';
 
 // FullCalendar
-import 'fullcalendar/dist/fullcalendar.min.js';
+import 'fullcalendar/dist/fullcalendar.js';
 import 'fullcalendar/dist/fullcalendar.min.css';
 import 'fullcalendar/dist/locale/ru.js';
 

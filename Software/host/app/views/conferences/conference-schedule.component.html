@@ -1,11 +1,14 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
     <div class="ui-g h100p" #grid>
         <div class="ui-g-8">
-            <p-schedule pDroppable="dd_conf" [events]="events" [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [height]="grid.offsetHeight - 6" [header]="headerConfig" (onDrop)="drop($event)"></p-schedule>
+            <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [editable]="true"
+                        [events]="events" [height]="grid.offsetHeight - 6" [header]="headerConfig" [nowIndicator]="true"
+                        (onDrop)="drop($event)" (onEventDrop)="eventDrop($event)">
+            </p-schedule>
         </div>
         <div class="ui-g-4">
             <p-tabView styleClass="h100p p0501">
-                <p-tabPanel header="Новые совещания">
+                <p-tabPanel header="Совещания">
                     <conference-list></conference-list>
                 </p-tabPanel>
                 <p-tabPanel header="Фильтр">
