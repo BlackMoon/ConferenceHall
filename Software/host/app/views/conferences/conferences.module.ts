@@ -2,14 +2,14 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { AccordionModule, ButtonModule, DataListModule, DragDropModule, DropdownModule, ScheduleModule, SplitButtonModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
+import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceListComponent } from './conference-list.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
 
 @NgModule({
-    declarations: [ConferenceListComponent, ConferenceScheduleComponent],
-    exports: [ScheduleModule],
+    declarations: [AppointmentDialogComponent, ConferenceListComponent, ConferenceScheduleComponent],
     imports: [
         AccordionModule,
         ButtonModule,

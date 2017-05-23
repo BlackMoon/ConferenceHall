@@ -58,4 +58,8 @@ export class ConferenceScheduleComponent implements OnInit {
     eventDrop(event) {
         debugger;
     }
+
+    viewRender(event) {
+        debugger;
+    }
 }

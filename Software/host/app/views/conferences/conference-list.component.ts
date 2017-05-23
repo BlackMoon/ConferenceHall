@@ -15,6 +15,7 @@ export class ConferenceListComponent implements OnInit {
     actions: MenuItem[];
     states: MenuItem[];
 
+    selectedConferenceIds: number[] = [];
     selectedState: ConfState = ConfState.Planned;
 
     conferences: ConferenceModel[];
@@ -68,18 +69,30 @@ export class ConferenceListComponent implements OnInit {
         event.dataTransfer.setData(confDragType, JSON.stringify(conference));
     }
 
-    selectConference(conference) {
-        conference.selected = !conference.selected;
-        
-    }
-
     changeState(state: ConfState) {
         this.selectedState = state;
-       
+        
         this.conferrenceService
             .getAll(this.selectedState)
             .subscribe(
                 conferences => this.conferences = conferences,
                 error => this.logger.error(error));
+
+        this.selectedConferenceIds = [];
+    }
+
+    makeAppointment() {
+        
+    }
+
+    selectConference(conference) {
+        conference.selected = !conference.selected;
+
+        if (conference.selected)
+            this.selectedConferenceIds.push(conference.id);
+        else {
+            let ix = this.selectedConferenceIds.indexOf(conference.id);
+            this.selectedConferenceIds.splice(ix, 1);
+        }
     }
 }

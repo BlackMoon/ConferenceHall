@@ -1,4 +1,5 @@
-﻿using domain.Common.Query;
+﻿using System;
+using domain.Common.Query;
 
 namespace domain.Conference.Query
 {
@@ -11,5 +12,10 @@ namespace domain.Conference.Query
         /// Статус конференции
         /// </summary>
         public ConfState State { get; set; }
+
+        /// <summary>
+        /// Начальная дата периода
+        /// </summary>
+        public DateTime Date { get; set; }
     }
 }

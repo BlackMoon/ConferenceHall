@@ -1,6 +1,6 @@
 ﻿<p-toolbar>
     <div class="ui-toolbar-group-left">
-        <p-splitButton label="Назначить" icon="fa-calendar-times-o" (onClick)="save()" [model]="actions"></p-splitButton>
+        <p-splitButton label="Назначить" icon="fa-calendar-times-o" (onClick)="makeAppointment()" [model]="actions"></p-splitButton>
     </div>
     <div class="ui-toolbar-group-right">
         <p-dropdown [options]="states" [(ngModel)]="selectedState" (onChange)="changeState($event.value)"></p-dropdown>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace host.Controllers
 
         // GET api/conferences
         [HttpGet]
-        public Task<IEnumerable<Conference>> Get(ConfState state)
+        public Task<IEnumerable<Conference>> Get(ConfState state, DateTime date)
         {
-            FindConferencesQuery query = new FindConferencesQuery() { State = state };
+            FindConferencesQuery query = new FindConferencesQuery() { Date = date, State = state };
             return _queryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
