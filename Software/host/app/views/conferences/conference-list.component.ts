@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, Input, OnInit } from '@angular/core';
+﻿import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MenuItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
@@ -9,34 +9,23 @@ declare var $: any;
 
 @Component({
     selector: "conference-list",
-    templateUrl: 'conference-list.component.html'
+    templateUrl: "conference-list.component.html"
 })
 export class ConferenceListComponent implements OnInit {
-
-// ReSharper disable InconsistentNaming
-    private _endDate: Date;
-    private _startDate: Date;
-// ReSharper restore InconsistentNaming
-
+    
     actions: MenuItem[];
     states: any[];
+
+    @Input()
+    endDate: Date;
+
+    @Input()
+    startDate: Date;
 
     selectedConferenceIds: number[] = [];
     selectedState: ConfState = ConfState.Planned;
     
     conferences: ConferenceModel[];
-    
-    @Input()
-    set startDate(date: Date) {
-
-        this._startDate = date;
-
-        this.conferrenceService
-            .getAll(this.selectedState, this._startDate)
-            .subscribe(
-            conferences => this.conferences = conferences,
-            error => this.logger.error(error));
-    }
 
     constructor(
         private conferrenceService: ConferenceService,
@@ -57,7 +46,7 @@ export class ConferenceListComponent implements OnInit {
                 icon: 'fa-trash'
             }
         ];
-
+        
         let stateKeys = Object
             .keys(ConfState)
             .filter(k => typeof ConfState[k] !== "function");
@@ -75,26 +64,46 @@ export class ConferenceListComponent implements OnInit {
             );
     }
 
+    
+    ngOnChanges(changes: SimpleChanges) {
+        
+        let startDateChange = changes["startDate"],
+            endDateChange = changes["endDate"];
+
+        if (startDateChange.currentValue !== startDateChange.previousValue &&
+            endDateChange.currentValue !== endDateChange.previousValue) {
+
+            if (this.selectedState !== ConfState.Planned) {
+                this.conferrenceService
+                    .getAll(this.selectedState, this.startDate, this.endDate)
+                    .subscribe(
+                        conferences => this.conferences = conferences,
+                        error => this.logger.error(error));
+            }
+        }
+    }
+
     ngOnInit() {
+        
         this.conferrenceService
-            .getAll(this.selectedState, this._startDate, this._endDate)
+            .getAll(this.selectedState, this.startDate, this.endDate)
             .subscribe(
                 conferences => this.conferences = conferences,
-                error => this.logger.error(error));
+                error => this.logger.error(error)); 
     }
 
     dragStart(event, conference) {
         event.dataTransfer.setData(confDragType, JSON.stringify(conference));
     }
-
+    
     changeState(state: ConfState) {
         this.selectedState = state;
-        
+
         this.conferrenceService
-            .getAll(this.selectedState, this._startDate, this._endDate)
+            .getAll(this.selectedState, this.startDate, this.endDate)
             .subscribe(
                 conferences => this.conferences = conferences,
-                error => this.logger.error(error));
+                error => this.logger.error(error)); 
 
         this.selectedConferenceIds = [];
     }

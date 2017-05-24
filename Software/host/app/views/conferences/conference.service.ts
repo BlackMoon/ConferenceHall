@@ -20,8 +20,8 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
         // [активные, на подготовке, завершенные] совещания фильтруются по дате
         if (state !== ConfState.Planned) {
-            queryParams.push(`startDate=${startDate}`);
-            queryParams.push(`endDate=${endDate}`);
+            queryParams.push(`startDate=${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
+            queryParams.push(`endDate=${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
         }    
 
         return this.http

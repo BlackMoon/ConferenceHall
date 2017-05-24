@@ -1,17 +1,21 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
+import { ConferenceListComponent } from "./conference-list.component";
 
 @Component({
     styleUrls: [`conference-schedule.component.css`],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent implements OnInit {
-
+    
     events: any[];
     headerConfig: any;
+
+    endDate: Date;
+    startDate: Date;
 
     constructor(private conferrenceService: ConferenceService) {
 
@@ -60,6 +64,7 @@ export class ConferenceScheduleComponent implements OnInit {
     }
 
     viewRender(event) {
-        debugger;
+        this.startDate = event.view.start.toDate(),
+        this.endDate = event.view.end.toDate();
     }
 }
