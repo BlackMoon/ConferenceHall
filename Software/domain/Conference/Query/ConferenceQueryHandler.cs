@@ -33,10 +33,13 @@ namespace domain.Conference.Query
             param.Add("state", query.State.ToString());
 
             // [активные, на подготовке, завершенные] совещания фильтруются по дате
-            if (query.Date.HasValue)
+            if (query.State != ConfState.Planned)
             {
-                sqlBuilder.Where("c.date_start >= @date");
-                param.Add("date", query.Date);
+                sqlBuilder.Where("c.date_end >= @startDate");
+                sqlBuilder.Where("c.date_start <= @endDate");
+
+                param.Add("startDate", query.StartDate);
+                param.Add("endDate", query.EndDate);
             }
 
             await DbManager.OpenAsync();
