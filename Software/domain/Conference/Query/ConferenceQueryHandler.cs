@@ -29,8 +29,18 @@ namespace domain.Conference.Query
                .Where("c.state = @state::conf_state")
                .OrderBy("lower(c.subject)");
 
+            DynamicParameters param = new DynamicParameters();
+            param.Add("state", query.State.ToString());
+
+            // [активные, на подготовке, завершенные] совещания фильтруются по дате
+            if (query.Date.HasValue)
+            {
+                sqlBuilder.Where("c.date_start >= @date");
+                param.Add("date", query.Date);
+            }
+
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<Conference>(sqlBuilder.ToString(), new { state = $"{query.State}" });
+            return await DbManager.DbConnection.QueryAsync<Conference>(sqlBuilder.ToString(), param);
         }
     }
 }

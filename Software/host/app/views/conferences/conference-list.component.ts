@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, OnInit } from '@angular/core';
+﻿import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MenuItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
@@ -12,13 +12,31 @@ declare var $: any;
     templateUrl: 'conference-list.component.html'
 })
 export class ConferenceListComponent implements OnInit {
+
+// ReSharper disable InconsistentNaming
+    private _endDate: Date;
+    private _startDate: Date;
+// ReSharper restore InconsistentNaming
+
     actions: MenuItem[];
-    states: MenuItem[];
+    states: any[];
 
     selectedConferenceIds: number[] = [];
     selectedState: ConfState = ConfState.Planned;
-
+    
     conferences: ConferenceModel[];
+    
+    @Input()
+    set startDate(date: Date) {
+
+        this._startDate = date;
+
+        this.conferrenceService
+            .getAll(this.selectedState, this._startDate)
+            .subscribe(
+            conferences => this.conferences = conferences,
+            error => this.logger.error(error));
+    }
 
     constructor(
         private conferrenceService: ConferenceService,
@@ -59,7 +77,7 @@ export class ConferenceListComponent implements OnInit {
 
     ngOnInit() {
         this.conferrenceService
-            .getAll(this.selectedState)
+            .getAll(this.selectedState, this._startDate, this._endDate)
             .subscribe(
                 conferences => this.conferences = conferences,
                 error => this.logger.error(error));
@@ -73,7 +91,7 @@ export class ConferenceListComponent implements OnInit {
         this.selectedState = state;
         
         this.conferrenceService
-            .getAll(this.selectedState)
+            .getAll(this.selectedState, this._startDate, this._endDate)
             .subscribe(
                 conferences => this.conferences = conferences,
                 error => this.logger.error(error));

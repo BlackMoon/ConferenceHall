@@ -4,7 +4,7 @@ using domain.Common.Query;
 namespace domain.Conference.Query
 {
     /// <summary>
-    /// Запрос. Поиск конференция
+    /// Запрос. Поиск конференций по условиям
     /// </summary>
     public class FindConferencesQuery: GetAllQuery
     {
@@ -14,8 +14,13 @@ namespace domain.Conference.Query
         public ConfState State { get; set; }
 
         /// <summary>
+        /// Конечная дата периода
+        /// </summary>
+        public DateTime? EndDate { get; set; }
+
+        /// <summary>
         /// Начальная дата периода
         /// </summary>
-        public DateTime Date { get; set; }
+        public DateTime? StartDate { get; set; }
     }
 }
