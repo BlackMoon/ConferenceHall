@@ -1,34 +1,43 @@
-﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <appointment-dialog (closed)="appointmentDialogClosed($event)"></appointment-dialog>
-    <div class="ui-g h100p" #grid>
-        <div class="ui-g-8">
-            <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [editable]="true" [fixedWeekCount]="false"
-                        [events]="events" [height]="grid.offsetHeight - 6" [header]="headerConfig" [nowIndicator]="true"
-                        (onDrop)="drop($event)" (onEventDrop)="eventDrop($event)" (onViewRender)="viewRender($event)">
-            </p-schedule>
+﻿<div id="SITE_PAGES">
+    <div class="ui-g ui-g-nopad h750">
+        <div class="ui-xl-0 ui-lg-0 ui-g-0">
         </div>
-        <div class="ui-g-4">
-            <p-tabView styleClass="h100p p0501">
-                <p-tabPanel header="Совещания">
-                    <conference-list [startDate]="startDate" [endDate]="endDate"></conference-list>
-                </p-tabPanel>
-                <p-tabPanel header="Фильтр">
-                    <div [ngStyle]="{'height':'50%'}">
-                        <p-accordion >
-                            <p-accordionTab header="Холлы" [selected]="true">
-                                Content 1
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
-                    <div [ngStyle]="{'height':'50%'}">
-                        <p-accordion>
-                            <p-accordionTab header="Участники" [selected]="true">
-                                Content 1
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
-                </p-tabPanel>
-            </p-tabView>
+        <div class="ui-xl-12 ui-lg-12 ui-g-12">
+            <appointment-dialog></appointment-dialog>
+            
+            <div class="ui-g h100p" #grid>
+                <div class="ui-g-8">
+                    <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [editable]="true" [fixedWeekCount]="false"
+                                [events]="events" [height]="grid.offsetHeight - 6" [header]="headerConfig" [nowIndicator]="true"
+                                (onDrop)="drop($event)" (onEventDrop)="eventDrop($event)" (onViewRender)="viewRender($event)">
+                    </p-schedule>
+                </div>
+                <div class="ui-g-4">
+                    <p-tabView styleClass="h100p p0501">
+                        <p-tabPanel header="Совещания">
+                            <conference-list [startDate]="startDate" [endDate]="endDate"></conference-list>
+                        </p-tabPanel>
+                        <p-tabPanel header="Фильтр">
+                            <div [ngStyle]="{'height':'50%'}">
+                                <p-accordion>
+                                    <p-accordionTab header="Холлы" [selected]="true">
+                                        Content 1
+                                    </p-accordionTab>
+                                </p-accordion>
+                            </div>
+                            <div [ngStyle]="{'height':'50%'}">
+                                <p-accordion>
+                                    <p-accordionTab header="Участники" [selected]="true">
+                                        Content 1
+                                    </p-accordionTab>
+                                </p-accordion>
+                            </div>
+                        </p-tabPanel>
+                    </p-tabView>
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="ui-xl-0 ui-lg-0 ui-g-0">
     </div>
 </div>
