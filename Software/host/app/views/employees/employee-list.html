@@ -1,35 +1,43 @@
-﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <p-dataTable  [value]="employees" [lazy]="true" [rows]="10" [paginator]="true" 
-             (onLazyLoad)="loadEmployeeLazy($event)">
-        <p-header>
-            Employees
-        </p-header>
-        <p-column field="name" header="ФИО"></p-column>
-        <p-column field="job_title" header="Должность"></p-column>
-        <p-column field="emails_list" header="email"></p-column>
-        <p-column field="phones_list" header="Телефоны"></p-column>
-        name: string;
-        description?: string;
-        job_title: string;
-        emails_list: string[];
-        phones_list
-        <ng-template let-employee pTemplate="item">
-            <div style="padding:3px" class="ui-g-8 ui-md-2">
-                <p-panel [style]="{'text-align':'center'}">
-                    <p-header>
-                        <div class="employee-header">
-                            {{employee.name }}
-                            <i *ngIf="employee.id" class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" (click)="removeEmployee(employee.id)"> </i>
-                        </div>
+﻿<div id="SITE_PAGES">
+    <div class="ui-g ui-g-nopad h750">
+        <div class="ui-xl-2 ui-lg-1 ui-g-0">
+        </div>
+        <div class="ui-xl-8 ui-lg-10 ui-g-12">
+            <p-dataTable [value]="employees" [lazy]="true" [rows]="10" [paginator]="true"
+                         (onLazyLoad)="loadEmployeeLazy($event)">
+                <p-header>
+                    Employees
+                </p-header>
+                <p-column field="name" header="ФИО"></p-column>
+                <p-column field="job_title" header="Должность"></p-column>
+                <p-column field="emails_list" header="email"></p-column>
+                <p-column field="phones_list" header="Телефоны"></p-column>
+                name: string;
+                description?: string;
+                job_title: string;
+                emails_list: string[];
+                phones_list
+                <ng-template let-employee pTemplate="item">
+                    <div style="padding:3px" class="ui-xl-3 ui-lg-3 ui-g-12">
+                        <p-panel [style]="{'text-align':'center'}">
+                            <p-header>
+                                <div class="employee-header">
+                                    {{employee.name }}
+                                    <i *ngIf="employee.id" class="fa fa-trash ui-panel-titlebar-remove" [ngStyle]="{'cursor':'pointer'}" (click)="removeEmployee(employee.id)"> </i>
+                                </div>
 
-                    </p-header>
+                            </p-header>
 
-                    <img src="/assets/office_64x64.png">
-                    <div class="employee-detail"> {{employee.description }}</div>
-                    <i> {{employee.size ? employee.size.area() : '&nbsp;' }}</i>
+                            <img src="/assets/office_64x64.png">
+                            <div class="employee-detail"> {{employee.description }}</div>
+                            <i> {{employee.size ? employee.size.area() : '&nbsp;' }}</i>
 
-                </p-panel>
-            </div>
-        </ng-template>
-    </p-dataTable>
+                        </p-panel>
+                    </div>
+                </ng-template>
+            </p-dataTable>
+        </div>
+    </div>
+    <div class="ui-xl-2 ui-lg-1 ui-g-0">
+    </div>
 </div>

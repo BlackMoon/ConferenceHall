@@ -1,30 +1,23 @@
-﻿import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
-import { Mediator } from "../../common/mediator";
-import { AppointmentDialogComponent } from "./appointment-dialog.component";
 import { ConferenceModel, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
-    styles: [`.p0501 .ui-tabview-panel { padding: 0.5em 0.1em; }`],
+    styleUrls: [`conference-schedule.component.css`],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent implements OnInit {
-
-    @ViewChild(AppointmentDialogComponent) appointmentDialog: AppointmentDialogComponent;
-
+    
     events: any[];
     headerConfig: any;
 
     endDate: Date;
     startDate: Date;
 
-    constructor(
-        private conferrenceService: ConferenceService,
-        private mediator: Mediator) {
+    constructor(private conferrenceService: ConferenceService) {
 
         this.headerConfig = {
             left: 'prev,next today',
@@ -32,9 +25,6 @@ export class ConferenceScheduleComponent implements OnInit {
             right: 'month,agendaWeek,agendaDay,listWeek'
         };
 
-        this.mediator
-            .on<number[]>("conferenceList_makeAppointment")
-            .subscribe(_ => this.appointmentDialog.show());
     }
 
     ngOnInit() {
@@ -62,13 +52,6 @@ export class ConferenceScheduleComponent implements OnInit {
                 "end": "2017-05-13"
             }
         ];
-    }
-
-    appointmentDialogClosed(result) {
-        debugger;
-        if (result) {
-            
-        }
     }
 
     drop(date, event) {
