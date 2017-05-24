@@ -20,9 +20,9 @@ namespace host.Controllers
 
         // GET api/conferences
         [HttpGet]
-        public Task<IEnumerable<Conference>> Get(ConfState state, DateTime? startDate)
+        public Task<IEnumerable<Conference>> Get(ConfState state, DateTime? startDate, DateTime? endDate)
         {
-            FindConferencesQuery query = new FindConferencesQuery() { Date = startDate, State = state };
+            FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state };
             return _queryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
