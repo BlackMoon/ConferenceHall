@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
@@ -8,7 +8,8 @@ import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
 
 @Component({
-    styleUrls: [`conference-schedule.component.css`],
+    encapsulation: ViewEncapsulation.None,
+    styles: [`.p0501 .ui-tabview-panel { padding: 0.5em 0.1em; }`],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent implements OnInit {

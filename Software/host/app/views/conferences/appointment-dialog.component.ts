@@ -1,10 +1,11 @@
-﻿import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
+﻿import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } from '@angular/core';
 import { Logger } from "../../common/logger";
 import { HallService } from '../halls/hall.service';
 
 @Component({
     selector: "appointment-dialog",
-    styleUrls: ["appointment-dialog.component.css"],
+    encapsulation: ViewEncapsulation.None,
+    styles: [`.ui-datepicker.ui-datepicker-inline { width: 100% }`],
     template: `<p-dialog header="Назначить на" [(visible)]="visible" modal="modal" minHeight="320" minWidth="300" dismissableMask="true" [responsive]="true" (onHide)="onHide()">                
                 <div class="ui-g">                    
                     <div class="ui-g-12" style="padding: .5em 0">                        
