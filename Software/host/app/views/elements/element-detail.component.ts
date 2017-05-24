@@ -60,7 +60,7 @@ export class ElementDetailComponent implements OnInit {
     }
 
     save(event, element) {
-        debugger;
+        
         event.preventDefault();
         
         (this.fileUpload.files.length > 0) && (element.image = this.fileUpload.files[0]);

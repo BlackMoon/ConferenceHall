@@ -4,33 +4,38 @@ using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Conference;
+using domain.Conference.Command;
 using domain.Conference.Query;
+using Kit.Core.CQRS.Command;
 
 namespace host.Controllers
 {
     [Route("api/[controller]")]
-    public class ConferencesController : Controller
+    public class ConferencesController : CqrsController
     {
-        private readonly IQueryDispatcher _queryDispatcher;
-
-        public ConferencesController(IQueryDispatcher queryDispatcher)
+        // GET api/conferences
+        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
-            _queryDispatcher = queryDispatcher;
         }
 
-        // GET api/conferences
         [HttpGet]
         public Task<IEnumerable<Conference>> Get(ConfState state, DateTime? startDate, DateTime? endDate)
         {
             FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state };
-            return _queryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
+            return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
         // GET api/conferences/5
         [HttpGet("{id}")]
         public Task<Conference> Get(int id)
         {
-            return _queryDispatcher.DispatchAsync<FindConferenceByIdQuery, Conference>(new FindConferenceByIdQuery() { Id = id });
+            return QueryDispatcher.DispatchAsync<FindConferenceByIdQuery, Conference>(new FindConferenceByIdQuery() { Id = id });
+        }
+
+        [HttpPost("/api/appointment")]
+        public Task MakeAppoontment([FromBody] MakeAppointmentCommand value)
+        {
+            return CommandDispatcher.DispatchAsync(value);
         }
 
         // POST api/conferences

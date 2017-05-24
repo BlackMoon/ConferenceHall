@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
-import { ConferenceModel, confDragType } from '../../models';
+import { AppointmentModel, ConferenceModel, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
 
@@ -21,11 +21,12 @@ export class ConferenceScheduleComponent implements OnInit {
 
     endDate: Date;
     startDate: Date;
-
+    
     selectedConferences: ConferenceModel[];
 
     constructor(
         private conferrenceService: ConferenceService,
+        private logger: Logger,
         private mediator: Mediator) {
 
         this.headerConfig = {
@@ -37,7 +38,8 @@ export class ConferenceScheduleComponent implements OnInit {
         this.mediator
             .on<ConferenceModel[]>("conferenceList_makeAppointment")
             .subscribe(conferences => {
-                this.appointmentDialog.show();
+                // conferences.length всегда > 0 !
+                this.appointmentDialog.show(<any>{ hallId: conferences[0].hallId, start: new Date() });
                 this.selectedConferences = conferences;
             });
     }
@@ -69,10 +71,28 @@ export class ConferenceScheduleComponent implements OnInit {
         ];
     }
 
-    appointmentDialogClosed(result) {
+    appointmentDialogClosed(appointment: AppointmentModel) {
         
-        if (result) {
-            debugger;        
+        if (appointment) {
+           
+            appointment.ids = this.selectedConferences.map(c => c.id);
+
+            this.conferrenceService
+                .makeAppointment(appointment)
+                .subscribe(
+                    _ => {
+                        for (let c of this.selectedConferences)
+                        {
+                            this.events.push(
+                            {
+                                title: c.subject,
+                                start: appointment.start,
+                                end: appointment.start.setDate(appointment.start.getDate())
+                            });
+                        }
+                    },
+                    error => this.logger.error(error)
+            );
         }
     }
 

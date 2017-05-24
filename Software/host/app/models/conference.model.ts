@@ -37,6 +37,7 @@ export namespace ConfState {
 export class ConferenceModel extends KeyModel implements ISelected {
 
     description: string;
+    hallId: number;
     selected: boolean;
     state: ConfState;
     subject: string;
@@ -45,7 +46,21 @@ export class ConferenceModel extends KeyModel implements ISelected {
         super();
 
         this.description = null;
+        this.hallId = null;
         this.state = ConfState.Planned;
         this.subject = null;
     }
+}
+
+/**
+ * Модель. Назначение конференции
+ */
+export class AppointmentModel {
+
+    start: Date;
+    hallId: number;
+    /**
+     * список id конференций для назначения
+     */
+    ids: number[];
 }

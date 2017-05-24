@@ -21,6 +21,7 @@ import { ConferenceService } from './conference.service';
         DragDropModule,
         DropdownModule,
         FormsModule,
+        ReactiveFormsModule,
         ScheduleModule,
         SplitButtonModule,
         TabViewModule,

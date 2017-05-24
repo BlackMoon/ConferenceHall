@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { ConferenceModel, ConfState } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -30,6 +30,13 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))
             )
+            .catch(handleResponseError);
+    }
+
+    makeAppointment(a: AppointmentModel) : Observable<any> {
+
+        return this.http
+            .post('/api/appointment', a)
             .catch(handleResponseError);
     }
 }
