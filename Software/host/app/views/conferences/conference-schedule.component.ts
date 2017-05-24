@@ -32,7 +32,7 @@ export class ConferenceScheduleComponent implements OnInit {
         };
 
         this.mediator
-            .on("conferenceList_makeAppointment")
+            .on<number[]>("conferenceList_makeAppointment")
             .subscribe(_ => this.appointmentDialog.show());
     }
 

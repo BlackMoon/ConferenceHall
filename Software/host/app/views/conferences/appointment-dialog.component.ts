@@ -4,18 +4,15 @@ import { HallService } from '../halls/hall.service';
 
 @Component({
     selector: "appointment-dialog",
-    template: `<p-dialog header="Назначить на" [(visible)]="visible" modal="modal" width="300" dismissableMask="true" [responsive]="true" (onHide)="onHide()">                
-                <div class="ui-grid ui-grid-responsive ui-grid-pad">                    
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p-calendar [inline]="true"></p-calendar>
-                        </div>
+    styleUrls: ["appointment-dialog.component.css"],
+    template: `<p-dialog header="Назначить на" [(visible)]="visible" modal="modal" minHeight="320" minWidth="300" dismissableMask="true" [responsive]="true" (onHide)="onHide()">                
+                <div class="ui-g">                    
+                    <div class="ui-g-12" style="padding: .5em 0">                        
+                        <p-dropdown [options]="halls" placeholder="Выберите холл" [style]="{'width':'100%'}"></p-dropdown>                        
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-12">
-                            <p-dropdown [options]="halls"></p-dropdown>
-                        </div>
-                    </div>
+                    <div class="ui-g-12 ui-g-nopad">                        
+                        <p-calendar [inline]="true" [style]="{'width':'100%'}"></p-calendar>                        
+                    </div>                    
                 </div>
                 <p-footer>
                     <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
