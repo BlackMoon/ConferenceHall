@@ -1,7 +1,5 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    
-    <appointment-dialog></appointment-dialog>
-
+    <appointment-dialog (closed)="appointmentDialogClosed($event)"></appointment-dialog>
     <div class="ui-g h100p" #grid>
         <div class="ui-g-8">
             <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [editable]="true" [fixedWeekCount]="false"

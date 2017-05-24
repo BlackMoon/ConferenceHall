@@ -1,7 +1,8 @@
-﻿import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+﻿import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MenuItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
+import { Mediator } from "../../common/mediator";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
 
@@ -11,7 +12,7 @@ declare var $: any;
     selector: "conference-list",
     templateUrl: "conference-list.component.html"
 })
-export class ConferenceListComponent implements OnInit {
+export class ConferenceListComponent implements OnInit, OnChanges {
     
     actions: MenuItem[];
     states: any[];
@@ -29,8 +30,8 @@ export class ConferenceListComponent implements OnInit {
 
     constructor(
         private conferrenceService: ConferenceService,
-        private el: ElementRef,
-        private logger: Logger) {
+        private logger: Logger,
+        private mediator: Mediator) {
 
         this.actions = [
             {
@@ -108,9 +109,7 @@ export class ConferenceListComponent implements OnInit {
         this.selectedConferenceIds = [];
     }
 
-    makeAppointment() {
-        
-    }
+    makeAppointment = () => this.mediator.broadcast("conferenceList_makeAppointment", this.selectedConferenceIds);    
 
     selectConference(conference) {
         conference.selected = !conference.selected;

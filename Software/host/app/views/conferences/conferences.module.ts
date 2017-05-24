@@ -1,7 +1,7 @@
 ﻿import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { AccordionModule, ButtonModule, DataListModule, DialogModule, DragDropModule, DropdownModule, ScheduleModule, SplitButtonModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
+import { AccordionModule, ButtonModule, CalendarModule, DataListModule, DialogModule, DragDropModule, DropdownModule, ScheduleModule, SplitButtonModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
 import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceListComponent } from './conference-list.component';
@@ -13,6 +13,7 @@ import { ConferenceService } from './conference.service';
     imports: [
         AccordionModule,
         ButtonModule,
+        CalendarModule,
         CommonModule,
         ConferenceRoutingModule,
         DataListModule,
