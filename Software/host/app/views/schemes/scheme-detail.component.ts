@@ -3,8 +3,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
     template: `
-    <div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    
         <div class="ui-g h100p">
             <div class="ui-g-2 ui-md-2 ui-widget-content ui-g-nopad">
                 <scheme-toolbox></scheme-toolbox>
@@ -13,8 +11,7 @@ import { ActivatedRoute, Params } from '@angular/router';
                 <scheme-main [schemeid]="id"></scheme-main>
             </div>
         </div>
-
-    </div>`
+    `
 })
 export class SchemeDetailComponent implements OnInit {
 
