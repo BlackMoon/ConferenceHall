@@ -22,6 +22,8 @@ export class ConferenceScheduleComponent implements OnInit {
     endDate: Date;
     startDate: Date;
 
+    selectedConferences: ConferenceModel[];
+
     constructor(
         private conferrenceService: ConferenceService,
         private mediator: Mediator) {
@@ -33,8 +35,11 @@ export class ConferenceScheduleComponent implements OnInit {
         };
 
         this.mediator
-            .on<number[]>("conferenceList_makeAppointment")
-            .subscribe(_ => this.appointmentDialog.show());
+            .on<ConferenceModel[]>("conferenceList_makeAppointment")
+            .subscribe(conferences => {
+                this.appointmentDialog.show();
+                this.selectedConferences = conferences;
+            });
     }
 
     ngOnInit() {
@@ -65,9 +70,9 @@ export class ConferenceScheduleComponent implements OnInit {
     }
 
     appointmentDialogClosed(result) {
-        debugger;
+        
         if (result) {
-            
+            debugger;        
         }
     }
 
