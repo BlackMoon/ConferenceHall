@@ -4,12 +4,13 @@ import { NgModule } from '@angular/core';
 import { AccordionModule, ButtonModule, CalendarModule, DataListModule, DialogModule, DragDropModule, DropdownModule, ScheduleModule, SplitButtonModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
 import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { ConferenceRoutingModule } from './conferences-routing.module';
+import { ConferenceDetailComponent } from './conference-detail.component';
 import { ConferenceListComponent } from './conference-list.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
 
 @NgModule({
-    declarations: [AppointmentDialogComponent, ConferenceListComponent, ConferenceScheduleComponent],
+    declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent],
     imports: [
         AccordionModule,
         ButtonModule,

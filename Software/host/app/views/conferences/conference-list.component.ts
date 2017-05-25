@@ -1,4 +1,5 @@
 ﻿import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MenuItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
@@ -28,19 +29,26 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     
     conferences: ConferenceModel[];
 
+    get checkBoxVisible(): boolean {
+        return this.selectedState === ConfState.Planned;
+    }
+
     constructor(
         private conferrenceService: ConferenceService,
         private logger: Logger,
-        private mediator: Mediator) {
+        private mediator: Mediator,
+        private router: Router) {
 
         this.actions = [
             {
                 label: 'Добавить',
-                icon: 'fa-plus'
+                icon: 'fa-plus',
+                routerLink: ['conferences/new']
             },
             {
                 label: 'Изменить',
-                icon: 'fa-pencil'
+                icon: 'fa-pencil',
+                command: () => this.router.navigate(['conferences', this.selectedConferenceIds[0]])
             },
             {
                 label: 'Удалить',

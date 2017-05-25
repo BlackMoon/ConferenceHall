@@ -8,7 +8,7 @@ import { HallService } from '../halls/hall.service';
     selector: "appointment-dialog",
     encapsulation: ViewEncapsulation.None,
     styles: [`.ui-datepicker.ui-datepicker-inline { width: 100% }`],
-    template: `<p-dialog header="Назначить на" [(visible)]="visible" modal="modal" minHeight="320" minWidth="300" width="400" dismissableMask="true" [responsive]="true" (onHide)="onHide()">                
+    template: `<p-dialog header="Назначить" [(visible)]="visible" modal="modal" minHeight="320" minWidth="300" width="400" dismissableMask="true" [responsive]="true" (onHide)="onHide()">                
                 <form [formGroup]="appointmentForm" (ngSubmit)="save($event, appointmentForm.value)">
                     <div class="ui-g">                    
                         <div class="ui-g-12" style="padding: .5em 0">                        
