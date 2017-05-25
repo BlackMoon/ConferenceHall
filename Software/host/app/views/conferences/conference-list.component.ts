@@ -142,8 +142,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
         if (this.selectedConferenceId) {
 
             this.mediator.broadcast("conferenceList_makeAppointment",
-                this.conferences
-                    .filter(c => c.id === this.selectedConferenceId));
+                this.conferences.find(c => c.id === this.selectedConferenceId));
         }
     }
 

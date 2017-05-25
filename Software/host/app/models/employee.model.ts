@@ -1,6 +1,4 @@
-﻿
-
-import { KeyModel } from './index';
+﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
 
 /**
@@ -16,9 +14,9 @@ export class EmployeeSchemeModel extends KeyModel {
 export class EmployeeModel extends KeyModel {
 
     name: string;
-    job_title: string;
-    emails_list: string[];
-    phones_list: string[];
+    jobTitle: string;
+    emailsList: string[];
+    phonesList: string[];
 
     @JsonProperty({ clazz: EmployeeSchemeModel })
     schemes?: EmployeeSchemeModel[];
@@ -26,9 +24,9 @@ export class EmployeeModel extends KeyModel {
 
         super();
         this.name = undefined;
-        this.job_title = undefined;
-        this.emails_list = undefined;
-        this.phones_list = undefined;
+        this.jobTitle = undefined;
+        this.emailsList = undefined;
+        this.phonesList = undefined;
         this.schemes = undefined;
     }
 }

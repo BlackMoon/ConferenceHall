@@ -81,21 +81,19 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
 
     appointmentDialogClosed(appointment: AppointmentModel) {
         
-        if (appointment) {
-
-            //this.selectedConference.dateStart = appointment.start;
-            //this.selectedConference.dateEnd = new Date(appointment.start.getTime() + appointment.duration.getTime());
-            this.selectedConference.hallId = appointment.hallId;
+        if (appointment != null) {
+            appointment.conferenceId = this.selectedConference.id;
 
             this.conferrenceService
-                .makeAppointment(this.selectedConference)
+                .makeAppointment(appointment)
                 .subscribe(
-                    (range:TimeRange) => {
+                    (period:TimeRange) => {
                             this.events.push(
                             {
+                                id: this.selectedConference.id,
                                 title: this.selectedConference.subject,
-                                start: range.dateStart,
-                                end: range.dateEnd
+                                start: period.lowerBound,
+                                end: period.upperBound
                             });
                         
                     },

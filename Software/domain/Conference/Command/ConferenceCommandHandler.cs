@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
-using domain.Common;
 using domain.Common.Command;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
@@ -31,10 +30,10 @@ namespace domain.Conference.Command
             DbManager.AddParameter("pconference_id", command.ConferenceId);
             DbManager.AddParameter("phall_id", command.HallId);
 
-            IDataParameter pDateStart = DbManager.AddParameter("pdate_start", command.DateStart);
+            IDataParameter pDateStart = DbManager.AddParameter("pdate_start", command.Start);
             pDateStart.Direction = ParameterDirection.InputOutput;
 
-            IDataParameter pDateEnd = DbManager.AddParameter("pdate_end", command.DateEnd);
+            IDataParameter pDateEnd = DbManager.AddParameter("pdate_end", command.Start.Add(command.Duration));
             pDateEnd.Direction = ParameterDirection.InputOutput;
 
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conference_aprovement_make");

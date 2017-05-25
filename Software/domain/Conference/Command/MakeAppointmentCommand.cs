@@ -21,11 +21,11 @@ namespace domain.Conference.Command
         /// <summary>
         /// Дата начала
         /// </summary>
-        public DateTime DateStart { get; set; }
+        public DateTime Start { get; set; }
 
         /// <summary>
-        /// Дата окончания
+        /// Длительность
         /// </summary>
-        public DateTime DateEnd { get; set; }
+        public TimeSpan Duration { get; set; }
     }
 }

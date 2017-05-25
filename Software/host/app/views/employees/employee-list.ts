@@ -14,7 +14,7 @@ import { Logger } from "../../common/logger";
 })
 export class EmployeeListComponent implements OnInit {
 
-    employees: EmployeeModel[] = [{ name: 'Имя клиента', job_title: 'Разработчик', emails_list:[], phones_list:[] }];
+    employees: EmployeeModel[] = [{ name: 'Имя клиента', jobTitle: 'Разработчик', emailsList:[], phonesList:[] }];
 
     constructor(
         private confirmationService: ConfirmationService,

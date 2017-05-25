@@ -1,4 +1,14 @@
 ﻿/**
+ * Интервал
+ */
+export class Range<T> {
+    lowerBound: T;
+    upperBound: T;
+}
+
+export type TimeRange = Range<Date>;
+
+/**
  * Интерфейс selected объекта
  */
 export interface ISelected {
@@ -14,12 +24,4 @@ export class KeyModel {
     constructor() {
         this.id = undefined;
     }
-}
-
-/**
- * Временной период
- */
-export class TimeRange {
-    dateStart: Date;
-    dateEnd: Date;
 }

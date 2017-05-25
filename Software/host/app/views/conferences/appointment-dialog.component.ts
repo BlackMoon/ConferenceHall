@@ -30,7 +30,7 @@ export class AppointmentDialogComponent implements OnInit {
     ngOnInit() {
 
         this.appointmentForm = this.fb.group({
-            hallid: [null],
+            hallId: [null],
             duration: [new Date(0, 0, 0, 1)],       // 1 hour
             start: [null]
         });
@@ -47,7 +47,10 @@ export class AppointmentDialogComponent implements OnInit {
     }
 
     save(event, appointment) {
-        
+
+        let duration:Date = appointment.duration;
+        appointment.duration = `${duration.getHours()}:${duration.getMinutes()}:00`;
+
         this.closed.emit(appointment);
         this.visible = false;
     }
@@ -56,7 +59,7 @@ export class AppointmentDialogComponent implements OnInit {
      * @param hallid
      */
     show(a: AppointmentModel) {
-        this.appointmentForm.patchValue({ hallid: a.hallId, start: a.start });
+        this.appointmentForm.patchValue({ hallId: a.hallId, start: a.start });
         this.visible = true;
     }
 }

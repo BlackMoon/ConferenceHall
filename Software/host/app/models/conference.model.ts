@@ -1,4 +1,5 @@
-﻿import { ISelected, KeyModel } from './index';
+﻿import { ISelected, KeyModel, TimeRange } from './index';
+import { JsonProperty } from '../common/map-utils';
 
 export const confDragType = "conference";
 
@@ -38,7 +39,7 @@ export class ConferenceModel extends KeyModel implements ISelected {
     
     description: string;
     hallId: number;
-    period: any;
+    period: TimeRange;
     selected: boolean;
     state: ConfState;
     subject: string;
@@ -48,6 +49,7 @@ export class ConferenceModel extends KeyModel implements ISelected {
 
         this.description = null;
         this.hallId = null;
+        this.period = null;
         this.state = ConfState.Planned;
         this.subject = null;
     }
@@ -58,11 +60,17 @@ export class ConferenceModel extends KeyModel implements ISelected {
  */
 export class AppointmentModel {
 
-    duration: Date;
-    start: Date;
-    hallId: number;
     /**
-     * список id конференций для назначения
+     * длительность в формате HH:mm:ss
      */
-    ids: number[];
+    duration: string;
+
+    start: Date;
+
+    hallId: number;
+
+    /**
+     * id конференции
+     */
+    conferenceId: number;
 }

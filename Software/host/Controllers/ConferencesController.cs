@@ -35,7 +35,7 @@ namespace host.Controllers
         }
 
         [HttpPost("/api/appointment")]
-        public Task<TimeRange> MakeAppointment([FromBody] MakeAppointmentCommand value)
+        public Task<TimeRange> MakeAppointment([FromBody]MakeAppointmentCommand value)
         {
             return CommandDispatcher.DispatchAsync<MakeAppointmentCommand, TimeRange>(value);
         }
