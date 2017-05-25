@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using domain.Conference.Command;
 using domain.Element.Command;
 using domain.Hall.Command;
 using domain.Scheme.Command;

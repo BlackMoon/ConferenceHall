@@ -5,6 +5,7 @@ using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
+using Microsoft.Extensions.Logging;
 
 namespace domain.Hall.Command
 {
@@ -12,7 +13,7 @@ namespace domain.Hall.Command
         ICommandHandlerWithResult<CreateHallCommand, int>,
         ICommandHandlerWithResult<DeleteHallCommand, bool>
     {
-        public HallCommandHandler(IDbManager dbManager) : base(dbManager)
+        public HallCommandHandler(IDbManager dbManager, ILogger<HallCommandHandler> logger) : base(dbManager, logger)
         {
         }
 

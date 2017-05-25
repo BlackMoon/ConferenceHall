@@ -1,6 +1,6 @@
 ﻿<p-toolbar>
     <div class="ui-toolbar-group-left">
-        <p-splitButton label="Назначить" icon="fa-calendar-times-o" (onClick)="makeAppointment()" [model]="actions"></p-splitButton>
+        <p-splitButton [label]="actionLabel" [icon]="actionIcon" (onClick)="actionClick()" [model]="actions"></p-splitButton>
     </div>
     <div class="ui-toolbar-group-right">
         <p-dropdown [options]="states" [(ngModel)]="selectedState" (onChange)="changeState($event.value)"></p-dropdown>
@@ -11,7 +11,7 @@
         <div class="ui-grid ui-grid-responsive ui-widget-content">
             <div pDraggable="dd_conf" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event, conference)">
                 <div class="ui-grid-col-2" >
-                    <i class="fa fa-2x {{conference.selected ? 'fa-check-square-o' : 'fa-square-o'}}" *ngIf="checkBoxVisible" (click)="selectConference(conference)"></i>                    
+                    <i class="fa fa-2x {{conference.selected ? 'fa-check-square-o' : 'fa-square-o'}}" (click)="selectConference(conference)"></i>                    
                 </div>
                 <div class="ui-grid-col-11">
                     <div>{{conference.subject}}</div>

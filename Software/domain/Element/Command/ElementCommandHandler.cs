@@ -29,12 +29,11 @@ namespace domain.Element.Command
         private const int MaxW = 1024;
 
         private readonly ICacheManager<Element> _cacheManager;
-        private readonly ILogger<ElementCommandHandler> _logger;
+       
 
-        public ElementCommandHandler(IDbManager dbManager, ICacheManager<Element> cacheManager, ILogger<ElementCommandHandler> logger) : base(dbManager)
+        public ElementCommandHandler(IDbManager dbManager, ILogger<ElementCommandHandler> logger, ICacheManager<Element> cacheManager) : base(dbManager, logger)
         {
             _cacheManager = cacheManager;
-            _logger = logger;
         }
 
         /// <summary>
@@ -119,7 +118,7 @@ namespace domain.Element.Command
             DbManager.AddParameter("puser_id", command.UserId);
 
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_favorites_add");
-            _logger.LogInformation($"Modified {returnValue} records");
+            Logger.LogInformation($"Modified {returnValue} records");
         }
 
         public int Execute(CreateElementCommand command)
@@ -141,7 +140,7 @@ namespace domain.Element.Command
             DbManager.AddParameter("puser_id", command.UserId);
 
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_user_add");
-            _logger.LogInformation($"Modified {returnValue} records");
+            Logger.LogInformation($"Modified {returnValue} records");
 
             return newId;
         }
@@ -158,7 +157,7 @@ namespace domain.Element.Command
             DbManager.AddParameter("puser_id", command.UserId);
            
             int deleted = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "scheme_element_location_del");
-            _logger.LogInformation($"Modified {deleted} records");
+            Logger.LogInformation($"Modified {deleted} records");
 
             // clear cache
             foreach (int id in command.Ids)

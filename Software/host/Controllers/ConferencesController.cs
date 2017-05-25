@@ -8,6 +8,8 @@ using domain.Conference.Command;
 using domain.Conference.Query;
 using Kit.Core.CQRS.Command;
 
+using TimeRange = domain.Common.Range<System.DateTime>;
+
 namespace host.Controllers
 {
     [Route("api/[controller]")]
@@ -33,9 +35,9 @@ namespace host.Controllers
         }
 
         [HttpPost("/api/appointment")]
-        public Task MakeAppoontment([FromBody] MakeAppointmentCommand value)
+        public Task<TimeRange> MakeAppointment([FromBody] MakeAppointmentCommand value)
         {
-            return CommandDispatcher.DispatchAsync(value);
+            return CommandDispatcher.DispatchAsync<MakeAppointmentCommand, TimeRange>(value);
         }
 
         // POST api/conferences

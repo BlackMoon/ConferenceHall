@@ -26,6 +26,8 @@ namespace domain.Conference.Query
                .Column("c.id")
                .Column("c.subject")
                .Column("c.description")
+               .Column("c.hall_id hallid")
+               .Column("c.period")
                .Where("c.state = @state::conf_state")
                .OrderBy("lower(c.subject)");
 
@@ -35,8 +37,7 @@ namespace domain.Conference.Query
             // [активные, на подготовке, завершенные] совещания фильтруются по дате
             if (query.State != ConfState.Planned)
             {
-                sqlBuilder.Where("c.date_end >= @startDate");
-                sqlBuilder.Where("c.date_start <= @endDate");
+                sqlBuilder.Where("c.period && tsrange(@startDate, @endDate, '[]')");
 
                 param.Add("startDate", query.StartDate);
                 param.Add("endDate", query.EndDate);

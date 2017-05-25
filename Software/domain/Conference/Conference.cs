@@ -1,6 +1,7 @@
 ﻿using System;
 using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
+using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
 
 namespace domain.Conference
@@ -32,18 +33,18 @@ namespace domain.Conference
     };
 
     [Table("conf_hall.conferences")]
-    public class Conference : KeyObject
+    public class Conference : KeyObject, ICommand
     {
+        [Column("hall_id")]
+        public int HallId { get; set; }
+
         public string Subject { get; set; }
      
         public string Description { get; set; }
 
-        [Column("date_start")]
-        public DateTime? DateStart { get; set; }
+        [JsonConverter(typeof(NpgsqlRangeConverter))]
+        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
 
-        [Column("date_end")]
-        public DateTime? DateEnd { get; set; }
-        
         public ConfState ConfState { get; set; }
 
         [Column("state")]

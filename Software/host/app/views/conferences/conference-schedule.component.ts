@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
-import { AppointmentModel, ConferenceModel, confDragType } from '../../models';
+import { AppointmentModel, ConferenceModel, confDragType, TimeRange } from '../../models';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
 
@@ -22,7 +22,7 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
     endDate: Date;
     startDate: Date;
     
-    selectedConferences: ConferenceModel[];
+    selectedConference: ConferenceModel;
 
     private subscription: Subscription = new Subscription();
 
@@ -39,11 +39,11 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
 
         this.subscription.add(
             mediator
-                .on<ConferenceModel[]>("conferenceList_makeAppointment")
-                .subscribe(conferences => {
+                .on<ConferenceModel>("conferenceList_makeAppointment")
+                .subscribe(conf => {
                     // conferences.length всегда > 0 !
-                    this.appointmentDialog.show(<any>{ hallId: conferences[0].hallId, start: new Date() });
-                    this.selectedConferences = conferences;
+                    this.appointmentDialog.show(<any>{ hallId: conf.hallId, start: new Date() });
+                    this.selectedConference = conf;
                 })
         );
     }
@@ -82,22 +82,22 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
     appointmentDialogClosed(appointment: AppointmentModel) {
         
         if (appointment) {
-           
-            appointment.ids = this.selectedConferences.map(c => c.id);
+
+            //this.selectedConference.dateStart = appointment.start;
+            //this.selectedConference.dateEnd = new Date(appointment.start.getTime() + appointment.duration.getTime());
+            this.selectedConference.hallId = appointment.hallId;
 
             this.conferrenceService
-                .makeAppointment(appointment)
+                .makeAppointment(this.selectedConference)
                 .subscribe(
-                    _ => {
-                        for (let c of this.selectedConferences)
-                        {
+                    (range:TimeRange) => {
                             this.events.push(
                             {
-                                title: c.subject,
-                                start: appointment.start,
-                                end: appointment.start.setDate(appointment.start.getDate())
+                                title: this.selectedConference.subject,
+                                start: range.dateStart,
+                                end: range.dateEnd
                             });
-                        }
+                        
                     },
                     error => this.logger.error(error)
             );

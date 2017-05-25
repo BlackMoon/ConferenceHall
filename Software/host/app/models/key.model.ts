@@ -15,3 +15,11 @@ export class KeyModel {
         this.id = undefined;
     }
 }
+
+/**
+ * Временной период
+ */
+export class TimeRange {
+    dateStart: Date;
+    dateEnd: Date;
+}

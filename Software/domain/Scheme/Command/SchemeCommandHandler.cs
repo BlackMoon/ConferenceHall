@@ -16,11 +16,9 @@ namespace domain.Scheme.Command
         ICommandHandlerWithResult<CreateSchemeCommand, int>, 
         ICommandHandlerWithResult<DeleteSchemeCommand, bool>
     {
-        private readonly ILogger<SchemeCommandHandler> _logger;
-
-        public SchemeCommandHandler(IDbManager dbManager, ILogger<SchemeCommandHandler> logger) : base(dbManager)
+        public SchemeCommandHandler(IDbManager dbManager, ILogger<SchemeCommandHandler> logger) : base(dbManager, logger)
         {
-            _logger = logger;
+         
         }
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace domain.Scheme.Command
             pName.Direction = ParameterDirection.Output;
             
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "hall_scheme_copy");
-            _logger.LogInformation($"Modified {returnValue} records");
+            Logger.LogInformation($"Modified {returnValue} records");
 
             return new Scheme()
             {
@@ -90,7 +88,7 @@ namespace domain.Scheme.Command
            
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.hall_scheme SET name = @name, grid_interval = @gridInterval, plan = @plan WHERE id = @id");
 
-            _logger.LogInformation($"Modified {updated} records");
+            Logger.LogInformation($"Modified {updated} records");
 
             return updated > 0;
         }

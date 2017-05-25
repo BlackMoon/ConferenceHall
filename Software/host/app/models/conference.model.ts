@@ -35,9 +35,10 @@ export namespace ConfState {
  * Модель. Конференция
  */
 export class ConferenceModel extends KeyModel implements ISelected {
-
+    
     description: string;
     hallId: number;
+    period: any;
     selected: boolean;
     state: ConfState;
     subject: string;
@@ -57,6 +58,7 @@ export class ConferenceModel extends KeyModel implements ISelected {
  */
 export class AppointmentModel {
 
+    duration: Date;
     start: Date;
     hallId: number;
     /**

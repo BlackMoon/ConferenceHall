@@ -18,43 +18,26 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     actions: MenuItem[];
     states: any[];
 
+    actionCommand: () => void;
+    actionLabel: string;
+    actionIcon: string;
+
     @Input()
     endDate: Date;
 
     @Input()
     startDate: Date;
 
-    selectedConferenceIds: number[] = [];
+    selectedConferenceId?: number;
     selectedState: ConfState = ConfState.Planned;
     
     conferences: ConferenceModel[];
-
-    get checkBoxVisible(): boolean {
-        return this.selectedState === ConfState.Planned;
-    }
 
     constructor(
         private conferrenceService: ConferenceService,
         private logger: Logger,
         private mediator: Mediator,
         private router: Router) {
-
-        this.actions = [
-            {
-                label: 'Добавить',
-                icon: 'fa-plus',
-                routerLink: ['conferences/new']
-            },
-            {
-                label: 'Изменить',
-                icon: 'fa-pencil',
-                command: () => this.router.navigate(['conferences', this.selectedConferenceIds[0]])
-            },
-            {
-                label: 'Удалить',
-                icon: 'fa-trash'
-            }
-        ];
         
         let stateKeys = Object
             .keys(ConfState)
@@ -72,7 +55,6 @@ export class ConferenceListComponent implements OnInit, OnChanges {
                 }
             );
     }
-
     
     ngOnChanges(changes: SimpleChanges) {
         
@@ -93,48 +75,87 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        
-        this.conferrenceService
-            .getAll(this.selectedState, this.startDate, this.endDate)
-            .subscribe(
-                conferences => this.conferences = conferences,
-                error => this.logger.error(error)); 
+        this.changeState(this.selectedState);
     }
 
-    dragStart(event, conference) {
-        event.dataTransfer.setData(confDragType, JSON.stringify(conference));
-    }
-    
+    actionClick = () => this.actionCommand();
+
     changeState(state: ConfState) {
+
         this.selectedState = state;
 
         this.conferrenceService
             .getAll(this.selectedState, this.startDate, this.endDate)
             .subscribe(
                 conferences => this.conferences = conferences,
-                error => this.logger.error(error)); 
+                error => this.logger.error(error));
 
-        this.selectedConferenceIds = [];
+        this.actions = [];
+
+        switch (state) {
+            case ConfState.Planned:
+
+                this.actions
+                    .push({
+                        label: 'Добавить',
+                        icon: 'fa-plus',
+                        routerLink: ['conferences/new']
+                    },
+                    {
+                        label: 'Изменить',
+                        icon: 'fa-pencil',
+                        command: () => this.selectedConferenceId && this.router.navigate(['/conferences', this.selectedConferenceId])
+                    });
+
+                this.actionCommand = () => this.makeAppointment();
+                this.actionLabel = "Назначить";
+                this.actionIcon = "fa-calendar-times-o";
+
+                break;
+
+            case ConfState.Active:
+            case ConfState.Closed:
+            case ConfState.Preparing:
+
+                this.actionCommand = () => this.selectedConferenceId && this.router.navigate(['/conferences', this.selectedConferenceId]);
+                this.actionLabel = "Изменить";
+                this.actionIcon = "fa-pencil";
+                break;
+        }
+
+        this.actions
+            .push({
+                label: 'Удалить',
+                icon: 'fa-trash',
+                command: () => { this.selectedConferenceId && console.log('del'); }
+            });
+
+        this.selectedConferenceId = null;
     }
 
+    dragStart(event, conference) {
+        event.dataTransfer.setData(confDragType, JSON.stringify(conference));
+    }
+    
     makeAppointment() {
 
-        if (this.selectedConferenceIds.length > 0) {
+        if (this.selectedConferenceId) {
 
             this.mediator.broadcast("conferenceList_makeAppointment",
                 this.conferences
-                    .filter(c => this.selectedConferenceIds.indexOf(c.id) !== -1));
+                    .filter(c => c.id === this.selectedConferenceId));
         }
     }
 
     selectConference(conference) {
-        conference.selected = !conference.selected;
 
-        if (conference.selected)
-            this.selectedConferenceIds.push(conference.id);
-        else {
-            let ix = this.selectedConferenceIds.indexOf(conference.id);
-            this.selectedConferenceIds.splice(ix, 1);
+        if (!conference.selected) {
+
+            for (let conf of this.conferences) {
+                conf.selected = (conf.id === conference.id);
+            }
+            
+            this.selectedConferenceId = conference.id;
         }
     }
 }
