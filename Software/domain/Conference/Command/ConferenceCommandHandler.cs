@@ -30,12 +30,14 @@ namespace domain.Conference.Command
         }
 
         public async Task<bool> ExecuteAsync(ChangePeriodCommand command)
-        {
+        {           
             DbManager.AddParameter("id", command.ConferenceId);
+            DbManager.AddParameter("start", command.Start);
+            DbManager.AddParameter("end", command.Start.Add(command.Delta));
 
-            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET name = @name, grid_interval = @gridInterval, plan = @plan WHERE id = @id");
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, @end) WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
-
+            
             return updated > 0;
         }
 

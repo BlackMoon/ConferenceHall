@@ -49,7 +49,7 @@ namespace host.Controllers
             };
             patch.ApplyTo(command, ModelState);
 
-            return CommandDispatcher.DispatchAsync(command);
+            return CommandDispatcher.DispatchAsync<ChangePeriodCommand, bool>(command);
         }
 
         // POST api/conferences
