@@ -1,5 +1,6 @@
 ﻿import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
 import { AppointmentModel } from '../../models';
 import { HallService } from '../halls/hall.service';
@@ -21,11 +22,15 @@ export class AppointmentDialogComponent implements OnInit {
     @Output() closed: EventEmitter<AppointmentModel> = new EventEmitter();
 
     appointmentForm: FormGroup;
+    locale: any;
 
     constructor(
         private fb: FormBuilder,
         private hallService: HallService,
-        private logger: Logger) { }
+        private logger: Logger) {
+
+        this.locale = locale;
+    }
 
     ngOnInit() {
 
@@ -47,9 +52,12 @@ export class AppointmentDialogComponent implements OnInit {
     }
 
     save(event, appointment) {
-
+        
         let duration:Date = appointment.duration;
-        appointment.duration = `${duration.getHours()}:${duration.getMinutes()}:00`;
+        appointment.duration = `${duration.getHours()}:${duration.getMinutes()}`;
+
+        let start: Date = appointment.start;
+        appointment.start = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
 
         this.closed.emit(appointment);
         this.visible = false;

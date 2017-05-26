@@ -13,7 +13,7 @@
                 <p-dropdown [options]="halls" formControlName="hallId" placeholder="Выберите холл" [style]="{'width':'100%'}"></p-dropdown>
             </div>
             <div class="ui-g-12 ui-g-nopad">
-                <p-calendar [inline]="true" formControlName="start" [style]="{'width':'100%'}"></p-calendar>
+                <p-calendar [inline]="true" formControlName="start" [locale]="locale" [style]="{'width':'100%'}"></p-calendar>
             </div>
         </div>
         <p-footer>
