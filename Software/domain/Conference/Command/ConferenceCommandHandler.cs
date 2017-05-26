@@ -14,6 +14,7 @@ namespace domain.Conference.Command
 {
     public class ConferenceCommandHandler : 
         KeyObjectCommandHandler<Conference>,
+        ICommandHandlerWithResult<ChangePeriodCommand, bool>,
         ICommandHandlerWithResult<MakeAppointmentCommand, TimeRange>,
         ICommandHandlerWithResult<DeleteConferenceCommand, bool>
     {
@@ -21,6 +22,21 @@ namespace domain.Conference.Command
         public ConferenceCommandHandler(IDbManager dbManager, ILogger<ConferenceCommandHandler> logger) : base(dbManager, logger)
         {
            
+        }
+
+        public bool Execute(ChangePeriodCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> ExecuteAsync(ChangePeriodCommand command)
+        {
+            DbManager.AddParameter("id", command.ConferenceId);
+
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET name = @name, grid_interval = @gridInterval, plan = @plan WHERE id = @id");
+            Logger.LogInformation($"Modified {updated} records");
+
+            return updated > 0;
         }
 
         public bool Execute(DeleteConferenceCommand command)
@@ -60,7 +76,5 @@ namespace domain.Conference.Command
                     UpperBound = Convert.ToDateTime(pDateEnd.Value)
                 };
         }
-
-        
     }
 }
