@@ -41,15 +41,15 @@ namespace host.Controllers
         }
 
         [HttpPatch("/api/period/{id}")]
-        public Task Patch(int id, [FromBody]JsonPatchDocument<ChangePeriodCommand> patch)
+        public Task Patch(int id, [FromBody]JsonPatchDocument<Conference> patch)
         {
-            ChangePeriodCommand command = new ChangePeriodCommand()
+            Conference value = new Conference()
             {
-                ConferenceId = id
+                Id = id
             };
-            patch.ApplyTo(command, ModelState);
+            patch.ApplyTo(value, ModelState);
 
-            return CommandDispatcher.DispatchAsync<ChangePeriodCommand, bool>(command);
+            return CommandDispatcher.DispatchAsync<Conference, bool>(value);
         }
 
         // POST api/conferences

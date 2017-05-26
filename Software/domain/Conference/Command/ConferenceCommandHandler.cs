@@ -30,7 +30,9 @@ namespace domain.Conference.Command
         }
 
         public async Task<bool> ExecuteAsync(ChangePeriodCommand command)
-        {           
+        {  
+            // todo через update conference
+
             DbManager.AddParameter("id", command.ConferenceId);
             DbManager.AddParameter("start", command.Start);
             DbManager.AddParameter("end", command.Start.Add(command.Delta));
