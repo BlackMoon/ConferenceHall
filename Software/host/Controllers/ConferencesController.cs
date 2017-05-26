@@ -54,8 +54,9 @@ namespace host.Controllers
 
         // DELETE api/conferences/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public Task Delete(int id)
         {
+            return CommandDispatcher.DispatchAsync<DeleteConferenceCommand, bool>(new DeleteConferenceCommand() { Id = id });
         }
     }
 }

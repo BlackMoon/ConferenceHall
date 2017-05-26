@@ -36,7 +36,7 @@ namespace domain.Conference
     public class Conference : KeyObject, ICommand
     {
         [Column("hall_id")]
-        public int HallId { get; set; }
+        public int? HallId { get; set; }
 
         public string Subject { get; set; }
      

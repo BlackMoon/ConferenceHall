@@ -19,7 +19,7 @@
         <p-footer>
             <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                 <button type="button" pButton icon="fa-close" (click)="visible=false" label="Отмена"></button>
-                <button type="submit" pButton icon="fa-check" label="ОК"></button>
+                <button type="submit" pButton icon="fa-check" label="ОК" [disabled]="!appointmentForm.valid"></button>
             </div>
         </p-footer>
     </form>

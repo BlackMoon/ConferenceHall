@@ -12,7 +12,7 @@ import { HallService } from './hall.service';
 })
 export class HallDetailComponent implements OnInit {
     
-    hallform: FormGroup;
+    hallForm: FormGroup;
     schemes: SchemeModel[];
 
     constructor(
@@ -25,7 +25,7 @@ export class HallDetailComponent implements OnInit {
 
     ngOnInit() {
 
-        this.hallform = this.fb.group({
+        this.hallForm = this.fb.group({
             id: [null],
             name: [null, Validators.required],
             description: [null],
@@ -42,7 +42,7 @@ export class HallDetailComponent implements OnInit {
             })
             .subscribe((hall: HallModel) => {
                 this.schemes = hall.schemes;
-                this.hallform.patchValue(hall);
+                this.hallForm.patchValue(hall);
             });
     }
 

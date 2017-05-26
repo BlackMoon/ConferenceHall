@@ -11,11 +11,8 @@ namespace domain.Login.Command
 {
     public class LoginCommandHandler : KeyObjectCommandHandler, ICommandHandlerWithResult<LoginCommand, LoginCommandResult>
     {
-        private readonly ILogger _logger;
-
-        public LoginCommandHandler(IDbManager dbManager, ILogger<LoginCommandHandler> logger) : base(dbManager)
+        public LoginCommandHandler(IDbManager dbManager, ILogger<LoginCommandHandler> logger) : base(dbManager, logger)
         {
-            _logger = logger;
         }
 
         /// <summary>
@@ -41,14 +38,14 @@ namespace domain.Login.Command
                 msg = ex.MessageText;
                 status = LoginStatus.Failure;
 
-                _logger.LogError($"{ex.Message}. {ex.Detail}");
+                Logger.LogError($"{ex.Message}. {ex.Detail}");
             }
             catch (Exception ex)
             {
                 msg = ex.Message;
                 status = LoginStatus.Failure;
 
-                _logger.LogError(msg);
+                Logger.LogError(msg);
             }
             finally
             {
@@ -76,14 +73,14 @@ namespace domain.Login.Command
                 msg = ex.MessageText;
                 status = LoginStatus.Failure;
 
-                _logger.LogError($"{ex.Message}. {ex.Detail}");
+                Logger.LogError($"{ex.Message}. {ex.Detail}");
             }
             catch (Exception ex)
             {
                 msg = ex.Message;
                 status = LoginStatus.Failure;
 
-                _logger.LogError(msg);
+                Logger.LogError(msg);
             }
             finally
             {

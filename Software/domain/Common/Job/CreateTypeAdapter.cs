@@ -13,6 +13,12 @@ namespace domain.Common.Job
     {
         public void Run()
         {
+            #region Conference
+            // DeleteConferenceCommand --> Conference
+            TypeAdapterConfig<DeleteConferenceCommand, Conference.Conference>
+                .ForType();
+            #endregion
+
             #region Element
             // CreateSchemeCommand --> Scheme
             TypeAdapterConfig<CreateElementCommand, Element.Element>

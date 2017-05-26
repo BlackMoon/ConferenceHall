@@ -1,7 +1,7 @@
 ﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MenuItem } from 'primeng/primeng';
+import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
@@ -40,6 +40,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
     constructor(
         private conferrenceService: ConferenceService,
+        private confirmationService: ConfirmationService,
         private logger: Logger,
         private router: Router) {
         
@@ -101,14 +102,14 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
                 this.actions
                     .push({
-                        label: 'Добавить',
-                        icon: 'fa-plus',
-                        routerLink: ['conferences/new']
+                        label: "Добавить",
+                        icon: "fa-plus",
+                        routerLink: ["conferences/new"]
                     },
                     {
-                        label: 'Изменить',
-                        icon: 'fa-pencil',
-                        command: () => this.selectedConference && this.router.navigate(['/conferences', this.selectedConference.id])
+                        label: "Изменить",
+                        icon: "fa-pencil",
+                        command: () => this.selectedConference && this.router.navigate(["/conferences", this.selectedConference.id])
                     });
 
                 this.actionCommand = () => this.makeAppointment();
@@ -121,7 +122,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
             case ConfState.Closed:
             case ConfState.Preparing:
 
-                this.actionCommand = () => this.selectedConference && this.router.navigate(['/conferences', this.selectedConference.id]);
+                this.actionCommand = () => this.selectedConference && this.router.navigate(["/conferences", this.selectedConference.id]);
                 this.actionLabel = "Изменить";
                 this.actionIcon = "fa-pencil";
                 break;
@@ -129,9 +130,9 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
         this.actions
             .push({
-                label: 'Удалить',
-                icon: 'fa-trash',
-                command: () => { this.selectedConference && console.log('del'); }
+                label: "Удалить",
+                icon: "fa-trash",
+                command: () => { this.selectedConference && this.removeConference(this.selectedConference); }
             });
 
         this.selectedConference = null;
@@ -145,6 +146,26 @@ export class ConferenceListComponent implements OnInit, OnChanges {
         (this.selectedConference) && this.appointmentButtonClick.emit(this.selectedConference);
     }
 
+    removeConference(conference: ConferenceModel) {
+
+        this.confirmationService.confirm({
+            header: 'Вопрос',
+            icon: 'fa fa-trash',
+            message: `Удалить [${conference.subject}]?`,
+            accept: _ => {
+                return this.conferrenceService
+                    .delete(conference.id)
+                    .subscribe(
+                        _ => this.removeConferenceFromList(conference.id),
+                        error => this.logger.error(error));
+            }
+        });
+    }
+
+    /**
+     * Удаляет конференцию из списка
+     * @param id
+     */
     removeConferenceFromList(id) {
         
         this.selectedConference = null;

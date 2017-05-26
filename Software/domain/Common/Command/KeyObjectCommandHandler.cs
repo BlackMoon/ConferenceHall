@@ -9,20 +9,23 @@ namespace domain.Common.Command
     public abstract class KeyObjectCommandHandler
     {
         protected readonly IDbManager DbManager;
+        protected readonly ILogger Logger;
 
-        protected KeyObjectCommandHandler(IDbManager dbManager)
+        protected KeyObjectCommandHandler(IDbManager dbManager, ILogger logger)
         {
             DbManager = dbManager;
+            Logger = logger;
         }
     }
 
-    public abstract class KeyObjectCommandHandler<TParameter> : KeyObjectCommandHandler, ICommandHandlerWithResult<TParameter, bool> where TParameter : class, ICommand
+    public abstract class KeyObjectCommandHandler<TParameter> : 
+        KeyObjectCommandHandler, 
+        ICommandHandlerWithResult<TParameter, bool> where TParameter : class, ICommand
     {
-        protected readonly ILogger Logger;
 
-        protected KeyObjectCommandHandler(IDbManager dbManager, ILogger logger) : base(dbManager)
+        protected KeyObjectCommandHandler(IDbManager dbManager, ILogger logger) : base(dbManager, logger)
         {
-            Logger = logger;
+            
         }
 
         /// <summary>

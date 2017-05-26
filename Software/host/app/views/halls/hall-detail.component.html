@@ -1,12 +1,12 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
 
-    <form [formGroup]="hallform" (ngSubmit)="save($event, hallform.value)">
+    <form [formGroup]="hallForm" (ngSubmit)="save($event, hallForm.value)">
 
         <p-tabView>
             <p-tabPanel header="Холл">
                 <div class="ui-grid ui-grid-responsive ui-grid-pad">
                     <div class="ui-widget-header" style="padding: .5em .75em">
-                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!hallform.valid"></button>
+                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!hallForm.valid"></button>
                     </div>
                     <hr class="ui-widget-content" style="border-top:0">
                    
@@ -59,8 +59,8 @@
                     </div>
                 </div>
             </p-tabPanel>
-            <p-tabPanel *ngIf="hallform.value.id" header="Схемы">
-                <scheme-list [hallId]="hallform.value.id" [items]="schemes"></scheme-list>
+            <p-tabPanel *ngIf="hallForm.value.id" header="Схемы">
+                <scheme-list [hallId]="hallForm.value.id" [items]="schemes"></scheme-list>
             </p-tabPanel>
         </p-tabView>
 

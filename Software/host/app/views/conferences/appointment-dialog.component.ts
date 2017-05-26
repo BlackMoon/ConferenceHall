@@ -35,7 +35,7 @@ export class AppointmentDialogComponent implements OnInit {
     ngOnInit() {
 
         this.appointmentForm = this.fb.group({
-            hallId: [null],
+            hallId: [null, Validators.required],
             duration: [new Date(0, 0, 0, 1)],       // 1 hour
             start: [null]
         });
@@ -56,17 +56,16 @@ export class AppointmentDialogComponent implements OnInit {
         let duration:Date = appointment.duration;
         appointment.duration = `${duration.getHours()}:${duration.getMinutes()}`;
 
+        // время utc!
         let start: Date = appointment.start;
         appointment.start = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
 
         this.closed.emit(appointment);
         this.visible = false;
     }
-
-    /**     
-     * @param hallid
-     */
+    
     show(a: AppointmentModel) {
+        
         this.appointmentForm.patchValue({ hallId: a.hallId, start: a.start });
         this.visible = true;
     }
