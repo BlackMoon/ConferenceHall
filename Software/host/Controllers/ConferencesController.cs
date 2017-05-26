@@ -7,7 +7,7 @@ using domain.Conference;
 using domain.Conference.Command;
 using domain.Conference.Query;
 using Kit.Core.CQRS.Command;
-
+using Microsoft.AspNetCore.JsonPatch;
 using TimeRange = domain.Common.Range<System.DateTime>;
 
 namespace host.Controllers
@@ -38,6 +38,18 @@ namespace host.Controllers
         public Task<TimeRange> MakeAppointment([FromBody]MakeAppointmentCommand value)
         {
             return CommandDispatcher.DispatchAsync<MakeAppointmentCommand, TimeRange>(value);
+        }
+
+        [HttpPatch("/api/period/{id}")]
+        public Task Patch(int id, [FromBody]JsonPatchDocument<ChangePeriodCommand> patch)
+        {
+            ChangePeriodCommand command = new ChangePeriodCommand()
+            {
+                ConferenceId = id
+            };
+            patch.ApplyTo(command, ModelState);
+
+            return CommandDispatcher.DispatchAsync(command);
         }
 
         // POST api/conferences

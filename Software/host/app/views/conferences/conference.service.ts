@@ -33,6 +33,18 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             .catch(handleResponseError);
     }
 
+    changePeriod(id, start: Date, delta) : Observable<any> {
+
+        let body = [
+            { op: "replace", path: "/start", value: start },
+            { op: "replace", path: "/delta", value: delta }
+        ];
+
+        return this.http
+            .patch(`/api/period/${id}`, body)
+            .catch(handleResponseError);
+    }
+
     makeAppointment(a: AppointmentModel) : Observable<any> {
 
         return this.http

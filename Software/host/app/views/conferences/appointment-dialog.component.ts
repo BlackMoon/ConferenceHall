@@ -8,8 +8,9 @@ import { HallService } from '../halls/hall.service';
 @Component({
     selector: "appointment-dialog",
     encapsulation: ViewEncapsulation.None,
-    styles: [`.ui-datepicker.ui-datepicker-inline { width: 100% }`,
-            `.ui-datepicker.ui-datepicker-timeonly { width: 120px }`],
+    styles: [".ui-datepicker.ui-datepicker-inline { width: 100% }",
+            ".ui-datepicker.ui-datepicker-timeonly { width: 120px }",
+            ".ui-dialog .ui-dialog-content { overflow: inherit }"],
     templateUrl: "appointment-dialog.component.html" 
 })
 export class AppointmentDialogComponent implements OnInit {
@@ -22,6 +23,7 @@ export class AppointmentDialogComponent implements OnInit {
     @Output() closed: EventEmitter<AppointmentModel> = new EventEmitter();
 
     appointmentForm: FormGroup;
+    calendarVisible = true;
     locale: any;
 
     constructor(
@@ -55,8 +57,8 @@ export class AppointmentDialogComponent implements OnInit {
         
         let duration:Date = appointment.duration;
         appointment.duration = `${duration.getHours()}:${duration.getMinutes()}`;
-
-        // время utc!
+        
+        // utc time!
         let start: Date = appointment.start;
         appointment.start = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
 
@@ -64,8 +66,8 @@ export class AppointmentDialogComponent implements OnInit {
         this.visible = false;
     }
     
-    show(a: AppointmentModel) {
-        
+    show(a: AppointmentModel, calendarVisible: boolean = true) {
+        this.calendarVisible = calendarVisible;
         this.appointmentForm.patchValue({ hallId: a.hallId, start: a.start });
         this.visible = true;
     }

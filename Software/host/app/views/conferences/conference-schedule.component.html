@@ -4,7 +4,7 @@
         <div class="ui-g-8">
             <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [editable]="true" [fixedWeekCount]="false"
                         [events]="events" [height]="grid.offsetHeight - 6" [header]="headerConfig" [nowIndicator]="true"
-                        (onDrop)="drop($event)" (onEventDrop)="eventDrop($event)" (onViewRender)="viewRender($event)">
+                        (onDrop)="drop($event)" (onEventDrop)="eventDrop($event)" (onEventResize)="eventResize($event)" (onViewRender)="viewRender($event)">
             </p-schedule>
         </div>
         <div class="ui-g-4">

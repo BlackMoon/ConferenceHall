@@ -72,7 +72,7 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
     appointmentDialogClosed(appointment: AppointmentModel) {
         
         if (appointment != null) {
-
+            
             appointment.conferenceId = this.selectedConference.id;
 
             this.conferrenceService
@@ -106,11 +106,44 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
 
     eventDrop(event) {
         debugger;
+
+        let minutes = event.delta.asMinutes(),
+            h = minutes / 60,
+            m = minutes % 60;
+
+        this.conferrenceService
+            .changePeriod(event.event.id, event.event.start, `0:${h}:${m}`)
+            .subscribe(
+                _ => {},
+                error => {
+                    event.revertFunc.call();
+                    this.logger.error(error);
+                });
+
+    }
+
+    eventResize(event) {
+        debugger;
     }
 
     makeAppointment(conference) {
+
+        // time period like schedule's view period
+        
+        let renderedDays:number = (<any>this.endDate - <any>this.startDate) / 864e5,
+            calendarVisible = (renderedDays !== 1),
+            date = this.startDate.getDate(),
+            month = this.startDate.getMonth();
+
+        if (renderedDays >= 28 && this.startDate.getDate() > 20)
+        {
+            // show next month
+            date = 1;
+            month++;
+        }
+        
         this.selectedConference = conference;
-        this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date() });    
+        this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date(this.startDate.getFullYear(), month, date) }, calendarVisible);    
     }
 
     viewRender(event) {
