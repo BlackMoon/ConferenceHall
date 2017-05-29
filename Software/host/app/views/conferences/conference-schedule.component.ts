@@ -1,6 +1,7 @@
-﻿import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
+import { Schedule } from "primeng/components/schedule/schedule";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
 import { AppointmentModel, ConferenceModel, confDragType, TimeRange } from '../../models';
 import { ConferenceService } from './conference.service';
@@ -11,7 +12,7 @@ import { ConferenceListComponent } from "./conference-list.component";
     styles: [`.p0501 .ui-tabview-panel { padding: 0.5em 0.1em; }`],
     templateUrl: 'conference-schedule.component.html'
 })
-export class ConferenceScheduleComponent implements OnInit, OnDestroy {
+export class ConferenceScheduleComponent {
 
     @ViewChild(AppointmentDialogComponent) appointmentDialog: AppointmentDialogComponent;
     @ViewChild(ConferenceListComponent) conferenceList: ConferenceListComponent;
@@ -24,8 +25,6 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
     
     selectedConference: ConferenceModel;
 
-    private subscription: Subscription = new Subscription();
-
     constructor(
         private conferrenceService: ConferenceService,
         private logger: Logger) {
@@ -36,37 +35,6 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
             right: 'month,agendaWeek,agendaDay,listWeek'
         };
         
-    }
-
-    ngOnInit() {
-        this.events = [
-            {
-                "title": "All Day Event",
-                "start": "2017-05-01"
-            },
-            {
-                "title": "Long Event",
-                "start": "2017-05-07",
-                "end": "2017-05-10"
-            },
-            {
-                "title": "Repeating Event",
-                "start": "2017-05-09T16:00:00"
-            },
-            {
-                "title": "Repeating Event",
-                "start": "2017-05-16T16:00:00"
-            },
-            {
-                "title": "Conference",
-                "start": "2017-05-11",
-                "end": "2017-05-13"
-            }
-        ];
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
     }
 
     appointmentDialogClosed(appointment: AppointmentModel) {
@@ -147,7 +115,15 @@ export class ConferenceScheduleComponent implements OnInit, OnDestroy {
     }
 
     viewRender(event) {
-        this.startDate = event.view.start.toDate(),
+        this.startDate = event.view.start.toDate();
         this.endDate = event.view.end.toDate();
+
+        this.conferrenceService
+            .getAll(null, this.startDate, this.endDate)
+            .subscribe(
+            conferences =>
+                this.events = conferences
+                    .map(c => <any>{ id: c.id, start: c.period.lowerBound, end: c.period.upperBound, title: c.subject }),
+            error => this.logger.error(error));
     }
 }
