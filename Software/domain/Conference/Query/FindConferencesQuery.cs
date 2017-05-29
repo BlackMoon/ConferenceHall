@@ -11,7 +11,7 @@ namespace domain.Conference.Query
         /// <summary>
         /// Статус конференции
         /// </summary>
-        public ConfState State { get; set; }
+        public ConfState? State { get; set; }
 
         /// <summary>
         /// Конечная дата периода
