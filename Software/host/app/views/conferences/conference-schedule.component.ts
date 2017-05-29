@@ -119,7 +119,7 @@ export class ConferenceScheduleComponent {
         this.endDate = event.view.end.toDate();
 
         this.conferrenceService
-            .getAll(null, this.startDate, this.endDate)
+            .getAll(this.startDate, this.endDate)
             .subscribe(
             conferences =>
                 this.events = conferences

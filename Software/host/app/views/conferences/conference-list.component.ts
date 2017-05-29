@@ -71,7 +71,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
             if (this.selectedState !== ConfState.Planned) {
                 this.conferrenceService
-                    .getAll(this.selectedState, this.startDate, this.endDate)
+                    .getAll(this.startDate, this.endDate, this.selectedState)
                     .subscribe(
                         conferences => this.conferences = conferences,
                         error => this.logger.error(error));
@@ -90,7 +90,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
         this.selectedState = state;
 
         this.conferrenceService
-            .getAll(this.selectedState, this.startDate, this.endDate)
+            .getAll(this.startDate, this.endDate, this.selectedState)
             .subscribe(
                 conferences => this.conferences = conferences,
                 error => this.logger.error(error));

@@ -7,10 +7,11 @@ import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceDetailComponent } from './conference-detail.component';
 import { ConferenceListComponent } from './conference-list.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
+import { ConferenceScreenComponent } from './conference-screen.component';
 import { ConferenceService } from './conference.service';
 
 @NgModule({
-    declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent],
+    declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent, ConferenceScreenComponent],
     imports: [
         AccordionModule,
         ButtonModule,
