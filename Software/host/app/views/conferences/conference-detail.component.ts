@@ -1,21 +1,53 @@
-﻿import { Component } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+﻿import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
+import { ConferenceModel} from '../../models';
+import { ConferenceService } from './conference.service';
 
 @Component({
-    template: "conference details"
+    templateUrl: 'conference-detail.component.html'
 })
-export class ConferenceDetailComponent {
+export class ConferenceDetailComponent implements OnInit {
 
-    constructor(private route: ActivatedRoute) {}
+    conferenceForm: FormGroup;
+
+    constructor(
+        private fb: FormBuilder,
+        private conferenceService: ConferenceService,
+        private location: Location,
+        private logger: Logger,
+        private route: ActivatedRoute,
+        private router: Router) { }
 
     ngOnInit() {
 
+        this.conferenceForm = this.fb.group({
+            id: [null],
+            subject: [null, Validators.required],
+            description: [null]
+        });
+
         this.route.params
-            .subscribe((params: Params) => {
+
+            .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                console.log(params["id"]);
-                //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                return key ? this.conferenceService.get(key) : Observable.empty();
+            })
+            .subscribe((conference: ConferenceModel) => {
+                this.conferenceForm.patchValue(conference);
             });
+    }
+
+    save(event, conference) {
+
+        event.preventDefault();
+
+        this.conferenceService[conference.id ? 'update' : 'add'](conference)
+            .subscribe(_ => this.location.back(),
+            error => this.logger.error(error));
     }
 }
