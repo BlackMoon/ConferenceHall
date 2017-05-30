@@ -36,18 +36,18 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             .catch(handleResponseError);
     }
 
-    add(conference): Observable<any> {
+    //add(conference): Observable<any> {
 
-        debugger;
-        let formData: FormData = new FormData();
+    //    debugger;
+    //    let formData: FormData = new FormData();
         
-        formData.append("subject", conference.subject);
-        formData.append("description", conference.description);
+    //    formData.append("subject", conference.subject);
+    //    formData.append("description", conference.description);
 
-        return this.http
-            .post(this.url, formData)
-            .catch(handleResponseError);
-    }
+    //    return this.http
+    //        .post(this.url, formData)
+    //        .catch(handleResponseError);
+    //}
 
     changePeriod(id, start: Date, delta) : Observable<any> {
 
