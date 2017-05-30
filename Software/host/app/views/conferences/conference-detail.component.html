@@ -1,51 +1,102 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
+    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value, startDate.value, endDate.value)">
         <input type="hidden" formControlName="id" />
-        <div class="ui-g">
-            <div class="ui-g-2">
-                <button pButton type="submit" label="Сохранить" class="ui-button-success"></button>
-            </div>
-            <div class="ui-g-12">
-                <p-tabView>
-                    <p-tabPanel header="Совещание" id="tabConference">
-                        <div class="ui-g">
-                            <div class="ui-g-12">
-                                Тема:
+
+        <p-tabView>
+            <p-tabPanel header="Совещание" id="tabConference">
+                <div class="ui-grid ui-grid-responsive ui-grid-pad">
+                    <div class="ui-widget-header" style="padding: .5em .75em">
+                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o"></button>
+                    </div>
+                    <hr class="ui-widget-content" style="border-top:0">
+
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Тема :
                             </div>
-                            <div class="ui-g-12">
+                            <div class="ui-grid-col-8">
                                 <input formControlName="subject" type="text" pInputText style="width: 100%;" />
                             </div>
-                            <div class="ui-g-12">
-                                Описание:
+                        </div>
+                    </div>
+                    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Описание :
                             </div>
-                            <div class="ui-g-12">
+                            <div class="ui-grid-col-8">
                                 <textarea formControlName="description" pInputTextarea style="width: 100%;"></textarea>
                             </div>
-                            <div class="ui-g-6">
-                                <div class="ui-g-12">
-                                    Конференц-холл:
-                                </div>
-                                <div class="ui-g-12">
-                                    <input type="text" pInputText style="width: 100%;" />
-                                </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Холл :
                             </div>
-                            <div class="ui-g-6">
-                                <div class="ui-g-12">
-                                    Тип совещания:
-                                </div>
-                                <div class="ui-g-12">
-                                    <p-dropdown #typeConference [options]="confTypes"></p-dropdown>
-                                </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown formControlName="hallId" [options]="halls" placeholder="Выберите холл" (onChange)="hallChanged(conferenceForm.value)"
+                                            [style]="{'width':'100%'}" ></p-dropdown>
                             </div>
                         </div>
-                    </p-tabPanel>
-                    <p-tabPanel header="Участники" id="tabMember" *ngIf="confId && confId > 0">
-                    </p-tabPanel>
-                    <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0">
-                    </p-tabPanel>
-                </p-tabView>
-            </div>
-        </div>
+                    </div>
+                    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Схема холла :
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown  placeholder="Выберите схему"  [style]="{'width':'100%'}"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Тип совещания :
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown #typeConference [options]="confTypes"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Дата начала:
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-calendar #startDate [showTime]="true"></p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-7">
+                            <div class="ui-grid-col-4">
+                                Дата окончания :
+                            </div>
+                            <div class="ui-grid-col-3">
+                                <p-calendar #endDate [showTime]="true"></p-calendar>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Участники" id="tabMember" *ngIf="confId && confId > 0">
+            </p-tabPanel>
+            <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0">
+            </p-tabPanel>
+        </p-tabView>
+
+
 
     </form>
 </div>
