@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
-import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule } from 'primeng/primeng';
+import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
+import { HallService } from '../halls/hall.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -14,9 +15,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ConferenceDetailComponent implements OnInit {
 
     conferenceForm: FormGroup;
-
     confId: number;
     confTypes: SelectItem[];
+    halls: any[];
+
+
+
+
+
     selectedConfType: string;
     conferences: ConferenceModel[];
 
@@ -25,6 +31,7 @@ export class ConferenceDetailComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
+        private hallService: HallService,
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
@@ -65,20 +72,32 @@ export class ConferenceDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        debugger;
         this.conferenceForm = this.fb.group({
             id: [null],
             subject: [null],
-            description: [null]
+            hallId: [null],
+            description: [null],
+            period: [null]
         });
 
+        this.hallService
+            .getAll()
+            .subscribe(
+            halls => this.halls = halls.map(h => <any>{ label: h.name, value: h.id }),
+            error => this.logger.error(error));
     }
     
 
-    save(e, conferenceObj) {
+    save(event, conferenceObj) {
         debugger;
         //var qq = subjectTxt;
         //var qq2 = this.selectedConfType;
         //this.conference.description
+
+        event.preventDefault();
+
         this.conferenceService['add'](conferenceObj)
             .subscribe(_ => this.location.back(),
             error => this.logger.error(error));
@@ -86,5 +105,10 @@ export class ConferenceDetailComponent implements OnInit {
         //this.hallService[hall.id ? 'update' : 'add'](hall)
         //    .subscribe(_ => this.location.back(),
         //    error => this.logger.error(error));
+    }
+
+    hallChanged(conferenceObj) {
+        debugger;
+        var qq = conferenceObj;
     }
 }
