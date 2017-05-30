@@ -12,6 +12,7 @@ namespace domain.Member
         [Column("employee_id")]
         [JsonIgnore]
         public int EmployeeId { get; set; }
+
         [Column("name")]
         public string Name { get; set; }
                 
@@ -27,9 +28,12 @@ namespace domain.Member
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string[] PhonesList { get; set; }
 
+        public string Place { get; set; }
+
         [Column("role")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Role { get; set; }
+
         [Column("locked")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool Locked { get; set; }
