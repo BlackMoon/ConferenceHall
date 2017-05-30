@@ -1,4 +1,5 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
@@ -24,6 +25,7 @@ export class ConferenceDetailComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
+        private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
         debugger;
@@ -55,11 +57,11 @@ export class ConferenceDetailComponent implements OnInit {
                 //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
             });
        
-        //var confs = this.conferenceService.getAll(ConfState.Active, new Date(1, 1, 1), new Date(2017, 12, 12))
+        //var confs = this.conferenceService.getAll(new Date(1, 1, 1), new Date(2017, 12, 12))
         //.subscribe(
         //    conferences => this.conferences = conferences,
         //    error => this.logger.error(error));
-
+        //var qq = this.conferences;
     }
 
     ngOnInit() {
@@ -77,5 +79,12 @@ export class ConferenceDetailComponent implements OnInit {
         //var qq = subjectTxt;
         //var qq2 = this.selectedConfType;
         //this.conference.description
+        this.conferenceService['add'](conferenceObj)
+            .subscribe(_ => this.location.back(),
+            error => this.logger.error(error));
+
+        //this.hallService[hall.id ? 'update' : 'add'](hall)
+        //    .subscribe(_ => this.location.back(),
+        //    error => this.logger.error(error));
     }
 }
