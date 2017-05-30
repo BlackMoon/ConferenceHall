@@ -38,6 +38,9 @@ namespace domain.Conference
         [Column("hall_id")]
         public int? HallId { get; set; }
 
+        [Column("hall_scheme_id")]
+        public int? HallSchemeId { get; set; }
+
         public string Subject { get; set; }
      
         public string Description { get; set; }

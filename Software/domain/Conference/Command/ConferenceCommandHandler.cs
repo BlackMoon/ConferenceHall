@@ -16,12 +16,32 @@ namespace domain.Conference.Command
         KeyObjectCommandHandler<Conference>,
         ICommandHandlerWithResult<ChangePeriodCommand, bool>,
         ICommandHandlerWithResult<MakeAppointmentCommand, TimeRange>,
-        ICommandHandlerWithResult<DeleteConferenceCommand, bool>
+        ICommandHandlerWithResult<DeleteConferenceCommand, bool>,
+        ICommandHandlerWithResult<CreateConferenceCommand, int>
     {
 
         public ConferenceCommandHandler(IDbManager dbManager, ILogger<ConferenceCommandHandler> logger) : base(dbManager, logger)
         {
            
+        }
+
+        /// <summary>
+        /// Создание конференции
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public int Execute(CreateConferenceCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> ExecuteAsync(CreateConferenceCommand command)
+        {
+            await DbManager.OpenAsync();
+
+            Conference conference = new Conference();
+            return await DbManager.DbConnection.InsertAsync(command.Adapt(conference));
+
         }
 
         public bool Execute(ChangePeriodCommand command)
