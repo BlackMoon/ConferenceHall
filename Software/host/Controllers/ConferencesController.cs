@@ -61,14 +61,16 @@ namespace host.Controllers
 
         // POST api/conferences
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Task<int> Post([FromBody]CreateConferenceCommand value)
         {
+            return CommandDispatcher.DispatchAsync<CreateConferenceCommand, int>(value);
         }
 
         // PUT api/conferences/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public Task Put(int id, [FromBody]Conference value)
         {
+            return CommandDispatcher.DispatchAsync<Conference, bool>(value);
         }
 
         // DELETE api/conferences/5
