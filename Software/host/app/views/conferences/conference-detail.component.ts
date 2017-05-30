@@ -1,53 +1,81 @@
-﻿import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+﻿import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
-import { ConferenceModel} from '../../models';
+import { ConferenceModel, ConfState, confDragType } from '../../models';
+import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-    templateUrl: 'conference-detail.component.html'
+    selector: "conference-detail",
+    templateUrl: "conference-detail.component.html"
 })
 export class ConferenceDetailComponent implements OnInit {
 
     conferenceForm: FormGroup;
 
+    confId: number;
+    confTypes: SelectItem[];
+    selectedConfType: string;
+    conferences: ConferenceModel[];
+
+    conference: ConferenceModel;
+
     constructor(
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
-        private location: Location,
         private logger: Logger,
-        private route: ActivatedRoute,
-        private router: Router) { }
+        private route: ActivatedRoute) {
+        debugger;
+        this.confTypes = [];
+
+        let stateKeys = Object
+            .keys(ConfState)
+            .filter(k => typeof ConfState[k] !== "function");
+
+        this.confTypes = stateKeys
+            .slice(stateKeys.length / 2)
+            .map(k => {
+                    let state = ConfState[k];
+                    return <SelectItem>
+                    {
+                        label: ConfState.toName(state),
+                        value: state
+                    }
+                }
+            );
+
+        this.route.params
+            .subscribe((params: Params) => {
+                //debugger;
+                this.confId = params.hasOwnProperty("id") ? +params["id"] : null;
+                
+                // (+) converts string 'id' to a number
+                console.log(params["id"]);
+                //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+            });
+       
+        var confs = this.conferenceService.getAll(ConfState.Active, new Date(1, 1, 1), new Date(2017, 12, 12))
+        .subscribe(
+            conferences => this.conferences = conferences,
+            error => this.logger.error(error));
+
+    }
 
     ngOnInit() {
-
         this.conferenceForm = this.fb.group({
             id: [null],
-            subject: [null, Validators.required],
+            subject: [null],
             description: [null]
         });
 
-        this.route.params
-
-            .switchMap((params: Params) => {
-                // (+) converts string 'id' to a number
-                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return key ? this.conferenceService.get(key) : Observable.empty();
-            })
-            .subscribe((conference: ConferenceModel) => {
-                this.conferenceForm.patchValue(conference);
-            });
     }
+    
 
-    save(event, conference) {
-
-        event.preventDefault();
-
-        this.conferenceService[conference.id ? 'update' : 'add'](conference)
-            .subscribe(_ => this.location.back(),
-            error => this.logger.error(error));
+    save(e, conferenceObj) {
+        debugger;
+        //var qq = subjectTxt;
+        //var qq2 = this.selectedConfType;
+        //this.conference.description
     }
 }

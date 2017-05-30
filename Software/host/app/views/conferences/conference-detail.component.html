@@ -1,0 +1,54 @@
+﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
+    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
+        <input type="hidden" formControlName="id" />
+        <div class="ui-g">
+            <div class="ui-g-2">
+                <button pButton type="submit" label="Сохранить" class="ui-button-success"></button>
+            </div>
+            <div class="ui-g-12">
+                <p-tabView>
+                    <p-tabPanel header="Совещание" id="tabConference">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                Тема:
+                            </div>
+                            <div class="ui-g-12">
+                                <input formControlName="subject" type="text" pInputText style="width: 100%;" />
+                            </div>
+                            <div class="ui-g-12">
+                                Описание:
+                            </div>
+                            <div class="ui-g-12">
+                                <textarea formControlName="description" pInputTextarea style="width: 100%;"></textarea>
+                            </div>
+                            <div class="ui-g-6">
+                                <div class="ui-g-12">
+                                    Конференц-холл:
+                                </div>
+                                <div class="ui-g-12">
+                                    <input type="text" pInputText style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="ui-g-6">
+                                <div class="ui-g-12">
+                                    Тип совещания:
+                                </div>
+                                <div class="ui-g-12">
+                                    <p-dropdown #typeConference [options]="confTypes"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Участники" id="tabMember" *ngIf="confId && confId > 0">
+                    </p-tabPanel>
+                    <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0">
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
