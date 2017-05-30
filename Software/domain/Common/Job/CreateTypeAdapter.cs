@@ -14,6 +14,10 @@ namespace domain.Common.Job
         public void Run()
         {
             #region Conference
+            // CreateConferenceCommand --> Conference
+            TypeAdapterConfig<CreateConferenceCommand, Conference.Conference>
+                .ForType();
+
             // DeleteConferenceCommand --> Conference
             TypeAdapterConfig<DeleteConferenceCommand, Conference.Conference>
                 .ForType();

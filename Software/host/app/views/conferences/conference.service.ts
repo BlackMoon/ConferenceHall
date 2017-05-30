@@ -10,7 +10,7 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class ConferenceService extends HttpDataService<ConferenceModel> {
 
-    url = isDevMode() ? "http://localhost:64346/api/conferences" : "/api/conferences";
+    url = isDevMode() ? "http://localhost:64346/api/conferences" : "api/conferences";
 
     constructor(http: Http) { super(http); }
 
