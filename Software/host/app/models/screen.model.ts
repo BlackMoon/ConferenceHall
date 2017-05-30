@@ -11,6 +11,7 @@ export class ScreenModel {
     plan: string;
     period: TimeRange;
 
+    members: any[];
     messages: string[];
 
     constructor() {

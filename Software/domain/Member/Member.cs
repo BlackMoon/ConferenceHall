@@ -1,12 +1,10 @@
 ﻿using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-using Dapper.Contrib.Extensions;
-
 
 namespace domain.Member
 {
-    [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.employees")]
+    [Table("conf_hall.employees")]
     public class Member : KeyObject
     {
         [Column("employee_id")]
