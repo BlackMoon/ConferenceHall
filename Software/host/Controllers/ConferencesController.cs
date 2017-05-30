@@ -21,7 +21,7 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Conference>> Get(ConfState state, DateTime? startDate, DateTime? endDate)
+        public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate)
         {
             FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state };
             return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);

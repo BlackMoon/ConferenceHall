@@ -28,11 +28,15 @@ namespace domain.Conference.Query
                .Column("c.description")
                .Column("c.hall_id hallid")
                .Column("c.period")
-               .Where("c.state = @state::conf_state")
                .OrderBy("lower(c.subject)");
 
             DynamicParameters param = new DynamicParameters();
-            param.Add("state", query.State.ToString());
+
+            if (query.State.HasValue)
+            {
+                sqlBuilder.Where("c.state = @state::conf_state");
+                param.Add("state", query.State.ToString());
+            }
 
             // [активные, на подготовке, завершенные] совещания фильтруются по дате
             if (query.State != ConfState.Planned)

@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace domain.Common.Command
 {
+    /// <summary>
+    /// Базовый commandHandler
+    /// </summary>
     public abstract class KeyObjectCommandHandler
     {
         protected readonly IDbManager DbManager;
@@ -18,6 +21,10 @@ namespace domain.Common.Command
         }
     }
 
+    /// <summary>
+    /// Базовый generic commandHandler
+    /// </summary>
+    /// <typeparam name="TParameter"></typeparam>
     public abstract class KeyObjectCommandHandler<TParameter> : 
         KeyObjectCommandHandler, 
         ICommandHandlerWithResult<TParameter, bool> where TParameter : class, ICommand
