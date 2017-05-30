@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using domain.Conference;
 using domain.Conference.Command;
 using domain.Conference.Query;
+using host.Hubs;
 using Kit.Core.CQRS.Command;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Infrastructure;
 using TimeRange = domain.Common.Range<System.DateTime>;
 
 namespace host.Controllers
@@ -15,14 +18,18 @@ namespace host.Controllers
     [Route("api/[controller]")]
     public class ConferencesController : CqrsController
     {
+        private readonly IConnectionManager _connectionManager;
         // GET api/conferences
-        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, IConnectionManager connectionManager) : base(commandDispatcher, queryDispatcher)
         {
+            _connectionManager = connectionManager;
         }
 
         [HttpGet]
         public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate)
         {
+            _connectionManager.GetHubContext<Broadcaster>().Clients.All.AddTickerMessage("44");
+
             FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state };
             return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }

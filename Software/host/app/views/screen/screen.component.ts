@@ -59,9 +59,16 @@ export class ScreenComponent implements AfterViewInit {
     constructor(
         private logger: Logger,
         private route: ActivatedRoute,
-        private screenService: ScreenService) { }
+        private screenService: ScreenService) {
+
+        screenService.start();
+    }
 
     ngOnInit() {
+
+        this.screenService
+            .sendTicker
+            .subscribe(messages => this.messages = messages);
 
         this.canvasBox = this.canvasBoxElRef.nativeElement;
 
@@ -94,8 +101,10 @@ export class ScreenComponent implements AfterViewInit {
                 }
             });
 
+        // clock
         setInterval(() => this.now = new Date(), 1000);
 
+        // ticker
         setInterval(() => {
             let ix = this.messages.indexOf(this.ticker) + 1;
             if (ix > this.messages.length - 1) {

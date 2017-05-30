@@ -55,7 +55,7 @@ export class ConferenceDetailComponent implements OnInit {
                 //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
             });
        
-        var confs = this.conferenceService.getAll(ConfState.Active, new Date(1, 1, 1), new Date(2017, 12, 12))
+        var confs = this.conferenceService.getAll(new Date(1, 1, 1), new Date(2017, 12, 12))
         .subscribe(
             conferences => this.conferences = conferences,
             error => this.logger.error(error));
