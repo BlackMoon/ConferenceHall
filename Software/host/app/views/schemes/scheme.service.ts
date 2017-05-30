@@ -5,7 +5,6 @@ import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
 import { SchemeModel } from '../../models';
 
-
 @Injectable()
 export class SchemeService extends HttpDataService<SchemeModel> {
     

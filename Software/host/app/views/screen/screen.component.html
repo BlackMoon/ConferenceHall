@@ -3,10 +3,15 @@
         <div #header class="ui-g-12 h40 ui-g-nopad">
             <div class="ui-g ui-widget-content">
                 <div class="ui-g-2 ui-md-2">
-                    время
+                    {{period?.lowerBound | date:'HH:mm'}} - {{period?.upperBound | date: 'HH:mm'}}
                 </div>
-                <div class="ui-g-10 ui-md-10">
-                    тема
+                <div class="ui-g-8 ui-md-8">
+                    {{subject}}
+                </div>
+                <div class="ui-g-2 ui-md-2">
+                    <div class="ui-toolbar-group-right">
+                        {{now | date:'dd.MM.yyyy HH:mm:ss'}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -19,7 +24,7 @@
         <div #footer class="ui-g-12 h40 ui-g-nopad">
             <div class="ui-g ui-widget-content">
                 <div class="ui-g-12 ui-md-12">
-                    Mesage
+                    {{ticker}}&nbsp;
                 </div>
             </div>
         </div>
