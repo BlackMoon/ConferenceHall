@@ -74,9 +74,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     @Input()
     schemeid: number;
 
-    @ViewChild('canvas')
-    canvasElRef: ElementRef;
-
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
 

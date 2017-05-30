@@ -14,9 +14,12 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     constructor(http: Http) { super(http); }
 
-    getAll(state: ConfState, startDate: Date, endDate: Date): Observable<any> {
+    getAll(startDate: Date, endDate: Date, state: ConfState = null): Observable<any> {
 
-        let queryParams = [`state=${state}`];
+        let queryParams = [];
+
+        if (state !== null)
+            queryParams.push(`state=${state}`);
 
         // [активные, на подготовке, завершенные] совещания фильтруются по дате
         if (state !== ConfState.Planned) {

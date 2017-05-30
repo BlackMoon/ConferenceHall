@@ -6,6 +6,7 @@ import { ConferencesModule } from './conferences/conferences.module';
 import { ElementsModule } from './elements/elements.module';
 import { HallsModule } from './halls/halls.module';
 import { SchemesModule } from './schemes/schemes.module';
+import { ScreenModule } from './screen/screen.module';
 import * as views from './index';
 
 @NgModule({
@@ -21,6 +22,7 @@ import * as views from './index';
         HallsModule,
         RouterModule,
         SchemesModule,
+        ScreenModule,
         SplitButtonModule,
         ToolbarModule],
     providers: [ConfirmationService]

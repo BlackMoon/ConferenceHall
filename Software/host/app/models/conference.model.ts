@@ -74,3 +74,4 @@ export class AppointmentModel {
      */
     conferenceId: number;
 }
+
