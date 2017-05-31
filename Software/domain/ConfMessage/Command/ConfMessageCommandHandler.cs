@@ -12,7 +12,6 @@ namespace domain.ConfMessage.Command
 {
     public class ConferenceCommandHandler : 
         KeyObjectCommandHandler<ConfMessage>,
-        ICommandHandlerWithResult<DeleteConfMessageCommand, bool>,
         ICommandHandlerWithResult<CreateConfMessageCommand, int>
     {
 
@@ -39,22 +38,5 @@ namespace domain.ConfMessage.Command
             return await DbManager.DbConnection.InsertAsync(command.Adapt(confMessage));
         }
 
-        /// <summary>
-        /// Удаление сообщения конференции
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public bool Execute(DeleteConfMessageCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> ExecuteAsync(DeleteConfMessageCommand command)
-        {
-            await DbManager.OpenAsync();
-
-            ConfMessage confMessage = new ConfMessage();
-            return await  DbManager.DbConnection.DeleteAsync(command.Adapt(confMessage));
-        }
     }
 }

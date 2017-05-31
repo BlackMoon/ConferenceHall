@@ -8,11 +8,14 @@ using Kit.Core.CQRS.Query;
 namespace domain.ConfMessage.Query
 {
     public class ConfMessageQueryHandler : 
-        KeyObjectQueryHandler<FindConfMessageByIdQuery, ConfMessage>,
         IQueryHandler<FindConfMessageQuery, IEnumerable<ConfMessage>>
     {
-        public ConfMessageQueryHandler(IDbManager dbManager) : base(dbManager)
+
+        protected readonly IDbManager DbManager;
+
+        public ConfMessageQueryHandler(IDbManager dbManager) 
         {
+            DbManager = dbManager;
         }
 
         public IEnumerable<ConfMessage> Execute(FindConfMessageQuery query)
