@@ -8,7 +8,7 @@ using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
-
+using NpgsqlTypes;
 using TimeRange = domain.Common.Range<System.DateTime>;
 
 namespace domain.Conference.Command
@@ -77,7 +77,7 @@ namespace domain.Conference.Command
             DbManager.AddParameter("id", command.ConferenceId);
             DbManager.AddParameter("start", command.Start);
             DbManager.AddParameter("end", command.Start.Add(command.Delta));
-
+            
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, @end) WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
             

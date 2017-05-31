@@ -19,44 +19,56 @@ enum SignalRConnectionStatus {
 @Injectable()
 export class ScreenService extends HttpDataService<ScreenModel> {
 
-    sendTicker: Observable<string[]>;
+    method2: Observable<string[]>;
+    sendTickers: Observable<string[]>;
 
     currentState = SignalRConnectionStatus.Disconnected;
     connectionState: Observable<SignalRConnectionStatus>;
 
-    private sendTickerSubject = new Subject<string []>();
     private connectionStateSubject = new Subject<SignalRConnectionStatus>();
+
+    private m2Subject = new Subject<string[]>();
+    private sendTickersSubject = new Subject<string[]>();
 
     url = isDevMode() ? "http://localhost:64346/api/screen" : "/api/screen";
 
     constructor(http: Http) {
         super(http);
 
-        this.sendTicker = this.sendTickerSubject.asObservable();
+        this.connectionState = this.connectionStateSubject.asObservable();
+
+        this.method2= this.m2Subject.asObservable();
+        this.sendTickers = this.sendTickersSubject.asObservable();
     }
 
     private setConnectionState(connectionState: SignalRConnectionStatus) {
-        console.log('connection state changed to: ' + connectionState);
         this.currentState = connectionState;
         this.connectionStateSubject.next(connectionState);
+        this.connectionStateSubject.complete();
     }
 
-    private onAddTickerMessage(messages) {
-        this.sendTickerSubject.next(messages);
+    private onMethod2(tickers) {
+        this.m2Subject.next(tickers);
     }
 
-    start(): Observable<SignalRConnectionStatus> {
+    private onSendTickers(tickers) {
+        this.sendTickersSubject.next(tickers);
+    }
+
+    start(key): Observable<SignalRConnectionStatus> {
 
         $.connection.hub.logging = isDevMode();
-        debugger;
-
+        $.connection.hub.qs = `id=${key}`;
+        
         let broadcaster = $.connection.broadcaster,
             client = broadcaster.client;
 
-        client.sendTickerMessage = message => this.onAddTickerMessage(message);
+        client.method2 = tickers => this.onMethod2(tickers);
+        client.sendTickers = tickers => this.onSendTickers(tickers);
 
         // start the connection
-        $.connection.hub
+        $.connection
+            .hub
             .start()
             .done(_ => this.setConnectionState(SignalRConnectionStatus.Connected))
             .fail(error => this.connectionStateSubject.error(error));
