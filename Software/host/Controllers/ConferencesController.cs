@@ -9,7 +9,6 @@ using domain.Conference.Query;
 using host.Hubs;
 using Kit.Core.CQRS.Command;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using TimeRange = domain.Common.Range<System.DateTime>;
 

@@ -12,7 +12,7 @@ export class ScreenModel {
     period: TimeRange;
 
     members: any[];
-    messages: string[];
+    tickers: string[];
 
     constructor() {
 
