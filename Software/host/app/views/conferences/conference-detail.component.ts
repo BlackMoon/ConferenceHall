@@ -1,10 +1,14 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
-import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule } from 'primeng/primeng';
+import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
+import { HallService } from '../halls/hall.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Schemeservice = require("../schemes/scheme.service");
+import { TimeRange } from '../../models';
 
 @Component({
     selector: "conference-detail",
@@ -13,9 +17,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ConferenceDetailComponent implements OnInit {
 
     conferenceForm: FormGroup;
-
     confId: number;
     confTypes: SelectItem[];
+    halls: any[];
+    hallSchemes: any[];
+    period2: TimeRange;
+
+
+
+
     selectedConfType: string;
     conferences: ConferenceModel[];
 
@@ -24,6 +34,9 @@ export class ConferenceDetailComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
+        private hallService: HallService,
+        private schemeService: Schemeservice.SchemeService,
+        private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
         debugger;
@@ -54,28 +67,63 @@ export class ConferenceDetailComponent implements OnInit {
                 console.log(params["id"]);
                 //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
             });
-       
-        //var confs = this.conferenceService.getAll(ConfState.Active, new Date(1, 1, 1), new Date(2017, 12, 12))
-        //.subscribe(
-        //    conferences => this.conferences = conferences,
-        //    error => this.logger.error(error));
 
+        this.hallService
+            .getAll()
+            .subscribe(
+            halls => this.halls = halls.map(h => <any>{ label: h.name, value: h.id }),
+            error => this.logger.error(error));
+
+        debugger;
+       
     }
 
     ngOnInit() {
+
+        debugger;
         this.conferenceForm = this.fb.group({
             id: [null],
             subject: [null],
-            description: [null]
+            hallId: [null],
+            description: [null],
+            period: { lowerBound: null, upperBound: null}
         });
-
     }
     
 
-    save(e, conferenceObj) {
+    save(event, conferenceObj, startDate, endDate) {
         debugger;
         //var qq = subjectTxt;
         //var qq2 = this.selectedConfType;
         //this.conference.description
+        
+        conferenceObj.period.lowerBound = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000);//to utc
+        conferenceObj.period.upperBound = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000);//to utc
+
+        event.preventDefault();
+
+        this.conferenceService['add'](conferenceObj)
+            .subscribe(_ => this.location.back(),
+            error => this.logger.error(error));
+
+
+
+        
+
+        //this.hallService[hall.id ? 'update' : 'add'](hall)
+        //    .subscribe(_ => this.location.back(),
+        //    error => this.logger.error(error));
+    }
+
+    hallChanged(conferenceObj) {
+        if (!conferenceObj) return;
+        debugger;
+
+        //this.schemeService
+        //    .getAll()
+        //    .subscribe(
+        //    schemes => this.hallSchemes = schemes.map(h => <any>{ label: h.name, value: h.id }),
+        //    error => this.logger.error(error));
+       
     }
 }

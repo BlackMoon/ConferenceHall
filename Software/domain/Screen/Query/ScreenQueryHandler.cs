@@ -1,12 +1,16 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Dapper;
+using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 
 namespace domain.Screen.Query
 {
-    public class ScreenQueryHandler : KeyObjectQueryHandler<FindScreenByIdQuery, Screen>
+    public class ScreenQueryHandler : 
+        KeyObjectQueryHandler<FindScreenByIdQuery, Screen>,
+        IQueryHandler<FindTickersByConference, IEnumerable<string>>
     {
         public ScreenQueryHandler(IDbManager dbManager) : base(dbManager)
         {
@@ -45,6 +49,20 @@ namespace domain.Screen.Query
             }
             
             return screen;
+        }
+
+        public IEnumerable<string> Execute(FindTickersByConference query)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<IEnumerable<string>> ExecuteAsync(FindTickersByConference query)
+        {
+            // sql для выбора участников
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_messages_get(@id)");
+
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryAsync<string>(sqlBuilder.ToString(), new {id = query.Id});
         }
     }
 }
