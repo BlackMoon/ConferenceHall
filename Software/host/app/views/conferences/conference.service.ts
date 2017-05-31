@@ -1,5 +1,5 @@
 ﻿import { Injectable, isDevMode } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
@@ -35,19 +35,6 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             )
             .catch(handleResponseError);
     }
-
-    //add(conference): Observable<any> {
-
-    //    debugger;
-    //    let formData: FormData = new FormData();
-        
-    //    formData.append("subject", conference.subject);
-    //    formData.append("description", conference.description);
-
-    //    return this.http
-    //        .post(this.url, formData)
-    //        .catch(handleResponseError);
-    //}
 
     changePeriod(id, start: Date, delta) : Observable<any> {
 
