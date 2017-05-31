@@ -2,13 +2,13 @@
     <div #wrapper class="ui-g h100p">
         <div #header class="ui-g-12 h40 ui-g-nopad">
             <div class="ui-g ui-widget-content">
-                <div class="ui-g-2 ui-md-2">
+                <div class="ui-g-2 ui-md-2" style="background-color: rgba(255, 0, 51, 0.9);color: white">
                     {{period?.lowerBound | date:'HH:mm'}} - {{period?.upperBound | date: 'HH:mm'}}
                 </div>
-                <div class="ui-g-8 ui-md-8">
+                <div class="ui-g-8 ui-md-8" style="background-color: rgba(109, 204, 163, 0.9)">
                     {{subject}}
                 </div>
-                <div class="ui-g-2 ui-md-2">
+                <div class="ui-g-2 ui-md-2" style="background-color: rgba(109, 204, 163, 0.9)">
                     <div class="ui-toolbar-group-right">
                         {{now | date:'dd.MM.yyyy HH:mm:ss'}}
                     </div>
@@ -16,14 +16,31 @@
             </div>
         </div>
         <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad">
-            Участники
+            <p-dataList [value]="members" [rows]="10">
+                <p-header>
+                    Участники
+                </p-header>
+                <ng-template let-member pTemplate="item">
+                    <div class="ui-g ui-widget-content">
+                        <div class="ui-g-6">
+                            {{member.name}}
+                        </div>
+                        <div class="ui-g-3">
+                            {{member.place}}
+                        </div>
+                        <div class="ui-g-3">
+
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
         </div>
         <div class="ui-g-8 ui-md-8 ui-widget-content">
             <div #canvasBox></div>
         </div>
         <div #footer class="ui-g-12 h40 ui-g-nopad">
             <div class="ui-g ui-widget-content">
-                <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12" style="background-color: rgba(109, 204, 163, 0.9)">
                     {{ticker}}&nbsp;
                 </div>
             </div>

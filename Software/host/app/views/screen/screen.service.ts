@@ -46,17 +46,32 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         this.connectionStateSubject.next(connectionState);
         this.connectionStateSubject.complete();
     }
-
+    
     private onMethod2(tickers) {
         this.m2Subject.next(tickers);
     }
 
+    /**
+     * server's sendTickets method
+     * @param tickers
+     */
     private onSendTickers(tickers) {
         this.sendTickersSubject.next(tickers);
     }
 
-    start(key): Observable<SignalRConnectionStatus> {
+    get(key): Observable<ScreenModel> {
 
+        return this.http
+            .get(`${this.url}/${key}`)
+            .map((r: Response) => {
+                debugger;
+                return MapUtils.deserialize(ScreenModel, r.json());
+            })
+            .catch(handleResponseError);
+    }
+
+    start(key): Observable<SignalRConnectionStatus> {
+        
         $.connection.hub.logging = isDevMode();
         $.connection.hub.qs = `id=${key}`;
         
@@ -74,5 +89,7 @@ export class ScreenService extends HttpDataService<ScreenModel> {
             .fail(error => this.connectionStateSubject.error(error));
 
         return this.connectionState;
+
+        //return Observable.of(SignalRConnectionStatus.Connected);
     }
 }

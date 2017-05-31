@@ -2,7 +2,7 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
-import { ScreenModel, TimeRange } from '../../models';
+import { MemberModel, ScreenModel, TimeRange } from '../../models';
 import { ScreenService } from "./screen.service";
 
 import * as SVG from "../../common/svg-utils";
@@ -19,6 +19,10 @@ export class ScreenComponent implements AfterViewInit {
 
     canvas: any;
     canvasBox: any;
+
+    initialHeight: number;
+    initialWidth: number;
+    members: MemberModel[];
 
     now: Date = new Date();
     period: TimeRange;
@@ -41,9 +45,6 @@ export class ScreenComponent implements AfterViewInit {
      */
     ticker: string;
 
-    initialHeight: number;
-    initialWidth: number;
-
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
 
@@ -63,11 +64,11 @@ export class ScreenComponent implements AfterViewInit {
 
     ngOnInit() {
 
+        this.canvasBox = this.canvasBoxElRef.nativeElement;
+
         this.screenService
             .sendTickers
             .subscribe(tickers => this.tickers = tickers);
-
-        this.canvasBox = this.canvasBoxElRef.nativeElement;
 
         this.route.params
 
@@ -79,7 +80,8 @@ export class ScreenComponent implements AfterViewInit {
             .subscribe((res:Array<any>) => {
                 
                 let screen: ScreenModel = res[1];
-
+                debugger;
+                this.members = screen.members;
                 this.period = screen.period;
                 this.subject = screen.subject;
                 this.tickers = screen.tickers || [];
