@@ -27,7 +27,7 @@
                                 Описание :
                             </div>
                             <div class="ui-grid-col-8">
-                                <textarea formControlName="description" pInputTextarea style="width: 100%;"></textarea>
+                                <textarea formControlName="description" pInputTextarea style="width: 100%;" rows="7"></textarea>
                             </div>
                         </div>
                     </div>
@@ -44,24 +44,24 @@
                         </div>
                     </div>
                     
-                    <div class="ui-grid-row">
+                    <div class="ui-grid-row" *ngIf="false">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
                                 Схема холла :
                             </div>
                             <div class="ui-grid-col-8">
-                                <p-dropdown  placeholder="Выберите схему"  [style]="{'width':'100%'}"></p-dropdown>
+                                <p-dropdown [options]="hallSchemes"  placeholder="Выберите схему"  [style]="{'width':'100%'}"></p-dropdown>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="ui-grid-row">
+                    <div class="ui-grid-row" *ngIf="confId && confId > 0" >
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
                                 Тип совещания :
                             </div>
                             <div class="ui-grid-col-8">
-                                <p-dropdown #typeConference [options]="confTypes"></p-dropdown>
+                                <p-dropdown #typeConference [options]="confTypes" [style]="{'width':'100 px'}"></p-dropdown>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                                 Дата начала:
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar #startDate [showTime]="true"></p-calendar>
+                                <p-calendar #startDate [showTime]="true" [style]="{'width':'100 px'}"></p-calendar>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                                 Дата окончания :
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar #endDate [showTime]="true"></p-calendar>
+                                <p-calendar #endDate [showTime]="true" [style]="{'width':'100 px'}"></p-calendar>
                             </div>
                         </div>
                     </div>
