@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Text;
 using System.Threading.Tasks;
 using domain.Common.Command;
 using Dapper.Contrib.Extensions;
@@ -37,11 +38,31 @@ namespace domain.Conference.Command
 
         public async Task<int> ExecuteAsync(CreateConferenceCommand command)
         {
-            await DbManager.OpenAsync();
+            DbManager.AddParameter("subject", command.Subject);
+            DbManager.AddParameter("description", command.Description);
+            DbManager.AddParameter("startDate", command.Period.LowerBound);
+            DbManager.AddParameter("endDate", command.Period.UpperBound);
 
-            Conference conference = new Conference();
-            return await DbManager.DbConnection.InsertAsync(command.Adapt(conference));
+            var sbParams = new StringBuilder();
+            var sbValues = new StringBuilder();
+            sbParams.Append("subject, description, period");
+            sbValues.Append("@subject, @description, tsrange(@startDate, @endDate)");
+            if (command.HallId.HasValue)
+            {
+                sbParams.Append(",hall_id");
+                sbValues.Append(",@hall_id");
+                DbManager.AddParameter("hall_id", command.HallId);
+            }
+            if (command.HallSchemeId.HasValue)
+            {
+                sbParams.Append(",hall_scheme_id");
+                sbParams.Append(",@hall_scheme_id");
+                DbManager.AddParameter("hall_scheme_id", command.HallSchemeId);
+            }
 
+            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({sbParams}) values({sbValues})");
+            Logger.LogInformation($"Inserted {inserted} conference");
+            return inserted;
         }
 
         public bool Execute(ChangePeriodCommand command)

@@ -18,11 +18,11 @@ namespace domain.Conference.Command
         [Column("hall_id")]
         public int? HallId { get; set; }
 
-        //[Column("hall_scheme_id")]
-        //public int? HallSchemeId { get; set; }
+        [Column("hall_scheme_id")]
+        public int? HallSchemeId { get; set; }
 
-        //[Column("period")]
-        //public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
+        [Column("period")]
+        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
 
     }
 }
