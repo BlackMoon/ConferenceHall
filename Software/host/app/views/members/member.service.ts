@@ -16,7 +16,16 @@ export class MemberService extends HttpDataService<MemberModel> {
     constructor(http: Http) { super(http); }
 
     add(member): Observable<any> {
-        return Observable.of(null);
+
+        let formData: FormData = new FormData();
+        formData.append("name", member.name);
+        formData.append("job_title", member.job_title);
+        formData.append("phones_list", member.phones_list);
+        formData.append("email_list", member.email_list);
+
+        return this.http
+            .post(this.url, formData)
+            .catch(handleResponseError);
     }
 
     delete(key): Observable<any> {
