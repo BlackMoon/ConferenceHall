@@ -9,7 +9,7 @@ export interface IJsonMetaData<T> {
 
 // ReSharper disable once InconsistentNaming
 export function JsonProperty<T>(metadata?: IJsonMetaData<T> | string): any {
-
+    debugger;
     // ReSharper disable once TypeGuardDoesntAffectAnything
     if (metadata instanceof String || typeof metadata === "string") {
         return Reflect.metadata(jsonMetadataKey, {
@@ -33,7 +33,7 @@ export function JsonProperty<T>(metadata?: IJsonMetaData<T> | string): any {
 export default class MapUtils {
 
     static isArray(object) {
-
+        
         if (object === Array) 
             return true;
         

@@ -19,10 +19,8 @@ const minChars = 3;
 export class MemberListComponent implements OnInit {
 
     members: MemberModel[];
-
     filter: string;
     header: string;
-    gridButtonsVisible = false;
     selectedElementIds: number[] = [];
 
 
@@ -102,8 +100,8 @@ export class MemberListComponent implements OnInit {
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 
-    addMember(value) {
-
+    addMember() {
+        debugger;
         this.router.navigate(["members/new"], { relativeTo: this.route });
         
         }  

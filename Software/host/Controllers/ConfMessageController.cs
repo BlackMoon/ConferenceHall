@@ -15,12 +15,6 @@ namespace host.Controllers
         {
         }
 
-        [HttpGet("{id}")]
-        public Task<ConfMessage> Get(int id)
-        {
-            return QueryDispatcher.DispatchAsync<FindConfMessageByIdQuery, ConfMessage>(new FindConfMessageByIdQuery(){ Id = id });
-        }
-
         [HttpPost]
         public Task<int> Post([FromBody]CreateConfMessageCommand value)
         {
@@ -34,11 +28,5 @@ namespace host.Controllers
             return CommandDispatcher.DispatchAsync<ConfMessage, bool>(value);
         }
 
-        
-        [HttpDelete("{id}")]
-        public Task Delete(int id)
-        {
-            return CommandDispatcher.DispatchAsync<DeleteConfMessageCommand, bool>(new DeleteConfMessageCommand() { Id = id });
-        }
     }
 }
