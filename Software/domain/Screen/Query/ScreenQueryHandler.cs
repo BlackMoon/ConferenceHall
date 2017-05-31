@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Query;
@@ -22,7 +24,7 @@ namespace domain.Screen.Query
             SqlBuilder sqlBuilder1 = new SqlBuilder("conf_hall.conferences c")
                 .Column("c.subject")
                 .Column("c.period")
-                .Column("conf_messages_get(c.id) messages")
+                .Column("conf_messages_get(c.id) tickers")
                 .Column("h.height")
                 .Column("h.width")
                 .Column("s.plan")
@@ -53,16 +55,13 @@ namespace domain.Screen.Query
 
         public IEnumerable<string> Execute(FindTickersByConference query)
         {
-            throw new System.NotImplementedException();
+            DbManager.Open();
+            return DbManager.DbConnection.Query<string>("SELECT conf_messages_rows(@id)", new { id = query.Id });
         }
 
-        public async Task<IEnumerable<string>> ExecuteAsync(FindTickersByConference query)
+        public Task<IEnumerable<string>> ExecuteAsync(FindTickersByConference query)
         {
-            // sql для выбора участников
-            SqlBuilder sqlBuilder = new SqlBuilder("conf_messages_get(@id)");
-
-            await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<string>(sqlBuilder.ToString(), new {id = query.Id});
+            throw new NotImplementedException();
         }
     }
 }

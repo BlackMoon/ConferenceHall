@@ -25,16 +25,16 @@ export class ScreenComponent implements AfterViewInit {
     subject: string;
 
 // ReSharper disable once InconsistentNaming
-    private _messages: string[] = [];
+    private _tickers: string[] = [];
 
-    get messages(): string[] {
-        return this._messages;
+    get tickers(): string[] {
+        return this._tickers;
     }
 
-    set messages(messages: string[]) {
+    set tickers(tickers: string[]) {
         
-        this.ticker = (messages.length > 0) ? messages[0] : "";
-        this._messages = messages;
+        this.ticker = (tickers.length > 0) ? tickers[0] : "";
+        this._tickers = tickers;
     }
     /**
      * (Бегущая) строка
@@ -59,16 +59,13 @@ export class ScreenComponent implements AfterViewInit {
     constructor(
         private logger: Logger,
         private route: ActivatedRoute,
-        private screenService: ScreenService) {
-
-        screenService.start();
-    }
+        private screenService: ScreenService) { }
 
     ngOnInit() {
 
         this.screenService
-            .sendTicker
-            .subscribe(messages => this.messages = messages);
+            .sendTickers
+            .subscribe(tickers => this.tickers = tickers);
 
         this.canvasBox = this.canvasBoxElRef.nativeElement;
 
@@ -77,13 +74,15 @@ export class ScreenComponent implements AfterViewInit {
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return key ? this.screenService.get(key) : Observable.empty();
+                return key ? Observable.forkJoin(this.screenService.start(key), this.screenService.get(key)) : Observable.empty();
             })
-            .subscribe((screen: ScreenModel) => {
+            .subscribe((res:Array<any>) => {
+                
+                let screen: ScreenModel = res[1];
 
                 this.period = screen.period;
                 this.subject = screen.subject;
-                this.messages = screen.messages || [];
+                this.tickers = screen.tickers || [];
 
                 this.canvasBox.insertAdjacentHTML("beforeend", screen.plan);
 
@@ -106,12 +105,12 @@ export class ScreenComponent implements AfterViewInit {
 
         // ticker
         setInterval(() => {
-            let ix = this.messages.indexOf(this.ticker) + 1;
-            if (ix > this.messages.length - 1) {
+            let ix = this.tickers.indexOf(this.ticker) + 1;
+            if (ix > this.tickers.length - 1) {
                 ix = 0;
             }
 
-            this.ticker = this.messages[ix];
+            this.ticker = this.tickers[ix];
 
         }, tickInterval);
     }

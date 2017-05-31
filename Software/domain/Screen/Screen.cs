@@ -28,7 +28,10 @@ namespace domain.Screen
 
         public Member.Member[] Members { get; set; }
 
-        public string[] Messages { get; set; }
+        /// <summary>
+        /// Сообщения бегущей строки
+        /// </summary>
+        public string[] Tickers { get; set; }
 
         [JsonConverter(typeof(NpgsqlRangeConverter))]
         public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }

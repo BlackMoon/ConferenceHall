@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using CacheManager.Core;
@@ -16,7 +14,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,6 +25,8 @@ namespace host
 {
     public partial class Startup : DryIocStartup
     {
+        public const string EventDbManagerKey = "EventDbManager";
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -68,26 +67,20 @@ namespace host
             // Add dependencies
             IContainer container = ConfigureDependencies(services, "domain", "Kit.Core", "Kit.Dal", "Kit.Dal.Postgre");
             
-            // IDbManager
-            container.RegisterInstance(Configuration.GetConnectionString("DefaultConnection"), serviceKey: "ConnectionString");
-            container.RegisterInstance(Configuration["Data:DefaultConnection:ProviderName"], serviceKey: "ProviderName");
+            // IDbManagers
+            
+            string providerName = Configuration["Data:DefaultConnection:ProviderName"];
 
-            Expression<Func<IDbManager>> serviceReturningExpr = () => DbManagerFactory.CreateDbManager(Arg.Of<string>("ProviderName"), Arg.Of<string>("ConnectionString"));
-            container.Register(made: Made.Of(serviceReturningExpr, requestIgnored => string.Empty));
+            string defaultConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            container.Register(
+                made: Made.Of(() => DbManagerFactory.CreateDbManager(providerName, defaultConnectionString), 
+                requestIgnored => string.Empty));
 
-            const string broadcastManagerKey = "BroadcastManager";
-            container.Register(made: Made.Of(serviceReturningExpr, requestIgnored => string.Empty), reuse:Reuse.Singleton, serviceKey: broadcastManagerKey);
-
-            IConnectionManager connectionManager = container.Resolve<IConnectionManager>();
-            container.RegisterInitializer<IDbManager>((m, r) => m.Notification = (sender, args) =>
-            {
-                connectionManager.GetHubContext<Broadcaster>().Clients.All.SendTicker("as");
-            },
-            info => Equals(info.ServiceKey, broadcastManagerKey));
-
-            // start listen db events
-            IDbManager broadcastDbManager = container.Resolve<IDbManager>(broadcastManagerKey);
-            broadcastDbManager.Open();
+            string eventConnectionString = Configuration.GetConnectionString("EventConnection");
+            container.Register(
+                made: Made.Of(() => DbManagerFactory.CreateDbManager(providerName, eventConnectionString), requestIgnored => string.Empty), 
+                reuse: Reuse.Singleton, 
+                serviceKey: EventDbManagerKey);
             
             // cache managers
             #region object cache
@@ -106,9 +99,8 @@ namespace host
                 reuse: Reuse.Singleton,
                 made: Made.Of(() => CacheFactory.FromConfiguration<SecretItem>("secretCache", secretCacheConfiguration)));
 
-            #endregion
-
             container.Register<SecretStorage>(Reuse.Singleton);
+            #endregion
 
             // Startup Jobs
             IJobDispatcher dispatcher = container.Resolve<IJobDispatcher>(IfUnresolved.ReturnDefault);

@@ -10,13 +10,13 @@ namespace domain.Member
         public string Name { get; set; }
                 
         [Column("job_title")]
-        public string JobTitle { get; set; }
+        public string Job_title { get; set; }
 
         [Column("emails_list")]
-        public string[] EmailsList { get; set; }
+        public string[] Emails_list { get; set; }
 
         [Column("phones_list")]
-        public string[] PhonesList { get; set; }
+        public string[] Phones_list { get; set; }
 
         public string Place { get; set; }
 
