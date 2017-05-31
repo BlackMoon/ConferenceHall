@@ -1,0 +1,21 @@
+﻿.ui-panel-titlebar {
+    height: 60px;    
+}
+
+.member-detail, .member-header {
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.member-header {
+    display: table-cell;
+    position: relative;
+    vertical-align: middle;
+}
+
+.ui-panel-titlebar-remove {
+    position: absolute;
+    right: 0;
+    top: 0;
+}

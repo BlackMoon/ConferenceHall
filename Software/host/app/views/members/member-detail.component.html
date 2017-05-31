@@ -1,0 +1,51 @@
+﻿<form [formGroup]="memberform" (ngSubmit)="save($event, memberform.value)">
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
+        <input type="hidden" formControlName="id" />
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    Наименование *:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText type="text" formControlName="name" style="width: 100%" />
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    Должность *:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText type="text" formControlName="job_title" style="width: 100%" />
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    Телефоны :
+                </div>
+                <div class="ui-grid-col-8">
+                    <textarea pInputTextarea type="text" rows="12" formControlName="phones_list" style="width: 100%"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    Email :
+                </div>
+                <div class="ui-grid-col-8">
+                    <textarea pInputTextarea type="text" rows="12" formControlName="email_list" style="width: 100%"></textarea>
+                </div>
+            </div>
+        </div>
+        <hr class="ui-widget-content" style="border:0">
+        <div class="ui-grid-row inputw100p">
+            <div class="ui-grid-col-12">
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled"></button>
+            </div>
+        </div>
+    </div>
+</form>
