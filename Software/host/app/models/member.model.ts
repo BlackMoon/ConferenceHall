@@ -2,7 +2,7 @@
 import { JsonProperty } from '../common/map-utils';
 
 /**
- * Модель. Клиент
+ * Модель. Участник
  */
 export class MemberModel extends KeyModel {
 
@@ -10,6 +10,7 @@ export class MemberModel extends KeyModel {
     jobTitle: string;
     emailsList: string[];
     phonesList: string[];
+    place: string;
     role: string;
     locked: boolean;
     selected: boolean;
@@ -17,13 +18,13 @@ export class MemberModel extends KeyModel {
     constructor() {
 
         super();
+
         this.name = undefined;
         this.jobTitle = undefined;
         this.emailsList = undefined;
         this.phonesList = undefined;
         this.role = undefined;
-        this.locked = undefined;
-
-     
+        this.role = undefined;
+        this.locked = true;
     }
 }

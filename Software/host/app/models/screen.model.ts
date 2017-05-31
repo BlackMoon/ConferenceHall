@@ -1,24 +1,29 @@
-﻿import { TimeRange } from './index';
+﻿import { MemberModel, TimeRange } from './index';
+import { JsonProperty } from '../common/map-utils';
 
 /**
  * Модель. Активная конференция (на отдельном экране)
  */
 export class ScreenModel {
+    
+    plan: string;
+    period: TimeRange;
+    subject: string;
+
     height: number;
     width: number;
 
-    subject: string;
-    plan: string;
-    period: TimeRange;
-
-    members: any[];
+    @JsonProperty({ clazz: MemberModel })
+    members: MemberModel[];
     tickers: string[];
 
     constructor() {
-
-        this.subject = null;
+        
+        this.members = null;
         this.plan = null;
         this.period = null;
+        this.subject = null;
+        this.tickers = null;
         this.height = 2;
         this.width = 2;
     }
