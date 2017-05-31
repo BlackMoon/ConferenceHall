@@ -21,10 +21,6 @@ export class ConferenceDetailComponent implements OnInit {
     confTypes: SelectItem[];
     halls: any[];
     hallSchemes: any[];
-    period2: TimeRange;
-
-
-
 
     selectedConfType: string;
     conferences: ConferenceModel[];
@@ -39,7 +35,7 @@ export class ConferenceDetailComponent implements OnInit {
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
-        debugger;
+
         this.confTypes = [];
 
         let stateKeys = Object
@@ -73,9 +69,6 @@ export class ConferenceDetailComponent implements OnInit {
             .subscribe(
             halls => this.halls = halls.map(h => <any>{ label: h.name, value: h.id }),
             error => this.logger.error(error));
-
-        debugger;
-       
     }
 
     ngOnInit() {
@@ -86,38 +79,35 @@ export class ConferenceDetailComponent implements OnInit {
             subject: [null],
             hallId: [null],
             description: [null],
-            period: { lowerBound: null, upperBound: null}
+            period: { lowerBound: new Date(), upperBound: new Date()}
         });
     }
     
 
     save(event, conferenceObj, startDate, endDate) {
         debugger;
-        //var qq = subjectTxt;
-        //var qq2 = this.selectedConfType;
-        //this.conference.description
         
-        conferenceObj.period.lowerBound = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000);//to utc
-        conferenceObj.period.upperBound = new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000);//to utc
+        conferenceObj.period.lowerBound = startDate ? new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000) : new Date();//to utc
+        conferenceObj.period.upperBound = endDate ? new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000) : new Date();//to utc
 
         event.preventDefault();
 
         this.conferenceService['add'](conferenceObj)
             .subscribe(_ => this.location.back(),
             error => this.logger.error(error));
-
-
-
-        
-
-        //this.hallService[hall.id ? 'update' : 'add'](hall)
-        //    .subscribe(_ => this.location.back(),
-        //    error => this.logger.error(error));
     }
 
     hallChanged(conferenceObj) {
-        if (!conferenceObj) return;
         debugger;
+        if (!conferenceObj) return;
+
+
+        //this.schemeService.getAll(conferenceObj.hallId)
+        //    .subscribe(
+        //    halls => this.hallSchemes = halls.map(h => <any>{ label: h.name, value: h.id }),
+        //    error => this.logger.error(error));
+
+        
 
         //this.schemeService
         //    .getAll()
