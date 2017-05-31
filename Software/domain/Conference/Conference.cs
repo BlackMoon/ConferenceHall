@@ -45,8 +45,8 @@ namespace domain.Conference
      
         public string Description { get; set; }
 
-        //[JsonConverter(typeof(NpgsqlRangeConverter))]
-        //public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
+        [JsonConverter(typeof(NpgsqlRangeConverter))]
+        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
 
         //public ConfState ConfState { get; set; }
 
