@@ -45,22 +45,22 @@ namespace domain.Conference
      
         public string Description { get; set; }
 
-        [JsonConverter(typeof(NpgsqlRangeConverter))]
-        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
+        //[JsonConverter(typeof(NpgsqlRangeConverter))]
+        //public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
 
-        public ConfState ConfState { get; set; }
+        //public ConfState ConfState { get; set; }
 
-        [Column("state")]
-        [JsonIgnore]
-        public string State
-        {
-            set
-            {
-                ConfState confState;
-                Enum.TryParse(value, true, out confState);
-                ConfState = confState;
-            }
-        }
+        //[Column("state")]
+        //[JsonIgnore]
+        //public string State
+        //{
+        //    set
+        //    {
+        //        ConfState confState;
+        //        Enum.TryParse(value, true, out confState);
+        //        ConfState = confState;
+        //    }
+        //}
     }
 
 }
