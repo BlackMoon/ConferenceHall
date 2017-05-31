@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -87,7 +88,7 @@ namespace host
             // start listen db events
             IDbManager broadcastDbManager = container.Resolve<IDbManager>(broadcastManagerKey);
             broadcastDbManager.Open();
-
+            
             // cache managers
             #region object cache
             ICacheManagerConfiguration elCacheConfiguration = Configuration.GetCacheConfiguration("elementCache");
