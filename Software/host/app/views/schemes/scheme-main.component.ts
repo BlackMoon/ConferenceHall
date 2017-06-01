@@ -5,10 +5,7 @@ import { Subscription } from 'rxjs';
 import { SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-
-import Point from "../../common/point";
-import * as SVG from "../../common/svg-utils";
-
+import { Point, borderClass, frameClass, lineClass, markClass, shapeClass } from "../../common/svg-utils";
 import { elemDragOffset, elemDragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
@@ -43,7 +40,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     set svgElement(shape: any) {
         
         // снять все ранее выделенные объекты
-        let frames = this.canvas.querySelectorAll(`.${SVG.frameClass}`);
+        let frames = this.canvas.querySelectorAll(`.${frameClass}`);
         [].forEach.call(frames,
             frame => frame.removeAttributeNS(null, "stroke"));
 
@@ -54,7 +51,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", shape));
 
             // выделить
-            let frame = shape.querySelector(`.${SVG.frameClass}`);
+            let frame = shape.querySelector(`.${frameClass}`);
             if (frame != null)
                 frame.setAttributeNS(null, "stroke", "blue");
         }
@@ -98,7 +95,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     get cloneButtonDisabled(): boolean {
-        return (this.removeButtonDisabled || !this.svgElement.classList.contains(SVG.shapeClass));
+        return (this.removeButtonDisabled || !this.svgElement.classList.contains(shapeClass));
     }
 
     get removeButtonDisabled(): boolean {
@@ -179,7 +176,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let g = document.createElementNS(this.canvas.namespaceURI, "g"),
             r = 15;
 
-        g.setAttribute("class", SVG.markClass);
+        g.setAttribute("class", markClass);
         g.setAttributeNS(null, "transform", "translate(100, 100)");
 
         // размеры в см
@@ -192,7 +189,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.appendChild(circle);
 
         let text = document.createElementNS(this.canvas.namespaceURI, "text"),
-            code = this.canvas.querySelectorAll(`g.${SVG.markClass}`).length + 1;
+            code = this.canvas.querySelectorAll(`g.${markClass}`).length + 1;
         
         text.textContent = code;
         
@@ -219,7 +216,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 this.svgElement = event.target.parentElement;
 
                 // на передний план --> вставка перед метками
-                let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
+                let firstMark = this.canvas.querySelector(`g.${markClass}`);
                 this.canvas.insertBefore(this.svgElement, firstMark);
 
                 let x = 0, y = 0;
@@ -233,12 +230,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     }
                 }
 
-                this.svgOrigin = new Point(x, y);
+                this.svgOrigin = new WebKitPoint(x, y);
             }
             // выбор canvas
             else {
                 this.svgElement = null;
-                this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
+                this.svgOrigin = new WebKitPoint(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
             }
         }
 
@@ -281,7 +278,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                             let box = this.svgElement.getBBox();
 
-                            this.svgElement.classList.contains(SVG.shapeClass)
+                            this.svgElement.classList.contains(shapeClass)
                                 ? attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`)
                                 : attr.push(`rotate(${t.angle})`);
 
@@ -306,7 +303,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         if (event.which === 1) {
 
-            if (this.svgElement !== null && this.svgElement.classList.contains(SVG.shapeClass)) {
+            if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass)) {
 
                 let attr = [];
                 for (let t of this.svgElement.transform.baseVal) {
@@ -335,7 +332,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                             let box = this.svgElement.getBBox();
 
-                            this.svgElement.classList.contains(SVG.shapeClass)
+                            this.svgElement.classList.contains(shapeClass)
                                 ? attr.push(`rotate(${t.angle} ${box.width / 2} ${box.height / 2})`)
                                 : attr.push(`rotate(${t.angle})`);
 
@@ -386,7 +383,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     drawBorder() {
         const rect = document.createElementNS(this.canvas.namespaceURI, "rect");
 
-        rect.setAttribute("class", SVG.borderClass);
+        rect.setAttribute("class", borderClass);
 
         rect.setAttributeNS(null, "x", "0");
         rect.setAttributeNS(null, "y", "0");
@@ -420,7 +417,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // горизонтальные линии
             for (i = 0; i <= this.initialHeight; i += int) {
                 line = document.createElementNS(this.canvas.namespaceURI, "line");
-                line.setAttribute("class", SVG.lineClass);
+                line.setAttribute("class", lineClass);
 
                 line.setAttributeNS(null, "x1", "0");
                 line.setAttributeNS(null, "y1", i);
@@ -439,7 +436,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // вертикальные линии
             for (i = 0; i <= this.initialWidth; i += int) {
                 line = document.createElementNS(this.canvas.namespaceURI, "line");
-                line.setAttribute("class", SVG.lineClass);
+                line.setAttribute("class", lineClass);
 
                 line.setAttributeNS(null, "x1", i);
                 line.setAttributeNS(null, "y1", "0");
@@ -470,7 +467,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
 
-        g.setAttribute("class", SVG.shapeClass);
+        g.setAttribute("class", shapeClass);
         g.setAttribute("data-id", `${id}`);
         g.setAttribute("data-name", element.name);
 
@@ -490,7 +487,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.setAttributeNS(null, "transform", `translate(${pt.x}, ${pt.y})`);
 
         let rect = document.createElementNS(this.canvas.namespaceURI, "rect");
-        rect.setAttribute("class", SVG.frameClass);
+        rect.setAttribute("class", frameClass);
 
         rect.setAttributeNS(null, "height", `${h}`);
         rect.setAttributeNS(null, "width", `${w}`);
@@ -499,13 +496,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.appendChild(rect);
 
         // вставка перед метками
-        let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
+        let firstMark = this.canvas.querySelector(`g.${markClass}`);
         this.canvas.insertBefore(g, firstMark);
     }
 
     intervalChange = _ => {
         // удалить старую сетку
-        let lines = this.canvas.querySelectorAll(`line.${SVG.lineClass}`);
+        let lines = this.canvas.querySelectorAll(`line.${lineClass}`);
         [].forEach.call(lines, (line) => this.canvas.removeChild(line));
 
         this.drawGrid();
@@ -522,11 +519,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         svg.setAttribute("viewbox", `0 0 ${this.initialWidth} ${this.initialHeight}`);
 
         // сетку и границу не нужно сохранять
-        let lines = svg.querySelectorAll(`line.${SVG.lineClass}`);
+        let lines = svg.querySelectorAll(`line.${lineClass}`);
         [].forEach.call(lines, (line) => svg.removeChild(line));
         
         // снять все ранее выделенные объекты
-        let frames = svg.querySelectorAll(`.${SVG.frameClass}`);
+        let frames = svg.querySelectorAll(`.${frameClass}`);
         [].forEach.call(frames,
             frame => frame.removeAttributeNS(null, "stroke"));
         
@@ -568,7 +565,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         clone.setAttributeNS(null, "transform", attr);
 
         // вставка перед метками
-        let firstMark = this.canvas.querySelector(`g.${SVG.markClass}`);
+        let firstMark = this.canvas.querySelector(`g.${markClass}`);
         this.canvas.insertBefore(clone, firstMark);
 
         this.svgElement = clone;
@@ -615,7 +612,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         if (alpha !== 0.0) {
             let box = this.svgElement.getBBox();
 
-            this.svgElement.classList.contains(SVG.shapeClass)
+            this.svgElement.classList.contains(shapeClass)
                 ? attr.push(`rotate(${alpha} ${box.width / 2} ${box.height / 2})`)
                 : attr.push(`rotate(${alpha})`);
         }
