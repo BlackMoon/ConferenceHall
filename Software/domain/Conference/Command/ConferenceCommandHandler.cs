@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Text;
 using System.Threading.Tasks;
 using domain.Common.Command;
 using Dapper.Contrib.Extensions;
@@ -8,8 +7,8 @@ using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
-using NpgsqlTypes;
 using TimeRange = domain.Common.Range<System.DateTime>;
+using System.Collections.Generic;
 
 namespace domain.Conference.Command
 {
@@ -40,27 +39,28 @@ namespace domain.Conference.Command
         {
             DbManager.AddParameter("subject", command.Subject);
             DbManager.AddParameter("description", command.Description);
-            DbManager.AddParameter("startDate", command.Period.LowerBound);
-            DbManager.AddParameter("endDate", command.Period.UpperBound);
+            DbManager.AddParameter("startDate", DbType.DateTime, command.Period.LowerBound);
+            DbManager.AddParameter("endDate", DbType.DateTime, command.Period.UpperBound);
+            DbManager.AddParameter("hall_id", command.HallId);
 
-            var sbParams = new StringBuilder();
-            var sbValues = new StringBuilder();
-            sbParams.Append("subject, description, period");
-            sbValues.Append("@subject, @description, tsrange(@startDate, @endDate)");
+            List<string> lParams = new List<string>(){ "subject", "description", "period" };
+            List<string> lValues = new List<string>() {"@subject", "@description", "tsrange(@startDate, @endDate)"};
+
             if (command.HallId.HasValue)
             {
-                sbParams.Append(",hall_id");
-                sbValues.Append(",@hall_id");
+                lParams.Add("hall_id");
+                lValues.Add("@hall_id");
                 DbManager.AddParameter("hall_id", command.HallId);
             }
+           
             if (command.HallSchemeId.HasValue)
             {
-                sbParams.Append(",hall_scheme_id");
-                sbParams.Append(",@hall_scheme_id");
+                lParams.Add("hall_scheme_id");
+                lValues.Add("@hall_scheme_id");
                 DbManager.AddParameter("hall_scheme_id", command.HallSchemeId);
             }
-
-            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({sbParams}) values({sbValues})");
+            
+            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", lParams)}) values({string.Join(",", lValues)})");
             Logger.LogInformation($"Inserted {inserted} conference");
             return inserted;
         }
