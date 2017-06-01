@@ -16,6 +16,13 @@ enum SignalRConnectionStatus {
     Error = 3
 }
 
+/**
+ * Интерфейс broadcast hub'а
+ */
+interface IBroadcaster {
+    sendTickers(tickers: string[]); 
+}
+
 @Injectable()
 export class ScreenService extends HttpDataService<ScreenModel> {
 
@@ -76,9 +83,9 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         $.connection.hub.qs = `id=${key}`;
         
         let broadcaster = $.connection.broadcaster,
-            client = broadcaster.client;
+            client = <IBroadcaster>broadcaster.client;
 
-        client.method2 = tickers => this.onMethod2(tickers);
+        //client.method2 = tickers => this.onMethod2(tickers);
         client.sendTickers = tickers => this.onSendTickers(tickers);
 
         // start the connection

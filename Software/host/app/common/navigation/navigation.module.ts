@@ -6,9 +6,7 @@ import * as views from '../../views';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },    
-    { path: 'home', component: views.HomeView },
-    { path: 'meetings', component: views.MeetingsView },
-    { path: 'members', component: views.MembersView }
+    { path: 'home', component: views.HomeView }
 ];
 
 @NgModule({

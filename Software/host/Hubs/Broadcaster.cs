@@ -5,8 +5,6 @@ namespace host.Hubs
 {
     public interface IBroadcaster
     {
-        Task SetConnectionId(string connectionId);
-        
         /// <summary>
         /// Отправить сообщения в бегущую строку
         /// </summary>
@@ -24,6 +22,15 @@ namespace host.Hubs
                 Groups.Add(Context.ConnectionId, confId.ToString());
 
             return base.OnConnected();
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            int confId;
+            if (int.TryParse(Context.QueryString["id"], out confId))
+                Groups.Remove(Context.ConnectionId, confId.ToString());
+
+            return base.OnDisconnected(stopCalled);
         }
     }
 }
