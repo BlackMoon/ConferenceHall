@@ -8,10 +8,10 @@ import { HallsModule } from './halls/halls.module';
 import { MembersModule } from './members/members.module';
 import { SchemesModule } from './schemes/schemes.module';
 import { ScreenModule } from './screen/screen.module';
-import * as views from './index';
+import { HomeView } from './home.view';
 
 @NgModule({
-    declarations: [Object.values(views)],
+    declarations: [HomeView],
     exports: [ConfirmDialogModule, GrowlModule],
     imports: [
         CommonModule,

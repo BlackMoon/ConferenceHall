@@ -2,14 +2,15 @@
 import { JsonProperty } from '../common/map-utils';
 
 /**
- * Модель. Клиент
+ * Модель. Участник
  */
 export class MemberModel extends KeyModel {
 
     name: string;
-    job_title: string;
-    emails_list: string[];
-    phones_list: string[];
+    jobTitle: string;
+    emailsList: string[];
+    phonesList: string[];
+    place: string;
     role: string;
     locked: boolean;
     selected: boolean;
@@ -17,13 +18,13 @@ export class MemberModel extends KeyModel {
     constructor() {
 
         super();
-        this.name = undefined;
-        this.job_title = undefined;
-        this.emails_list = undefined;
-        this.phones_list = undefined;
-        this.role = undefined;
-        this.locked = undefined;
 
-     
+        this.name = undefined;
+        this.jobTitle = undefined;
+        this.emailsList = undefined;
+        this.phonesList = undefined;
+        this.role = undefined;
+        this.role = undefined;
+        this.locked = true;
     }
 }

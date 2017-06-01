@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NpgsqlTypes;
 
 namespace domain.Common
 {
-    class NpgsqlRangeConverter : JsonConverter
+    class NpgsqlRangeConverter<T> : JsonConverter where T: struct
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            NpgsqlRange<DateTime> range = (NpgsqlRange<DateTime>)value;
+            NpgsqlRange<T> range = (NpgsqlRange<T>)value;
             if (range.IsEmpty)
             {
                 serializer.Serialize(writer, null);
@@ -30,7 +29,21 @@ namespace domain.Common
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            T? upperBound = null;
+            T? lowerBound = null;
+
+            var jObj = JObject.Load(reader);
+            
+            JToken val;
+
+            if (jObj.TryGetValue("lowerBound", out val))
+                lowerBound = val.ToObject<T?>();
+
+            if (jObj.TryGetValue("upperBound", out val))
+                upperBound = val.ToObject<T?>();
+
+            return lowerBound.HasValue && upperBound.HasValue ?
+                new NpgsqlRange<T>(lowerBound.Value, upperBound.Value) : new NpgsqlRange<T>();
         }
 
         public override bool CanConvert(Type objectType)

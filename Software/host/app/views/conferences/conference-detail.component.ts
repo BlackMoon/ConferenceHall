@@ -7,7 +7,7 @@ import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, Butto
 import { ConferenceService } from './conference.service';
 import { HallService } from '../halls/hall.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import Schemeservice = require("../schemes/scheme.service");
+import { SchemeService } from  "../schemes/scheme.service";
 import { TimeRange } from '../../models';
 
 @Component({
@@ -31,7 +31,7 @@ export class ConferenceDetailComponent implements OnInit {
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
         private hallService: HallService,
-        private schemeService: Schemeservice.SchemeService,
+        private schemeService: SchemeService,
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {

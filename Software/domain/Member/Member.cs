@@ -4,9 +4,31 @@ using Newtonsoft.Json;
 
 namespace domain.Member
 {
+    public enum MemberState
+    {
+        /// <summary>
+        /// Приглашен
+        /// </summary>
+        Invited,
+
+        /// <summary>
+        /// Зарегистрирован
+        /// </summary>
+        Registered,
+
+        /// <summary>
+        /// Регистрация подтверждена
+        /// </summary>
+        Confirmed
+    };
+
+
     [Table("conf_hall.employees")]
     public class Member : KeyObject
-    {     
+    {
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public bool Locked { get; set; }
+
         public string Name { get; set; }
                 
         [Column("job_title")]
@@ -21,9 +43,6 @@ namespace domain.Member
         public string Place { get; set; }
 
         public string Role { get; set; }
-
-        [Column("locked")]
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public bool Locked { get; set; }
+        
     }
 }

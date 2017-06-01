@@ -1,8 +1,8 @@
-﻿import { AfterViewInit, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
-import { ScreenModel, TimeRange } from '../../models';
+import { MemberModel, ScreenModel, TimeRange } from '../../models';
 import { ScreenService } from "./screen.service";
 
 import * as SVG from "../../common/svg-utils";
@@ -15,10 +15,14 @@ const tickInterval = 5000;
     styles: [".h40 { height: 40px }"],
     templateUrl: 'screen.component.html'
 })
-export class ScreenComponent implements AfterViewInit {
+export class ScreenComponent implements AfterViewInit, OnInit {
 
     canvas: any;
     canvasBox: any;
+
+    initialHeight: number;
+    initialWidth: number;
+    members: MemberModel[];
 
     now: Date = new Date();
     period: TimeRange;
@@ -36,13 +40,16 @@ export class ScreenComponent implements AfterViewInit {
         this.ticker = (tickers.length > 0) ? tickers[0] : "";
         this._tickers = tickers;
     }
+
+    /**
+     * id конференции
+     */
+    id: number;
+
     /**
      * (Бегущая) строка
      */
     ticker: string;
-
-    initialHeight: number;
-    initialWidth: number;
 
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
@@ -59,16 +66,17 @@ export class ScreenComponent implements AfterViewInit {
     constructor(
         private logger: Logger,
         private route: ActivatedRoute,
-        private screenService: ScreenService) { }
+        private screenService: ScreenService) {
+    }
+
+    ngAfterViewInit() {
+        this.onResize();
+    }
 
     ngOnInit() {
 
-        this.screenService
-            .sendTickers
-            .subscribe(tickers => this.tickers = tickers);
-
         this.canvasBox = this.canvasBoxElRef.nativeElement;
-
+        
         this.route.params
 
             .switchMap((params: Params) => {
@@ -76,10 +84,11 @@ export class ScreenComponent implements AfterViewInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? Observable.forkJoin(this.screenService.start(key), this.screenService.get(key)) : Observable.empty();
             })
-            .subscribe((res:Array<any>) => {
-                
+            .subscribe((res: Array<any>) => {
+
                 let screen: ScreenModel = res[1];
 
+                this.members = screen.members;
                 this.period = screen.period;
                 this.subject = screen.subject;
                 this.tickers = screen.tickers || [];
@@ -100,6 +109,10 @@ export class ScreenComponent implements AfterViewInit {
                 }
             });
 
+        this.screenService
+            .sendTickers
+            .subscribe(tickers => this.tickers = tickers);
+
         // clock
         setInterval(() => this.now = new Date(), 1000);
 
@@ -115,10 +128,7 @@ export class ScreenComponent implements AfterViewInit {
         }, tickInterval);
     }
 
-    ngAfterViewInit() {
-        this.onResize();
-    }
-
+   
     /**
      * Установить схему по центру 
      */
@@ -145,7 +155,7 @@ export class ScreenComponent implements AfterViewInit {
 
         this.canvas.insertBefore(rect, this.canvas.firstChild);
     }
-
+    
     onResize() {
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.headerElRef.nativeElement.offsetHeight - this.footerElRef.nativeElement.offsetHeight}px`;
     }

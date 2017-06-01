@@ -1,12 +1,18 @@
 ﻿using System.Threading.Tasks;
+using domain.Member;
 using Microsoft.AspNetCore.SignalR;
 
 namespace host.Hubs
 {
     public interface IBroadcaster
     {
-        Task SetConnectionId(string connectionId);
-        
+        /// <summary>
+        /// Подтверждение регистрации участника
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        Task ConfirmMember(Member member);
+
         /// <summary>
         /// Отправить сообщения в бегущую строку
         /// </summary>
@@ -15,6 +21,10 @@ namespace host.Hubs
         Task SendTickers(string [] tickers);
     }
 
+
+    /// <summary>
+    /// SignalR hub
+    /// </summary>
     public class Broadcaster : Hub<IBroadcaster>
     {
         public override Task OnConnected()
@@ -24,6 +34,15 @@ namespace host.Hubs
                 Groups.Add(Context.ConnectionId, confId.ToString());
 
             return base.OnConnected();
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            int confId;
+            if (int.TryParse(Context.QueryString["id"], out confId))
+                Groups.Remove(Context.ConnectionId, confId.ToString());
+
+            return base.OnDisconnected(stopCalled);
         }
     }
 }
