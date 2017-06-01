@@ -27,11 +27,10 @@ namespace domain.Member.Query
         {
 
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees s")
+               // .Column("rowid")
                 .Column("s.id")
                 .Column("s.name")
                 .Column("s.job_title")
-                .Column("s.emails_list")
-                .Column("s.phones_list")
                 .Column("u.role")
                  .Column("u.locked")
                  .Join("conf_hall.users u ON s.id = u.employee_id")

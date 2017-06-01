@@ -22,28 +22,32 @@ namespace domain.Member
         /// </summary>
         Confirmed
     };
-
-
+   
     [Table("conf_hall.employees")]
     public class Member : KeyObject
     {
+        public int LockedInt { get; set; }
         /// <summary>
         /// Заблокирован? (для пользователей)
         /// </summary>
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public bool Locked { get; set; }
+       
+        [Column("locked")]
+        [JsonIgnore]
+    public bool Locked
+    {
+            set
+            {                
+               LockedInt = value ? 1 :0;
+            }
+        }
 
         public string Name { get; set; }
-                
+        public string RowId { get; set; }
+
         [Column("job_title")]
         public string JobTitle { get; set; }
 
-        [Column("emails_list")]
-        public string[] EmailsList { get; set; }
-
-        [Column("phones_list")]
-        public string[] PhonesList { get; set; }
-        
         /// <summary>
         /// Роль (для пользователей)
         /// </summary>
