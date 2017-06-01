@@ -2,10 +2,9 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
+import { borderClass, markClass } from "../../common/svg-utils";
 import { MemberModel, ScreenModel, TimeRange } from '../../models';
 import { ScreenService } from "./screen.service";
-
-import * as SVG from "../../common/svg-utils";
 
 const tickInterval = 5000;
 
@@ -142,7 +141,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     drawBorder() {
         const rect = document.createElementNS(this.canvas.namespaceURI, "rect");
 
-        rect.setAttribute("class", SVG.borderClass);
+        rect.setAttribute("class", borderClass);
 
         rect.setAttributeNS(null, "x", "0");
         rect.setAttributeNS(null, "y", "0");

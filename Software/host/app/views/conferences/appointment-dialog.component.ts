@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
 import { AppointmentModel } from '../../models';
+import { DateToUtcPipe } from "../../common/pipes";
 import { HallService } from '../halls/hall.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class AppointmentDialogComponent implements OnInit {
     locale: any;
 
     constructor(
+        private dateToUtcPipe: DateToUtcPipe,
         private fb: FormBuilder,
         private hallService: HallService,
         private logger: Logger) {
@@ -57,10 +59,7 @@ export class AppointmentDialogComponent implements OnInit {
         
         let duration:Date = appointment.duration;
         appointment.duration = `${duration.getHours()}:${duration.getMinutes()}`;
-        
-        // utc time!
-        let start: Date = appointment.start;
-        appointment.start = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
+        appointment.start = this.dateToUtcPipe.transform(appointment.start);
 
         this.closed.emit(appointment);
         this.visible = false;

@@ -1,5 +1,5 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value, startDate.value, endDate.value)">
+    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
         <input type="hidden" formControlName="id" />
 
         <p-tabView>
@@ -72,7 +72,7 @@
                                 Дата начала:
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar #startDate [showTime]="true" [style]="{'width':'100 px'}"></p-calendar>
+                                <p-calendar  [(ngModel)]="startDate" [showTime]="true" [style]="{'width':'100 px'}"></p-calendar>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                                 Дата окончания :
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar #endDate [showTime]="true" [style]="{'width':'100 px'}"></p-calendar>
+                                <p-calendar [(ngModel)]="endDate" [showTime]="true" [style]="{'width':'100 px'}"></p-calendar>
                             </div>
                         </div>
                     </div>

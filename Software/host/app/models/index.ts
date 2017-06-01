@@ -2,6 +2,7 @@
 export * from "./key.model";
 
 export * from "./conference.model";
+export * from "./confMessage.model";
 export * from "./element.model";
 export * from "./employee.model";
 export * from "./group.model";

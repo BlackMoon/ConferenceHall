@@ -35,8 +35,8 @@ namespace domain.Screen.Query
             // sql для выбора участников
             SqlBuilder sqlBuilder2 = new SqlBuilder("conf_hall.conf_members m")
                 .Column("m.id")
+                .Column("m.seat")
                 .Column("m.state")
-                .Column("m.place")
                 .Column("e.name")
                 .Join("conf_hall.employees e ON e.id = m.employee_id")
                 .Where("m.conf_id = @id");
