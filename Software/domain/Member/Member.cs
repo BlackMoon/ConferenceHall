@@ -4,6 +4,20 @@ using Newtonsoft.Json;
 
 namespace domain.Member
 {
+    public enum MemberState
+    {
+        /// <summary>
+        /// Планируемая
+        /// </summary>
+        Invited,
+
+        /// <summary>
+        /// На подготовке
+        /// </summary>
+        Registered
+    };
+
+
     [Table("conf_hall.employees")]
     public class Member : KeyObject
     {     
@@ -22,7 +36,7 @@ namespace domain.Member
 
         public string Role { get; set; }
 
-        [Column("locked")]
+        
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool Locked { get; set; }
     }

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Kit.Core.CQRS.Command;
 using System;
+using domain.Common;
+using Newtonsoft.Json;
 
 namespace domain.Conference.Command
 {
@@ -21,7 +23,7 @@ namespace domain.Conference.Command
         [Column("hall_scheme_id")]
         public int? HallSchemeId { get; set; }
 
-        [Column("period")]
+        [JsonConverter(typeof(NpgsqlRangeConverter))]
         public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
 
     }
