@@ -56,7 +56,7 @@ export class AppointmentDialogComponent implements OnInit {
     }
 
     save(event, appointment) {
-        debugger;
+        
         let duration:Date = appointment.duration;
         appointment.duration = `${duration.getHours()}:${duration.getMinutes()}`;
         appointment.start = this.dateToUtcPipe.transform(appointment.start);
