@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
+using System.Text.RegularExpressions;
+using domain.Member;
+using domain.Member.Query;
 using domain.Screen.Query;
 using DryIoc;
 using host.Hubs;
@@ -13,7 +17,7 @@ namespace host
 {
     public class Program
     {
-        private static readonly string[] Channels = {"conf_messages_change"};
+        private static readonly string[] Channels = { "conf_members_change", "conf_messages_change" };
 
         public static void Main(string[] args)
         {
@@ -25,6 +29,7 @@ namespace host
                 .UseApplicationInsights()
                 .Build();
 
+            #region listener
             IContainer container = host.Services.GetService<IContainer>();
             IConnectionManager connectionManager = container.Resolve<IConnectionManager>();
             IDbManager dbManager = container.Resolve<IDbManager>(serviceKey: Startup.EventDbManagerKey);
@@ -37,24 +42,53 @@ namespace host
             {
                 Npgsql.NpgsqlNotificationEventArgs eventArgs = e as Npgsql.NpgsqlNotificationEventArgs;
 
-                switch (eventArgs?.Condition.ToLower())
+                if (eventArgs != null)
                 {
-                    case "conf_messages_change":
+                    string info = eventArgs.AdditionalInformation;
+                    int confId;
 
-                        int confId;
-                        if (int.TryParse(eventArgs.AdditionalInformation, out confId))
-                        {
-                            var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() {Id = confId});
-                            // отправить signalR клиенту(ам)
-                            connectionManager.GetHubContext<Broadcaster>().Clients.Group(confId.ToString()).SendTickers(tickers);
-                        }
+                    switch (eventArgs.Condition.ToLower())
+                    {
+                        case "conf_members_change":
 
-                        break;
+                            NameValueCollection nvc = new NameValueCollection();
+
+                            // строка вида [confid=..&memberid=...]
+                            foreach (string s in Regex.Split(info, "&"))
+                            {
+                                string[] pair = Regex.Split(s, "=");
+                                if (pair.Length == 2)
+                                {
+                                    nvc.Add(pair[0], pair[1]);
+                                }
+                            }
+                        
+                            int memberId;
+                            info = nvc["confid"];
+                            if (int.TryParse(info, out confId) && int.TryParse(nvc["memberid"], out memberId))
+                            {
+                                var seat = queryDispatcher.Dispatch<FindMemberSeat, Member>(new FindMemberSeat() { Id = confId });
+                                // отправить уведомления signalR клиенту(ам)
+                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(seat);
+                            }
+
+                            break;
+
+                        case "conf_messages_change":
+                        
+                            if (int.TryParse(info, out confId))
+                            {
+                                var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() {Id = confId});
+                                // отправить уведомления signalR клиенту(ам)
+                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).SendTickers(tickers);
+                            }
+
+                            break;
+                    }
                 }
-
             };
             listener.Start(true);
-           
+            #endregion
 
             host.Run();
         }

@@ -1,10 +1,18 @@
 ﻿using System.Threading.Tasks;
+using domain.Member;
 using Microsoft.AspNetCore.SignalR;
 
 namespace host.Hubs
 {
     public interface IBroadcaster
     {
+        /// <summary>
+        /// Подтверждение регистрации участника
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        Task ConfirmMember(Member member);
+
         /// <summary>
         /// Отправить сообщения в бегущую строку
         /// </summary>
@@ -13,6 +21,10 @@ namespace host.Hubs
         Task SendTickers(string [] tickers);
     }
 
+
+    /// <summary>
+    /// SignalR hub
+    /// </summary>
     public class Broadcaster : Hub<IBroadcaster>
     {
         public override Task OnConnected()

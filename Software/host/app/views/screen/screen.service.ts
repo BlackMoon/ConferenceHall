@@ -20,6 +20,7 @@ enum SignalRConnectionStatus {
  * Интерфейс broadcast hub'а
  */
 interface IHubClient {
+    confirmMember(memberId: number);
     sendTickers(tickers: string[]); 
 }
 
@@ -29,10 +30,12 @@ export class ScreenService extends HttpDataService<ScreenModel> {
     currentState = SignalRConnectionStatus.Disconnected;
     connectionState: Observable<SignalRConnectionStatus>;
 
+    confirmMember: Observable<number>;
     sendTickers: Observable<string[]>;
 
     private connectionStateSubject = new Subject<SignalRConnectionStatus>();
-    
+
+    private confirmMemberSubject = new Subject<number>();
     private sendTickersSubject = new Subject<string[]>();
 
     url = isDevMode() ? "http://localhost:64346/api/screen" : "/api/screen";
@@ -41,7 +44,8 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         super(http);
 
         this.connectionState = this.connectionStateSubject.asObservable();
-        
+
+        this.confirmMember = this.confirmMemberSubject.asObservable();
         this.sendTickers = this.sendTickersSubject.asObservable();
     }
 
@@ -52,7 +56,15 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         this.connectionStateSubject.next(connectionState);
         this.connectionStateSubject.complete();
     }
-   
+    
+    /**
+     * server's confirmMember method
+     * @param id
+     */
+    private onConfirmMember(id) {
+        this.confirmMemberSubject.next(id);
+    }
+
     /**
      * server's sendTickets method
      * @param tickers
@@ -81,7 +93,7 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         let proxy = $.connection.broadcaster,
             client = <IHubClient>proxy.client;
 
-        //client.method2 = tickers => this.onMethod2(tickers);
+        client.confirmMember = id => this.onConfirmMember(id);
         client.sendTickers = tickers => this.onSendTickers(tickers);
 
         // start the connection
