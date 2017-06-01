@@ -84,9 +84,10 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? Observable.forkJoin(this.screenService.start(key), this.screenService.get(key)) : Observable.empty();
             })
-            .subscribe((screen: ScreenModel) => {
-                
-                debugger;
+            .subscribe((res: Array<any>) => {
+
+                let screen: ScreenModel = res[1];
+
                 this.members = screen.members;
                 this.period = screen.period;
                 this.subject = screen.subject;
