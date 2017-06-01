@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { Point, borderClass, frameClass, lineClass, markClass, shapeClass } from "../../common/svg-utils";
+import { borderClass, frameClass, lineClass, markClass, shapeClass, Point } from "../../common/svg-utils";
 import { elemDragOffset, elemDragType, ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
