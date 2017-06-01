@@ -23,7 +23,7 @@ namespace domain.Conference.Command
         [Column("hall_scheme_id")]
         public int? HallSchemeId { get; set; }
 
-        [JsonConverter(typeof(NpgsqlRangeConverter))]
+        [JsonConverter(typeof(NpgsqlRangeConverter<DateTime>))]
         public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
 
     }
