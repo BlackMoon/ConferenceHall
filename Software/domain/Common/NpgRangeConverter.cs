@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NpgsqlTypes;
 
 namespace domain.Common
@@ -30,7 +29,17 @@ namespace domain.Common
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var jObj = JObject.Load(reader);
+            DateTime? upperBound = null;
+            DateTime? lowerBound = null;
+            JToken val;
+            if(jObj.TryGetValue("lowerBound", out val))
+                lowerBound = val.ToObject<DateTime?>();
+            if (jObj.TryGetValue("upperBound", out val))
+                upperBound = val.ToObject<DateTime?>();
+
+            return lowerBound.HasValue && upperBound.HasValue ?
+                new NpgsqlRange<DateTime>(lowerBound.Value, upperBound.Value) : new NpgsqlRange<DateTime>();
         }
 
         public override bool CanConvert(Type objectType)
