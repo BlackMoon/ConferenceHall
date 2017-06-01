@@ -8,6 +8,7 @@ import { ConferenceDetailComponent } from './conference-detail.component';
 import { ConferenceListComponent } from './conference-list.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
+import { DateToUtcPipe } from "../../common/pipes";
 
 @NgModule({
     declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent],
@@ -27,6 +28,6 @@ import { ConferenceService } from './conference.service';
         SplitButtonModule,
         TabViewModule,
         ToolbarModule],
-    providers: [ConferenceService]
+    providers: [ConferenceService, DateToUtcPipe]
 })
 export class ConferencesModule { }
