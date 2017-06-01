@@ -19,22 +19,20 @@ enum SignalRConnectionStatus {
 /**
  * Интерфейс broadcast hub'а
  */
-interface IBroadcaster {
+interface IHubClient {
     sendTickers(tickers: string[]); 
 }
 
 @Injectable()
 export class ScreenService extends HttpDataService<ScreenModel> {
-
-    method2: Observable<string[]>;
-    sendTickers: Observable<string[]>;
-
+    
     currentState = SignalRConnectionStatus.Disconnected;
     connectionState: Observable<SignalRConnectionStatus>;
 
-    private connectionStateSubject = new Subject<SignalRConnectionStatus>();
+    sendTickers: Observable<string[]>;
 
-    private m2Subject = new Subject<string[]>();
+    private connectionStateSubject = new Subject<SignalRConnectionStatus>();
+    
     private sendTickersSubject = new Subject<string[]>();
 
     url = isDevMode() ? "http://localhost:64346/api/screen" : "/api/screen";
@@ -43,21 +41,18 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         super(http);
 
         this.connectionState = this.connectionStateSubject.asObservable();
-
-        this.method2= this.m2Subject.asObservable();
+        
         this.sendTickers = this.sendTickersSubject.asObservable();
     }
 
     private setConnectionState(connectionState: SignalRConnectionStatus) {
+        console.log(`connection state changed to: ${connectionState}`);
+
         this.currentState = connectionState;
         this.connectionStateSubject.next(connectionState);
         this.connectionStateSubject.complete();
     }
-    
-    private onMethod2(tickers) {
-        this.m2Subject.next(tickers);
-    }
-
+   
     /**
      * server's sendTickets method
      * @param tickers
@@ -78,12 +73,13 @@ export class ScreenService extends HttpDataService<ScreenModel> {
     }
 
     start(key): Observable<SignalRConnectionStatus> {
-        
+
         $.connection.hub.logging = isDevMode();
         $.connection.hub.qs = `id=${key}`;
-        
-        let broadcaster = $.connection.broadcaster,
-            client = <IBroadcaster>broadcaster.client;
+
+        // reference signalR hub named 'broadcaster'
+        let proxy = $.connection.broadcaster,
+            client = <IHubClient>proxy.client;
 
         //client.method2 = tickers => this.onMethod2(tickers);
         client.sendTickers = tickers => this.onSendTickers(tickers);

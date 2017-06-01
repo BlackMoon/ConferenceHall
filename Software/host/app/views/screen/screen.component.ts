@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -15,7 +15,7 @@ const tickInterval = 5000;
     styles: [".h40 { height: 40px }"],
     templateUrl: 'screen.component.html'
 })
-export class ScreenComponent implements AfterViewInit {
+export class ScreenComponent implements AfterViewInit, OnInit {
 
     canvas: any;
     canvasBox: any;
@@ -40,6 +40,12 @@ export class ScreenComponent implements AfterViewInit {
         this.ticker = (tickers.length > 0) ? tickers[0] : "";
         this._tickers = tickers;
     }
+
+    /**
+     * id конференции
+     */
+    id: number;
+
     /**
      * (Бегущая) строка
      */
@@ -60,16 +66,17 @@ export class ScreenComponent implements AfterViewInit {
     constructor(
         private logger: Logger,
         private route: ActivatedRoute,
-        private screenService: ScreenService) { }
+        private screenService: ScreenService) {
+    }
+
+    ngAfterViewInit() {
+        this.onResize();
+    }
 
     ngOnInit() {
 
         this.canvasBox = this.canvasBoxElRef.nativeElement;
-
-        this.screenService
-            .sendTickers
-            .subscribe(tickers => this.tickers = tickers);
-
+        
         this.route.params
 
             .switchMap((params: Params) => {
@@ -77,9 +84,8 @@ export class ScreenComponent implements AfterViewInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? Observable.forkJoin(this.screenService.start(key), this.screenService.get(key)) : Observable.empty();
             })
-            .subscribe((res:Array<any>) => {
+            .subscribe((screen: ScreenModel) => {
                 
-                let screen: ScreenModel = res[1];
                 debugger;
                 this.members = screen.members;
                 this.period = screen.period;
@@ -102,6 +108,10 @@ export class ScreenComponent implements AfterViewInit {
                 }
             });
 
+        this.screenService
+            .sendTickers
+            .subscribe(tickers => this.tickers = tickers);
+
         // clock
         setInterval(() => this.now = new Date(), 1000);
 
@@ -117,10 +127,7 @@ export class ScreenComponent implements AfterViewInit {
         }, tickInterval);
     }
 
-    ngAfterViewInit() {
-        this.onResize();
-    }
-
+   
     /**
      * Установить схему по центру 
      */
@@ -147,7 +154,7 @@ export class ScreenComponent implements AfterViewInit {
 
         this.canvas.insertBefore(rect, this.canvas.firstChild);
     }
-
+    
     onResize() {
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.headerElRef.nativeElement.offsetHeight - this.footerElRef.nativeElement.offsetHeight}px`;
     }
