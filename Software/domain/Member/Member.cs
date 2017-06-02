@@ -43,10 +43,10 @@ namespace domain.Member
         }
 
         public string Name { get; set; }
-        public string RowId { get; set; }
+        public int Id { get; set; }
 
         [Column("job_title")]
-        public string JobTitle { get; set; }
+        public string Job_title { get; set; }
 
         /// <summary>
         /// Роль (для пользователей)
