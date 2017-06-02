@@ -76,7 +76,7 @@ export class ScreenComponent implements OnInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
 
                 if (key) {
-
+                    // служба signalR может отсутствовать
                     this.screenService
                         .start(key)
                         .flatMap(_ => this.screenService.sendTickers)
