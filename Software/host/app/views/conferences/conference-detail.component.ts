@@ -22,8 +22,6 @@ export class ConferenceDetailComponent implements OnInit {
     confTypes: SelectItem[];
     halls: any[];
     hallSchemes: any[];
-    startDate: Date;
-    endDate: Date;
 
     selectedConfType: string;
     conferences: ConferenceModel[];
@@ -40,6 +38,7 @@ export class ConferenceDetailComponent implements OnInit {
         private logger: Logger,
         private route: ActivatedRoute) {
 
+        this.conference = null;
         this.confTypes = [];
 
         let stateKeys = Object
@@ -58,14 +57,39 @@ export class ConferenceDetailComponent implements OnInit {
                 }
             );
 
+
+        this.conferenceForm = this.fb.group({
+            id: [null],
+            subject: [null],
+            hallId: [null],
+            description: [null],
+            startDate: [null],
+            endDate: [null]
+        });
+
         this.route.params
             .subscribe((params: Params) => {
-                //debugger;
+                debugger;
                 this.confId = params.hasOwnProperty("id") ? +params["id"] : null;
+                if (this.confId && this.confId > 0)
+                    this.conferenceService
+                        .get(this.confId)
+                        .subscribe((conf: any) => {
+                            debugger;
+                            this.conference = conf;
+                            if (!this.conference) return;
+                            this.conferenceForm.setValue({
+                                id: conf.id,
+                                subject: conf.subject,
+                                hallId: conf.hallId,
+                                description: conf.description,
+                                startDate: conf.startDate,
+                                endDate: [null]
+                            });
+                            this.conferenceForm.patchValue(this.conference);
+                        });
                 
-                // (+) converts string 'id' to a number
-                console.log(params["id"]);
-                //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                console.log("id = " + this.confId);
             });
 
         this.hallService
@@ -78,21 +102,18 @@ export class ConferenceDetailComponent implements OnInit {
     ngOnInit() {
 
         debugger;
-        this.conferenceForm = this.fb.group({
-            id: [null],
-            subject: [null],
-            hallId: [null],
-            description: [null],
-            period: { lowerBound: this.startDate, upperBound: this.endDate}
-        });
+        
+
     }
     
 
     save(event, conferenceObj) {
         debugger;
 
-        conferenceObj.period.lowerBound = this.dateToUtcPipe.transform(conferenceObj.period.lowerBound);
-        conferenceObj.period.upperBound = this.dateToUtcPipe.transform(conferenceObj.period.upperBound);
+        if (conferenceObj.lowerBound)
+            conferenceObj.lowerBound = this.dateToUtcPipe.transform(conferenceObj.lowerBound);
+        if (conferenceObj.upperBound)
+            conferenceObj.upperBound = this.dateToUtcPipe.transform(conferenceObj.upperBound);
      
         event.preventDefault();
 

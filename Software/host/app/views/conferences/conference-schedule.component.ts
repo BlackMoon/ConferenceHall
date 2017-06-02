@@ -1,9 +1,11 @@
 ﻿import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
 import { AppointmentModel, ConferenceModel, confDragType, TimeRange } from '../../models';
+import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
 
@@ -19,21 +21,54 @@ export class ConferenceScheduleComponent {
 
     events: any[];
     headerConfig: any;
+    menuItems: MenuItem[];
 
     endDate: Date;
     startDate: Date;
     
     selectedConference: ConferenceModel;
+    selectedEvent: any;
 
     constructor(
         private conferrenceService: ConferenceService,
-        private logger: Logger) {
+        private confirmationService: ConfirmationService,
+        private logger: Logger,
+        private router: Router) {
 
         this.headerConfig = {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay,listWeek'
         };
+
+        this.menuItems = [
+            {
+                label: "Изменить",
+                icon: "fa-pencil",
+                command: () => this.router.navigate(["/conferences", this.selectedEvent.id])
+            },
+            {
+                label: "Удалить",
+                icon: "fa-trash",
+                command: () => {
+                    this.confirmationService.confirm({
+                        header: 'Вопрос',
+                        icon: 'fa fa-trash',
+                        message: `Удалить [${this.selectedEvent.title}]?`,
+                        accept: _ => {
+                            return this.conferrenceService
+                                .delete(this.selectedEvent.id)
+                                .subscribe(
+                                    _ => {
+                                        let ix = this.events.findIndex(c => c.id === this.selectedEvent.id);
+                                        this.events.splice(ix, 1);
+                                        this.selectedEvent = null;
+                                    },
+                                    error => this.logger.error(error));
+                        }
+                    });
+                }
+            }];
         
     }
 
@@ -73,12 +108,8 @@ export class ConferenceScheduleComponent {
     }
 
     eventDrop(e) {
-        debugger;
 
-        let delta = e.delta.asMinutes(),
-            h = delta / 60,
-            m = delta % 60, 
-            appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), delta: `${h}:${m}` };
+        let appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), end: e.event.end.toDate() };
 
         this.conferrenceService
             .changePeriod(appointment)
@@ -92,21 +123,17 @@ export class ConferenceScheduleComponent {
     }
 
     eventResize(e) {
-        debugger;
 
-        let delta = e.delta.asMinutes(),
-            h = delta / 60,
-            m = delta % 60,
-            appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), end: e.event.end.toDate() };
+        let appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), end: e.event.end.toDate() };
 
         this.conferrenceService
             .changePeriod(appointment)
             .subscribe(
-            _ => { },
-            error => {
-                e.revertFunc.call();
-                this.logger.error(error);
-            });
+                _ => {},
+                error => {
+                    e.revertFunc.call();
+                    this.logger.error(error);
+                });
     }
 
     makeAppointment(conference) {

@@ -71,7 +71,7 @@ export class AppointmentModel {
     /**
      * длительность в формате HH:mm:ss
      */
-    delta?: string;
+    duration?: string;
 
     start: Date;
 

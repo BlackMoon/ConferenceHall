@@ -75,9 +75,8 @@ namespace domain.Conference.Command
             DbManager.AddParameter("id", command.ConferenceId);
             DbManager.AddParameter("start", DbType.DateTime, command.Start);
             DbManager.AddParameter("end", DbType.DateTime, command.End);
-            DbManager.AddParameter("delta", DbType.Time, command.Delta);
 
-            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, coalesce(@end, @start + @delta)) WHERE id = @id");
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, @end) WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
             
             return updated > 0;
@@ -108,7 +107,7 @@ namespace domain.Conference.Command
             DbManager.AddParameter("phall_id", command.HallId);
 
             IDataParameter pDateStart = DbManager.AddParameter("pdate_start", DbType.DateTime, command.Start, ParameterDirection.InputOutput),
-                           pDateEnd = DbManager.AddParameter("pdate_end", DbType.DateTime, command.Start.Add(command.Delta), ParameterDirection.InputOutput);
+                           pDateEnd = DbManager.AddParameter("pdate_end", DbType.DateTime, command.Start.Add(command.Duration), ParameterDirection.InputOutput);
 
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conference_aprovement_make");
             Logger.LogInformation($"Modified {returnValue} records");

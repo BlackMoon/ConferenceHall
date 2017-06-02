@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Subject } from "rxjs/Subject";
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { ScreenModel, TickerModel } from '../../models';
+import { ScreenModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 

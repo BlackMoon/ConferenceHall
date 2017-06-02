@@ -26,6 +26,6 @@ namespace domain.Conference.Command
         /// <summary>
         /// Длительность
         /// </summary>
-        public TimeSpan Delta { get; set; }
+        public TimeSpan Duration { get; set; }
     }
 }

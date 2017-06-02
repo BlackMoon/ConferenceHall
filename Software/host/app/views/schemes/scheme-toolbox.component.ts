@@ -6,7 +6,6 @@ import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { ElementGroupCommand, GroupModel, GroupType } from '../../models';
 import { MenuItem } from 'primeng/primeng';
-import { Menu } from 'primeng/components/menu/menu';
 
 /**
  * min кол-во символов фильтра
