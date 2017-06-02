@@ -23,14 +23,11 @@ namespace domain.Screen.Query
             // sql для выбора конференции
             SqlBuilder sqlBuilder1 = new SqlBuilder("conf_hall.conferences c")
                 .Column("c.subject")
+                .Column("c.hall_scheme_id schemeid")
                 .Column("lower(c.period) startDate")
                 .Column("upper(c.period) endDate")
                 .Column("conf_messages_get(c.id) tickers")
-                .Column("h.height")
-                .Column("h.width")
-                .Column("s.plan")
                 .Join("conf_hall.halls h ON h.id = c.hall_id")
-                .Join("conf_hall.hall_scheme s ON s.id = c.hall_scheme_id")
                 .Where("c.id = @id");
 
             // sql для выбора участников

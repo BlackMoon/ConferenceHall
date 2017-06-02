@@ -6,12 +6,10 @@ import { JsonProperty } from '../common/map-utils';
  */
 export class ScreenModel {
     
-    plan: string;
+    schemeId: string;
     startDate: Date;
     endDate: Date;
     subject: string;
-    height: number;
-    width: number;
 
     @JsonProperty({ clazz: MemberModel })
     members: MemberModel[];
@@ -20,12 +18,10 @@ export class ScreenModel {
     constructor() {
         
         this.members = null;
-        this.plan = null;
+        this.schemeId = null;
         this.startDate = null;
         this.endDate = null;
         this.subject = null;
         this.tickers = null;
-        this.height = 2;
-        this.width = 2;
     }
 }

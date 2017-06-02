@@ -85,24 +85,25 @@ export class ScreenService extends HttpDataService<ScreenModel> {
     }
 
     start(key): Observable<SignalRConnectionStatus> {
-
+        
         $.connection.hub.logging = isDevMode();
         $.connection.hub.qs = `id=${key}`;
 
         // reference signalR hub named 'broadcaster'
-        let proxy = $.connection.broadcaster,
-            client = <IHubClient>proxy.client;
+        let proxy = $.connection.broadcaster;
+        if (proxy) {
+            let client = <IHubClient>proxy.client;
 
-        client.confirmMember = id => this.onConfirmMember(id);
-        client.sendTickers = tickers => this.onSendTickers(tickers);
+            client.confirmMember = id => this.onConfirmMember(id);
+            client.sendTickers = tickers => this.onSendTickers(tickers);
 
-        // start the connection
-        $.connection
-            .hub
-            .start()
-            .done(_ => this.setConnectionState(SignalRConnectionStatus.Connected))
-            .fail(error => this.connectionStateSubject.error(error));
-
+            // start the connection
+            $.connection
+                .hub
+                .start()
+                .done(_ => this.setConnectionState(SignalRConnectionStatus.Connected))
+                .fail(error => this.connectionStateSubject.error(error));
+        }
         return this.connectionState;
 
         //return Observable.of(SignalRConnectionStatus.Connected);

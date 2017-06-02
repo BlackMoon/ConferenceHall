@@ -3,7 +3,7 @@
 namespace domain.Conference.Command
 {
     /// <summary>
-    /// Команда манипуляции конференцией
+    /// Абстрактная команда манипуляции конференцией
     /// </summary>
     public abstract class AbstractConferenceCommand : ICommand
     {
