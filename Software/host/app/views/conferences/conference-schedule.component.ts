@@ -60,11 +60,9 @@ export class ConferenceScheduleComponent {
                                 .changeState(this.selectedEvent.id, ConfState.Planned)
                                 .subscribe(
                                     _ => {
-                                        let ix = this.events.findIndex(c => c.id === this.selectedEvent.id);
-                                        this.events.splice(ix, 1);
 
-                                        if (this.conferenceList.selectedState === ConfState.Planned) {
-
+                                        if (this.conferenceList.selectedState === ConfState.Planned)
+                                        {
                                             let conference: ConferenceModel = 
                                             {
                                                 id: this.selectedEvent.id,
@@ -76,8 +74,7 @@ export class ConferenceScheduleComponent {
                                             this.conferenceList.addConferenceToList(conference);
                                         }
 
-                                        this.selectedEvent = null;
-
+                                        this.removeEventFromList(this.selectedEvent.id);
                                     },
                                     error => this.logger.error(error));
                         }
@@ -90,14 +87,12 @@ export class ConferenceScheduleComponent {
     appointmentDialogClosed(appointment: AppointmentModel) {
         
         if (appointment != null) {
-            
-            appointment.conferenceId = this.selectedConference.id;
 
             this.conferrenceService
-                .makeAppointment(appointment)
+                .makeAppointment(this.selectedConference.id, appointment)
                 .subscribe(
                     (period:TimeRange) => {
-                        
+                       
                         this.events.push(
                             {
                                 id: this.selectedConference.id,
@@ -106,7 +101,7 @@ export class ConferenceScheduleComponent {
                                 start: period.lowerBound,
                                 end: period.upperBound
                             });
-                        this.conferenceList.removeConferenceFromList(this.selectedConference.id);
+                        this.conferenceList.removeConferenceFromList(this.selectedConference.id, false);
                         this.selectedConference = null;
                     },
                     error =>
@@ -167,6 +162,13 @@ export class ConferenceScheduleComponent {
         
         this.selectedConference = conference;
         this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date(this.startDate.getFullYear(), month, date) }, calendarVisible);    
+    }
+
+    removeEventFromList(id) {
+        let ix = this.events.findIndex(c => c.id === id);
+        this.events.splice(ix, 1); 
+
+        this.selectedEvent = null;
     }
 
     viewRender(event) {

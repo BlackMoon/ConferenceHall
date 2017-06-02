@@ -75,9 +75,4 @@ export class AppointmentModel {
     start: Date;
 
     hallId: number;
-
-    /**
-     * id конференции
-     */
-    conferenceId: number;
 }

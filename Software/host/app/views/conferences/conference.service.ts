@@ -45,7 +45,7 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
     changePeriod(confid: number, start, end): Observable<any> {
 
         return this.http
-            .post(`/api/period/${confid}`, { start: start, end: end })
+            .put(`/api/period/${confid}`, { start: start, end: end })
             .catch(handleResponseError);
     }
 
@@ -57,7 +57,7 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
     changeState(confid: number, state: ConfState): Observable<any> {
 
         return this.http
-            .post(`/api/state/${confid}`, { state: state })
+            .put(`/api/state/${confid}`, { state: state })
             .catch(handleResponseError);    
     }
 
@@ -65,10 +65,10 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
      * Назначить совещание
      * @param a
      */
-    makeAppointment(a: AppointmentModel) : Observable<any> {
+    makeAppointment(confid: number, a: AppointmentModel) : Observable<any> {
 
         return this.http
-            .post('/api/appointment', a)
+            .put(`/api/appointment/${confid}`, a)
             .map((r: Response) => r.json())
             .catch(handleResponseError);
     }

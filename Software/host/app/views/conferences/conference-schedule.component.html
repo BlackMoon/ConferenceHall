@@ -12,7 +12,7 @@
         <div class="ui-g-4">
             <p-tabView styleClass="h100p p0501">
                 <p-tabPanel header="Совещания">
-                    <conference-list [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)"></conference-list>
+                    <conference-list [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)" (conferenceRemoveClick)="removeEventFromList($event, false)"></conference-list>
                 </p-tabPanel>
                 <p-tabPanel header="Фильтр">
                     <div [ngStyle]="{'height':'50%'}">
