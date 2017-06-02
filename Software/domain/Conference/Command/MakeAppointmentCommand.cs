@@ -16,16 +16,16 @@ namespace domain.Conference.Command
         /// <summary>
         /// № холла
         /// </summary>
-        public int HallId { get; set; }
+        public int? HallId { get; set; }
 
         /// <summary>
         /// Дата начала
         /// </summary>
         public DateTime Start { get; set; }
-
+        
         /// <summary>
         /// Длительность
         /// </summary>
-        public TimeSpan Duration { get; set; }
+        public TimeSpan Delta { get; set; }
     }
 }

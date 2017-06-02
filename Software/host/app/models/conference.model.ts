@@ -3,6 +3,10 @@ import { JsonProperty } from '../common/map-utils';
 
 export const confDragType = "conference";
 
+/**
+ * Состояние конференции
+ */
+
 export enum ConfState { Planned, Preparing, Active, Closed }
 
 export namespace ConfState {
@@ -39,6 +43,8 @@ export class ConferenceModel extends KeyModel implements ISelected {
     
     description: string;
     hallId: number;
+    startDate: Date;
+    endDate: Date;
     period: TimeRange;
     selected: boolean;
     state: ConfState;
@@ -50,6 +56,8 @@ export class ConferenceModel extends KeyModel implements ISelected {
         this.description = null;
         this.hallId = null;
         this.period = null;
+        this.startDate = null;
+        this.endDate = null;
         this.state = ConfState.Planned;
         this.subject = null;
     }
@@ -63,15 +71,16 @@ export class AppointmentModel {
     /**
      * длительность в формате HH:mm:ss
      */
-    duration: string;
+    delta?: string;
 
     start: Date;
 
-    hallId: number;
+    end?: Date;
+
+    hallId?: number;
 
     /**
      * id конференции
      */
     conferenceId: number;
 }
-

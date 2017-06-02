@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { AppointmentModel, ConferenceModel, ConfState } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, TimeRange } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -36,18 +36,22 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             .catch(handleResponseError);
     }
 
-    changePeriod(id, start: Date, delta) : Observable<any> {
-
-        let body = [
-            { op: "replace", path: "/start", value: start },
-            { op: "replace", path: "/delta", value: delta }
-        ];
+    /**
+     * Изменить период
+     * @param a
+     */
+    changePeriod(a: AppointmentModel) : Observable<any> {
+        debugger;
 
         return this.http
-            .patch(`/api/period/${id}`, body)
+            .post('/api/period', a)
             .catch(handleResponseError);
     }
 
+    /**
+     * Назначить совещание
+     * @param a
+     */
     makeAppointment(a: AppointmentModel) : Observable<any> {
 
         return this.http

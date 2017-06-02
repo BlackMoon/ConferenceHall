@@ -41,12 +41,16 @@ namespace domain.Conference
         //[Column("hall_scheme_id")]
         //public int? HallSchemeId { get; set; }
 
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
         public string Subject { get; set; }
      
         public string Description { get; set; }
 
-        [JsonConverter(typeof(NpgsqlRangeConverter<DateTime>))]
-        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
+       
+        public Range<DateTime> Period { get; set; }
 
         //public ConfState ConfState { get; set; }
 

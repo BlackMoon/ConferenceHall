@@ -5,7 +5,7 @@ using NpgsqlTypes;
 
 namespace domain.Common
 {
-    class NpgsqlRangeConverter<T> : JsonConverter where T: struct
+    public class NpgsqlRangeConverter<T> : JsonConverter where T: struct
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

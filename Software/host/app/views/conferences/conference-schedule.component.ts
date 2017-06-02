@@ -72,32 +72,46 @@ export class ConferenceScheduleComponent {
         //let conference = JSON.parse(event.dataTransfer.getData(confDragType));
     }
 
-    eventDrop(event) {
+    eventDrop(e) {
         debugger;
 
-        let minutes = event.delta.asMinutes(),
-            h = minutes / 60,
-            m = minutes % 60;
+        let delta = e.delta.asMinutes(),
+            h = delta / 60,
+            m = delta % 60, 
+            appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), delta: `${h}:${m}` };
 
         this.conferrenceService
-            .changePeriod(event.event.id, event.event.start, `0:${h}:${m}`)
+            .changePeriod(appointment)
             .subscribe(
                 _ => {},
                 error => {
-                    event.revertFunc.call();
+                    e.revertFunc.call();
                     this.logger.error(error);
                 });
-
+        
     }
 
-    eventResize(event) {
+    eventResize(e) {
         debugger;
+
+        let delta = e.delta.asMinutes(),
+            h = delta / 60,
+            m = delta % 60,
+            appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), end: e.event.end.toDate() };
+
+        this.conferrenceService
+            .changePeriod(appointment)
+            .subscribe(
+            _ => { },
+            error => {
+                e.revertFunc.call();
+                this.logger.error(error);
+            });
     }
 
     makeAppointment(conference) {
 
         // time period like schedule's view period
-        
         let renderedDays:number = (<any>this.endDate - <any>this.startDate) / 864e5,
             calendarVisible = (renderedDays !== 1),
             date = this.startDate.getDate(),
@@ -121,9 +135,7 @@ export class ConferenceScheduleComponent {
         this.conferrenceService
             .getAll(this.startDate, this.endDate)
             .subscribe(
-            conferences =>
-                this.events = conferences
-                    .map(c => <any>{ id: c.id, start: c.period.lowerBound, end: c.period.upperBound, title: c.subject }),
-            error => this.logger.error(error));
+                conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject }),
+                error => this.logger.error(error));
     }
 }

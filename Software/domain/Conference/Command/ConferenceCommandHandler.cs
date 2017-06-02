@@ -8,7 +8,6 @@ using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
-using NpgsqlTypes;
 using TimeRange = domain.Common.Range<System.DateTime>;
 
 namespace domain.Conference.Command
@@ -40,7 +39,9 @@ namespace domain.Conference.Command
         {
             DbManager.AddParameter("subject", command.Subject);
             DbManager.AddParameter("description", command.Description);
-            DbManager.AddParameter("startDate", command.Period.LowerBound);
+            IDbDataParameter p = DbManager.AddParameter("startDate", command.Period.LowerBound);
+            p.DbType = DbType.DateTime;
+
             DbManager.AddParameter("endDate", command.Period.UpperBound);
 
             var sbParams = new StringBuilder();
@@ -72,13 +73,12 @@ namespace domain.Conference.Command
 
         public async Task<bool> ExecuteAsync(ChangePeriodCommand command)
         {  
-            // todo через update conference
-
             DbManager.AddParameter("id", command.ConferenceId);
-            DbManager.AddParameter("start", command.Start);
-            DbManager.AddParameter("end", command.Start.Add(command.Delta));
-            
-            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, @end) WHERE id = @id");
+            DbManager.AddParameter("start", DbType.DateTime, command.Start);
+            DbManager.AddParameter("end", DbType.DateTime, command.End);
+            DbManager.AddParameter("delta", DbType.Time, command.Delta);
+
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, coalesce(@end, @start + @delta)) WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
             
             return updated > 0;
@@ -109,7 +109,7 @@ namespace domain.Conference.Command
             DbManager.AddParameter("phall_id", command.HallId);
 
             IDataParameter pDateStart = DbManager.AddParameter("pdate_start", DbType.DateTime, command.Start, ParameterDirection.InputOutput),
-                           pDateEnd = DbManager.AddParameter("pdate_end", DbType.DateTime, command.Start.Add(command.Duration), ParameterDirection.InputOutput);
+                           pDateEnd = DbManager.AddParameter("pdate_end", DbType.DateTime, command.Start.Add(command.Delta), ParameterDirection.InputOutput);
 
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conference_aprovement_make");
             Logger.LogInformation($"Modified {returnValue} records");

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Kit.Dal.DbManager;
@@ -27,7 +29,8 @@ namespace domain.Conference.Query
                .Column("c.subject")
                .Column("c.description")
                .Column("c.hall_id hallid")
-               .Column("c.period")
+               .Column("lower(c.period) startDate")
+               .Column("upper(c.period) endDate")
                .OrderBy("lower(c.subject)");
 
             DynamicParameters param = new DynamicParameters();

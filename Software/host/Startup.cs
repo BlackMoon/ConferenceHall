@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Net;
 using CacheManager.Core;
 using domain.Element;
 using DryIoc;
-using host.Hubs;
 using host.Security;
 using host.Security.TokenProvider;
 using Kit.Core;
@@ -68,7 +66,6 @@ namespace host
             IContainer container = ConfigureDependencies(services, "domain", "Kit.Core", "Kit.Dal", "Kit.Dal.Postgre");
             
             // IDbManagers
-            
             string providerName = Configuration["Data:DefaultConnection:ProviderName"];
 
             string defaultConnectionString = Configuration.GetConnectionString("DefaultConnection");
