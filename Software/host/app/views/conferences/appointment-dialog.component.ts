@@ -40,7 +40,7 @@ export class AppointmentDialogComponent implements OnInit {
 
         this.appointmentForm = this.fb.group({
             hallId: [null, Validators.required],
-            delta: [new Date(0, 0, 0, 1)],       // 1 hour
+            duration: [new Date(0, 0, 0, 1)],       // 1 hour
             start: [null]
         });
 
@@ -57,8 +57,8 @@ export class AppointmentDialogComponent implements OnInit {
 
     save(event, appointment) {
         
-        let delta:Date = appointment.delta;
-        appointment.delta = `${delta.getHours()}:${delta.getMinutes()}`;
+        let duration:Date = appointment.duration;
+        appointment.duration = `${duration.getHours()}:${duration.getMinutes()}`;
         appointment.start = this.dateToUtcPipe.transform(appointment.start);
 
         this.closed.emit(appointment);
