@@ -230,12 +230,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     }
                 }
 
-                this.svgOrigin = new WebKitPoint(x, y);
+                this.svgOrigin = new Point(x, y);
             }
             // выбор canvas
             else {
                 this.svgElement = null;
-                this.svgOrigin = new WebKitPoint(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
+                this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
             }
         }
 

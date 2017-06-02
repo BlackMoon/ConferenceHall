@@ -5,9 +5,9 @@ import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
 import { AppointmentModel, ConferenceModel, confDragType, TimeRange } from '../../models';
+import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
-import { MenuItem } from 'primeng/primeng';
 
 @Component({
     encapsulation: ViewEncapsulation.None,
@@ -27,10 +27,11 @@ export class ConferenceScheduleComponent {
     startDate: Date;
     
     selectedConference: ConferenceModel;
-    selectedEventId: number;
+    selectedEvent: any;
 
     constructor(
         private conferrenceService: ConferenceService,
+        private confirmationService: ConfirmationService,
         private logger: Logger,
         private router: Router) {
 
@@ -44,12 +45,29 @@ export class ConferenceScheduleComponent {
             {
                 label: "Изменить",
                 icon: "fa-pencil",
-                command: () => this.router.navigate(["/conferences", this.selectedEventId])
+                command: () => this.router.navigate(["/conferences", this.selectedEvent.id])
             },
             {
                 label: "Удалить",
                 icon: "fa-trash",
-                command: () => {  }
+                command: () => {
+                    this.confirmationService.confirm({
+                        header: 'Вопрос',
+                        icon: 'fa fa-trash',
+                        message: `Удалить [${this.selectedEvent.title}]?`,
+                        accept: _ => {
+                            return this.conferrenceService
+                                .delete(this.selectedEvent.id)
+                                .subscribe(
+                                    _ => {
+                                        let ix = this.events.findIndex(c => c.id === this.selectedEvent.id);
+                                        this.events.splice(ix, 1);
+                                        this.selectedEvent = null;
+                                    },
+                                    error => this.logger.error(error));
+                        }
+                    });
+                }
             }];
         
     }
