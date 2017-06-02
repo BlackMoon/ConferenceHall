@@ -74,17 +74,24 @@ export class ScreenComponent implements OnInit {
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return key ? Observable.forkJoin(this.screenService.get(key), this.screenService.start(key)) : Observable.empty();
-            })
-            .subscribe((res: Array<any>) => {
 
-                this.activeScreen = res[0];
+                if (key) {
+
+                    this.screenService
+                        .start(key)
+                        .flatMap(_ => this.screenService.sendTickers)
+                        .subscribe(tickers => this.tickers = tickers);
+
+                    return this.screenService.get(key);
+                }
+
+                return Observable.empty();
+            })
+            .subscribe((screen: ScreenModel) => {
+
+                this.activeScreen = screen;
                 this.tickers = this.activeScreen.tickers || [];
             });
-
-        /*this.screenService
-            .sendTickers
-            .subscribe(tickers => this.tickers = tickers);*/
         
         // clock
         setInterval(() => this.now = new Date(), 1000);
