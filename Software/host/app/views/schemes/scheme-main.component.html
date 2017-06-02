@@ -1,5 +1,5 @@
 ﻿<div #wrapper class="h100p">
-    <div class="ui-g-12 ui-g-nopad" *ngIf="schemeToolbarVisible">
+    <div class="ui-g-12 ui-g-nopad" *ngIf="toolbarVisible">
         <p-toolbar>
             <div class="ui-g-6 ui-g-nopad">
                 <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
@@ -25,7 +25,5 @@
             </div>
         </form>
     </div>
-    <div class="ui-g-12">
-        <div #canvasBox pDroppable="dd_elem" class="ui-grid-pad" (onDrop)="drop($event)"></div>
-    </div>
+    <div #canvasBox pDroppable="dd_elem" class="ui-g-12 ui-grid-pad" (onDrop)="drop($event)"></div>
 </div>

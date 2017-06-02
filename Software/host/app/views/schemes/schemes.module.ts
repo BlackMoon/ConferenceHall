@@ -32,7 +32,18 @@ import { ShapePropertiesComponent } from './shape-properties.component';
 
 @NgModule({
     declarations: [SchemeDetailComponent, SchemeMainComponent, SchemeListComponent, SchemeToolboxComponent, ShapePropertiesComponent],
-    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SchemeListComponent, SchemeMainComponent, SchemeToolboxComponent, ShapePropertiesComponent, SpinnerModule],
+    exports: [
+        ButtonModule,
+        DataGridModule,
+        FieldsetModule,
+        InputTextModule,
+        InputTextareaModule,
+        SchemeListComponent,
+        SchemeMainComponent,
+        SchemeToolboxComponent,
+        ShapePropertiesComponent,
+        SpinnerModule
+    ],
     imports: [
         AccordionModule,
         ButtonModule,

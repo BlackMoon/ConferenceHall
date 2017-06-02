@@ -18,10 +18,7 @@ const zoomStep = 0.1;
     templateUrl: 'scheme-main.component.html'
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
-
-    @Input()
-    schemeToolbarVisible: boolean = true;             
-
+    
     canvas: any;
     canvasBox: any;
 
@@ -34,87 +31,58 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     zoomCoef: number;                               // коэф. масштабирования [0..1]
 
+    // ReSharper disable InconsistentNaming
+    private _schemeId: number;
+
+    get schemeId(): number {
+        return this._schemeId;
+    }
+
+    @Input()
+    set schemeId(value: number) {
+        this._schemeId = value;
+        value && this.loadScheme();
+    }
+
 // ReSharper disable once InconsistentNaming
     private _svgElement: any = null;                // selected svgElement
 
     get svgElement() {
         return this._svgElement;
     }
-    set svgElement(shape: any) {
+    set svgElement(value: any) {
         
         // снять все ранее выделенные объекты
         let frames = this.canvas.querySelectorAll(`.${frameClass}`);
         [].forEach.call(frames,
             frame => frame.removeAttributeNS(null, "stroke"));
 
-        if (!!shape) {
+        if (!!value) {
 
             this.router
                 .navigate(['shape'], { relativeTo: this.route })
-                .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", shape));
+                .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", value));
 
             // выделить
-            let frame = shape.querySelector(`.${frameClass}`);
+            let frame = value.querySelector(`.${frameClass}`);
             if (frame != null)
                 frame.setAttributeNS(null, "stroke", "blue");
         }
         else 
             this.router
                 .navigate(["groups"], { relativeTo: this.route })
-                .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", shape));
+                .then(_ => this.mediator.broadcast("schemeMain_shapeSelected", value));
         
 
-        this._svgElement = shape;
+        this._svgElement = value;
     }
     
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
     intervals: SelectItem[];
 
-    private _schemeid: number;
-
-    @Input() set schemeid(value: number) {
-       this._schemeid = value;
-       this.schemeBind();
-    }
-    get schemeid(): number {
-        return this._schemeid;
-    }
-
-    schemeBind() {
-        this.schemeService
-            .get(this.schemeid)
-            .subscribe((scheme: SchemeModel) => {
-
-                this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
-                this.gridInterval = scheme.gridInterval || 0;
-                // размеры в см
-                this.initialHeight = scheme.height * 100;
-                this.initialWidth = scheme.width * 100;
-
-                this.canvas = this.canvasBox.querySelector("svg");
-
-                if (this.canvas != null) {
-                    this.canvas.style.height = this.canvas.style.width = "100%";
-
-                    this.centerView();
-                    this.drawBorder();
-                    this.drawGrid();
-
-                    this.canvas
-                        .addEventListener("mousedown", (event) => this.canvasMouseDown(event));
-
-                    this.canvas
-                        .addEventListener("mousemove", (event) => this.canvasMouseMove(event));
-
-                    this.canvas
-                        .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
-                }
-
-                this.schemeForm.patchValue(scheme);
-            },
-            error => this.logger.error(error));
-    }
+    @Input()
+    toolbarVisible: boolean = true;             
 
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
@@ -159,10 +127,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         });
 
         this.canvasBox = this.canvasBoxElRef.nativeElement;
-
     }
-
-   
 
     ngOnDestroy() {
         this.canvas.removeEventListener("mousedown");
@@ -180,7 +145,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onResize() {
-        this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.canvasBox.offsetTop}px`;
+        let offsetTop = this.toolbarVisible ? this.canvasBox.offsetTop : 0;
+        this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - offsetTop}px`;
     }
 
     /**
@@ -253,8 +219,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 this.svgOrigin = new Point(this.canvas.viewBox.baseVal.x, this.canvas.viewBox.baseVal.y);
             }
         }
-
-       
     }
 
     canvasMouseMove(event) {
@@ -522,6 +486,45 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.drawGrid();
     };
+
+    loadScheme() {
+
+        this.schemeService
+            .get(this.schemeId)
+            .subscribe((scheme: SchemeModel) => {
+
+                this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
+                this.gridInterval = scheme.gridInterval || 0;
+                // размеры в см
+                this.initialHeight = scheme.height * 100;
+                this.initialWidth = scheme.width * 100;
+
+                this.canvas = this.canvasBox.querySelector("svg");
+
+                if (this.canvas != null) {
+                    this.canvas.style.height = this.canvas.style.width = "100%";
+
+                    this.centerView();
+
+                    if (this.toolbarVisible) {
+                        this.drawBorder();
+                        this.drawGrid();
+
+                        this.canvas
+                            .addEventListener("mousedown", (event) => this.canvasMouseDown(event));
+
+                        this.canvas
+                            .addEventListener("mousemove", (event) => this.canvasMouseMove(event));
+
+                        this.canvas
+                            .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
+                    }
+                }
+
+                this.schemeForm.patchValue(scheme);
+            },
+            error => this.logger.error(error));
+    }
 
     saveScheme(scheme) {
 
