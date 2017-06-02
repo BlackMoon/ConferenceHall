@@ -27,7 +27,6 @@ namespace domain.Member.Query
         {
 
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees s")
-               // .Column("rowid")
                 .Column("s.id")
                 .Column("s.name")
                 .Column("s.job_title")
