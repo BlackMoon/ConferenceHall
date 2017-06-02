@@ -22,5 +22,10 @@ namespace domain.Conference.Query
         /// Начальная дата периода
         /// </summary>
         public DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// id холлов
+        /// </summary>
+        public int[] HallIds { get; set; }
     }
 }

@@ -50,6 +50,12 @@ namespace domain.Conference.Query
                 param.Add("endDate", query.EndDate);
             }
 
+            if (query.HallIds != null)
+            {
+                sqlBuilder.Where("c.hall_id IN (@hallIds)");
+                param.Add("hallIds", query.HallIds);
+            }
+
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Conference>(sqlBuilder.ToString(), param);
         }

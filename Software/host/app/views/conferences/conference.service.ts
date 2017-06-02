@@ -18,18 +18,18 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
         
         let params: URLSearchParams = new URLSearchParams();
         if (state !== null)
-            params.set("state", `${state}`);
+            params.append("state", `${state}`);
 
         // [активные, на подготовке, завершенные] совещания фильтруются по дате
         if (state !== ConfState.Planned) {
-            params.set("startDate", `${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
-            params.set("endDate", `${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
+            params.append("startDate", `${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
+            params.append("endDate", `${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
         }
-
-        //params.set("hallids", hallIds);
+        debugger;
+        hallIds.forEach(id => params.set("hallids", id.toString()));
 
         return this.http
-            .get(this.url, { search: params })
+            .get(this.url, { params: params })
             .map((r: Response) => r
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))

@@ -15,20 +15,16 @@ namespace host.Controllers
 {
     [Route("api/[controller]")]
     public class ConferencesController : CqrsController
-    {
-        private readonly IConnectionManager _connectionManager;
+    {       
         // GET api/conferences
-        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, IConnectionManager connectionManager) : base(commandDispatcher, queryDispatcher)
-        {
-            _connectionManager = connectionManager;
+        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        {            
         }
 
         [HttpGet]
-        public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate)
-        {
-            _connectionManager.GetHubContext<Broadcaster>().Clients.All.AddTickerMessage("44");
-
-            FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state };
+        public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate, int [] hallIds)
+        {           
+            FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state, HallIds = hallIds };
             return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
