@@ -78,7 +78,6 @@ export class ScreenService extends HttpDataService<ScreenModel> {
         return this.http
             .get(`${this.url}/${key}`)
             .map((r: Response) => {
-                debugger;
                 return MapUtils.deserialize(ScreenModel, r.json());
             })
             .catch(handleResponseError);
@@ -104,8 +103,9 @@ export class ScreenService extends HttpDataService<ScreenModel> {
                 .done(_ => this.setConnectionState(SignalRConnectionStatus.Connected))
                 .fail(error => this.connectionStateSubject.error(error));
         }
-        return this.connectionState;
+        else 
+            console.warn("broadcaster proxy not available");
 
-        //return Observable.of(SignalRConnectionStatus.Connected);
+        return this.connectionState;
     }
 }
