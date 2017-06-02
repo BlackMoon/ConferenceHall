@@ -3,13 +3,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { AutoCompleteModule, ButtonModule, DataGridModule, DataListModule, FieldsetModule, InputTextModule, InputTextareaModule, PanelModule, SpinnerModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
 import { HallDetailComponent } from './hall-detail.component';
-import { HallListComponent } from './hall-list.component';
+import { HallGridComponent } from './hall-grid.component';
 import { HallRoutingModule } from './halls-routing.module';
 import { HallService } from './hall.service';
 import { SchemesModule } from "../schemes/schemes.module";
 
 @NgModule({
-    declarations: [HallDetailComponent, HallListComponent],
+    declarations: [HallDetailComponent, HallGridComponent],
     exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule],
     imports: [
         AutoCompleteModule,
