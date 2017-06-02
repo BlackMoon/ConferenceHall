@@ -9,6 +9,7 @@ import { HallService } from '../halls/hall.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SchemeService } from  "../schemes/scheme.service";
 import { TimeRange } from '../../models';
+import { DateToUtcPipe } from "../../common/pipes";
 
 @Component({
     selector: "conference-detail",
@@ -21,6 +22,8 @@ export class ConferenceDetailComponent implements OnInit {
     confTypes: SelectItem[];
     halls: any[];
     hallSchemes: any[];
+    startDate: Date;
+    endDate: Date;
 
     selectedConfType: string;
     conferences: ConferenceModel[];
@@ -28,6 +31,7 @@ export class ConferenceDetailComponent implements OnInit {
     conference: ConferenceModel;
 
     constructor(
+        private dateToUtcPipe: DateToUtcPipe,
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
         private hallService: HallService,
@@ -79,17 +83,17 @@ export class ConferenceDetailComponent implements OnInit {
             subject: [null],
             hallId: [null],
             description: [null],
-            period: { lowerBound: new Date(), upperBound: new Date()}
+            period: { lowerBound: this.startDate, upperBound: this.endDate}
         });
     }
     
 
-    save(event, conferenceObj, startDate, endDate) {
+    save(event, conferenceObj) {
         debugger;
-        
-        conferenceObj.period.lowerBound = startDate ? new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000) : new Date();//to utc
-        conferenceObj.period.upperBound = endDate ? new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000) : new Date();//to utc
 
+        conferenceObj.period.lowerBound = this.dateToUtcPipe.transform(conferenceObj.period.lowerBound);
+        conferenceObj.period.upperBound = this.dateToUtcPipe.transform(conferenceObj.period.upperBound);
+     
         event.preventDefault();
 
         this.conferenceService['add'](conferenceObj)

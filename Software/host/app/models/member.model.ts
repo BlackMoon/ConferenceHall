@@ -7,12 +7,11 @@ import { JsonProperty } from '../common/map-utils';
 export class MemberModel extends KeyModel {
 
     name: string;
-    jobTitle: string;
-    emailsList: string[];
-    phonesList: string[];
+    job_title: string;
+   
     place: string;
     role: string;
-    locked: boolean;
+    lockedInt: number;
     selected: boolean;
 
     constructor() {
@@ -20,11 +19,9 @@ export class MemberModel extends KeyModel {
         super();
 
         this.name = undefined;
-        this.jobTitle = undefined;
-        this.emailsList = undefined;
-        this.phonesList = undefined;
+        this.job_title = undefined;      
         this.role = undefined;
         this.role = undefined;
-        this.locked = true;
+        this.lockedInt = 0;
     }
 }

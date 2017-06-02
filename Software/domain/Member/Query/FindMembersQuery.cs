@@ -6,6 +6,6 @@ namespace domain.Member.Query
     {
         public string Filter { get; set; }
 
-      
+        public int ConferenceId { get; set; }
     }
 }

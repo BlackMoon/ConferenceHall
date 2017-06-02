@@ -1,27 +1,30 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
     <p-toolbar>
         <div class="ui-toolbar-group-left">
-            <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" (ngModelChange)="filterChange($event)" [ngClass]="'w100p'" [ngStyle]="{'box-sizing':'border-box'}" (keypress)="filterKeyPressed($event)" />
+            <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" (ngModelChange)="filterChange($event)" [ngClass]="'w300p'" [ngStyle]="{'box-sizing':'border-box'}" (keypress)="filterKeyPressed($event)" />
         </div>
         <div class="ui-toolbar-group-right">          
-            <button type="button" pButton (click)="addMember()" icon="fa fa-plus" title="Добавить"   ></button>           
+            <button type="button" pButton  (click)="addMember()" icon="fa fa-plus" style="width:120px" >Добавить</button>           
         </div>
     </p-toolbar>
-    <p-dataTable [value]="members"  [rows]="10" [paginator]="true" selectionMode="single" [(selection)]="selectMember"  >      
-        <p-column  field="locked"  styleClass="col-button" [style]="{'width':'50px'}">
+    <p-dataTable [value]="members"  [rows]="10" [paginator]="true" selectionMode="single"  [(selection)]="selectedMember"   >      
+        <p-column field="rowId" header="№">
             <ng-template let-member="rowData" pTemplate="body">
-                <picture pButton icon="{{member.locked?'fa fa-lock' : 'fa fa-unlock-alt'}}"></picture>
+             
+            </ng-template>
+</p-column>
+        <p-column  field="lockedInt"  styleClass="col-button" [style]="{'width':'50px'}">
+            <ng-template let-member="rowData" pTemplate="body" >
+                <i  class="{{member.lockedInt==0?'fa fa-unlock-alt':'fa fa-lock'}}"></i>
             </ng-template>
         </p-column>
+       
         <p-column field="name" header="ФИО" ></p-column>
-        <p-column field="job_title" header="Должность"></p-column>
-        <p-column field="emails_list" header="email"></p-column>
-        <p-column field="phones_list" header="Телефоны"></p-column>
+        <p-column field="jobTitle" header="Должность"></p-column>
         <p-column field="role" header="Роль"></p-column>        
         <p-column  styleClass="col-button" [style]="{'width':'50px'}" >           
             <ng-template let-member="rowData" pTemplate="body">
-                <i class="fa fa-trash-o" (click)="removeMember(member.id,member.name)" style="cursor: pointer;" title="Удалить"></i>
-                <!--<button type="button" pButton (click)="removeMember(member.id,member.name)" icon="fa fa-trash"></button>-->
+                <i  class="fa fa-trash-o" (click)="removeMember(member.id,member.name)" style="cursor: pointer;" title="Удалить"></i>
             </ng-template>
         </p-column>
     </p-dataTable>

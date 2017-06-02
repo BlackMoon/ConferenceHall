@@ -21,8 +21,7 @@ export class MemberListComponent implements OnInit {
     members: MemberModel[];
     filter: string;
     header: string;
-    selectedElementIds: number[] = [];
-
+   
 
     @Input()
     selectedMember: MemberModel;
@@ -70,15 +69,15 @@ export class MemberListComponent implements OnInit {
 
         });       
     }
-    selectMember(member) {
-        debugger;
-        if (!member.selected) {
-            for (let memb of this.members) {
-                memb.selected = (memb.id === member.id);
-            }
-            this.selectedMember = member;
-        }        
-    }
+    //selectMember(member) {
+    //    debugger;
+    //    if (!member.selected) {
+    //        for (let memb of this.members) {
+    //            memb.selected = (memb.id === member.id);
+    //        }
+    //        this.selectedMember = member;
+    //    }        
+    //}
     filterChange(value) {
         
         this.filter = value;
