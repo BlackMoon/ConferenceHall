@@ -19,6 +19,9 @@ const zoomStep = 0.1;
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
+    @Input()
+    schemeToolbarVisible: boolean = true;             
+
     canvas: any;
     canvasBox: any;
 
@@ -68,8 +71,50 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     schemeFormVisible: boolean;
     intervals: SelectItem[];
 
-    @Input()
-    schemeid: number;
+    private _schemeid: number;
+
+    @Input() set schemeid(value: number) {
+       this._schemeid = value;
+       this.schemeBind();
+    }
+    get schemeid(): number {
+        return this._schemeid;
+    }
+
+    schemeBind() {
+        this.schemeService
+            .get(this.schemeid)
+            .subscribe((scheme: SchemeModel) => {
+
+                this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
+                this.gridInterval = scheme.gridInterval || 0;
+                // размеры в см
+                this.initialHeight = scheme.height * 100;
+                this.initialWidth = scheme.width * 100;
+
+                this.canvas = this.canvasBox.querySelector("svg");
+
+                if (this.canvas != null) {
+                    this.canvas.style.height = this.canvas.style.width = "100%";
+
+                    this.centerView();
+                    this.drawBorder();
+                    this.drawGrid();
+
+                    this.canvas
+                        .addEventListener("mousedown", (event) => this.canvasMouseDown(event));
+
+                    this.canvas
+                        .addEventListener("mousemove", (event) => this.canvasMouseMove(event));
+
+                    this.canvas
+                        .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
+                }
+
+                this.schemeForm.patchValue(scheme);
+            },
+            error => this.logger.error(error));
+    }
 
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
@@ -115,39 +160,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.canvasBox = this.canvasBoxElRef.nativeElement;
 
-        this.schemeService
-            .get(this.schemeid)
-            .subscribe((scheme: SchemeModel) => {
-
-                    this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
-                    this.gridInterval = scheme.gridInterval || 0;
-                    // размеры в см
-                    this.initialHeight = scheme.height * 100;
-                    this.initialWidth = scheme.width * 100;
-
-                    this.canvas = this.canvasBox.querySelector("svg");
-
-                    if (this.canvas != null) {
-                        this.canvas.style.height = this.canvas.style.width = "100%";
-
-                        this.centerView();
-                        this.drawBorder();
-                        this.drawGrid();
-
-                        this.canvas
-                            .addEventListener("mousedown", (event) => this.canvasMouseDown(event));
-
-                        this.canvas
-                            .addEventListener("mousemove", (event) => this.canvasMouseMove(event));
-
-                        this.canvas
-                            .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
-                        }
-
-                    this.schemeForm.patchValue(scheme);
-                },
-                error => this.logger.error(error));
     }
+
+   
 
     ngOnDestroy() {
         this.canvas.removeEventListener("mousedown");
