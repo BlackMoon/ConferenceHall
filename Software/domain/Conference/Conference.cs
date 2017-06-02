@@ -38,33 +38,35 @@ namespace domain.Conference
         [Column("hall_id")]
         public int? HallId { get; set; }
 
-        //[Column("hall_scheme_id")]
-        //public int? HallSchemeId { get; set; }
+        [Column("hall_scheme_id")]
+        public int? HallSchemeId { get; set; }
 
+        /// <summary>
+        /// Дата/время начала
+        /// </summary>
         public DateTime StartDate { get; set; }
 
+        /// <summary>
+        /// Дата/время окончания
+        /// </summary>
         public DateTime EndDate { get; set; }
 
         public string Subject { get; set; }
      
         public string Description { get; set; }
 
-       
-        public Range<DateTime> Period { get; set; }
+        public ConfState ConfState { get; set; }
 
-        //public ConfState ConfState { get; set; }
-
-        //[Column("state")]
-        //[JsonIgnore]
-        //public string State
-        //{
-        //    set
-        //    {
-        //        ConfState confState;
-        //        Enum.TryParse(value, true, out confState);
-        //        ConfState = confState;
-        //    }
-        //}
+        [Column("state")]
+        [JsonIgnore]
+        public string State
+        {
+            set
+            {
+                ConfState confState;
+                Enum.TryParse(value, true, out confState);
+                ConfState = confState;
+            }
+        }
     }
-
 }

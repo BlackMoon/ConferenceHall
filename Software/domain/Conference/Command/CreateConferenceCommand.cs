@@ -24,15 +24,14 @@ namespace domain.Conference.Command
         public int? HallSchemeId { get; set; }
 
         /// <summary>
-        /// Дата начала.
-        /// Поле Period.LowerBound. См. поле period из БД.
+        /// Дата начала
         /// </summary>
-        public DateTime? LowerBound { get; set; }
+        public DateTime? StartDate { get; set; }
+        
         /// <summary>
         /// Дата окончания
-        /// Поле Period.UpperBound. См. поле period из БД.
         /// </summary>
-        public DateTime? UpperBound { get; set; }
+        public DateTime? EndDate { get; set; }
 
     }
 }

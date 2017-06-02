@@ -23,7 +23,8 @@ namespace domain.Screen.Query
             // sql для выбора конференции
             SqlBuilder sqlBuilder1 = new SqlBuilder("conf_hall.conferences c")
                 .Column("c.subject")
-                .Column("c.period")
+                .Column("lower(c.period) startDate")
+                .Column("upper(c.period) endDate")
                 .Column("conf_messages_get(c.id) tickers")
                 .Column("h.height")
                 .Column("h.width")

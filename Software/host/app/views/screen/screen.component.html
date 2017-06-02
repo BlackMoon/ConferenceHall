@@ -3,7 +3,7 @@
         <div #header class="ui-g-12 h40 ui-g-nopad">
             <div class="ui-g ui-widget-content">
                 <div class="ui-g-2 ui-md-2" style="background-color: rgba(255, 0, 51, 0.9);color: white">
-                    {{period?.lowerBound | date:'HH:mm'}} - {{period?.upperBound | date: 'HH:mm'}}
+                    {{startDate | date:'HH:mm'}} - {{endDate | date: 'HH:mm'}}
                 </div>
                 <div class="ui-g-8 ui-md-8" style="background-color: rgba(109, 204, 163, 0.9)">
                     {{subject}}

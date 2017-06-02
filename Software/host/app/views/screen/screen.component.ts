@@ -24,7 +24,8 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     members: MemberModel[];
 
     now: Date = new Date();
-    period: TimeRange;
+    endDate: Date;
+    startDate: Date;
     subject: string;
 
 // ReSharper disable once InconsistentNaming
@@ -88,7 +89,8 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                 let screen: ScreenModel = res[1];
 
                 this.members = screen.members;
-                this.period = screen.period;
+                this.startDate = screen.startDate;
+                this.endDate = screen.endDate;
                 this.subject = screen.subject;
                 this.tickers = screen.tickers || [];
 

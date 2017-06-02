@@ -33,7 +33,14 @@ namespace domain.Screen
         /// </summary>
         public string[] Tickers { get; set; }
 
-        [JsonConverter(typeof(NpgsqlRangeConverter<DateTime>))]
-        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
+        /// <summary>
+        /// Дата/время начала
+        /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Дата/время окончания
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 }

@@ -7,9 +7,9 @@ import { JsonProperty } from '../common/map-utils';
 export class ScreenModel {
     
     plan: string;
-    period: TimeRange;
+    startDate: Date;
+    endDate: Date;
     subject: string;
-
     height: number;
     width: number;
 
@@ -21,7 +21,8 @@ export class ScreenModel {
         
         this.members = null;
         this.plan = null;
-        this.period = null;
+        this.startDate = null;
+        this.endDate = null;
         this.subject = null;
         this.tickers = null;
         this.height = 2;
