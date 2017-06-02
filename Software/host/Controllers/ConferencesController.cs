@@ -39,16 +39,25 @@ namespace host.Controllers
             return QueryDispatcher.DispatchAsync<FindConferenceByIdQuery, Conference>(new FindConferenceByIdQuery() { Id = id });
         }
 
-        [HttpPost("/api/appointment")]
-        public Task<TimeRange> MakeAppointment([FromBody]MakeAppointmentCommand value)
+        [HttpPut("/api/appointment/{id}")]
+        public Task<TimeRange> MakeAppointment(int id, [FromBody]MakeAppointmentCommand value)
         {
+            value.ConferenceId = id;
             return CommandDispatcher.DispatchAsync<MakeAppointmentCommand, TimeRange>(value);
         }
 
-        [HttpPost("/api/period")]
-        public Task ChangePeriod([FromBody]ChangePeriodCommand value)
+        [HttpPut("/api/period/{id}")]
+        public Task ChangePeriod(int id, [FromBody]ChangePeriodCommand value)
         {
+            value.ConferenceId = id;
             return CommandDispatcher.DispatchAsync<ChangePeriodCommand, bool>(value);
+        }
+
+        [HttpPut("/api/state/{id}")]
+        public Task ChangeState(int id, [FromBody]ChangeStateCommand value)
+        {
+            value.ConferenceId = id;
+            return CommandDispatcher.DispatchAsync<ChangeStateCommand, bool>(value);
         }
 
         // POST api/conferences

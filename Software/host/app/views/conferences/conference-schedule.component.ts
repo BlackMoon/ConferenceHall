@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
-import { AppointmentModel, ConferenceModel, confDragType, TimeRange } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, confDragType, TimeRange } from '../../models';
 import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
@@ -57,12 +57,24 @@ export class ConferenceScheduleComponent {
                         message: `Удалить [${this.selectedEvent.title}]?`,
                         accept: _ => {
                             return this.conferrenceService
-                                .delete(this.selectedEvent.id)
+                                .changeState(this.selectedEvent.id, ConfState.Planned)
                                 .subscribe(
                                     _ => {
-                                        let ix = this.events.findIndex(c => c.id === this.selectedEvent.id);
-                                        this.events.splice(ix, 1);
-                                        this.selectedEvent = null;
+
+                                        if (this.conferenceList.selectedState === ConfState.Planned)
+                                        {
+                                            let conference: ConferenceModel = 
+                                            {
+                                                id: this.selectedEvent.id,
+                                                subject: this.selectedEvent.title,
+                                                description: this.selectedEvent.description,
+                                                selected: false,
+                                                state: ConfState.Planned
+                                            };
+                                            this.conferenceList.addConferenceToList(conference);
+                                        }
+
+                                        this.removeEventFromList(this.selectedEvent.id);
                                     },
                                     error => this.logger.error(error));
                         }
@@ -75,22 +87,21 @@ export class ConferenceScheduleComponent {
     appointmentDialogClosed(appointment: AppointmentModel) {
         
         if (appointment != null) {
-            
-            appointment.conferenceId = this.selectedConference.id;
 
             this.conferrenceService
-                .makeAppointment(appointment)
+                .makeAppointment(this.selectedConference.id, appointment)
                 .subscribe(
                     (period:TimeRange) => {
-                        
+                       
                         this.events.push(
                             {
                                 id: this.selectedConference.id,
                                 title: this.selectedConference.subject,
+                                description: this.selectedConference.description,
                                 start: period.lowerBound,
                                 end: period.upperBound
                             });
-                        this.conferenceList.removeConferenceFromList(this.selectedConference.id);
+                        this.conferenceList.removeConferenceFromList(this.selectedConference.id, false);
                         this.selectedConference = null;
                     },
                     error =>
@@ -109,10 +120,8 @@ export class ConferenceScheduleComponent {
 
     eventDrop(e) {
 
-        let appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), end: e.event.end.toDate() };
-
         this.conferrenceService
-            .changePeriod(appointment)
+            .changePeriod(e.event.id, e.event.start.toDate(), e.event.end.toDate())
             .subscribe(
                 _ => {},
                 error => {
@@ -122,12 +131,12 @@ export class ConferenceScheduleComponent {
         
     }
 
+    eventRender = (event, element) => element.attr("title", event.description || event.title);
+
     eventResize(e) {
-
-        let appointment: AppointmentModel = { conferenceId: e.event.id, start: e.event.start.toDate(), end: e.event.end.toDate() };
-
+      
         this.conferrenceService
-            .changePeriod(appointment)
+            .changePeriod(e.event.id, e.event.start.toDate(), e.event.end.toDate())
             .subscribe(
                 _ => {},
                 error => {
@@ -155,6 +164,13 @@ export class ConferenceScheduleComponent {
         this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date(this.startDate.getFullYear(), month, date) }, calendarVisible);    
     }
 
+    removeEventFromList(id) {
+        let ix = this.events.findIndex(c => c.id === id);
+        this.events.splice(ix, 1); 
+
+        this.selectedEvent = null;
+    }
+
     viewRender(event) {
         this.startDate = event.view.start.toDate();
         this.endDate = event.view.end.toDate();
@@ -162,7 +178,7 @@ export class ConferenceScheduleComponent {
         this.conferrenceService
             .getAll(this.startDate, this.endDate)
             .subscribe(
-                conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject }),
+                conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
                 error => this.logger.error(error));
     }
 }

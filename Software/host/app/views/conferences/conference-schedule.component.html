@@ -5,13 +5,14 @@
         <div class="ui-g-8">
             <p-schedule [allDayText]="'Весь день'" [businessHours]="true" [droppable]="true" [editable]="true" [fixedWeekCount]="false"
                         [events]="events" [height]="grid.offsetHeight - 6" [header]="headerConfig" [nowIndicator]="true"
-                        (onDrop)="drop($event)" (onEventClick)="selectedEvent=$event.calEvent;menu.toggle($event.jsEvent)" (onEventDrop)="eventDrop($event)" (onEventResize)="eventResize($event)" (onViewRender)="viewRender($event)">
+                        [eventRender]="eventRender" (onDrop)="drop($event)" (onEventClick)="selectedEvent=$event.calEvent;menu.toggle($event.jsEvent)" 
+                        (onEventDrop)="eventDrop($event)" (onEventResize)="eventResize($event)" (onViewRender)="viewRender($event)">
             </p-schedule>
         </div>
         <div class="ui-g-4">
             <p-tabView styleClass="h100p p0501">
                 <p-tabPanel header="Совещания">
-                    <conference-list [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)"></conference-list>
+                    <conference-list [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)" (conferenceRemoveClick)="removeEventFromList($event, false)"></conference-list>
                 </p-tabPanel>
                 <p-tabPanel header="Фильтр">
                     <div [ngStyle]="{'height':'50%'}">

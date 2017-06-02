@@ -15,6 +15,7 @@ namespace domain.Conference.Command
     public class ConferenceCommandHandler : 
         KeyObjectCommandHandler<Conference>,
         ICommandHandlerWithResult<ChangePeriodCommand, bool>,
+        ICommandHandlerWithResult<ChangeStateCommand, bool>,
         ICommandHandlerWithResult<MakeAppointmentCommand, TimeRange>,
         ICommandHandlerWithResult<DeleteConferenceCommand, bool>,
         ICommandHandlerWithResult<CreateConferenceCommand, int>
@@ -60,7 +61,7 @@ namespace domain.Conference.Command
                 DbManager.AddParameter("hall_scheme_id", command.HallSchemeId);
             }
             
-            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", lParams)}) values({string.Join(",", lValues)})");
+            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", lParams)}) VALUES({string.Join(",", lValues)})");
             Logger.LogInformation($"Inserted {inserted} conference");
             return inserted;
         }
@@ -81,6 +82,23 @@ namespace domain.Conference.Command
             
             return updated > 0;
         }
+
+        public bool Execute(ChangeStateCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> ExecuteAsync(ChangeStateCommand command)
+        {
+            DbManager.AddParameter("id", command.ConferenceId);
+            DbManager.AddParameter("state", command.State.ToString());
+
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET state = @state::conf_state WHERE id = @id");
+            Logger.LogInformation($"Modified {updated} records");
+
+            return updated > 0;
+        }
+
 
         public bool Execute(DeleteConferenceCommand command)
         {

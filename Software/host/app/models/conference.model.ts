@@ -42,10 +42,10 @@ export namespace ConfState {
 export class ConferenceModel extends KeyModel implements ISelected {
     
     description: string;
-    hallId: number;
-    startDate: Date;
-    endDate: Date;
-    period: TimeRange;
+    hallId?: number;
+    startDate?: Date;
+    endDate?: Date;
+    
     selected: boolean;
     state: ConfState;
     subject: string;
@@ -55,7 +55,6 @@ export class ConferenceModel extends KeyModel implements ISelected {
 
         this.description = null;
         this.hallId = null;
-        this.period = null;
         this.startDate = null;
         this.endDate = null;
         this.state = ConfState.Planned;
@@ -71,16 +70,9 @@ export class AppointmentModel {
     /**
      * длительность в формате HH:mm:ss
      */
-    duration?: string;
+    duration: string;
 
     start: Date;
 
-    end?: Date;
-
-    hallId?: number;
-
-    /**
-     * id конференции
-     */
-    conferenceId: number;
+    hallId: number;
 }

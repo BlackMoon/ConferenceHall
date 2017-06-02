@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Kit.Dal.DbManager;
@@ -40,6 +38,8 @@ namespace domain.Conference.Query
                 sqlBuilder.Where("c.state = @state::conf_state");
                 param.Add("state", query.State.ToString());
             }
+            else
+                sqlBuilder.Where("c.state != 'Planned'::conf_state");
 
             // [активные, на подготовке, завершенные] совещания фильтруются по дате
             if (query.State != ConfState.Planned)

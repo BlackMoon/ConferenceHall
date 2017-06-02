@@ -35,6 +35,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     selectedState: ConfState = ConfState.Planned;
 
     @Output() appointmentButtonClick = new EventEmitter<ConferenceModel>();
+    @Output() conferenceRemoveClick = new EventEmitter<number>();
 
     conferences: ConferenceModel[];
 
@@ -84,6 +85,8 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     }
 
     actionClick = () => this.actionCommand();
+
+    addConferenceToList = (conference: ConferenceModel) => this.conferences.push(conference);
 
     changeState(state: ConfState) {
 
@@ -161,17 +164,20 @@ export class ConferenceListComponent implements OnInit, OnChanges {
             }
         });
     }
-
+    
     /**
      * Удаляет конференцию из списка
-     * @param id
+     * @param id 
+     * @param emit     
      */
-    removeConferenceFromList(id) {
+    removeConferenceFromList(id, emit:boolean = true) {
         
         this.selectedConference = null;
 
         let ix = this.conferences.findIndex(c => c.id === id);
         this.conferences.splice(ix, 1);
+
+        emit && this.conferenceRemoveClick.emit(id);
     } 
 
     selectConference(conference) {
