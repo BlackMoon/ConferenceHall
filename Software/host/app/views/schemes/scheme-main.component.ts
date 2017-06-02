@@ -19,6 +19,9 @@ const zoomStep = 0.1;
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
+    @Input()
+    schemeToolbarVisible: boolean = true;             
+
     canvas: any;
     canvasBox: any;
 

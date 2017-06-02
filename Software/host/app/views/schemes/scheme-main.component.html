@@ -1,5 +1,5 @@
 ﻿<div #wrapper class="h100p">
-    <div class="ui-g-12 ui-g-nopad">
+    <div class="ui-g-12 ui-g-nopad" *ngIf="schemeToolbarVisible">
         <p-toolbar>
             <div class="ui-g-6 ui-g-nopad">
                 <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
