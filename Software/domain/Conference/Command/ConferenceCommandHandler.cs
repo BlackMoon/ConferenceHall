@@ -39,8 +39,8 @@ namespace domain.Conference.Command
         {
             DbManager.AddParameter("subject", command.Subject);
             DbManager.AddParameter("description", command.Description);
-            DbManager.AddParameter("startDate", DbType.DateTime, command.Period.LowerBound);
-            DbManager.AddParameter("endDate", DbType.DateTime, command.Period.UpperBound);
+            DbManager.AddParameter("startDate", DbType.DateTime, command.LowerBound);//to add datetime without timezone for 'tsrange' function
+            DbManager.AddParameter("endDate", DbType.DateTime, command.UpperBound);//to add datetime without timezone 'for tsrange' function
             DbManager.AddParameter("hall_id", command.HallId);
 
             List<string> lParams = new List<string>(){ "subject", "description", "period" };

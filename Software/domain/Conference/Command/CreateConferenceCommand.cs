@@ -23,8 +23,16 @@ namespace domain.Conference.Command
         [Column("hall_scheme_id")]
         public int? HallSchemeId { get; set; }
 
-        [JsonConverter(typeof(NpgsqlRangeConverter<DateTime>))]
-        public NpgsqlTypes.NpgsqlRange<DateTime> Period { get; set; }
+        /// <summary>
+        /// Дата начала.
+        /// Поле Period.LowerBound. См. поле period из БД.
+        /// </summary>
+        public DateTime? LowerBound { get; set; }
+        /// <summary>
+        /// Дата окончания
+        /// Поле Period.UpperBound. См. поле period из БД.
+        /// </summary>
+        public DateTime? UpperBound { get; set; }
 
     }
 }
