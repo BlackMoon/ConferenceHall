@@ -1,13 +1,14 @@
-﻿import { KeyModel, SchemeModel } from './index';
+﻿import { ISelected, KeyModel, SchemeModel } from './index';
 import { JsonProperty } from '../common/map-utils';
 
 /**
  * Модель. Конференц-холл
  */
-export class HallModel extends KeyModel {
+export class HallModel extends KeyModel implements ISelected {
    
     name: string;
     description?: string;
+    selected: boolean;
     height?: number;
     width?: number;
 
@@ -20,8 +21,10 @@ export class HallModel extends KeyModel {
         
         this.name = undefined;
         this.description = undefined;
+        this.selected = false;
         this.height = 2;
         this.width = 2;
+
         this.schemes = undefined;
     }
 

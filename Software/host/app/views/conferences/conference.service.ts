@@ -1,5 +1,5 @@
 ﻿import { Injectable, isDevMode } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
@@ -14,21 +14,22 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     constructor(http: Http) { super(http); }
 
-    getAll(startDate: Date, endDate: Date, state: ConfState = null): Observable<any> {
-
-        let queryParams = [];
-
+    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = []): Observable<any> {
+        
+        let params: URLSearchParams = new URLSearchParams();
         if (state !== null)
-            queryParams.push(`state=${state}`);
+            params.set("state", `${state}`);
 
         // [активные, на подготовке, завершенные] совещания фильтруются по дате
         if (state !== ConfState.Planned) {
-            queryParams.push(`startDate=${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
-            queryParams.push(`endDate=${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
-        }    
+            params.set("startDate", `${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
+            params.set("endDate", `${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
+        }
+
+        //params.set("hallids", hallIds);
 
         return this.http
-            .get(`${this.url}?${queryParams.join("&")}`)
+            .get(this.url, { search: params })
             .map((r: Response) => r
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))

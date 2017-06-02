@@ -16,9 +16,9 @@
                 </p-tabPanel>
                 <p-tabPanel header="Фильтр">
                     <div [ngStyle]="{'height':'50%'}">
-                        <p-accordion >
+                        <p-accordion>
                             <p-accordionTab header="Холлы" [selected]="true">
-                                Content 1
+                                <hall-list (selectionChanged)="hallListChanged($event)"></hall-list>
                             </p-accordionTab>
                         </p-accordion>
                     </div>

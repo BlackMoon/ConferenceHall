@@ -11,7 +11,8 @@ import { ConferenceListComponent } from "./conference-list.component";
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    styles: [`.p0501 .ui-tabview-panel { padding: 0.5em 0.1em; }`],
+    styles: [`.ui-accordion .ui-accordion-content { padding: 0}`,
+            `.p0501 .ui-tabview-panel { padding: 0.5em 0.1em; }`],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent {
@@ -27,6 +28,7 @@ export class ConferenceScheduleComponent {
     startDate: Date;
     
     selectedConference: ConferenceModel;
+    selectedHallIds: number[];
     selectedEvent: any;
 
     constructor(
@@ -145,6 +147,12 @@ export class ConferenceScheduleComponent {
                 });
     }
 
+    hallListChanged(ids: number[]) {
+        this.selectedHallIds = ids;
+
+        this.loadEvents();
+    }
+
     makeAppointment(conference) {
 
         // time period like schedule's view period
@@ -164,6 +172,14 @@ export class ConferenceScheduleComponent {
         this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date(this.startDate.getFullYear(), month, date) }, calendarVisible);    
     }
 
+    loadEvents() {
+        this.conferrenceService
+            .getAll(this.startDate, this.endDate, null, this.selectedHallIds)
+            .subscribe(
+                conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
+                error => this.logger.error(error));
+    }
+
     removeEventFromList(id) {
         let ix = this.events.findIndex(c => c.id === id);
         this.events.splice(ix, 1); 
@@ -175,10 +191,6 @@ export class ConferenceScheduleComponent {
         this.startDate = event.view.start.toDate();
         this.endDate = event.view.end.toDate();
 
-        this.conferrenceService
-            .getAll(this.startDate, this.endDate)
-            .subscribe(
-                conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
-                error => this.logger.error(error));
+        this.loadEvents();
     }
 }

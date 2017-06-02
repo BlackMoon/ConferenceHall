@@ -8,6 +8,7 @@ import { ConferenceDetailComponent } from './conference-detail.component';
 import { ConferenceListComponent } from './conference-list.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
+import { HallsModule } from '../halls/halls.module';
 import { DateToUtcPipe } from "../../common/pipes";
 
 @NgModule({
@@ -23,6 +24,7 @@ import { DateToUtcPipe } from "../../common/pipes";
         DragDropModule,
         DropdownModule,
         FormsModule,
+        HallsModule,
         MenuModule,
         ReactiveFormsModule,
         ScheduleModule,
