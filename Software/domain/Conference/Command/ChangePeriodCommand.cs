@@ -1,18 +1,12 @@
 ﻿using System;
-using Kit.Core.CQRS.Command;
 
 namespace domain.Conference.Command
 {
     /// <summary>
     /// Команда. Изменить интервал события
     /// </summary>
-    public class ChangePeriodCommand : ICommand
+    public class ChangePeriodCommand : AbstractConferenceCommand
     {
-        /// <summary>
-        /// id конференции
-        /// </summary>
-        public int ConferenceId { get; set; }
-
         /// <summary>
         /// Дата начала
         /// </summary>

@@ -85,6 +85,8 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
     actionClick = () => this.actionCommand();
 
+    addConferenceToList = (conference: ConferenceModel) => this.conferences.push(conference);
+
     changeState(state: ConfState) {
 
         this.selectedState = state;

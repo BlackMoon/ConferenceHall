@@ -3,7 +3,7 @@
 namespace domain.Screen.Query
 {
     /// <summary>
-    /// Запрос для поиска сообщений конференции
+    /// Запрос.  Поиск сообщений конференции
     /// </summary>
     public class FindTickersByConference : FindObjectByIdQuery
     {

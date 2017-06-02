@@ -38,14 +38,27 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     /**
      * Изменить период
-     * @param a
+     * @param confid
+     * @param start
+     * @param end
      */
-    changePeriod(a: AppointmentModel) : Observable<any> {
-        debugger;
+    changePeriod(confid: number, start, end): Observable<any> {
 
         return this.http
-            .post('/api/period', a)
+            .post(`/api/period/${confid}`, { start: start, end: end })
             .catch(handleResponseError);
+    }
+
+    /**
+     * Изменить состояние
+     * @param confid
+     * @param state
+     */
+    changeState(confid: number, state: ConfState): Observable<any> {
+
+        return this.http
+            .post(`/api/state/${confid}`, { state: state })
+            .catch(handleResponseError);    
     }
 
     /**
