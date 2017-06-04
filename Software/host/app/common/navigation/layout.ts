@@ -1,16 +1,16 @@
 ﻿/**
- * Макет
+ * Макет отображения
  */
 
 export enum Layout
 {
     None = 0,
     
-    ShowHeader = 1 << 0,
+    ShowHeader = 1,     // 1 << 0,
     
-    ShowFooter = 1 << 1,
+    ShowFooter = 2,     // 1 << 1,
 
-    ShowLeftSide = 1 << 2,
+    ShowLeftSide = 4,   // 1 << 2,
 
-    ShowRightSide = 1 << 3
+    ShowRightSide = 8,  // 1 << 3
 }
