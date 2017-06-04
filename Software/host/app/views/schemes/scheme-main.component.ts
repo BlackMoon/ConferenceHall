@@ -82,7 +82,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     intervals: SelectItem[];
 
     @Input()
-    toolbarVisible: boolean = true;             
+    showToolbar: boolean;             
 
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
@@ -145,7 +145,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onResize() {
-        let offsetTop = this.toolbarVisible ? this.canvasBox.offsetTop : 0;
+        let offsetTop = this.showToolbar ? this.canvasBox.offsetTop : 0;
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - offsetTop}px`;
     }
 
@@ -506,7 +506,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                     this.centerView();
 
-                    if (this.toolbarVisible) {
+                    if (this.showToolbar) {
                         this.drawBorder();
                         this.drawGrid();
 
