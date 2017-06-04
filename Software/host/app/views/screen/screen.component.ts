@@ -87,11 +87,12 @@ export class ScreenComponent implements OnInit {
 
                 return Observable.empty();
             })
-            .subscribe((screen: ScreenModel) => {
-
-                this.activeScreen = screen;
-                this.tickers = this.activeScreen.tickers || [];
-            });
+            .subscribe((screen: ScreenModel) =>
+                {
+                    this.activeScreen = screen;
+                    this.tickers = this.activeScreen.tickers || [];
+                },
+                error => this.logger.error(error));
         
         // clock
         setInterval(() => this.now = new Date(), 1000);
