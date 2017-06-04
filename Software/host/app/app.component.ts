@@ -37,7 +37,6 @@ export class AppComponent implements OnInit {
                 while (r.firstChild) r = r.firstChild;
                 return r;                
             })
-            .filter(route => route.outlet === 'primary')
             .mergeMap(r => r.data)
             .subscribe(data => this.layout = data.layout | Layout.ShowHeader);
 
