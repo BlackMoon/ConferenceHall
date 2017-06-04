@@ -13,12 +13,11 @@ using System.Collections.Generic;
 namespace domain.Conference.Command
 {
     public class ConferenceCommandHandler : 
-        KeyObjectCommandHandler<Conference>,
-        ICommandHandlerWithResult<ChangePeriodCommand, bool>,
-        ICommandHandlerWithResult<ChangeStateCommand, bool>,
-        ICommandHandlerWithResult<MakeAppointmentCommand, TimeRange>,
+        KeyObjectCommandHandler<Conference>,        
+        ICommandHandlerWithResult<CreateConferenceCommand, int>,
         ICommandHandlerWithResult<DeleteConferenceCommand, bool>,
-        ICommandHandlerWithResult<CreateConferenceCommand, int>
+        ICommandHandlerWithResult<MakeAppointmentCommand, TimeRange>,
+        ICommandHandlerWithResult<PartialUpdateCommand, bool>
     {
 
         public ConferenceCommandHandler(IDbManager dbManager, ILogger<ConferenceCommandHandler> logger) : base(dbManager, logger)
@@ -44,61 +43,27 @@ namespace domain.Conference.Command
             //DbManager.AddParameter("endDate", DbType.DateTime, command.UpperBound);//to add datetime without timezone 'for tsrange' function
             DbManager.AddParameter("hall_id", command.HallId);
 
-            List<string> lParams = new List<string>(){ "subject", "description", "period" };
-            List<string> lValues = new List<string>() {"@subject", "@description", "tsrange(@startDate, @endDate)"};
+            List<string> columns = new List<string>(){ "subject", "description", "period" };
+            List<string> values = new List<string>() {"@subject", "@description", "tsrange(@startDate, @endDate)"};
 
             if (command.HallId.HasValue)
             {
-                lParams.Add("hall_id");
-                lValues.Add("@hall_id");
+                columns.Add("hall_id");
+                values.Add("@hall_id");
                 DbManager.AddParameter("hall_id", command.HallId);
             }
            
             if (command.HallSchemeId.HasValue)
             {
-                lParams.Add("hall_scheme_id");
-                lValues.Add("@hall_scheme_id");
+                columns.Add("hall_scheme_id");
+                values.Add("@hall_scheme_id");
                 DbManager.AddParameter("hall_scheme_id", command.HallSchemeId);
             }
             
-            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", lParams)}) VALUES({string.Join(",", lValues)})");
+            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) VALUES({string.Join(",", values)})");
             Logger.LogInformation($"Inserted {inserted} conference");
             return inserted;
-        }
-
-        public bool Execute(ChangePeriodCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> ExecuteAsync(ChangePeriodCommand command)
-        {  
-            DbManager.AddParameter("id", command.ConferenceId);
-            DbManager.AddParameter("start", DbType.DateTime, command.Start);
-            DbManager.AddParameter("end", DbType.DateTime, command.End);
-
-            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET period = tsrange(@start, @end) WHERE id = @id");
-            Logger.LogInformation($"Modified {updated} records");
-            
-            return updated > 0;
-        }
-
-        public bool Execute(ChangeStateCommand command)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> ExecuteAsync(ChangeStateCommand command)
-        {
-            DbManager.AddParameter("id", command.ConferenceId);
-            DbManager.AddParameter("state", command.State.ToString());
-
-            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.conferences SET state = @state::conf_state WHERE id = @id");
-            Logger.LogInformation($"Modified {updated} records");
-
-            return updated > 0;
-        }
-
+        }      
 
         public bool Execute(DeleteConferenceCommand command)
         {
@@ -136,6 +101,54 @@ namespace domain.Conference.Command
                     LowerBound = Convert.ToDateTime(pDateStart.Value),
                     UpperBound = Convert.ToDateTime(pDateEnd.Value)
                 };
+        }
+
+        /// <summary>
+        /// Частичное обновление конференции
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public bool Execute(PartialUpdateCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Частичное обновление конференции
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public async Task<bool> ExecuteAsync(PartialUpdateCommand command)
+        {
+            List<string> columns = new List<string>();
+
+            DbManager.AddParameter("id", command.ConferenceId);           
+
+            if (command.StartDate.HasValue && command.EndDate.HasValue)
+            {
+                DbManager.AddParameter("start", DbType.DateTime, command.StartDate);
+                DbManager.AddParameter("end", DbType.DateTime, command.EndDate);
+                columns.Add("period=tsrange(@start, @end)");
+            }
+
+            if (command.State.HasValue)
+            {
+                DbManager.AddParameter("state", command.State.ToString());  
+                columns.Add("state=@state::conf_state");
+            }
+
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");
+            Logger.LogInformation($"Modified {updated} records");
+
+            return updated > 0;
+        }
+
+        public override Task<bool> ExecuteAsync(Conference command)
+        {
+            IList<string> columns = new List<string>();
+
+            // todo написать команду update!
+            return base.ExecuteAsync(command);
         }
     }
 }
