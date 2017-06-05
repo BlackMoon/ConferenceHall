@@ -27,6 +27,7 @@ namespace domain.Conference.Query
                 .Column("c.id")
                 .Column("c.subject")
                 .Column("c.description")
+                .Column("c.state")
                 .Column("c.hall_id hallid")
                 .Column("lower(c.period) startDate")
                 .Column("upper(c.period) endDate")
