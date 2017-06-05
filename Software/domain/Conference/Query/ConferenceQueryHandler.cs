@@ -32,10 +32,9 @@ namespace domain.Conference.Query
                 .Column("upper(c.period) endDate")
                 .OrderBy("lower(c.subject)")
                 .Where("id = @id");
-            DynamicParameters param = new DynamicParameters();
-            param.Add("id", query.Id);
+            
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryFirstOrDefaultAsync<Conference>(sqlBuilder.ToString(), param);
+            return await DbManager.DbConnection.QueryFirstOrDefaultAsync<Conference>(sqlBuilder.ToString(), new { id = query.Id });
         }
 
         public async Task<IEnumerable<Conference>> ExecuteAsync(FindConferencesQuery query)
