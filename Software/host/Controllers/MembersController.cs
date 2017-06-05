@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using domain.Member;
 using domain.Member.Query;
 using domain.Common.Query;
+using domain.Conference.Query;
 
 namespace host.Controllers
 {
@@ -21,13 +22,18 @@ namespace host.Controllers
 
         // GET api/members
         [HttpGet]
-        public Task<IEnumerable<Member>> Get(string filter)
+        public Task<IEnumerable<Member>> Get(int? confid, string filter)
         {
-            FindMembersQuery query = new FindMembersQuery()
+            if (confid.HasValue)
             {
-                Filter = filter               
-            };
-            return _queryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(query);
+                FindConferenceMembersQuery query = new FindConferenceMembersQuery() { ConferenceId = confid.Value };
+                return _queryDispatcher.DispatchAsync<FindConferenceMembersQuery, IEnumerable<Member>>(query);
+            }
+            else
+            {
+                FindMembersQuery query = new FindMembersQuery() { Filter = filter };
+                return _queryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(query);
+            }
         }
 
         // GET api/members/5

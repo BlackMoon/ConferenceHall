@@ -1,4 +1,4 @@
-﻿import { Component, OnInit,Input } from '@angular/core';
+﻿import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router,Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MemberModel } from '../../models';
@@ -10,7 +10,9 @@ import { Logger } from "../../common/logger";
 const minChars = 3;
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
     selector: "member-table",
+    styles: [`middle { text-align: center }`],
     templateUrl: 'member-table.component.html'
 })
 
@@ -18,11 +20,9 @@ export class MemberTableComponent implements OnInit {
 
     members: MemberModel[];
     filter: string;
-    header: string;
-   
 
     @Input()
-    selectedMember: MemberModel;
+    conferenceId: number;
    
     constructor(
         private confirmationService: ConfirmationService,
@@ -30,23 +30,34 @@ export class MemberTableComponent implements OnInit {
         private logger: Logger,
         private route: ActivatedRoute,
         private router: Router) { }
-  
 
     ngOnInit() {
-      
-        this.memberService
-            .getAll()
-            .subscribe(members => this.members = members,
-                error => this.logger.error(error));
-       
+        this.loadMembers();
     }
+
+    addMember() {
+        debugger;
+        this.router.navigate(["members/new"], { relativeTo: this.route });
+    }
+
+    loadMembers() {
+        
+        this.memberService
+            .getAll(null, this.conferenceId)
+            .subscribe(
+                members => this.members = members,
+                error => this.logger.error(error));    
+    }
+
     loadMemberLazy(event: LazyLoadEvent) {
 
         this.memberService
             .getAll()
-            .subscribe(members => this.members = this.members,
-            error => this.logger.error(error));
+            .subscribe(
+                members => this.members = members,
+                error => this.logger.error(error));
     }
+
     removeMember(id: number, name?: string) {
 
         this.confirmationService.confirm({
@@ -67,26 +78,11 @@ export class MemberTableComponent implements OnInit {
 
         });       
     }
-    //selectMember(member) {
-    //    debugger;
-    //    if (!member.selected) {
-    //        for (let memb of this.members) {
-    //            memb.selected = (memb.id === member.id);
-    //        }
-    //        this.selectedMember = member;
-    //    }        
-    //}
+    
     filterChange(value) {
         
         this.filter = value;
-
-        if (value.length >= minChars) {
-            this.memberService
-                .getAll(value)
-                .subscribe(members => this.members = members,
-                error => this.logger.error(error));
-          
-        }
+        value.length >= minChars && this.loadMembers();
     }
 
     /**
@@ -96,11 +92,4 @@ export class MemberTableComponent implements OnInit {
        
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
-
-    addMember() {
-        debugger;
-        this.router.navigate(["members/new"], { relativeTo: this.route });
-        
-        }  
-
 }

@@ -29,10 +29,11 @@ export class MemberService extends HttpDataService<MemberModel> {
         return Observable.of(null);
     }
 
-    getAll(filter?: string): Observable<any> {
-
+    getAll(filter?: string, confid?: number): Observable<any> {
+        
         let params: URLSearchParams = new URLSearchParams();
         filter && params.append("filter", filter);
+        confid && params.append("confid", confid.toString());
        
         return this.http
             .get(this.url, { params: params })

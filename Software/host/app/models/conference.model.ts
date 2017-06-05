@@ -6,7 +6,6 @@ export const confDragType = "conference";
 /**
  * Состояние конференции
  */
-
 export enum ConfState { Planned, Preparing, Active, Closed }
 
 export namespace ConfState {

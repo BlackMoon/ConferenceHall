@@ -73,16 +73,16 @@ export class ScreenComponent implements OnInit {
 
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
 
-                if (key) {
+                if (this.id) {
                     // служба signalR может отсутствовать
                     this.screenService
-                        .start(key)
+                        .start(this.id)
                         .flatMap(_ => this.screenService.sendTickers)
                         .subscribe(tickers => this.tickers = tickers);
 
-                    return this.screenService.get(key);
+                    return this.screenService.get(this.id);
                 }
 
                 return Observable.empty();

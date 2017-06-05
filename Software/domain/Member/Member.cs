@@ -62,6 +62,7 @@ namespace domain.Member
         /// <summary>
         /// Статус
         /// </summary>
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MemberState MemberState { get; set; }
 
         [Column("state")]

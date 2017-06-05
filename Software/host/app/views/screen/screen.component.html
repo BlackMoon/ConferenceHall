@@ -16,24 +16,7 @@
             </div>
         </div>
         <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad">
-            <p-dataList [value]="activeScreen?.members" [rows]="10">
-                <p-header>
-                    Участники
-                </p-header>
-                <ng-template let-member pTemplate="item">
-                    <div class="ui-g ui-widget-content">
-                        <div class="ui-g-6">
-                            {{member.name}}
-                        </div>
-                        <div class="ui-g-3">
-                            {{member.place}}
-                        </div>
-                        <div class="ui-g-3">
-
-                        </div>
-                    </div>
-                </ng-template>
-            </p-dataList>
+            <member-table [conferenceId]="id"></member-table>
         </div>
         <div #canvasbox class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad">
             <scheme-main [schemeId]="activeScreen?.schemeId"></scheme-main>
