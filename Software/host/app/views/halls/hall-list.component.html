@@ -1,0 +1,14 @@
+﻿<p-dataList [value]="halls">
+    <ng-template let-hall pTemplate="item">
+        <div class="ui-grid ui-grid-responsive ui-widget-content">
+            <div class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}">
+                <div class="ui-grid-col-2">
+                    <i class="fa fa-2x {{hall.selected ? 'fa-check-square-o' : 'fa-square-o'}}" (click)="selectHall(hall)"></i>
+                </div>
+                <div class="ui-grid-col-11">
+                    <div>{{hall.name}}</div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dataList>

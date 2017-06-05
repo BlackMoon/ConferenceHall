@@ -1,0 +1,24 @@
+﻿.ui-panel-titlebar {
+    height: 60px;    
+}
+
+.hall-detail, .hall-header {
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hall-header {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.ui-panel-titlebar {
+    position: relative
+}
+
+.ui-panel-titlebar-remove {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+}
