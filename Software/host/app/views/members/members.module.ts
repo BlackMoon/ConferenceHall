@@ -20,16 +20,14 @@ import {
     ToolbarModule
 } from 'primeng/primeng';
 
-import { MemberListComponent } from './member-list.component';
 import { MemberDetailComponent } from './member-detail.component';
+import { MemberTableComponent } from './member-table.component';
 import { MemberRoutingModule } from './members-routing.module';
 import { MemberService } from './member.service';
 
-   
-
 @NgModule({
-        declarations: [MemberDetailComponent, MemberListComponent],
-        exports: [DataTableModule, ButtonModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, MemberListComponent],
+        declarations: [MemberDetailComponent, MemberTableComponent],
+        exports: [DataTableModule, ButtonModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, MemberTableComponent],
     imports: [
         AccordionModule,
         ButtonModule,

@@ -7,16 +7,14 @@ import { LazyLoadEvent } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 
-
 const minChars = 3;
+
 @Component({
-    selector: "member-list",
-    styleUrls: [`member-list.component.css`],
-    templateUrl: 'member-list.component.html'
+    selector: "member-table",
+    templateUrl: 'member-table.component.html'
 })
 
-
-export class MemberListComponent implements OnInit {
+export class MemberTableComponent implements OnInit {
 
     members: MemberModel[];
     filter: string;

@@ -26,24 +26,25 @@ namespace domain.Member
     [Table("conf_hall.employees")]
     public class Member : KeyObject
     {
+        public string Name { get; set; }
+
         public int LockedInt { get; set; }
+        
         /// <summary>
         /// Заблокирован? (для пользователей)
         /// </summary>
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
        
         [Column("locked")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [JsonIgnore]
-    public bool Locked
-    {
+        public bool Locked
+        {
             set
-            {                
-               LockedInt = value ? 1 :0;
+            {
+                LockedInt = value ? 1 : 0;
             }
         }
-
-        public string Name { get; set; }
-        public int Id { get; set; }
+        
 
         [Column("job_title")]
         public string Job_title { get; set; }
