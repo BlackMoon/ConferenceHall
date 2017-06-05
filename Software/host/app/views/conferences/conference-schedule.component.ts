@@ -28,7 +28,7 @@ export class ConferenceScheduleComponent {
     startDate: Date;
     
     selectedConference: ConferenceModel;
-    selectedHallIds: number[] = [1];
+    selectedHallIds: number[];
     selectedEvent: any;
 
     constructor(

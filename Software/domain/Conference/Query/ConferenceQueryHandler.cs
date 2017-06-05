@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Kit.Dal.DbManager;
@@ -18,6 +19,22 @@ namespace domain.Conference.Query
         public IEnumerable<Conference> Execute(FindConferencesQuery query)
         {
             throw new System.NotImplementedException();
+        }
+
+        public  override async Task<Conference> ExecuteAsync(FindConferenceByIdQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
+                .Column("c.id")
+                .Column("c.subject")
+                .Column("c.description")
+                .Column("c.hall_id hallid")
+                .Column("lower(c.period) startDate")
+                .Column("upper(c.period) endDate")
+                .OrderBy("lower(c.subject)")
+                .Where("id = @id");
+            
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryFirstOrDefaultAsync<Conference>(sqlBuilder.ToString(), new { id = query.Id });
         }
 
         public async Task<IEnumerable<Conference>> ExecuteAsync(FindConferencesQuery query)
@@ -45,14 +62,15 @@ namespace domain.Conference.Query
             if (query.State != ConfState.Planned)
             {
                 sqlBuilder.Where("c.period && tsrange(@startDate, @endDate, '[]')");
-
-                param.Add("startDate", query.StartDate);
-                param.Add("endDate", query.EndDate);
+                
+                param.Add("startDate", query.StartDate, DbType.Date);
+                param.Add("endDate", query.EndDate, DbType.Date);
             }
 
+            // фильтр по холлам
             if (query.HallIds != null)
             {
-                sqlBuilder.Where("c.hall_id IN (@hallIds)");
+                sqlBuilder.Where("c.hall_id = ANY(@hallIds)");
                 param.Add("hallIds", query.HallIds);
             }
 

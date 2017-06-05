@@ -14,21 +14,11 @@
                 <p-tabPanel header="Совещания">
                     <conference-list [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)" (conferenceRemoveClick)="removeEventFromList($event, false)"></conference-list>
                 </p-tabPanel>
-                <p-tabPanel header="Фильтр">
-                    <div [ngStyle]="{'height':'50%'}">
-                        <p-accordion>
-                            <p-accordionTab header="Холлы" [selected]="true">
-                                <hall-list (selectionChanged)="hallListChanged($event)"></hall-list>
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
-                    <div [ngStyle]="{'height':'50%'}">
-                        <p-accordion>
-                            <p-accordionTab header="Участники" [selected]="true">
-                                Content 1
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
+                <p-tabPanel header="Холлы">
+                    <hall-list (selectionChanged)="hallListChanged($event)"></hall-list>
+                </p-tabPanel>
+                <p-tabPanel header="Участники">
+                    Участники
                 </p-tabPanel>
             </p-tabView>
         </div>

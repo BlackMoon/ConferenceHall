@@ -39,28 +39,33 @@ namespace domain.Conference.Command
         {
             DbManager.AddParameter("subject", command.Subject);
             DbManager.AddParameter("description", command.Description);
-            //DbManager.AddParameter("startDate", DbType.DateTime, command.LowerBound);//to add datetime without timezone for 'tsrange' function
-            //DbManager.AddParameter("endDate", DbType.DateTime, command.UpperBound);//to add datetime without timezone 'for tsrange' function
-            DbManager.AddParameter("hall_id", command.HallId);
 
-            List<string> columns = new List<string>(){ "subject", "description", "period" };
-            List<string> values = new List<string>() {"@subject", "@description", "tsrange(@startDate, @endDate)"};
+            List<string> lParams = new List<string>() { "subject", "description" };
+            List<string> lValues = new List<string>() { "@subject", "@description" };
+
+            if (command.StartDate.HasValue && command.EndDate.HasValue)
+            {
+                DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);//to add datetime without timezone for 'tsrange' function
+                DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);//to add datetime without timezone 'for tsrange' function
+                lParams.Add("period");
+                lValues.Add("tsrange(@startDate, @endDate)");
+            }
 
             if (command.HallId.HasValue)
             {
-                columns.Add("hall_id");
-                values.Add("@hall_id");
+                lParams.Add("hall_id");
+                lValues.Add("@hall_id");
                 DbManager.AddParameter("hall_id", command.HallId);
             }
-           
+
             if (command.HallSchemeId.HasValue)
             {
-                columns.Add("hall_scheme_id");
-                values.Add("@hall_scheme_id");
+                lParams.Add("hall_scheme_id");
+                lValues.Add("@hall_scheme_id");
                 DbManager.AddParameter("hall_scheme_id", command.HallSchemeId);
             }
-            
-            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) VALUES({string.Join(",", values)})");
+
+            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", lParams)}) values({string.Join(",", lValues)})");
             Logger.LogInformation($"Inserted {inserted} conference");
             return inserted;
         }      

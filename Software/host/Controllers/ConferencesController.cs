@@ -6,13 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using domain.Conference;
 using domain.Conference.Command;
 using domain.Conference.Query;
-using host.Hubs;
 using Kit.Core.CQRS.Command;
-using Microsoft.AspNetCore.SignalR.Infrastructure;
 using TimeRange = domain.Common.Range<System.DateTime>;
 using Microsoft.AspNetCore.JsonPatch;
-using System.Linq;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 
 namespace host.Controllers
 {
@@ -22,13 +18,6 @@ namespace host.Controllers
         // GET api/conferences
         public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {            
-        }
-
-        [HttpGet]
-        public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate, int [] hallIds)
-        {           
-            FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state, HallIds = hallIds };
-            return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
         // GET api/conferences/5
@@ -77,6 +66,12 @@ namespace host.Controllers
         public Task Delete(int id)
         {
             return CommandDispatcher.DispatchAsync<DeleteConferenceCommand, bool>(new DeleteConferenceCommand() { Id = id });
+        }
+
+        [HttpPost("/api/search")]
+        public Task<IEnumerable<Conference>> Search([FromBody]FindConferencesQuery value)
+        {
+            return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(value);
         }
     }
 }
