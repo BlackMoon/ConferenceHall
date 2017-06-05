@@ -21,6 +21,23 @@ namespace domain.Conference.Query
             throw new System.NotImplementedException();
         }
 
+        public  override async Task<Conference> ExecuteAsync(FindConferenceByIdQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
+                .Column("c.id")
+                .Column("c.subject")
+                .Column("c.description")
+                .Column("c.hall_id hallid")
+                .Column("lower(c.period) startDate")
+                .Column("upper(c.period) endDate")
+                .OrderBy("lower(c.subject)")
+                .Where("id = @id");
+            DynamicParameters param = new DynamicParameters();
+            param.Add("id", query.Id);
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryFirstOrDefaultAsync<Conference>(sqlBuilder.ToString(), param);
+        }
+
         public async Task<IEnumerable<Conference>> ExecuteAsync(FindConferencesQuery query)
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
