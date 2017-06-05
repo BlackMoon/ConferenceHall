@@ -5,9 +5,9 @@ import { JsonProperty } from '../common/map-utils';
  * Модель. Участник
  */
 export class MemberModel extends KeyModel implements ISelected {
-    id: number;
+    
     name: string;
-    job_title: string;   
+    jobTitle: string;   
     place: string;
     role: string;
     lockedInt: number;
@@ -18,7 +18,7 @@ export class MemberModel extends KeyModel implements ISelected {
         super();
         this.id = undefined;
         this.name = undefined;
-        this.job_title = undefined;      
+        this.jobTitle = undefined;      
         this.role = undefined;
         this.role = undefined;
         this.lockedInt = 0;

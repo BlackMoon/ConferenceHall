@@ -47,7 +47,7 @@ namespace domain.Member
         
 
         [Column("job_title")]
-        public string Job_title { get; set; }
+        public string JobTitle { get; set; }
 
         /// <summary>
         /// Роль (для пользователей)

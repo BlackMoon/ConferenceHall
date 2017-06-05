@@ -25,24 +25,21 @@ namespace domain.Member.Query
 
         public async Task<IEnumerable<Member>> ExecuteAsync(FindMembersQuery query)
         {
-
-            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees s")
-                .Column("s.id")
-                .Column("s.name")
-                .Column("s.job_title")
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
+                .Column("e.id")
+                .Column("e.name")
+                .Column("e.job_title jobTitle")
                 .Column("u.role")
-                 .Column("u.locked")
-                 .Join("conf_hall.users u ON s.id = u.employee_id")
-                 //  .Where("s.id = @id")
-                 .OrderBy("lower(s.name)");
+                .Column("u.locked")
+                .LeftJoin("conf_hall.users u ON e.id = u.employee_id")
+                .OrderBy("lower(e.name)");
 
             DynamicParameters param = new DynamicParameters();
 
             // может задаваться фильтр
             if (!string.IsNullOrEmpty(query.Filter))
             {
-                sqlBuilder.Where("lower(s.name) LIKE lower(@filter)");
-
+                sqlBuilder.Where("lower(e.name) LIKE lower(@filter)");
                 param.Add("filter", query.Filter + "%");
             }
 
@@ -66,8 +63,7 @@ namespace domain.Member.Query
                 .Where("m.conf_id = @id");
 
             await DbManager.OpenAsync();
-            var members = await DbManager.DbConnection.QueryAsync<Member>(sqlBuilder.ToString(), new { id = query.Id });
-            return members.SingleOrDefault();
+            return DbManager.DbConnection.QueryFirstOrDefault<Member>(sqlBuilder.ToString(), new { id = query.Id });
         }
     }
 }
