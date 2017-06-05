@@ -7,27 +7,26 @@ import { Logger } from "./common/logger";
 
 const startViewKey = 'returnUrl';
 
-@Component({    
+@Component({
     selector: 'conferenceHall-app',
     styleUrls: ['app.component.css'],
     templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {
 
-    msgs: Message[] = [];    
+    msgs: Message[] = [];
 
     private layout: Layout = Layout.None;
     private Layout = Layout;
     /**
      * Стартовая страница
      */
-    private startView: string;    
+    private startView: string;
 
     constructor(
         private route: ActivatedRoute,
         private logger: Logger,
-        private router: Router)
-    {
+        private router: Router) {
         this.router
             .events
             .filter(e => e instanceof NavigationEnd)
@@ -35,16 +34,16 @@ export class AppComponent implements OnInit {
             .map(r => {
                 // find the last activated route
                 while (r.firstChild) r = r.firstChild;
-                return r;                
+                return r;
             })
             .mergeMap(r => r.data)
             .subscribe(data => this.layout = (data.layout == Layout.None) ? (data.layout) : (data.layout || Layout.ShowHeader));
 
-        this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);        
+        this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
     }
 
     ngOnInit() {
-        
+
         this.logger.msgReсeived.subscribe((msgs: Message[]) => this.msgs = msgs);
 
         // start page --> navigate
