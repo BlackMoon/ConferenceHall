@@ -75,6 +75,16 @@ namespace domain.Conference.Query
                 param.Add("hallIds", query.HallIds);
             }
 
+            // фильтр по участникам
+            if (query.MemberIds != null)
+            {
+                sqlBuilder
+                    .Join("conf_members m ON m.conf_id = c.id")
+                    .Where("m.id = ANY(@memberIds)");
+
+                param.Add("memberIds", query.MemberIds);
+            }
+
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Conference>(sqlBuilder.ToString(), param);
         }

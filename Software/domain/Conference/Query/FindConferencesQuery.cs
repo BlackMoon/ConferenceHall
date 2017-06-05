@@ -27,5 +27,10 @@ namespace domain.Conference.Query
         /// id холлов
         /// </summary>
         public int[] HallIds { get; set; }
+
+        /// <summary>
+        /// id участников
+        /// </summary>
+        public int[]MemberIds { get; set; }
     }
 }
