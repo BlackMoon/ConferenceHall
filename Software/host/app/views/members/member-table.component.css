@@ -1,0 +1,16 @@
+﻿.middle {
+    text-align: center
+}
+
+.circle {
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.on {
+    background-color: greenyellow;
+}
+
+.off {
+    background-color: red;
+}

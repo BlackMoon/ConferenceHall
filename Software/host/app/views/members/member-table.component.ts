@@ -1,7 +1,7 @@
-﻿import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+﻿import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router,Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MemberModel } from '../../models';
+import { MemberModel, MemberState } from '../../models';
 import { MemberService } from './member.service';
 import { LazyLoadEvent } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/primeng';
@@ -10,13 +10,15 @@ import { Logger } from "../../common/logger";
 const minChars = 3;
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
     selector: "member-table",
-    styles: [`middle { text-align: center }`],
+    styleUrls: [`member-table.component.css`],
     templateUrl: 'member-table.component.html'
 })
 
 export class MemberTableComponent implements OnInit {
+
+// ReSharper disable once InconsistentNaming
+    public MemberState = MemberState;
 
     members: MemberModel[];
     filter: string;

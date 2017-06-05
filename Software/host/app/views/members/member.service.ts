@@ -39,7 +39,7 @@ export class MemberService extends HttpDataService<MemberModel> {
             .get(this.url, { params: params })
             .map((r: Response) => r
                 .json()
-                .map(el => MapUtils.deserialize(MemberModel, el))
+                .map(m => MapUtils.deserialize(MemberModel, m))
             )
             .catch(handleResponseError);
     }

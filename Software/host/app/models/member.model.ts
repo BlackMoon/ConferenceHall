@@ -30,6 +30,12 @@ export class MemberModel extends KeyModel implements ISelected {
      * Роль (для пользователей)
      */
     role: string;
+
+    /**
+     * Состояние (в режиме конференции)
+     */
+    state: MemberState;
+
     lockedInt: number;
     selected: boolean;
 
@@ -41,6 +47,7 @@ export class MemberModel extends KeyModel implements ISelected {
         this.jobTitle = undefined;      
         this.role = undefined;
         this.seat = undefined;
+        this.state = MemberState.Invited;
         this.lockedInt = 0;
     }
 }
