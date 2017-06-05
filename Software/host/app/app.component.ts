@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
                 return r;
             })
             .mergeMap(r => r.data)
-            .subscribe(data => this.layout = (data.layout == Layout.None) ? (data.layout) : (data.layout || Layout.ShowHeader));
+            .subscribe(data => this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader;
 
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
     }
