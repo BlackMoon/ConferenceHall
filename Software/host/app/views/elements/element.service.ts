@@ -1,5 +1,5 @@
 ﻿import { Injectable, isDevMode } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
@@ -51,13 +51,13 @@ export class ElementService extends HttpDataService<ElementModel> {
 
     getAll(filter?: string, groupid?:number): Observable<any> {
 
-        let queryParams = [];
+        let params: URLSearchParams = new URLSearchParams();
 
-        filter && queryParams.push(`filter=${filter}`);
-        groupid && queryParams.push(`groupid=${groupid}`);
+        filter && params.append("filter", filter);
+        groupid && params.append("groupid", groupid.toString());
         
         return this.http
-            .get(this.url + (queryParams.length > 0 ? `?${queryParams.join("&")}` : ""))
+            .get(this.url, { params: params })
             .map((r: Response) => r
                 .json()
                 .map(el => MapUtils.deserialize(ElementModel, el))
