@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, confDragType } from '../../models';
+import { ConferenceModel, ConfState, SchemeModel } from '../../models';
 import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { HallService } from '../halls/hall.service';
@@ -21,7 +21,7 @@ export class ConferenceDetailComponent implements OnInit {
     confId: number;
     confTypes: SelectItem[];
     halls: any[];
-    hallSchemes: any[];
+    hallScheme: any[];
 
     selectedConfType: string;
     conferences: ConferenceModel[];
@@ -65,7 +65,8 @@ export class ConferenceDetailComponent implements OnInit {
             description: [null],
             startDate: [null],
             endDate: [null],
-            confState: [null]
+            confState: [null],
+            hallSchemeId: [null]
         });
 
         this.route.params
@@ -79,8 +80,11 @@ export class ConferenceDetailComponent implements OnInit {
                             debugger;
                             this.conference = conf;
                             if (!this.conference) return;
+
+                            this.dataBindScheme(this.conference.hallId);
                             this.conference.startDate = new Date(conf.startDate);
                             this.conference.endDate = new Date(conf.endDate);
+
                             this.conferenceForm.patchValue(this.conference);
                         });
                 
@@ -95,9 +99,6 @@ export class ConferenceDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-
-        debugger;
-        
 
     }
     
@@ -117,6 +118,19 @@ export class ConferenceDetailComponent implements OnInit {
 
     hallChanged(conferenceObj) {
         debugger;
-        if (!conferenceObj) return;
+        if (!conferenceObj || !conferenceObj.hallId) return;
+        this.dataBindScheme(conferenceObj.hallId);
+    }
+
+    dataBindScheme(hallId: number) {
+        delete this.hallScheme;
+        this.hallScheme = [];
+        this.schemeService
+            .getAll(hallId)
+            .subscribe((schemeArray: SchemeModel[]) => {
+                debugger;
+                this.hallScheme = schemeArray.map(h => <any>{ label: h.name, value: h.id });
+                //this.conferenceForm.setValue({ hallScheme:});
+            });
     }
 }

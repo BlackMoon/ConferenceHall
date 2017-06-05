@@ -54,6 +54,7 @@ export class ConferenceModel extends KeyModel implements ISelected {
     
     description: string;
     hallId?: number;
+    hallSchemeId?: number;
     startDate?: Date;
     endDate?: Date;
     
@@ -70,6 +71,7 @@ export class ConferenceModel extends KeyModel implements ISelected {
         this.endDate = null;
         this.state = ConfState.Planned;
         this.subject = null;
+        this.hallSchemeId = null;
     }
 }
 
