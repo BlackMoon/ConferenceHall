@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using domain.Scheme;
 using domain.Scheme.Command;
 using domain.Scheme.Query;
@@ -14,6 +15,18 @@ namespace host.Controllers
         public SchemesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
         }
+
+        [HttpGet]
+        public Task<IEnumerable<Scheme>> Get(int? hallId, string filter)
+        {
+            FindSchemasQuery query = new FindSchemasQuery()
+            {
+                Filter = filter,
+                HallId = hallId
+            };
+            return QueryDispatcher.DispatchAsync<FindSchemasQuery, IEnumerable<Scheme>>(query);
+        }
+
 
         [HttpGet("{id}")]
         public Task<Scheme> Get(int id)
