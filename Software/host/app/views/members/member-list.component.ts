@@ -35,9 +35,9 @@ export class MemberListComponent implements OnInit {
      * @param value
      */
     filterChange(value) {
-
+        
         this.filter = value;
-        if (value.length >= minChars) {
+        if (value.length >= minChars || !value.length) {
             this.loadMembers();
             this.selectedMemberIds = [];
         }
