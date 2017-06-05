@@ -22,7 +22,6 @@ namespace domain.Conference.Command
 
         public ConferenceCommandHandler(IDbManager dbManager, ILogger<ConferenceCommandHandler> logger) : base(dbManager, logger)
         {
-           
         }
 
         /// <summary>
@@ -82,7 +81,6 @@ namespace domain.Conference.Command
             Conference conference = new Conference();
             return await  DbManager.DbConnection.DeleteAsync(command.Adapt(conference));
         }
-
 
         public TimeRange Execute(MakeAppointmentCommand command)
         {
@@ -148,12 +146,38 @@ namespace domain.Conference.Command
             return updated > 0;
         }
 
-        public override Task<bool> ExecuteAsync(Conference command)
+        public override async Task<bool> ExecuteAsync(Conference command)
         {
-            IList<string> columns = new List<string>();
+            DbManager.AddParameter("id", command.Id);
+            DbManager.AddParameter("subject", command.Subject);
+            DbManager.AddParameter("description", command.Description);
+            DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);
+            DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);
+            DbManager.AddParameter("state", command.ConfState.ToString());
 
-            // todo написать команду update!
-            return base.ExecuteAsync(command);
+            List<string> lParams = new List<string>()
+            {
+                "subject = @subject",
+                "description = @description",
+                "period = tsrange(@startDate, @endDate)",
+                "state = @state::conf_state"
+            };
+
+            if (command.HallId.HasValue)
+            {
+                lParams.Add("hall_id = @hall_id");
+                DbManager.AddParameter("hall_id", command.HallId);
+            }
+
+            if (command.HallSchemeId.HasValue)
+            {
+                lParams.Add("hall_scheme_id = @hall_scheme_id");
+                DbManager.AddParameter("hall_scheme_id", command.HallSchemeId);
+            }
+
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", lParams)} WHERE id = @id");
+            Logger.LogInformation($"Modified {updated} records");
+            return updated > 0;
         }
     }
 }
