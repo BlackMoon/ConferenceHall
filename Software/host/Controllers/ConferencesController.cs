@@ -10,25 +10,24 @@ using host.Hubs;
 using Kit.Core.CQRS.Command;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using TimeRange = domain.Common.Range<System.DateTime>;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Linq;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 
 namespace host.Controllers
 {
     [Route("api/[controller]")]
     public class ConferencesController : CqrsController
-    {
-        private readonly IConnectionManager _connectionManager;
+    {       
         // GET api/conferences
-        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, IConnectionManager connectionManager) : base(commandDispatcher, queryDispatcher)
-        {
-            _connectionManager = connectionManager;
+        public ConferencesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        {            
         }
 
         [HttpGet]
-        public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate)
-        {
-            _connectionManager.GetHubContext<Broadcaster>().Clients.All.AddTickerMessage("44");
-
-            FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state };
+        public Task<IEnumerable<Conference>> Get(ConfState? state, DateTime? startDate, DateTime? endDate, int [] hallIds)
+        {           
+            FindConferencesQuery query = new FindConferencesQuery() { EndDate = endDate, StartDate = startDate, State = state, HallIds = hallIds };
             return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(query);
         }
 
@@ -44,20 +43,19 @@ namespace host.Controllers
         {
             value.ConferenceId = id;
             return CommandDispatcher.DispatchAsync<MakeAppointmentCommand, TimeRange>(value);
-        }
+        }        
 
-        [HttpPut("/api/period/{id}")]
-        public Task ChangePeriod(int id, [FromBody]ChangePeriodCommand value)
+        [HttpPatch("{id}")]
+        public Task Patch(int id, [FromBody]JsonPatchDocument patch)
         {
-            value.ConferenceId = id;
-            return CommandDispatcher.DispatchAsync<ChangePeriodCommand, bool>(value);
-        }
+            PartialUpdateCommand value = new PartialUpdateCommand()
+            {
+                ConferenceId = id                
+            };
 
-        [HttpPut("/api/state/{id}")]
-        public Task ChangeState(int id, [FromBody]ChangeStateCommand value)
-        {
-            value.ConferenceId = id;
-            return CommandDispatcher.DispatchAsync<ChangeStateCommand, bool>(value);
+            patch.ApplyTo(value);
+            
+            return CommandDispatcher.DispatchAsync<PartialUpdateCommand, bool>(value);
         }
 
         // POST api/conferences

@@ -18,18 +18,18 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
         
         let params: URLSearchParams = new URLSearchParams();
         if (state !== null)
-            params.set("state", `${state}`);
+            params.append("state", `${state}`);
 
         // [активные, на подготовке, завершенные] совещания фильтруются по дате
         if (state !== ConfState.Planned) {
-            params.set("startDate", `${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
-            params.set("endDate", `${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
+            params.append("startDate", `${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
+            params.append("endDate", `${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
         }
-
-        //params.set("hallids", hallIds);
+        
+        hallIds.forEach(id => params.set("hallids", id.toString()));
 
         return this.http
-            .get(this.url, { search: params })
+            .get(this.url, { params: params })
             .map((r: Response) => r
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))
@@ -45,8 +45,10 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
      */
     changePeriod(confid: number, start, end): Observable<any> {
 
+        let body = [{ op: 'replace', path: '/startdate', value: start }, { op: 'replace', path: '/enddate', value: end }];
+
         return this.http
-            .put(`/api/period/${confid}`, { start: start, end: end })
+            .patch(`${this.url}/${confid}`, body)
             .catch(handleResponseError);
     }
 
@@ -57,8 +59,10 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
      */
     changeState(confid: number, state: ConfState): Observable<any> {
 
+        let body = [{op: 'replace', path: '/state', value: state }];
+
         return this.http
-            .put(`/api/state/${confid}`, { state: state })
+            .patch(`${this.url}/${confid}`, body)
             .catch(handleResponseError);    
     }
 
