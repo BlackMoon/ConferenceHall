@@ -64,7 +64,8 @@ export class ConferenceDetailComponent implements OnInit {
             hallId: [null],
             description: [null],
             startDate: [null],
-            endDate: [null]
+            endDate: [null],
+            confState: [null]
         });
 
         this.route.params
@@ -74,18 +75,12 @@ export class ConferenceDetailComponent implements OnInit {
                 if (this.confId && this.confId > 0)
                     this.conferenceService
                         .get(this.confId)
-                        .subscribe((conf: any) => {
+                        .subscribe((conf: ConferenceModel) => {
                             debugger;
                             this.conference = conf;
                             if (!this.conference) return;
-                            this.conferenceForm.setValue({
-                                id: conf.id,
-                                subject: conf.subject,
-                                hallId: conf.hallId,
-                                description: conf.description,
-                                startDate: conf.startDate,
-                                endDate: [null]
-                            });
+                            this.conference.startDate = new Date(conf.startDate);
+                            this.conference.endDate = new Date(conf.endDate);
                             this.conferenceForm.patchValue(this.conference);
                         });
                 
@@ -108,16 +103,14 @@ export class ConferenceDetailComponent implements OnInit {
     
 
     save(event, conferenceObj) {
-        debugger;
 
-        if (conferenceObj.lowerBound)
-            conferenceObj.lowerBound = this.dateToUtcPipe.transform(conferenceObj.lowerBound);
-        if (conferenceObj.upperBound)
-            conferenceObj.upperBound = this.dateToUtcPipe.transform(conferenceObj.upperBound);
-     
-        event.preventDefault();
+        if ("startDate" in conferenceObj)
+            conferenceObj.startDate = this.dateToUtcPipe.transform(conferenceObj.startDate);
 
-        this.conferenceService['add'](conferenceObj)
+        if ("endDate" in conferenceObj)
+            conferenceObj.endDate = this.dateToUtcPipe.transform(conferenceObj.endDate);
+
+        this.conferenceService[this.confId && this.confId > 0 ? 'update' : 'add'](conferenceObj)
             .subscribe(_ => this.location.back(),
             error => this.logger.error(error));
     }
@@ -125,20 +118,5 @@ export class ConferenceDetailComponent implements OnInit {
     hallChanged(conferenceObj) {
         debugger;
         if (!conferenceObj) return;
-
-
-        //this.schemeService.getAll(conferenceObj.hallId)
-        //    .subscribe(
-        //    halls => this.hallSchemes = halls.map(h => <any>{ label: h.name, value: h.id }),
-        //    error => this.logger.error(error));
-
-        
-
-        //this.schemeService
-        //    .getAll()
-        //    .subscribe(
-        //    schemes => this.hallSchemes = schemes.map(h => <any>{ label: h.name, value: h.id }),
-        //    error => this.logger.error(error));
-       
     }
 }
