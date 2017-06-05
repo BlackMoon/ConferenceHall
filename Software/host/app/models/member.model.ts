@@ -1,10 +1,10 @@
-﻿import { KeyModel } from './index';
+﻿import { KeyModel, ISelected } from './index';
 import { JsonProperty } from '../common/map-utils';
 
 /**
  * Модель. Участник
  */
-export class MemberModel extends KeyModel {
+export class MemberModel extends KeyModel implements ISelected {
     id: number;
     name: string;
     job_title: string;   

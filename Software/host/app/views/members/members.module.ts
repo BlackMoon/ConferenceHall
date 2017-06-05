@@ -21,13 +21,14 @@ import {
 } from 'primeng/primeng';
 
 import { MemberDetailComponent } from './member-detail.component';
+import { MemberListComponent } from './member-list.component';
 import { MemberTableComponent } from './member-table.component';
 import { MemberRoutingModule } from './members-routing.module';
 import { MemberService } from './member.service';
 
 @NgModule({
-        declarations: [MemberDetailComponent, MemberTableComponent],
-        exports: [DataTableModule, ButtonModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, MemberTableComponent],
+    declarations: [MemberDetailComponent, MemberListComponent, MemberTableComponent],
+    exports: [DataTableModule, ButtonModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, MemberListComponent, MemberTableComponent],
     imports: [
         AccordionModule,
         ButtonModule,

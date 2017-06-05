@@ -14,11 +14,12 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     constructor(http: Http) { super(http); }
 
-    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null): Observable<any> {
+    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, memberIds: number[] = null): Observable<any> {
 
         let body: FindQuery = { startDate: startDate, endDate: endDate, state: state};
 
         hallIds && hallIds.length > 0 && (body.hallIds = hallIds); 
+        memberIds && memberIds.length > 0 && (body.memberIds = memberIds); 
 
         return this.http
             .post("/api/search", body)

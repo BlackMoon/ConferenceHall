@@ -29,6 +29,7 @@ export class ConferenceScheduleComponent {
     
     selectedConference: ConferenceModel;
     selectedHallIds: number[];
+    selectedMemberIds: number[];
     selectedEvent: any;
 
     constructor(
@@ -153,6 +154,12 @@ export class ConferenceScheduleComponent {
         this.loadEvents();
     }
 
+    memberListChanged(ids: number[]) {
+        this.selectedMemberIds = ids;
+
+        this.loadEvents();
+    }
+
     makeAppointment(conference) {
 
         // time period like schedule's view period
@@ -174,7 +181,7 @@ export class ConferenceScheduleComponent {
 
     loadEvents() {
         this.conferrenceService
-            .getAll(this.startDate, this.endDate, null, this.selectedHallIds)
+            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedMemberIds)
             .subscribe(
                 conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
                 error => this.logger.error(error));

@@ -9,6 +9,7 @@ import { ConferenceListComponent } from './conference-list.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
 import { HallsModule } from '../halls/halls.module';
+import { MembersModule } from '../members/members.module';
 import { DateToUtcPipe } from "../../common/pipes";
 
 @NgModule({
@@ -25,6 +26,7 @@ import { DateToUtcPipe } from "../../common/pipes";
         DropdownModule,
         FormsModule,
         HallsModule,
+        MembersModule,
         MenuModule,
         ReactiveFormsModule,
         ScheduleModule,

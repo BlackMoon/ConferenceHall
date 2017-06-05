@@ -36,12 +36,15 @@ export namespace ConfState {
     }
 }
 
-
+/**
+ * Запрос поиска конференций
+ */
 export class FindQuery {
     state?: ConfState;
     startDate?: Date;
     endDate?: Date;
     hallIds?: number[];
+    memberIds?: number[];
 }
 
 
