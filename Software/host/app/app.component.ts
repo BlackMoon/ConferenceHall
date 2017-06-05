@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
         private route: ActivatedRoute,
         private logger: Logger,
         private router: Router) {
+
         this.router
             .events
             .filter(e => e instanceof NavigationEnd)
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit {
                 return r;
             })
             .mergeMap(r => r.data)
-            .subscribe(data => this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader);
+            .subscribe((data:any) => this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader);
 
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
     }
