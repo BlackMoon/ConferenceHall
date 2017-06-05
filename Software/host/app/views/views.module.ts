@@ -12,7 +12,7 @@ import { HomeView } from './home.view';
 
 @NgModule({
     declarations: [HomeView],
-    exports: [ConfirmDialogModule, GrowlModule],
+    exports: [ConfirmDialogModule, CommonModule, GrowlModule],
     imports: [
         CommonModule,
         ConfirmDialogModule,
