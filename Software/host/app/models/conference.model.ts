@@ -36,6 +36,15 @@ export namespace ConfState {
     }
 }
 
+
+export class FindQuery {
+    state?: ConfState;
+    startDate?: Date;
+    endDate?: Date;
+    hallIds?: number[];
+}
+
+
 /**
  * Модель. Конференция
  */

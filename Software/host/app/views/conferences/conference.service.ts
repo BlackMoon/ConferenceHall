@@ -3,7 +3,7 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { AppointmentModel, ConferenceModel, ConfState, TimeRange } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, FindQuery, TimeRange } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -14,22 +14,14 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     constructor(http: Http) { super(http); }
 
-    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = []): Observable<any> {
-        
-        let params: URLSearchParams = new URLSearchParams();
-        if (state !== null)
-            params.append("state", `${state}`);
+    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null): Observable<any> {
 
-        // [активные, на подготовке, завершенные] совещания фильтруются по дате
-        if (state !== ConfState.Planned) {
-            params.append("startDate", `${startDate.getMonth() + 1}.${startDate.getDate()}.${startDate.getFullYear()}`);
-            params.append("endDate", `${endDate.getMonth() + 1}.${endDate.getDate()}.${endDate.getFullYear()}`);
-        }
-        
-        hallIds.forEach(id => params.set("hallids", id.toString()));
+        let body: FindQuery = { startDate: startDate, endDate: endDate, state: state};
+
+        hallIds && hallIds.length > 0 && (body.hallIds = hallIds); 
 
         return this.http
-            .get(this.url, { params: params })
+            .post("/api/search", body)
             .map((r: Response) => r
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Kit.Dal.DbManager;
@@ -45,14 +46,15 @@ namespace domain.Conference.Query
             if (query.State != ConfState.Planned)
             {
                 sqlBuilder.Where("c.period && tsrange(@startDate, @endDate, '[]')");
-
-                param.Add("startDate", query.StartDate);
-                param.Add("endDate", query.EndDate);
+                
+                param.Add("startDate", query.StartDate, DbType.Date);
+                param.Add("endDate", query.EndDate, DbType.Date);
             }
 
+            // фильтр по холлам
             if (query.HallIds != null)
             {
-                sqlBuilder.Where("c.hall_id IN (@hallIds)");
+                sqlBuilder.Where("c.hall_id = ANY(@hallIds)");
                 param.Add("hallIds", query.HallIds);
             }
 
