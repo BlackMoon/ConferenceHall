@@ -1,12 +1,15 @@
-﻿using host.MessageSystem;
+﻿using host.SmsSystem;
+using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 
 namespace host.SmsType
 {
-    public class SmsSender : ISender
+    public class SmsSender : ISmsSender
     {
-        public void Send(string subject, string body)
+
+        public Task SendSmsAsync(string number, string message)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(0);
         }
     }
 }

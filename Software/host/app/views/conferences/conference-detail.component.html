@@ -1,22 +1,26 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
+    <form [formGroup]="conferenceForm" novalidate  (ngSubmit)="save($event, conferenceForm.value)">
         <input type="hidden" formControlName="id" />
-
         <p-tabView>
             <p-tabPanel header="Совещание" id="tabConference">
                 <div class="ui-grid ui-grid-responsive ui-grid-pad">
                     <div class="ui-widget-header" style="padding: .5em .75em">
-                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o"></button>
+                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" ></button>
                     </div>
                     <hr class="ui-widget-content" style="border-top:0">
 
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
-                                Тема :
+                                Тема :*
                             </div>
                             <div class="ui-grid-col-8">
                                 <input formControlName="subject" type="text" pInputText style="width: 100%;" />
+                            </div>
+                            <div class="ui-grid-col-12">
+                                <div class="alert alert-danger" *ngIf="formErrors.subject">
+                                    {{formErrors.subject}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -24,10 +28,15 @@
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
-                                Описание :
+                                Описание :*
                             </div>
                             <div class="ui-grid-col-8">
                                 <textarea formControlName="description" pInputTextarea style="width: 100%;" rows="7"></textarea>
+                            </div>
+                            <div class="ui-grid-col-12">
+                                <div class="alert alert-danger" *ngIf="formErrors.description">
+                                    {{formErrors.description}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -40,6 +49,11 @@
                             <div class="ui-grid-col-8">
                                 <p-dropdown formControlName="hallId" [options]="halls" placeholder="Выберите холл" (onChange)="hallChanged(conferenceForm.value)"
                                             [style]="{'width':'100%'}" ></p-dropdown>
+                            </div>
+                            <div class="ui-grid-col-12">
+                                <div class="alert alert-danger" *ngIf="formErrors.hallId">
+                                    {{formErrors.hallId}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -74,6 +88,11 @@
                             <div class="ui-grid-col-3">
                                 <p-calendar  formControlName="startDate" [showTime]="true" [style]="{'width':'100 px'}" [locale]="locale"></p-calendar>
                             </div>
+                            <div class="ui-grid-col-12">
+                                <div class="alert alert-danger" *ngIf="formErrors.startDate">
+                                    {{formErrors.startDate}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -84,6 +103,11 @@
                             </div>
                             <div class="ui-grid-col-3">
                                 <p-calendar formControlName="endDate" [showTime]="true" [style]="{'width':'100 px'}" [locale]="locale" ></p-calendar>
+                            </div>
+                            <div class="ui-grid-col-12">
+                                <div class="alert alert-danger" *ngIf="formErrors.endDate">
+                                    {{formErrors.endDate}}
+                                </div>
                             </div>
                         </div>
                     </div>
