@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SchemeService } from  "../schemes/scheme.service";
 import { TimeRange } from '../../models';
 import { DateToUtcPipe } from "../../common/pipes";
+import { locale } from "../../common/locale";
 
 @Component({
     selector: "conference-detail",
@@ -22,6 +23,7 @@ export class ConferenceDetailComponent implements OnInit {
     confTypes: SelectItem[];
     halls: any[];
     hallScheme: any[];
+    locale: any;
 
     selectedConfType: string;
     conferences: ConferenceModel[];
@@ -37,7 +39,7 @@ export class ConferenceDetailComponent implements OnInit {
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
-
+        this.locale = locale;
         this.conference = null;
         this.confTypes = [];
 
@@ -60,18 +62,17 @@ export class ConferenceDetailComponent implements OnInit {
 
         this.conferenceForm = this.fb.group({
             id: [null],
-            subject: [null],
-            hallId: [null],
-            description: [null],
-            startDate: [null],
-            endDate: [null],
+            subject: [null, Validators.required],
+            hallId: [null, Validators.required],
+            description: [null, Validators.required],
+            startDate: [null, Validators.required],
+            endDate: [null, Validators.required],
             confState: [null],
             hallSchemeId: [null]
         });
 
         this.route.params
             .subscribe((params: Params) => {
-                debugger;
                 this.confId = params.hasOwnProperty("id") ? +params["id"] : null;
                 if (this.confId && this.confId > 0)
                     this.conferenceService
@@ -105,10 +106,10 @@ export class ConferenceDetailComponent implements OnInit {
 
     save(event, conferenceObj) {
 
-        if ("startDate" in conferenceObj)
+        if ("startDate" in conferenceObj && conferenceObj.startDate)
             conferenceObj.startDate = this.dateToUtcPipe.transform(conferenceObj.startDate);
 
-        if ("endDate" in conferenceObj)
+        if ("endDate" in conferenceObj && conferenceObj.endDate)
             conferenceObj.endDate = this.dateToUtcPipe.transform(conferenceObj.endDate);
 
         this.conferenceService[this.confId && this.confId > 0 ? 'update' : 'add'](conferenceObj)
@@ -117,7 +118,6 @@ export class ConferenceDetailComponent implements OnInit {
     }
 
     hallChanged(conferenceObj) {
-        debugger;
         if (!conferenceObj || !conferenceObj.hallId) return;
         this.dataBindScheme(conferenceObj.hallId);
     }
