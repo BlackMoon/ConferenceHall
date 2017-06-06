@@ -72,20 +72,20 @@ namespace domain.Member.Query
 
         public Member Execute(FindMemberSeatQuery query)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Member> ExecuteAsync(FindMemberSeatQuery query)
-        {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conf_members m")
                 .Column("m.id")
-                .Column("m.name")
                 .Column("m.seat")
                 .Column("m.state")
+                .Where("m.id = @memberId")
                 .Where("m.conf_id = @id");
 
-            await DbManager.OpenAsync();
-            return DbManager.DbConnection.QueryFirstOrDefault<Member>(sqlBuilder.ToString(), new { id = query.Id });
+            DbManager.Open();
+            return DbManager.DbConnection.QueryFirstOrDefault<Member>(sqlBuilder.ToString(), new { id = query.Id, memberId = query.MemberId });
+        }
+
+        public Task<Member> ExecuteAsync(FindMemberSeatQuery query)
+        {
+            throw new NotImplementedException();
         }
     }
 }

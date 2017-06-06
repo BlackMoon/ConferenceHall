@@ -65,9 +65,9 @@ namespace host
                         
                             int memberId;
                             info = nvc["confid"];
-                            if (int.TryParse(info, out confId) && int.TryParse(nvc["memberid"], out memberId))
+                            if (int.TryParse(info, out confId) && int.TryParse(nvc["id"], out memberId))
                             {
-                                var seat = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId });
+                                var seat = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
                                 // отправить уведомления signalR клиенту(ам)
                                 connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(seat);
                             }

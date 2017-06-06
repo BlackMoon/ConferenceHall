@@ -11,6 +11,7 @@ import { ConferenceService } from './conference.service';
 import { HallsModule } from '../halls/halls.module';
 import { MembersModule } from '../members/members.module';
 import { DateToUtcPipe } from "../../common/pipes";
+import { HubService } from "../../common/hub-service";
 
 @NgModule({
     declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent],
@@ -33,6 +34,6 @@ import { DateToUtcPipe } from "../../common/pipes";
         SplitButtonModule,
         TabViewModule,
         ToolbarModule],
-    providers: [ConferenceService, DateToUtcPipe]
+    providers: [ConferenceService, HubService, DateToUtcPipe]
 })
 export class ConferencesModule { }

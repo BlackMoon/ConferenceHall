@@ -10,7 +10,7 @@ import { ActivatedRoute, Params } from '@angular/router';
                 <scheme-toolbox></scheme-toolbox>
             </div>
             <div class="ui-g-10 ui-md-10 ui-widget-content ui-g-nopad">
-                <scheme-main [schemeId]="id" [showToolbar]="true"></scheme-main>
+                <scheme-main [schemeId]="id" [readOnly]="false"></scheme-main>
             </div>
         </div>
 

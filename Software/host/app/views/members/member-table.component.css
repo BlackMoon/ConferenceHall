@@ -4,13 +4,15 @@
 
 .circle {
     -ms-border-radius: 50%;
+    border: 1px solid blue;
     border-radius: 50%;
+    color: blue;
 }
 
 .on {
-    background-color: greenyellow;
+    background-color: rgba(0, 255, 0, 0.9);
 }
 
 .off {
-    background-color: red;
+    background-color: white;
 }

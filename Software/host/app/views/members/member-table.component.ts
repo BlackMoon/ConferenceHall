@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router,Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MemberModel, MemberState } from '../../models';
@@ -25,6 +25,9 @@ export class MemberTableComponent implements OnInit {
 
     @Input()
     conferenceId: number;
+
+    @Output()
+    membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();
    
     constructor(
         private confirmationService: ConfirmationService,
@@ -47,7 +50,10 @@ export class MemberTableComponent implements OnInit {
         this.memberService
             .getAll(null, this.conferenceId)
             .subscribe(
-                members => this.members = members,
+                members => {
+                    this.members = members;
+                    this.membersLoaded.emit(members);
+                },
                 error => this.logger.error(error));    
     }
 

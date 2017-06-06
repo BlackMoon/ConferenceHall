@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,9 +12,12 @@ import { SchemeService } from "./scheme.service";
 const zoomStep = 0.1;
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
     host: { '(window:keydown)': "onKeyDown($event)",
             '(window:resize)' : "onResize($event)" },
     selector: 'scheme-main',
+    styles: [".mark ellipse { fill: rgba(255, 255, 255, 0.9); stroke: blue; stroke-width: 2px }",
+            ".mark.on ellipse { fill: rgba(0, 255, 0, 0.9) }"],
     templateUrl: 'scheme-main.component.html'
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
@@ -76,13 +79,16 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this._svgElement = value;
     }
-    
+
     schemeForm: FormGroup;
     schemeFormVisible: boolean;
     intervals: SelectItem[];
 
     @Input()
-    showToolbar: boolean;             
+    readOnly: boolean = true;             
+
+    @Output()
+    schemeLoaded: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChild('canvasBox')
     canvasBoxElRef: ElementRef;
@@ -145,7 +151,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onResize() {
-        let offsetTop = this.showToolbar ? this.canvasBox.offsetTop : 0;
+        let offsetTop = this.readOnly ? 0 : this.canvasBox.offsetTop;
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - offsetTop}px`;
     }
 
@@ -165,8 +171,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         circle.setAttributeNS(null, "rx", `${r}`);
         circle.setAttributeNS(null, "ry", `${r}`);
-
-        circle.setAttributeNS(null, "fill", "rgba(0, 115, 234, 0.9)");
+        
         g.appendChild(circle);
 
         let text = document.createElementNS(this.canvas.namespaceURI, "text"),
@@ -182,6 +187,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.canvas.appendChild(g);
         this.svgElement = g;
+    }
+
+    toggleMark(code) {
+        let mark = this.canvas.querySelector(`g.${markClass}[data-code="${code}"`);
+        mark.classList.toggle("on");
     }
 
     canvasMouseDown(event) {
@@ -506,7 +516,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                     this.centerView();
 
-                    if (this.showToolbar) {
+                    if (!this.readOnly) {
                         this.drawBorder();
                         this.drawGrid();
 
@@ -520,8 +530,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                             .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
                     }
                 }
-
+                    
                 this.schemeForm.patchValue(scheme);
+                this.schemeLoaded.emit(this.canvas);
             },
             error => this.logger.error(error));
     }

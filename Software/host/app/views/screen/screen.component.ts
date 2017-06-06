@@ -3,7 +3,10 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { borderClass, markClass } from "../../common/svg-utils";
-import { MemberModel, ScreenModel, TimeRange } from '../../models';
+import { MemberModel, MemberState, ScreenModel } from '../../models';
+import { MemberTableComponent } from "../members/member-table.component";
+import { SchemeMainComponent } from "../schemes/scheme-main.component";
+import { HubService } from "../../common/hub-service";
 import { ScreenService } from "./screen.service";
 
 const tickInterval = 5000;
@@ -27,6 +30,8 @@ export class ScreenComponent implements OnInit {
     endDate: Date;
     startDate: Date;
     subject: string;
+
+    hubObservable: Observable<any>;
 
 // ReSharper disable once InconsistentNaming
     private _tickers: string[] = [];
@@ -61,9 +66,14 @@ export class ScreenComponent implements OnInit {
 
     @ViewChild('wrapper') wrapperElRef: ElementRef;
 
+    @ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
+
+    @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
+
     constructor(
         private logger: Logger,
         private route: ActivatedRoute,
+        private hubService: HubService,
         private screenService: ScreenService) {
     }
 
@@ -77,10 +87,29 @@ export class ScreenComponent implements OnInit {
 
                 if (this.id) {
                     // служба signalR может отсутствовать
-                    this.screenService
-                        .start(this.id)
-                        .flatMap(_ => this.screenService.sendTickers)
+                    this.hubObservable = this.hubService.start(this.id);
+
+                    this.hubObservable
+                        .flatMap(_ => this.hubService.sendTickers)
                         .subscribe(tickers => this.tickers = tickers);
+
+                    this.hubObservable
+                        .flatMap(_ => this.hubService.confirmMember)
+                        .subscribe(member => {
+                            
+                            this.schemeMain.toggleMark(member.seat);
+                            
+                            [].every.call(this.memberTable.members, m => {
+
+                                if (m.id === member.id) {
+                                    m.memberState = member.memberState;
+                                    m.seat = member.seat;
+                                    return false;
+                                }
+                                return true;
+                            });
+                            
+                        });
 
                     return this.screenService.get(this.id);
                 }
@@ -93,7 +122,15 @@ export class ScreenComponent implements OnInit {
                     this.tickers = this.activeScreen.tickers || [];
                 },
                 error => this.logger.error(error));
-        
+
+        Observable
+            .combineLatest(this.schemeMain.schemeLoaded, this.memberTable.membersLoaded)
+            .subscribe((a:Array<any>) => {
+                let members: MemberModel[] = a[1] || [];
+                [].forEach.call(members, m => this.schemeMain.toggleMark(m.seat));
+            });
+            
+
         // clock
         setInterval(() => this.now = new Date(), 1000);
 

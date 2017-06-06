@@ -3,6 +3,7 @@ using System.Net;
 using CacheManager.Core;
 using domain.Element;
 using DryIoc;
+using host.Hubs;
 using host.Security;
 using host.Security.TokenProvider;
 using Kit.Core;
@@ -41,6 +42,11 @@ namespace host
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new SignalRContractResolver() });
+            services.Add(new ServiceDescriptor(typeof(JsonSerializer),
+                         provider => serializer,
+                         ServiceLifetime.Transient));
+
             services.AddOptions();
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
             
