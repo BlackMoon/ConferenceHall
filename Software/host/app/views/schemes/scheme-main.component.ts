@@ -143,7 +143,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     onKeyDown(event) {
         
-        if (event.target.nodeName.toLocaleLowerCase() === "input")
+        if (event.target.nodeName.toLowerCase() === "input")
             return;
 
         // delete key
@@ -457,7 +457,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let g = document.createElementNS(this.canvas.namespaceURI, "g");
 
         g.setAttribute("class", shapeClass);
-        g.setAttribute("data-id", `${id}`);
+        g.setAttribute("data-id", `${id}`);         // id шаблона
         g.setAttribute("data-name", element.name);
 
         let pt = this.canvas.createSVGPoint();

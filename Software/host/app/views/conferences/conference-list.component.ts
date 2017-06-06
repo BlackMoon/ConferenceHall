@@ -6,8 +6,6 @@ import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
 
-declare var $: any;
-
 @Component({
     selector: "conference-list",
     templateUrl: "conference-list.component.html"
@@ -63,7 +61,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     }
     
     ngOnChanges(changes: SimpleChanges) {
-        
+       
         let startDateChange = changes["startDate"],
             endDateChange = changes["endDate"];
 

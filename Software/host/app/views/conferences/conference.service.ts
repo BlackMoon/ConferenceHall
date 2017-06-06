@@ -22,7 +22,7 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
         memberIds && memberIds.length > 0 && (body.memberIds = memberIds); 
 
         return this.http
-            .post("/api/search", body)
+            .post(isDevMode()? "http://localhost:64346/api/search" : "/api/search", body)
             .map((r: Response) => r
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))

@@ -6,6 +6,7 @@
         <p-dropdown [options]="states" [(ngModel)]="selectedState" (onChange)="changeState($event.value)"></p-dropdown>
     </div>
 </p-toolbar>
+
 <p-dataList [value]="conferences">
     <ng-template let-conference pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">

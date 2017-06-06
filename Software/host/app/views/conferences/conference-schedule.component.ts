@@ -9,6 +9,8 @@ import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
 
+declare var $: any;
+
 @Component({
     encapsulation: ViewEncapsulation.None,
     styles: [`.ui-accordion .ui-accordion-content { padding: 0}`,
@@ -16,7 +18,7 @@ import { ConferenceListComponent } from "./conference-list.component";
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent {
-
+    
     @ViewChild(AppointmentDialogComponent) appointmentDialog: AppointmentDialogComponent;
     @ViewChild(ConferenceListComponent) conferenceList: ConferenceListComponent;
 
@@ -115,10 +117,32 @@ export class ConferenceScheduleComponent {
             );
         }
     }
+    
+    drop(event, element) {
+        
+        let mouseX = event.pageX,
+            mouseY = event.pageY;
 
-    drop(date, event) {
-        debugger;
-        //let conference = JSON.parse(event.dataTransfer.getData(confDragType));
+        let selectedDay;
+        let days = $(".fc-day");
+        for (let i = 0; i < days.length; i++) {
+
+            let day = $(days[i]);
+
+            let offset = day.offset(),
+                width = day.width(),
+                height = day.height();
+
+            if (mouseX >= offset.left && mouseX <= offset.left + width && mouseY >= offset.top && mouseY <= offset.top + height) {
+                selectedDay = day;
+                break;
+            }
+        }
+        // drop именно внутри календаря
+        if (selectedDay) {
+            let conference: ConferenceModel = JSON.parse(event.dataTransfer.getData(confDragType));
+            this.makeAppointment(conference);
+        }
     }
 
     eventDrop(e) {
