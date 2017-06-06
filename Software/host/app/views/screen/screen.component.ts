@@ -87,28 +87,31 @@ export class ScreenComponent implements OnInit {
 
                 if (this.id) {
                     // служба signalR может отсутствовать
-                    this.hubObservable = this.hubService.start(this.id);
+                    this.hubService
+                        .start(this.id)
+                        .subscribe(_ => {
 
-                    this.hubObservable
-                        .flatMap(_ => this.hubService.sendTickers)
-                        .subscribe(tickers => this.tickers = tickers);
+                            this.hubService
+                                .sendTickers
+                                .subscribe(tickers => this.tickers = tickers);
 
-                    this.hubObservable
-                        .flatMap(_ => this.hubService.confirmMember)
-                        .subscribe(member => {
-                            
-                            this.schemeMain.toggleMark(member.seat);
-                            
-                            [].every.call(this.memberTable.members, m => {
+                            this.hubService
+                                .confirmMember
+                                .subscribe(member => {
 
-                                if (m.id === member.id) {
-                                    m.memberState = member.memberState;
-                                    m.seat = member.seat;
-                                    return false;
-                                }
-                                return true;
-                            });
-                            
+                                    this.schemeMain.toggleMark(member.seat);
+
+                                    this.memberTable.members.every(
+                                        m => {
+
+                                            if (m.id === member.id) {
+                                                m.memberState = member.memberState;
+                                                m.seat = member.seat;
+                                                return false;
+                                            }
+                                            return true;
+                                        });
+                                });
                         });
 
                     return this.screenService.get(this.id);
