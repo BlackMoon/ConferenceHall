@@ -39,17 +39,18 @@ export class Logger {
     /**
      * Логгирование
      * @param level - уровень ['error', 'info', 'success', 'warn']
-     * @param args - заголовок и текст
+     * @param summary - заголовок
+     * @param detail - текст
      */
-    log(level, summary, detail) {
+    log = (level, summary, detail) => this.log2(level, { summary: summary, detail: detail });
 
-        this.messages.push({ severity: level || "info", summary: summary, detail: detail });
-        // стек наполнен --> событие
-        (this.messages.length >= this.stackSize) && this.msgReсeived.emit(this.messages.splice(0, this.stackSize));
-    }
-
+    /**
+     * Логгирование
+     * @param level - уровень ['error', 'info', 'success', 'warn']
+     * @param message - сообщение     
+     */
     log2(level, message) {
-
+       
         message.severity = message.severity || level || "info";
         this.messages.push(message);
         // стек наполнен --> событие

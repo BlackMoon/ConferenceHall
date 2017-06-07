@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using CacheManager.Core;
+using domain;
 using domain.Element;
 using DryIoc;
 using host.Hubs;
@@ -142,7 +143,7 @@ namespace host
                     IExceptionHandlerFeature ex = context.Features.Get<IExceptionHandlerFeature>();
                     if (ex != null)
                     {
-                        string error = JsonConvert.SerializeObject(new { ex.Error.Message });
+                        string error = JsonConvert.SerializeObject(new { message = ex.Error.GetMessage(), detail = ex.Error.GetDetail() });
                         await context.Response.WriteAsync(error).ConfigureAwait(false);
                     }
                 });

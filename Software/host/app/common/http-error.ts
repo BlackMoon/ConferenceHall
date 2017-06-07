@@ -10,14 +10,14 @@ import { Message } from 'primeng/primeng';
  */
 export function handleResponseError(error: Response | any): ErrorObservable {
     
-    let errMsg: Message = { severity: "error" };
+    let errMsg: Message = { };
     if (error instanceof Response) {
 
         const body = error.json() || "";
 
         if (body.hasOwnProperty("message")) {
             errMsg.summary = body.message;
-            errMsg.detail = body.details;
+            errMsg.detail = body.detail;
         }
         else {
             const err = body.error || JSON.stringify(body);
