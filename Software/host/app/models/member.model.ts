@@ -1,6 +1,6 @@
 ﻿import { KeyModel, ISelected } from './index';
 import { JsonProperty } from '../common/map-utils';
-
+import { ContactModel } from '../models';
 /**
  * Состояние участника
  */
@@ -35,6 +35,10 @@ export class MemberModel extends KeyModel implements ISelected {
      * Состояние (в режиме конференции)
      */
     memberState: MemberState;
+    /**
+    * Контакты
+    */
+    contacts: ContactModel[];
 
     lockedInt: number;
     selected: boolean;
@@ -49,5 +53,6 @@ export class MemberModel extends KeyModel implements ISelected {
         this.role = undefined;
         this.seat = undefined;
         this.lockedInt = 0;
+        this.contacts = [];
     }
 }

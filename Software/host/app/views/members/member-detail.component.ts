@@ -7,6 +7,7 @@ import { FileUpload } from 'primeng/components/fileupload/fileupload';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { MemberModel } from '../../models';
+import { ContactModel } from '../../models';
 import { MemberService } from './member.service';
 
 @Component({
@@ -14,13 +15,17 @@ import { MemberService } from './member.service';
     templateUrl: "member-detail.component.html"
 })
 export class MemberDetailComponent implements OnInit {
+    displayDialog: boolean;
 
-
+    contact: ContactModel;
+    contacts: ContactModel[];
+    newContact: boolean;
     id: number;
     memberForm: FormGroup;
     memberId: number;
     members: MemberModel[];
     member: MemberModel;
+
     constructor(private route: ActivatedRoute,
         private fb: FormBuilder,
         private conferenceService: MemberService,
@@ -39,18 +44,15 @@ export class MemberDetailComponent implements OnInit {
                 //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
             });
     }
-     
-   ngOnInit() {
-       this.memberForm = this.fb.group({
-           id: [null],
-           name: [null],
-           job_title: [null],
-           phones_list: [null],
-           email_list: [null],
 
-       });
-   }
-
+    ngOnInit() {
+        this.memberForm = this.fb.group({
+            id: [null],
+            name: [null],
+            job_title: [null],
+            contacts: []
+        });
+    }
     //save(event, conferenceObj, startDate, endDate) {
     //    debugger;
 
@@ -62,9 +64,20 @@ export class MemberDetailComponent implements OnInit {
     //    this.conferenceService['add'](conferenceObj)
     //        .subscribe(_ => this.location.back(),
     //        error => this.logger.error2(error));
-   
-        
+
+
     //}
-}
 
 
+    phoneKeyPressed(event) {
+
+                (event.keyCode === 13) && alert(event.target.value);
+            }
+    showDialogToAdd() {
+                debugger;
+                this.newContact = true;
+                this.contact = new ContactModel();
+                this.displayDialog = true;
+            }
+        }
+            
