@@ -37,6 +37,8 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
     conferences: ConferenceModel[];
 
+    public ConfState = ConfState; 
+
     constructor(
         private conferrenceService: ConferenceService,
         private confirmationService: ConfirmationService,

@@ -122,26 +122,29 @@ export class ConferenceScheduleComponent {
         
         let mouseX = event.pageX,
             mouseY = event.pageY;
-
-        let selectedDay;
-        let days = $(".fc-day");
+        
+        let day;
+        let days = $("#calendar .fc-day");
         for (let i = 0; i < days.length; i++) {
 
-            let day = $(days[i]);
+            let $day = $(days[i]);
 
-            let offset = day.offset(),
-                width = day.width(),
-                height = day.height();
+            let offset = $day.offset(),
+                width = $day.width(),
+                height = $day.height();
 
             if (mouseX >= offset.left && mouseX <= offset.left + width && mouseY >= offset.top && mouseY <= offset.top + height) {
-                selectedDay = day;
+                day = $day;
                 break;
             }
         }
         // drop именно внутри календаря
-        if (selectedDay) {
-            let conference: ConferenceModel = JSON.parse(event.dataTransfer.getData(confDragType));
-            this.makeAppointment(conference);
+        if (day) {
+            let data = day.data("date");
+            if (data) {
+                let conference: ConferenceModel = JSON.parse(event.dataTransfer.getData(confDragType));
+                this.makeAppointment(conference, new Date(data));
+            }
         }
     }
 
@@ -184,13 +187,15 @@ export class ConferenceScheduleComponent {
         this.loadEvents();
     }
 
-    makeAppointment(conference) {
+    makeAppointment(conference, defaultDate: Date = null) {
 
         // time period like schedule's view period
-        let renderedDays:number = (<any>this.endDate - <any>this.startDate) / 864e5,
-            calendarVisible = (renderedDays !== 1),
-            date = this.startDate.getDate(),
-            month = this.startDate.getMonth();
+        let startDate = defaultDate || this.startDate,
+            endDate = defaultDate || this.endDate,
+            renderedDays:number = (<any>endDate - <any>startDate) / 864e5,
+            calendarVisible = (renderedDays > 1),
+            date = startDate.getDate(),
+            month = startDate.getMonth();
 
         if (renderedDays >= 28 && this.startDate.getDate() > 20)
         {
