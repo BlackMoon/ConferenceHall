@@ -24,7 +24,7 @@ export class HallGridComponent implements OnInit {
             .getAll()
             .subscribe(
                 halls => this.halls = this.halls.concat(halls),
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     removeHall(id:number, name?: string) {
@@ -43,7 +43,7 @@ export class HallGridComponent implements OnInit {
                             let ix = this.halls.findIndex(h => h.id === id);
                             this.halls.splice(ix, 1);
                         },
-                        error => this.logger.error(error))
+                        error => this.logger.error2(error))
             
         });
     }

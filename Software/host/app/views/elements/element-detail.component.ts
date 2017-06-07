@@ -68,6 +68,6 @@ export class ElementDetailComponent implements OnInit {
         this.elementService[element.id ? "update" : "add"](element)
             .subscribe(
                 _ => this.mediator.broadcast("elementDetail_itemSaved"),
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 }

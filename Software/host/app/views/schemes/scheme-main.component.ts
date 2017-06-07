@@ -534,7 +534,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 this.schemeForm.patchValue(scheme);
                 this.schemeLoaded.emit(this.canvas);
             },
-            error => this.logger.error(error));
+            error => this.logger.error2(error));
     }
 
     saveScheme(scheme) {
@@ -562,7 +562,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.schemeService
             .update(scheme)
             .subscribe(_ => { },
-            error => this.logger.error(error));
+            error => this.logger.error2(error));
     }
 
     /**

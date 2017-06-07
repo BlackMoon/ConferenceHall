@@ -75,7 +75,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
                     .getAll(this.startDate, this.endDate, this.selectedState)
                     .subscribe(
                         conferences => this.conferences = conferences,
-                        error => this.logger.error(error));
+                        error => this.logger.error2(error));
             }
         }
     }
@@ -96,7 +96,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
             .getAll(this.startDate, this.endDate, this.selectedState)
             .subscribe(
                 conferences => this.conferences = conferences,
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
 
         this.actions = [];
 
@@ -160,7 +160,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
                     .delete(conference.id)
                     .subscribe(
                         _ => this.removeConferenceFromList(conference.id),
-                        error => this.logger.error(error));
+                        error => this.logger.error2(error));
             }
         });
     }

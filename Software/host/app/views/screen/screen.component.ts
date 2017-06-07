@@ -124,7 +124,7 @@ export class ScreenComponent implements OnInit {
                     this.activeScreen = screen;
                     this.tickers = this.activeScreen.tickers || [];
                 },
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
 
         Observable
             .combineLatest(this.schemeMain.schemeLoaded, this.memberTable.membersLoaded)

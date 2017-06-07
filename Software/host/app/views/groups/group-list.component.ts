@@ -25,7 +25,7 @@ export class GroupListComponent implements OnInit {
             .getAll()
             .subscribe(
                 groups => this.groups = groups,
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     itemClick = (group: GroupModel) => this.mediator.broadcast("groupList_itemClicked", group);

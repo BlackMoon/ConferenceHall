@@ -48,7 +48,7 @@ export class SchemeListComponent {
                     this.schemeformVisible = false;
                     this.schemeform.reset();
                 },
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     copyScheme(id: number) {
@@ -72,7 +72,7 @@ export class SchemeListComponent {
                             let ix = this.items.findIndex(s => s.id === id);
                             this.items.splice(ix, 1);
                         },
-                        error => this.logger.error(error));
+                        error => this.logger.error2(error));
             }
         });   
     }

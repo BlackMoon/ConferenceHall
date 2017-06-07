@@ -56,7 +56,7 @@ export class MemberListComponent implements OnInit {
             .getAll(this.filter)
             .subscribe(
                 members => this.members = members,
-                error => this.logger.error(error));    
+                error => this.logger.error2(error));    
     }
 
     selectMember(member) {

@@ -48,7 +48,7 @@ export class AppointmentDialogComponent implements OnInit {
             .getAll()
             .subscribe(
                 halls => this.halls = halls.map(h => <any>{ label: h.name,  value: h.id}),
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     onHide() {

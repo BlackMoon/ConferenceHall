@@ -25,7 +25,7 @@ export class HallListComponent implements OnInit {
             .getAll()
             .subscribe(
                 halls => this.halls = halls,
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     selectHall(hall) {

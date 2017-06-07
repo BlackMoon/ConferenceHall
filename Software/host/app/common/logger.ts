@@ -16,20 +16,25 @@ export class Logger {
 
     constructor() {
         
-        ['error', 'info', 'success', 'warn']
-            .forEach(l => this[l] = (s, d) => this.log(l, s, d));
+        ["error", "info", "success", "warn"]
+            .forEach(l => {
+                this[l] = (s, d) => this.log(l, s, d);
+                this[`${l}2`] = (m) => this.log2(l, m);
+            });
     }
 
     // event Handlers
     @Output() msgReсeived: EventEmitter<Message[]> = new EventEmitter();
 
-    error = (...args) => {}
+    error = (summary, detail?) => { }
 
-    info = (...args) => { }
+    error2 = (message) => { }
 
-    success = (...args) => { }
+    info = (summary, detail?) => { }
 
-    warn = (...args) => { }
+    success = (summary, detail?) => { }
+
+    warn = (summary, detail?) => { }
 
     /**
      * Логгирование
@@ -38,7 +43,15 @@ export class Logger {
      */
     log(level, summary, detail) {
 
-        this.messages.push({ severity: level || 'info', summary: summary, detail: detail });
+        this.messages.push({ severity: level || "info", summary: summary, detail: detail });
+        // стек наполнен --> событие
+        (this.messages.length >= this.stackSize) && this.msgReсeived.emit(this.messages.splice(0, this.stackSize));
+    }
+
+    log2(level, message) {
+
+        message.severity = message.severity || level || "info";
+        this.messages.push(message);
         // стек наполнен --> событие
         (this.messages.length >= this.stackSize) && this.msgReсeived.emit(this.messages.splice(0, this.stackSize));
     }

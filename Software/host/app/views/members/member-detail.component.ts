@@ -61,7 +61,7 @@ export class MemberDetailComponent implements OnInit {
 
     //    this.conferenceService['add'](conferenceObj)
     //        .subscribe(_ => this.location.back(),
-    //        error => this.logger.error(error));
+    //        error => this.logger.error2(error));
    
         
     //}

@@ -33,7 +33,7 @@ export class ElementListComponent implements OnInit, OnDestroy  {
                 .flatMap((c:ElementGroupCommand) => this.elementService.addToFavorites(c))
                 .subscribe(
                     _ => { },
-                    error => this.logger.error(error))
+                    error => this.logger.error2(error))
         );
 
         this.subscription.add(
@@ -47,14 +47,14 @@ export class ElementListComponent implements OnInit, OnDestroy  {
                         this.elements.splice(ix, 1);
                     }
                 },
-                error => this.logger.error(error))
+                error => this.logger.error2(error))
         );
 
         this.subscription.add(
             mediator
                 .on<boolean>("elementList_viewChanged")
                 .subscribe(sm => this.smallGrid = sm,
-                           error => this.logger.error(error))
+                           error => this.logger.error2(error))
         );
     }
 
@@ -70,7 +70,7 @@ export class ElementListComponent implements OnInit, OnDestroy  {
             })
             .subscribe(
                 elements => this.elements = elements,
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     ngOnDestroy() {

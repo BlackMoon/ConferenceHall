@@ -9,7 +9,7 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class SchemeService extends HttpDataService<SchemeModel> {
     
-    url = isDevMode() ? "http://localhost:64346/api/schemes" : "/api/schemes";
+    url = isDevMode() ? "http://localhost:64346/api/schemes1s" : "/api/schemes";
 
     constructor(http: Http) { super(http); }
 

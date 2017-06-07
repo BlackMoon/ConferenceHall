@@ -81,7 +81,7 @@ export class ConferenceScheduleComponent {
 
                                         this.removeEventFromList(this.selectedEvent.id);
                                     },
-                                    error => this.logger.error(error));
+                                    error => this.logger.error2(error));
                         }
                     });
                 }
@@ -112,7 +112,7 @@ export class ConferenceScheduleComponent {
                     error =>
                     {
                         this.selectedConference = null;
-                        this.logger.error(error);
+                        this.logger.error2(error);
                     }
             );
         }
@@ -156,7 +156,7 @@ export class ConferenceScheduleComponent {
                 _ => {},
                 error => {
                     e.revertFunc.call();
-                    this.logger.error(error);
+                    this.logger.error2(error);
                 });
         
     }
@@ -171,7 +171,7 @@ export class ConferenceScheduleComponent {
                 _ => {},
                 error => {
                     e.revertFunc.call();
-                    this.logger.error(error);
+                    this.logger.error2(error);
                 });
     }
 
@@ -213,7 +213,7 @@ export class ConferenceScheduleComponent {
             .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedMemberIds)
             .subscribe(
                 conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     removeEventFromList(id) {

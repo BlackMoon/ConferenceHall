@@ -54,7 +54,7 @@ export class MemberTableComponent implements OnInit {
                     this.members = members;
                     this.membersLoaded.emit(members);
                 },
-                error => this.logger.error(error));    
+                error => this.logger.error2(error));    
     }
 
     loadMemberLazy(event: LazyLoadEvent) {
@@ -63,7 +63,7 @@ export class MemberTableComponent implements OnInit {
             .getAll()
             .subscribe(
                 members => this.members = members,
-                error => this.logger.error(error));
+                error => this.logger.error2(error));
     }
 
     removeMember(id: number, name?: string) {
@@ -82,7 +82,7 @@ export class MemberTableComponent implements OnInit {
                         let ix = this.members.findIndex(h => h.id === id);
                         this.members.splice(ix, 1);
                     },
-                    error => this.logger.error(error))
+                    error => this.logger.error2(error))
 
         });       
     }

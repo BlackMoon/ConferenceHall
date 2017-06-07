@@ -56,6 +56,6 @@ export class HallDetailComponent implements OnInit {
 
         this.hallService[hall.id ? 'update' : 'add'](hall)
             .subscribe(_ => this.location.back(),
-                       error => this.logger.error(error));
+                       error => this.logger.error2(error));
     }
 }

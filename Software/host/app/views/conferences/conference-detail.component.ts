@@ -96,7 +96,7 @@ export class ConferenceDetailComponent implements OnInit {
             .getAll()
             .subscribe(
             halls => this.halls = halls.map(h => <any>{ label: h.name, value: h.id }),
-            error => this.logger.error(error));
+            error => this.logger.error2(error));
 
         this.conferenceForm.valueChanges
             .subscribe(data => this.onValueChanged(data));
@@ -146,7 +146,7 @@ export class ConferenceDetailComponent implements OnInit {
 
         this.conferenceService[this.confId && this.confId > 0 ? 'update' : 'add'](conferenceObj)
             .subscribe((): void => this.location.back(),
-            error => this.logger.error(error));
+            error => this.logger.error2(error));
     }
 
     hallChanged(conferenceObj) {
