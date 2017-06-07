@@ -42,7 +42,7 @@ export class MemberTableComponent implements OnInit {
 
     addMember() {
         debugger;
-        this.router.navigate(["members/new"], { relativeTo: this.route });
+        this.router.navigate(["members/new"]);
     }
 
     loadMembers() {
