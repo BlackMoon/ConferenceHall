@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+
 
 namespace domain.Member
 {
@@ -58,6 +60,7 @@ namespace domain.Member
         /// Место
         /// </summary>
         public string Seat { get; set; }
+        public IList<Contact.Contact> Contacts { get; set; }
 
         /// <summary>
         /// Статус

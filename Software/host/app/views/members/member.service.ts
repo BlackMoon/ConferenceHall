@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
 import { MemberModel } from '../../models';
+import { ContactModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -17,9 +18,7 @@ export class MemberService extends HttpDataService<MemberModel> {
         let formData: FormData = new FormData();
         formData.append("name", member.name);
         formData.append("job_title", member.job_title);
-        formData.append("phones_list", member.phones_list);
-        formData.append("email_list", member.email_list);
-
+        formData.append("contacts", member.contacts);
         return this.http
             .post(this.url, formData)
             .catch(handleResponseError);

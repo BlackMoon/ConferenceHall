@@ -49,7 +49,8 @@ import { MemberService } from './member.service';
         SpinnerModule,
         TabViewModule,
         ToggleButtonModule,
-        ToolbarModule],
+        ToolbarModule
+   ],
     providers: [MemberService]
 })
 export class MembersModule { }
