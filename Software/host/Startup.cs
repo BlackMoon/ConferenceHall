@@ -143,7 +143,16 @@ namespace host
                     IExceptionHandlerFeature ex = context.Features.Get<IExceptionHandlerFeature>();
                     if (ex != null)
                     {
-                        string error = JsonConvert.SerializeObject(new { message = ex.Error.GetMessage(), detail = ex.Error.GetDetail() });
+                        string message = ex.Error.GetMessage(),
+                               detail = ex.Error.GetDetail();
+
+                        dynamic err = new System.Dynamic.ExpandoObject();
+                        err.message = message;
+
+                        if (!string.IsNullOrEmpty(detail))
+                            err.detail = detail;
+
+                        string error = JsonConvert.SerializeObject(err);
                         await context.Response.WriteAsync(error).ConfigureAwait(false);
                     }
                 });
