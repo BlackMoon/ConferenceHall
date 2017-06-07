@@ -4,11 +4,4 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Email\" />
-    <Folder Include="WhatsApp\" />
-    <Folder Include="TL\" />
-    <Folder Include="Sms\" />
-  </ItemGroup>
-
 </Project>

@@ -3,7 +3,6 @@ using System.Net;
 using CacheManager.Core;
 using domain.Element;
 using DryIoc;
-using host.EmailType;
 using host.Hubs;
 using host.Security;
 using host.Security.TokenProvider;
@@ -85,22 +84,6 @@ namespace host
                 made: Made.Of(() => DbManagerFactory.CreateDbManager(providerName, eventConnectionString), requestIgnored => string.Empty), 
                 reuse: Reuse.Singleton, 
                 serviceKey: EventDbManagerKey);
-
-
-            // smtp manager
-            //SmtpConnect sConnect = new SmtpConnect();
-            //sConnect.SmtpPort = Configuration["SmtpConnection:SmtpPort"];
-            //sConnect.PasswordSender = Configuration["SmtpConnection:PasswordSender"];
-            //sConnect.SmtpServer = Configuration["SmtpConnection:SmtpServer"];
-            //sConnect.EmailSender = Configuration["SmtpConnection:EmailSender"];
-            //sConnect.NameSender = Configuration["SmtpConnection:NameSender"]; 
-            //sConnect.UseSSL = Configuration["SmtpConnection:UseSSL"];
-
-            // пример рассылки по списку
-            //String[] listEmail = { "phstas2016@rambler.ru", "fiseyskiysv@aquilon-st.ru" };
-            //EmailSender es = new EmailSender("Header letter", "Body letter");
-            //es.SmtpSettings = sConnect;
-            //es.EmailSending(listEmail);
             
             // cache managers
             #region object cache
