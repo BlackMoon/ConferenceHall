@@ -1,4 +1,5 @@
-﻿using host.EmailSystem;
+﻿using System.Threading.Tasks;
+using host.EmailSystem;
 using MimeKit;
 using MailKit.Net.Smtp;
 using host.Mail.Smtp;
@@ -20,7 +21,7 @@ namespace host.EmailType
         public string Recepients;
 
         // генерация сообщения
-        public void Send(string subject, string body)
+        public async Task Send(string subject, string body)
         {
             var emailMessage = new MimeMessage();
 
@@ -34,15 +35,18 @@ namespace host.EmailType
 
             using (var client = new SmtpClient())
             {
-                client.Connect(SmtpSettings.SmtpServer, SmtpSettings.SmtpPort, SmtpSettings.UseSSL);
-                client.Authenticate(SmtpSettings.EmailSender, SmtpSettings.PasswordSender);
-                client.Send(emailMessage);
-                client.Disconnect(true);
+                await client.ConnectAsync(SmtpSettings.SmtpServer, SmtpSettings.SmtpPort, SmtpSettings.UseSSL);
+                await client.AuthenticateAsync(SmtpSettings.EmailSender, SmtpSettings.PasswordSender);
+                await client.SendAsync(emailMessage);
+                await client.DisconnectAsync(true);
             }
 
         }
 
-
+        public void Send(string subject, string body, string[] email)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }
