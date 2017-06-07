@@ -9,11 +9,13 @@ namespace domain.Contact
     [Table("conf_hall.contacts")]
     public class Contact : KeyObject
     {
+        public bool Active { get; set; }
+
         /// <summary>
         /// Вид контакта
         /// </summary>
         public string Kind { get; set; }
 
-        public string Phone { get; set; }
+        public string Address { get; set; }
     }
 }
