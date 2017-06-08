@@ -19,7 +19,7 @@ export class MemberService extends HttpDataService<MemberModel> {
 
         let formData: FormData = new FormData();
         formData.append("name", member.name);
-        formData.append("job_title", member.job_title);
+        formData.append("jobTitle", member.jobTitle);
         formData.append("contacts", member.contacts);
         return this.http
             .post(this.url, formData)
@@ -31,7 +31,7 @@ export class MemberService extends HttpDataService<MemberModel> {
     }
 
     getAll(filter?: string, confid?: number): Observable<any> {
-        
+       
         let params: URLSearchParams = new URLSearchParams();
         filter && params.append("filter", filter);
         confid && params.append("confid", confid.toString());
@@ -46,7 +46,7 @@ export class MemberService extends HttpDataService<MemberModel> {
     }
 
     get(key): Observable<any> {
-
+        debugger;
         return this.http
             .get(`${this.url}/${key}`)
             .map((r: Response) => MapUtils.deserialize(MemberModel, r.json()))

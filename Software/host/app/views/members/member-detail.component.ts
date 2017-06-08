@@ -25,49 +25,54 @@ export class MemberDetailComponent implements OnInit {
     memberId: number;
     members: MemberModel[];
     member: MemberModel;
-
+   
     constructor(private route: ActivatedRoute,
         private fb: FormBuilder,
-        private conferenceService: MemberService,
+        private memberService: MemberService,
 
         private location: Location,
         private logger: Logger
     ) {
 
-        this.route.params
-            .subscribe((params: Params) => {
-                // (+) converts string 'id' to a number
-                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+        //this.route.params
+        //    .subscribe((params: Params) => {
+        //        // (+) converts string 'id' to a number
+        //        this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
 
-                // (+) converts string 'id' to a number
-                console.log(params["id"]);
-                //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
-            });
+        //        // (+) converts string 'id' to a number
+        //        console.log(params["id"]);
+        //        //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+        //    });
     }
 
     ngOnInit() {
         this.memberForm = this.fb.group({
             id: [null],
             name: [null],
-            job_title: [null],
+            jobTitle: [null],
             contacts: []
         });
+       
+        this.route.params
+
+            .switchMap((params: Params) => {
+               
+                // (+) converts string 'id' to a number
+                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                return key ? this.memberService.get(key) : Observable.empty();
+            })
+            .subscribe((member: MemberModel) => {
+               this.memberForm.patchValue(member);
+            });
     }
-    //save(event, conferenceObj, startDate, endDate) {
-    //    debugger;
+    save(event, member) {
 
-    //    conferenceObj.period.lowerBound = startDate ? new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000) : new Date();//to utc
-    //    conferenceObj.period.upperBound = endDate ? new Date(endDate.getTime() - endDate.getTimezoneOffset() * 60000) : new Date();//to utc
+        event.preventDefault();
 
-    //    event.preventDefault();
-
-    //    this.conferenceService['add'](conferenceObj)
-    //        .subscribe(_ => this.location.back(),
-    //        error => this.logger.error2(error));
-
-
-    //}
-
+        this.memberService[member.id ? 'update' : 'add'](member)
+            .subscribe(_ => this.location.back(),
+            error => this.logger.error2(error));
+    }
 
     phoneKeyPressed(event) {
 
