@@ -1,7 +1,9 @@
 ﻿import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
+    ButtonModule,
     DataTableModule,
     InputTextModule,
     ToolbarModule
@@ -12,11 +14,13 @@ import { OrganizationService } from "./organization.service";
 
 @NgModule({
     declarations: [OrganizationListComponent],
-    imports: [CommonModule],
-    exports: [
-        DataTableModule,
+    exports: [DataTableModule, InputTextModule, OrganizationListComponent],
+    imports: [
+        ButtonModule,
+        CommonModule,
+        FormsModule,
         InputTextModule,
-        OrganizationListComponent,
+        ReactiveFormsModule,
         ToolbarModule
     ],
     providers: [OrganizationService]

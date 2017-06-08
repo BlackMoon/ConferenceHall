@@ -30,7 +30,7 @@ import { OrganizationsModule } from '../organizations/organizations.module';
 
 @NgModule({
     declarations: [MemberDetailComponent, MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
-    exports: [DataTableModule, ButtonModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
+    exports: [MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
     imports: [
         AccordionModule,
         ButtonModule,

@@ -20,8 +20,8 @@ export class MemberTableComponent implements OnInit {
 // ReSharper disable once InconsistentNaming
     public MemberState = MemberState;
 
-    members: MemberModel[];
     filter: string;
+    members: MemberModel[];
 
     @Input()
     conferenceId: number;
@@ -48,7 +48,7 @@ export class MemberTableComponent implements OnInit {
     loadMembers() {
         
         this.memberService
-            .getAll(null, this.conferenceId)
+            .getAll(this.filter, this.conferenceId)
             .subscribe(
                 members => {
                     this.members = members;
@@ -90,7 +90,8 @@ export class MemberTableComponent implements OnInit {
     filterChange(value) {
         
         this.filter = value;
-        value.length >= minChars && this.loadMembers();
+        if (value.length >= minChars || !value.length) 
+            this.loadMembers();
     }
 
     /**
