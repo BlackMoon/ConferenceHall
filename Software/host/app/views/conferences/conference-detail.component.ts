@@ -6,12 +6,13 @@ import { ConferenceModel, ConfState, SchemeModel } from '../../models';
 import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { HallService } from '../halls/hall.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SchemeService } from "../schemes/scheme.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TimeRange } from '../../models';
 import { DateToUtcPipe } from "../../common/pipes";
 import { locale } from "../../common/locale";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
+import { MemberTableComponent} from '../members/member-table.component';
 
 @Component({
     selector: "conference-detail",
@@ -27,6 +28,7 @@ export class ConferenceDetailComponent implements OnInit {
     hallScheme: any[];
     locale: any;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
+    @ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
     @ViewChild('tabSchemeWrapper') tabSchemeWrapper: ElementRef;
     @ViewChild('schemeContent') schemeContent: ElementRef;
 
@@ -200,11 +202,18 @@ export class ConferenceDetailComponent implements OnInit {
 
     tabViewChangedHandle(e) {
         switch (e.index) {
+            //tabScheme
             case 2:
                 {
+                    
                     this.schemeMain.canvasBox.innerHTML = "";//удаляем старую схему обновления
                     if (this.conferenceForm.value && this.conferenceForm.value.hallSchemeId) 
                         this.schemeMain.schemeId = this.conferenceForm.value.hallSchemeId;
+
+                    if (this.conferenceForm.value && this.conferenceForm.value.id) {
+                        this.memberTable.conferenceId = this.conferenceForm.value.id;
+                        this.memberTable.loadMembers();
+                    }
                     break;
                 }
         }
