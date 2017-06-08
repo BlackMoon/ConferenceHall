@@ -10,6 +10,7 @@ using host.Security.TokenProvider;
 using Kit.Core;
 using Kit.Core.CQRS.Job;
 using Kit.Dal.DbManager;
+using Messengers.Email.Smtpoptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -49,10 +50,15 @@ namespace host
                          ServiceLifetime.Transient));
 
             services.AddOptions();
+            
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
             
             // CORS в режиме debug'a
             services.AddCors(o => o.AddPolicy("AllowAll", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+            #region messenger's options
+            services.Configure<SmtpOptions>(Configuration.GetSection("SmtpConnection"));
+            #endregion
 
             services.Configure<TokenProviderOptions>(Configuration.GetSection("TokenAuthentication"));
             
