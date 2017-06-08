@@ -18,14 +18,15 @@ namespace Messengers.Email.EmailSend
 
         }
 
-        public string[] Recipients;
+        public string Recipients;
 
         // генерация сообщения
         public void Send(string subject, string body)
         {
             var emailMessage = new MimeMessage();
 
-            foreach (var email in Recipients)
+            string[] recipientList = Recipients.Split(';');
+            foreach (var email in recipientList)
             {
                 emailMessage.To.Add(new MailboxAddress("", email));
             }
@@ -51,7 +52,9 @@ namespace Messengers.Email.EmailSend
         {
             var emailMessage = new MimeMessage();
 
-            foreach (var email in Recipients)
+
+            string[] recipientList = Recipients.Split(';');
+            foreach (var email in recipientList)
             {
                 emailMessage.To.Add(new MailboxAddress("", email));
             }

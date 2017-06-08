@@ -12,4 +12,8 @@
     <Folder Include="WhatsApp\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\host\host.csproj" />
+  </ItemGroup>
+
 </Project>
