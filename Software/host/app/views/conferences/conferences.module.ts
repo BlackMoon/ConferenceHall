@@ -12,10 +12,12 @@ import { HallsModule } from '../halls/halls.module';
 import { MembersModule } from '../members/members.module';
 import { DateToUtcPipe } from "../../common/pipes";
 import { HubService } from "../../common/hub-service";
+import { SchemesModule } from '../schemes/schemes.module';
 
 @NgModule({
     declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent],
     imports: [
+        SchemesModule,
         AccordionModule,
         ButtonModule,
         CalendarModule,

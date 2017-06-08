@@ -1,5 +1,5 @@
 ﻿import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, SchemeModel } from '../../models';
@@ -11,6 +11,7 @@ import { SchemeService } from "../schemes/scheme.service";
 import { TimeRange } from '../../models';
 import { DateToUtcPipe } from "../../common/pipes";
 import { locale } from "../../common/locale";
+import { SchemeMainComponent } from "../schemes/scheme-main.component";
 
 @Component({
     selector: "conference-detail",
@@ -25,11 +26,9 @@ export class ConferenceDetailComponent implements OnInit {
     halls: any[];
     hallScheme: any[];
     locale: any;
-
-    selectedConfType: string;
-    conferences: ConferenceModel[];
-
-    conference: ConferenceModel;
+    @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
+    @ViewChild('tabSchemeWrapper') tabSchemeWrapper: ElementRef;
+    @ViewChild('schemeContent') schemeContent: ElementRef;
 
     constructor(
         private dateToUtcPipe: DateToUtcPipe,
@@ -40,8 +39,8 @@ export class ConferenceDetailComponent implements OnInit {
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
+
         this.locale = locale;
-        this.conference = null;
         this.confTypes = [];
 
         let stateKeys = Object
@@ -62,11 +61,11 @@ export class ConferenceDetailComponent implements OnInit {
 
         this.conferenceForm = this.fb.group({
             id: [null],
-            subject: [null, [Validators.required, Validators.maxLength(10)]],
+            subject: [null, Validators.required],
             hallId: [null, Validators.required],
             description: [null, Validators.required],
-            startDate: [null, [Validators.required, this.validateStartAndEndDate]],
-            endDate: [null, [Validators.required, this.validateStartAndEndDate]],
+            startDate: [null, this.confId && this.confId > 0 ? [Validators.required, this.validateStartAndEndDate] : this.validateStartAndEndDate],
+            endDate: [null, this.confId && this.confId > 0 ? [Validators.required, this.validateStartAndEndDate] : this.validateStartAndEndDate],
             confState: [null],
             hallSchemeId: [null]
         });
@@ -79,18 +78,16 @@ export class ConferenceDetailComponent implements OnInit {
                         .get(this.confId)
                         .subscribe((conf: ConferenceModel) => {
 
-                            this.conference = conf;
-                            if (!this.conference) return;
+                            if (!conf) return;
+                            this.dataBindScheme(conf.hallId);
+                            conf.startDate = new Date(conf.startDate);
+                            conf.endDate = new Date(conf.endDate);
 
-                            this.dataBindScheme(this.conference.hallId);
-                            this.conference.startDate = new Date(conf.startDate);
-                            this.conference.endDate = new Date(conf.endDate);
-
-                            this.conferenceForm.patchValue(this.conference);
+                            this.conferenceForm.patchValue(conf);
                         });
 
                 console.log("id = " + this.confId);
-            });
+            }, error => this.logger.error2(error));
 
         this.hallService
             .getAll()
@@ -99,32 +96,15 @@ export class ConferenceDetailComponent implements OnInit {
             error => this.logger.error2(error));
 
         this.conferenceForm.valueChanges
-            .subscribe(data => this.onValueChanged(data));
-    }
-
-    validateStartAndEndDate(input) {
-             
-        if (!input || !input.root.controls) return null;
-        var startDt = null;
-        if ("startDate" in input.root.controls)
-            startDt = input.root.controls["startDate"].value;
-
-        var endDt = null;
-        if ("endDate" in input.root.controls)
-            endDt = input.root.controls["endDate"].value;
-
-        if (!startDt || !endDt) return null;
-        return startDt <= endDt ? null : {'validateStartAndEndDate' : true};
+            .subscribe(data => this.onValueChanged(data), error => this.logger.error2(error));
     }
 
     ngOnInit() {
-        var validationMessages = this.validationMessages;
-        for (var item in validationMessages) {
-            if (!validationMessages.hasOwnProperty(item)) continue;
+        for (var item in this.validationMessages) {
+            if (!this.validationMessages.hasOwnProperty(item)) continue;
             this.formErrors[item] = '';
         }
     }
-
 
     save(event, conferenceObj) {
         if (!this.conferenceForm.valid) {
@@ -159,9 +139,9 @@ export class ConferenceDetailComponent implements OnInit {
         this.hallScheme = [];
         this.schemeService
             .getAll(hallId)
-            .subscribe((schemeArray: SchemeModel[]) => {
-                this.hallScheme = schemeArray.map(h => <any>{ label: h.name, value: h.id });
-            });
+            .subscribe((schemeArray: SchemeModel[]) => this.hallScheme = schemeArray.map(h => <any>{ label: h.name, value: h.id }),
+            error => this.logger.error2(error)
+            );
     }
 
     formErrors = {};
@@ -198,10 +178,41 @@ export class ConferenceDetailComponent implements OnInit {
                 const messages = this.validationMessages[field];
                 for (const key in control.errors) {
                     if (!control.errors.hasOwnProperty(key)) continue;
-                    formErrors[field] += "key" in messages ? messages[key] : '  ' + '  ';
+                    formErrors[field] += key in messages ? messages[key] : '  ' + '  ';
                 }
             }
 
         }
+    }
+    validateStartAndEndDate(input) {
+        if (!input || !input.root.controls) return null;
+        var startDt = null;
+        if ("startDate" in input.root.controls)
+            startDt = input.root.controls["startDate"].value;
+
+        var endDt = null;
+        if ("endDate" in input.root.controls)
+            endDt = input.root.controls["endDate"].value;
+
+        if (!startDt || !endDt) return null;
+        return startDt <= endDt ? null : { 'validateStartAndEndDate': true };
+    }
+
+    tabViewChangedHandle(e) {
+        switch (e.index) {
+            case 2:
+                {
+                    this.schemeMain.canvasBox.innerHTML = "";//удаляем старую схему обновления
+                    if (this.conferenceForm.value && this.conferenceForm.value.hallSchemeId) 
+                        this.schemeMain.schemeId = this.conferenceForm.value.hallSchemeId;
+                    break;
+                }
+        }
+    }
+
+    shemeMainLoaded(e) {
+        debugger;
+        this.tabSchemeWrapper.nativeElement.style.height = "500px";
+        this.schemeMain && this.schemeMain.onResize();
     }
 }
