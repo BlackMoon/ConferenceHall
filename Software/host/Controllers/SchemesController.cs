@@ -17,13 +17,9 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Scheme>> GetByHallId(int? hallId)
-        {
-            FindSchemasQuery query = new FindSchemasQuery()
-            {
-                HallId = hallId
-            };
-            return QueryDispatcher.DispatchAsync<FindSchemasQuery, IEnumerable<Scheme>>(query);
+        public Task<IEnumerable<Scheme>> GetSchemesByHallId(int hallId)
+        {            
+            return QueryDispatcher.DispatchAsync<FindSchemesQuery, IEnumerable<Scheme>>(new FindSchemesQuery() { HallId = hallId });
         }
 
 

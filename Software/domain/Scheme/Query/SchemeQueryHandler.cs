@@ -11,15 +11,10 @@ namespace domain.Scheme.Query
 {
     public class SchemeQueryHandler : 
         KeyObjectQueryHandler<FindSchemeByIdQuery, Scheme>,
-        IQueryHandler<FindSchemasQuery, IEnumerable<Scheme>>
+        IQueryHandler<FindSchemesQuery, IEnumerable<Scheme>>
     {
         public SchemeQueryHandler(IDbManager dbManager) : base(dbManager)
         {
-        }
-
-        public IEnumerable<Scheme> Execute(FindSchemasQuery query)
-        {
-            throw new NotImplementedException();
         }
 
         public override async Task<Scheme> ExecuteAsync(FindSchemeByIdQuery query)
@@ -35,29 +30,23 @@ namespace domain.Scheme.Query
                 .Where("s.id = @id");
 
             await DbManager.OpenAsync();
-            var schemes = await DbManager.DbConnection.QueryAsync<Scheme>(sqlBuilder.ToString(), new { id = query.Id});
-            return schemes.SingleOrDefault();
+            return DbManager.DbConnection.QuerySingleOrDefault<Scheme>(sqlBuilder.ToString(), new { id = query.Id });
         }
 
-        public async Task<IEnumerable<Scheme>> ExecuteAsync(FindSchemasQuery query)
+        public IEnumerable<Scheme> Execute(FindSchemesQuery query)
+        {
+            throw new NotImplementedException();
+        }        
+
+        public async Task<IEnumerable<Scheme>> ExecuteAsync(FindSchemesQuery query)
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.hall_scheme s")
                 .Column("s.id")
-                .Column("s.name")
-                .Column("s.plan")
-                .Column("s.hall_id")
-                .Column("s.grid_interval gridinterval");
-
-            DynamicParameters param = new DynamicParameters();
-
-            if (query.HallId.HasValue)
-            {
-                param.Add("hall_id", query.HallId);
-                sqlBuilder.Where("s.hall_id = @hall_id");
-            }
+                .Column("s.name")                
+                .Where("s.hall_id = @hallid");            
            
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<Scheme>(sqlBuilder.ToString(), param);
+            return await DbManager.DbConnection.QueryAsync<Scheme>(sqlBuilder.ToString(), new { hallid = query.HallId });
         }
     }
 }

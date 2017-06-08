@@ -93,8 +93,10 @@ export class ConferenceScheduleComponent {
         
         if (appointment != null) {
 
+            appointment.conferenceId = this.selectedConference.id;
+
             this.conferrenceService
-                .makeAppointment(this.selectedConference.id, appointment)
+                .makeAppointment(appointment)
                 .subscribe(
                     (period:TimeRange) => {
                        
@@ -187,6 +189,11 @@ export class ConferenceScheduleComponent {
         this.loadEvents();
     }
 
+    /**
+     * Из conference-list'a передается целиком объект [conference] для вставки subject/description в event schedule
+     * @param conference
+     * @param defaultDate
+     */
     makeAppointment(conference, defaultDate: Date = null) {
 
         // time period like schedule's view period

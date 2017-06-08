@@ -65,7 +65,7 @@ namespace host.Controllers
             return new FileContentResult(fileContents, contentType);
         }
 
-        [HttpPost("/api/favorites")]
+        [HttpPost("/api/[controller]/favorites")]
         public Task AddToFavorites([FromBody]AddToFavoritesCommand value)
         {
             value.UserId = 1;  // todo from HttpContext.User

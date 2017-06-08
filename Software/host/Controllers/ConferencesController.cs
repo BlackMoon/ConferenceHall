@@ -27,10 +27,9 @@ namespace host.Controllers
             return QueryDispatcher.DispatchAsync<FindConferenceByIdQuery, Conference>(new FindConferenceByIdQuery() { Id = id });
         }
 
-        [HttpPut("/api/appointment/{id}")]
-        public Task<TimeRange> MakeAppointment(int id, [FromBody]MakeAppointmentCommand value)
-        {
-            value.ConferenceId = id;
+        [HttpPut("/api/[controller]/appointment")]
+        public Task<TimeRange> MakeAppointment([FromBody]MakeAppointmentCommand value)
+        {            
             return CommandDispatcher.DispatchAsync<MakeAppointmentCommand, TimeRange>(value);
         }        
 

@@ -12,23 +12,7 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     url = isDevMode() ? "http://localhost:64346/api/conferences" : "api/conferences";
 
-    constructor(http: Http) { super(http); }
-
-    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, memberIds: number[] = null): Observable<any> {
-
-        let body: FindConferencesQuery = { startDate: startDate, endDate: endDate, state: state};
-
-        hallIds && hallIds.length > 0 && (body.hallIds = hallIds); 
-        memberIds && memberIds.length > 0 && (body.memberIds = memberIds); 
-
-        return this.http
-            .post(`${this.url}/search`, body)
-            .map((r: Response) => r
-                .json()
-                .map(conf => MapUtils.deserialize(ConferenceModel, conf))
-            )
-            .catch(handleResponseError);
-    }
+    constructor(http: Http) { super(http); }    
 
     /**
      * Изменить период
@@ -59,14 +43,30 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             .catch(handleResponseError);    
     }
 
+    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, memberIds: number[] = null): Observable<any> {
+
+        let body: FindConferencesQuery = { startDate: startDate, endDate: endDate, state: state };
+
+        hallIds && hallIds.length > 0 && (body.hallIds = hallIds);
+        memberIds && memberIds.length > 0 && (body.memberIds = memberIds);
+
+        return this.http
+            .post(`${this.url}/search`, body)
+            .map((r: Response) => r
+                .json()
+                .map(conf => MapUtils.deserialize(ConferenceModel, conf))
+            )
+            .catch(handleResponseError);
+    }
+
     /**
      * Назначить совещание
      * @param a
      */
-    makeAppointment(confid: number, a: AppointmentModel) : Observable<any> {
+    makeAppointment(a: AppointmentModel) : Observable<any> {
 
         return this.http
-            .put(`/api/appointment/${confid}`, a)
+            .put(`${this.url}/appointment`, a)
             .map((r: Response) => r.json())
             .catch(handleResponseError);
     }

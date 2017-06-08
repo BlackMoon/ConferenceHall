@@ -36,7 +36,7 @@ namespace domain.Conference.Query
                 .Where("id = @id");
             
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryFirstOrDefaultAsync<Conference>(sqlBuilder.ToString(), new { id = query.Id });
+            return await DbManager.DbConnection.QuerySingleOrDefaultAsync<Conference>(sqlBuilder.ToString(), new { id = query.Id });
         }
 
         public async Task<IEnumerable<Conference>> ExecuteAsync(FindConferencesQuery query)

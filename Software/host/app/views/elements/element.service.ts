@@ -33,7 +33,7 @@ export class ElementService extends HttpDataService<ElementModel> {
     addToFavorites(c: ElementGroupCommand): Observable<any> {
 
         return this.http
-            .post(`/api/favorites`, c)
+            .post(`${this.url}/favorites`, c)
             .catch(handleResponseError);
     }
 
@@ -44,7 +44,7 @@ export class ElementService extends HttpDataService<ElementModel> {
     delete(c: ElementGroupCommand): Observable<any> {
         
         return this.http
-            .post("/api/elements/delete", c)
+            .post(`${this.url}/delete`, c)
             .map(_ => c.ids)
             .catch(handleResponseError);
     }

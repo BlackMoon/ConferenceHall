@@ -24,10 +24,10 @@ export class SchemeService extends HttpDataService<SchemeModel> {
             .catch(handleResponseError);
     }
 
-    getAll(hallId?: number, filter?: string): Observable<any> {
+    getAll(hallId: number): Observable<any> {
 
         let params: URLSearchParams = new URLSearchParams();
-        hallId && params.append("hallId", hallId.toString());
+        params.append("hallId", hallId.toString());
 
         return this.http
             .get(this.url, { params: params })

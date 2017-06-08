@@ -80,6 +80,8 @@ export class ConferenceModel extends KeyModel implements ISelected {
  */
 export class AppointmentModel {
 
+    conferenceId: number;
+
     /**
      * длительность в формате HH:mm:ss
      */
