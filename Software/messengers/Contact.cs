@@ -1,4 +1,4 @@
-﻿namespace MessengersContact
+﻿namespace messengers
 {
     public class Contact
     {

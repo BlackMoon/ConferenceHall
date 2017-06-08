@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Messengers.Email.Smtpoptions
+namespace messengers.Email
 {
     // тип для связи с smtp сервером
     public class SmtpOptions

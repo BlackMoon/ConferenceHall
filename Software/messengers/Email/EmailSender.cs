@@ -1,21 +1,20 @@
-﻿using Messengers.Email.EmailSender;
-using MimeKit;
-using MailKit.Net.Smtp;
-using Messengers.Email.Smtpoptions;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Options;
+using MimeKit;
 
-namespace Messengers.Email.EmailSend
+namespace messengers.Email
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender : IMessageSender
     {
 
-        public SmtpOptions SmtpSettings;
+        private readonly SmtpOptions _smtpSettings;
 
-
-        // конструктор
-        public EmailSender()
+        
+        public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {
-
+            _smtpSettings = smtpOptions.Value;
         }
 
         public string Recipients;
@@ -31,7 +30,7 @@ namespace Messengers.Email.EmailSend
                 emailMessage.To.Add(new MailboxAddress("", email));
             }
 
-            emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
+            /*emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
@@ -44,7 +43,7 @@ namespace Messengers.Email.EmailSend
                 client.Authenticate(SmtpSettings.EmailSender, SmtpSettings.PasswordSender);
                 client.Send(emailMessage);
                 client.Disconnect(true);
-            }
+            }*/
 
         }
 
@@ -59,7 +58,7 @@ namespace Messengers.Email.EmailSend
                 emailMessage.To.Add(new MailboxAddress("", email));
             }
 
-            emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
+            /*emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
@@ -73,10 +72,19 @@ namespace Messengers.Email.EmailSend
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);
-            }
+            }*/
         }
 
+        public IEnumerable<string> Errors { get; set; }
+        public void Send(string subject, string body, params string[] addresses)
+        {
+            throw new System.NotImplementedException();
+        }
 
+        public Task SendAsync(string subject, string body, params string[] addresses)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }
