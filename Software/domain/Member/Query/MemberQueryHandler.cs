@@ -33,7 +33,9 @@ namespace domain.Member.Query
                 .Column("m.state")
                 .Column("e.name")
                 .Column("e.job_title jobTitle")
+                .Column("o.name organization")
                 .Join("conf_hall.employees e ON e.id = m.employee_id")
+                .Join("conf_hall.organizations o ON o.id = e.org_id")
                 .Where("m.conf_id = @confid")
                 .OrderBy("lower(e.name)");
 
@@ -52,9 +54,11 @@ namespace domain.Member.Query
                 .Column("e.id")
                 .Column("e.name")
                 .Column("e.job_title jobTitle")
+                .Column("o.name organization")
                 .Column("u.role")
                 .Column("u.locked")
-                .LeftJoin("conf_hall.users u ON e.id = u.employee_id")
+                .Join("conf_hall.organizations o ON o.id = e.org_id")
+                .LeftJoin("conf_hall.users u ON u.employee_id = e.id")
                 .OrderBy("lower(e.name)");
 
             DynamicParameters param = new DynamicParameters();

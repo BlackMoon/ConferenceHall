@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using domain.Common.Query;
+﻿using domain.Common.Query;
 
 namespace domain.Scheme.Query
 {

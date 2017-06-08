@@ -10,3 +10,18 @@
         </div>
     </div>
 </p-toolbar>
+<p-dataTable [value]="organizations" [rows]="10" [paginator]="true">
+    <p-column header="№" *ngIf="!conferenceId" [style]="{'width':'50px'}">
+        <ng-template let-ix="rowIndex" pTemplate="body">
+            {{ix + 1}}
+        </ng-template>
+    </p-column>
+
+    <p-column field="name" header="Наименование"></p-column>
+    
+    <p-column styleClass="col-button" [style]="{'width':'50px'}">
+        <ng-template let-org="rowData" pTemplate="body">
+            <i class="fa fa-trash-o" (click)="removeOrganization(org.id, org.name)" style="cursor: pointer;" title="Удалить"></i>
+        </ng-template>
+    </p-column>
+</p-dataTable>

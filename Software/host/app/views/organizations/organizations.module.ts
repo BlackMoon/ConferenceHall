@@ -18,6 +18,7 @@ import { OrganizationService } from "./organization.service";
     imports: [
         ButtonModule,
         CommonModule,
+        DataTableModule,
         FormsModule,
         InputTextModule,
         ReactiveFormsModule,

@@ -22,19 +22,26 @@ export class MemberModel extends KeyModel implements ISelected {
     jobTitle: string;   
 
     /**
+     * Состояние (в режиме конференции)
+     */
+    memberState: MemberState;
+
+    /**
+     * Наименование организации
+     */
+    organization: string;
+
+    /**
+    * Роль (для пользователей)
+     */
+    role: string;
+    
+    /**
      * Место
      */
     seat: string;
 
-    /**
-     * Роль (для пользователей)
-     */
-    role: string;
-
-    /**
-     * Состояние (в режиме конференции)
-     */
-    memberState: MemberState;
+    
     /**
     * Контакты
     */
@@ -50,6 +57,7 @@ export class MemberModel extends KeyModel implements ISelected {
         this.name = undefined;
         this.jobTitle = undefined;      
         this.memberState = MemberState.Invited;
+        this.organization = undefined;
         this.role = undefined;
         this.seat = undefined;
         this.lockedInt = 0;

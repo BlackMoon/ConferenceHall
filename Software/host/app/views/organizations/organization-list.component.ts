@@ -6,6 +6,8 @@ import { ConfirmationService } from 'primeng/primeng';
 import { OrganizationModel } from "../../models";
 import { OrganizationService } from "./organization.service";
 
+const minChars = 3;
+
 @Component({
     selector: "organization-list",
     templateUrl: 'organization-list.component.html'
@@ -30,5 +32,20 @@ export class OrganizationListComponent implements OnInit {
             .getAll()
             .subscribe(orgs => this.organizations = orgs,
                 error => this.logger.error2(error));
+    }
+
+    filterChange(value) {
+
+        this.filter = value;
+        if (value.length >= minChars || !value.length)
+            this.loadOrganizations();
+    }
+
+    /**
+     * Handle enter key press
+     */
+    filterKeyPressed(event) {
+
+        (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 }

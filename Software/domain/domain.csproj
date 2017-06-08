@@ -14,11 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Organization\Command\" />
-    <Folder Include="Organization\Query\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.2" />
     <PackageReference Include="SkiaSharp" Version="1.57.1" />

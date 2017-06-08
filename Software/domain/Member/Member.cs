@@ -48,8 +48,16 @@ namespace domain.Member
         }
         
 
+        /// <summary>
+        /// Должность
+        /// </summary>
         [Column("job_title")]
         public string JobTitle { get; set; }
+
+        /// <summary>
+        /// Организация
+        /// </summary>
+        public string Organization { get; set; }
 
         /// <summary>
         /// Роль (для пользователей)
@@ -60,6 +68,7 @@ namespace domain.Member
         /// Место
         /// </summary>
         public string Seat { get; set; }
+
         public IList<Contact.Contact> Contacts { get; set; }
 
         /// <summary>

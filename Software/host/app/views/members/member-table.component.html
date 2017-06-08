@@ -24,7 +24,7 @@
 
     <p-column field="name" header="ФИО"></p-column>
     <p-column field="jobTitle" header="Должность"></p-column>
-    <p-column header="Организация"></p-column>
+    <p-column field="organization" header="Организация" *ngIf="conferenceId"></p-column>
     <p-column field="seat" header="Место" *ngIf="conferenceId" [style]="{ 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
         <ng-template let-member="rowData" pTemplate="body">
             <span class="fa-stack circle {{member.memberState === MemberState.Confirmed ? 'on' : 'off'}}" >
