@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace messengers
-{
-    
+{    
     public class SenderManager
     {
         private readonly IServiceProvider _serviceProvider;
