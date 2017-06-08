@@ -11,17 +11,17 @@
     </div>
 </p-toolbar>
 <p-dataTable [value]="organizations" [rows]="10" [paginator]="true">
-    <p-column header="№" *ngIf="!conferenceId" [style]="{'width':'50px'}">
-        <ng-template let-ix="rowIndex" pTemplate="body">
-            {{ix + 1}}
+    <p-column header="№" *ngIf="!conferenceId" [styleClass]="'center'" [style]="{'width':'50px'}">
+        <ng-template let-org="rowData" pTemplate="body">
+            <i class="fa fa-2x {{org.selected ? 'fa-check-square-o' : 'fa-square-o'}}" (click)="selectOrganization(org)"></i>
         </ng-template>
     </p-column>
 
     <p-column field="name" header="Наименование"></p-column>
     
-    <p-column styleClass="col-button" [style]="{'width':'50px'}">
+    <p-column [styleClass]="'center'" [style]="{'width':'50px'}">
         <ng-template let-org="rowData" pTemplate="body">
-            <i class="fa fa-trash-o" (click)="removeOrganization(org.id, org.name)" style="cursor: pointer;" title="Удалить"></i>
+            <i class="fa fa-2x fa-trash-o" (click)="removeOrganization(org.id, org.name)" style="cursor: pointer;" title="Удалить"></i>
         </ng-template>
     </p-column>
 </p-dataTable>

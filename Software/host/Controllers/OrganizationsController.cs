@@ -18,11 +18,10 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Organization>> Get()
+        public Task<IEnumerable<Organization>> Get(string filter)
         {
-            // todo _queryDispatcher.DispatchAsync<>()
-
-            return QueryDispatcher.DispatchAsync<GetAllQuery, IEnumerable<Organization>>(new GetAllQuery());
+            FindOrganizationsQuery query = new FindOrganizationsQuery(){ Filter = filter };
+            return QueryDispatcher.DispatchAsync<FindOrganizationsQuery, IEnumerable<Organization>>(query);
         }
 
         // GET api/organizations/5

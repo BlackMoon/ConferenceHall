@@ -51,13 +51,12 @@ namespace domain.Member
         /// <summary>
         /// Должность
         /// </summary>
-        [Column("job_title")]
-        public string JobTitle { get; set; }
+        public string Position { get; set; }
 
         /// <summary>
         /// Организация
         /// </summary>
-        public string Organization { get; set; }
+        public string Job { get; set; }
 
         /// <summary>
         /// Роль (для пользователей)

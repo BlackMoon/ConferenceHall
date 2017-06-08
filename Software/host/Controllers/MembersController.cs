@@ -1,38 +1,33 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Member;
 using domain.Member.Query;
-using domain.Common.Query;
-using domain.Conference.Query;
+using Kit.Core.CQRS.Command;
 
 namespace host.Controllers
 {
     [Route("api/[controller]")]
-    public class MembersController : Controller
+    public class MembersController : CqrsController
     {
-        private IQueryDispatcher _queryDispatcher;
-
-        public MembersController(IQueryDispatcher queryDispatcher)
+        // GET api/members
+        public MembersController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
-            _queryDispatcher = queryDispatcher;
         }
 
-        // GET api/members
         [HttpGet]
         public Task<IEnumerable<Member>> Get(int? confid, string filter)
         {
             if (confid.HasValue)
             {
                 FindConferenceMembersQuery query = new FindConferenceMembersQuery() { ConferenceId = confid.Value };
-                return _queryDispatcher.DispatchAsync<FindConferenceMembersQuery, IEnumerable<Member>>(query);
+                return QueryDispatcher.DispatchAsync<FindConferenceMembersQuery, IEnumerable<Member>>(query);
             }
             else
             {
                 FindMembersQuery query = new FindMembersQuery() { Filter = filter };
-                return _queryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(query);
+                return QueryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(query);
             }
         }
 
@@ -40,7 +35,7 @@ namespace host.Controllers
         [HttpGet("{id}")]
         public Task<Member> Get(int id)
         {
-            return _queryDispatcher.DispatchAsync<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = id });
+            return QueryDispatcher.DispatchAsync<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = id });
         }
 
         // POST api/members

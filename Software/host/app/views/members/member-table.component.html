@@ -16,24 +16,24 @@
             {{ix + 1}}
         </ng-template>
     </p-column>
-    <p-column field="lockedInt" styleClass="col-button" [style]="{'width':'50px'}" *ngIf="!conferenceId">
+    <p-column field="lockedInt" [styleClass]="'center'" [style]="{ 'width':'50px'}" *ngIf="!conferenceId">
         <ng-template let-member="rowData" pTemplate="body">
             <i class="{{member.lockedInt==0?'fa fa-unlock-alt':'fa fa-lock'}}"></i>
         </ng-template>
     </p-column>
 
     <p-column field="name" header="ФИО"></p-column>
-    <p-column field="jobTitle" header="Должность"></p-column>
-    <p-column field="organization" header="Организация" *ngIf="conferenceId"></p-column>
-    <p-column field="seat" header="Место" *ngIf="conferenceId" [style]="{ 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
+    <p-column field="job" header="Организация" *ngIf="conferenceId"></p-column>
+    <p-column field="position" header="Должность"></p-column>
+    <p-column field="seat" header="Место" *ngIf="conferenceId" [styleClass]="'center'" [style]="{ 'vertical-align': 'middle', 'width': '15%'}">
         <ng-template let-member="rowData" pTemplate="body">
-            <span class="fa-stack circle {{member.memberState === MemberState.Confirmed ? 'on' : 'off'}}" >
+            <span class="fa-stack circle {{member.memberState === MemberState.Confirmed ? 'on' : ''}}" >
                 <strong class="fa-stack-1x">{{member.seat}}</strong>
             </span>
         </ng-template>
     </p-column>
     <p-column field="role" header="Роль" *ngIf="!conferenceId"></p-column>
-    <p-column styleClass="col-button" [style]="{'width':'50px'}" *ngIf="!conferenceId">
+    <p-column [styleClass]="'center'" [style]="{ 'width':'50px'}" *ngIf="!conferenceId">
         <ng-template let-member="rowData" pTemplate="body">
             <i class="fa fa-trash-o" (click)="removeMember(member.id, member.name)" style="cursor: pointer;" title="Удалить"></i>
         </ng-template>

@@ -1,14 +1,15 @@
-﻿import { KeyModel } from './index';
+﻿import { ISelected, KeyModel } from './index';
 
 /**
  * Модель. Организация
  */
-export class OrganizationModel extends KeyModel {
+export class OrganizationModel extends KeyModel implements ISelected {
 
     address: string;
     code: string;
     description: string;
     name: string;
+    selected: boolean;
 
     constructor() {
 
@@ -18,6 +19,7 @@ export class OrganizationModel extends KeyModel {
         this.code = undefined;
         this.description = undefined;
         this.name = undefined;
+        this.selected = false;
     }
     
 }
