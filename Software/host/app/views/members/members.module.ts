@@ -26,6 +26,7 @@ import { MemberTableComponent } from './member-table.component';
 import { MemberRoutingModule } from './members-routing.module';
 import { MemberService } from './member.service';
 import { OrgMemberTableComponent } from './org-member-table.component';
+import { OrganizationsModule } from '../organizations/organizations.module';
 
 @NgModule({
     declarations: [MemberDetailComponent, MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
@@ -43,15 +44,16 @@ import { OrgMemberTableComponent } from './org-member-table.component';
         FormsModule,      
         InputTextModule,
         InputTextareaModule,
+        MemberRoutingModule,
         MenuModule,
+        OrganizationsModule,
         PanelModule,
         ReactiveFormsModule,
-        MemberRoutingModule,
         SpinnerModule,
         TabViewModule,
         ToggleButtonModule,
         ToolbarModule
-   ],
+    ],
     providers: [MemberService]
 })
 export class MembersModule { }

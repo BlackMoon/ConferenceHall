@@ -10,7 +10,9 @@ import MapUtils from '../../common/map-utils';
 
 @Injectable()
 export class MemberService extends HttpDataService<MemberModel> {
+
     url: string = isDevMode() ? "http://localhost:64346/api/members" : "api/members";
+
     constructor(http: Http) { super(http); }
 
     add(member): Observable<any> {
