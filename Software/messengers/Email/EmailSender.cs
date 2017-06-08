@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
-using host.EmailSystem;
-using MimeKit;
-using MailKit.Net.Smtp;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using host.Mail.Smtp;
+using MailKit.Net.Smtp;
+using MimeKit;
 
-namespace host.EmailType
+namespace messengers.Email
 {
-    public class EmailSender : IEmailSender
+    [SenderKind("Email")]
+    public class EmailSender : IMessageSender
     {
 
         public SmtpConnect SmtpSettings;
@@ -44,6 +45,12 @@ namespace host.EmailType
         }
 
         public void Send(string subject, string body, string[] email)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<string> Errors { get; }
+        public Task SendAsync(string subject, string body, params string[] addresses)
         {
             throw new System.NotImplementedException();
         }
