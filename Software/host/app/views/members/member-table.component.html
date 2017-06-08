@@ -6,7 +6,7 @@
         <button type="button" pButton icon="fa-plus" style="float: left" label="Добавить" (click)="addMember()"></button>
     </div>
 </p-toolbar>
-<p-dataTable [value]="members" [rows]="10" [paginator]="true">
+<p-dataTable [value]="members" [rows]="10" [paginator]="true" selectionMode="single" [(selection)]="selectedMember" dataKey="id" (onRowSelect)="onRowSelect($event)">
     <p-column header="№" *ngIf="!conferenceId" [style]="{'width':'50px'}">
         <ng-template let-ix="rowIndex" pTemplate="body">
             {{ix + 1}}
