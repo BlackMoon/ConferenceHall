@@ -1,7 +1,7 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SelectivePreloadingStrategy } from '../../common/navigation/selective-preloading-strategy';
-
+import { Layout } from "../../common/navigation/layout";
 import { ElementDetailComponent } from '../elements/element-detail.component';
 import { ElementListComponent } from '../elements/element-list.component';
 import { GroupListComponent } from '../groups/group-list.component';
@@ -13,7 +13,7 @@ const schemeRoutes: Routes = [
         path: "schemes/:id", component: SchemeDetailComponent,
         children: [
             { path: "", redirectTo: "groups", pathMatch: "full" },
-            { path: "groups", component: GroupListComponent, data: { preload: true } },
+            { path: "groups", component: GroupListComponent, data: { preload: true, layout: Layout.None } },
             { path: "elements", component: ElementListComponent },
             { path: "elements/new", component: ElementDetailComponent },
             { path: "elements/:id", component: ElementDetailComponent },

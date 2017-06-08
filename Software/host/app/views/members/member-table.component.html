@@ -1,9 +1,13 @@
 ﻿<p-toolbar *ngIf="!conferenceId">
-    <div class="ui-toolbar-group-left">
-        <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" (ngModelChange)="filterChange($event)" [ngClass]="'w100p'" [ngStyle]="{'box-sizing':'border-box'}" (keypress)="filterKeyPressed($event)" />
-    </div>
-    <div class="ui-toolbar-group-right">
-        <button type="button" pButton icon="fa-plus" style="float: left" label="Добавить" (click)="addMember()"></button>
+    <div class="ui-g">
+        <div class="ui-g-8 ui-g-nopad">
+            <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'"  (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)"/>
+        </div>        
+        <div class="ui-g-4 ui-g-nopad">
+            <div class="ui-toolbar-group-right">
+                <button type="button" pButton icon="fa-plus" style="float: left" label="Добавить" (click)="addMember()"></button>
+            </div>
+        </div>
     </div>
 </p-toolbar>
 <p-dataTable [value]="members" [rows]="10" [paginator]="true">
