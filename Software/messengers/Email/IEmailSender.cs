@@ -1,10 +1,10 @@
 ﻿
-namespace host.EmailSystem
+namespace Messengers.Email.EmailSender
 {
 
     public interface IEmailSender
     {
-        void Send(string subject, string body, string[] email);
+        void Send(string subject, string body);
     }
 
 
