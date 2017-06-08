@@ -38,7 +38,7 @@ export namespace ConfState {
 /**
  * Запрос поиска конференций
  */
-export class FindQuery {
+export class FindConferencesQuery {
     state?: ConfState;
     startDate?: Date;
     endDate?: Date;

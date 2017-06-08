@@ -19,4 +19,9 @@
     <PackageReference Include="SkiaSharp" Version="1.57.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Employee\Command\" />
+    <Folder Include="Employee\Query\" />
+  </ItemGroup>
+
 </Project>

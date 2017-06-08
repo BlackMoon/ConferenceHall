@@ -15,21 +15,7 @@ namespace host.Controllers
         public MembersController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
         }
-
-        [HttpGet]
-        public Task<IEnumerable<Member>> Get(int? confid, string filter)
-        {
-            if (confid.HasValue)
-            {
-                FindConferenceMembersQuery query = new FindConferenceMembersQuery() { ConferenceId = confid.Value };
-                return QueryDispatcher.DispatchAsync<FindConferenceMembersQuery, IEnumerable<Member>>(query);
-            }
-            else
-            {
-                FindMembersQuery query = new FindMembersQuery() { Filter = filter };
-                return QueryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(query);
-            }
-        }
+        
 
         // GET api/members/5
         [HttpGet("{id}")]
@@ -54,6 +40,12 @@ namespace host.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        [HttpPost("/api/[controller]/search")]
+        public Task<IEnumerable<Member>> Search([FromBody]FindMembersQuery value)
+        {
+            return QueryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(value);
         }
     }
 }

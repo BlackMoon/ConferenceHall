@@ -68,7 +68,7 @@ namespace host.Controllers
             return CommandDispatcher.DispatchAsync<DeleteConferenceCommand, bool>(new DeleteConferenceCommand() { Id = id });
         }
 
-        [HttpPost("/api/search")]
+        [HttpPost("/api/[controller]/search")]
         public Task<IEnumerable<Conference>> Search([FromBody]FindConferencesQuery value)
         {
             return QueryDispatcher.DispatchAsync<FindConferencesQuery, IEnumerable<Conference>>(value);

@@ -17,6 +17,7 @@ export class OrganizationListComponent implements OnInit {
     filter: string;
     organizations: OrganizationModel[];
 
+    selectedAll: boolean;
     selectedOrgIds: number[] = [];
 
     constructor(
@@ -69,6 +70,15 @@ export class OrganizationListComponent implements OnInit {
                     error => this.logger.error2(error))
 
         });           
+    }
+
+    selectAll() {
+       
+        this.organizations.forEach(o => {
+            o.selected = this.selectedAll;
+        });
+
+        this.selectedAll ? this.selectedOrgIds = this.organizations.map(o => o.id) : [];
     }
 
     selectOrganization(org: OrganizationModel) {

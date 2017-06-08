@@ -70,6 +70,13 @@ namespace domain.Member.Query
                 param.Add("filter", query.Filter + "%");
             }
 
+            // фильтр по организациям
+            if (query.OrganizationIds != null)
+            {
+                sqlBuilder.Where("c.org_id = ANY(@orgIds)");
+                param.Add("orgIds", query.OrganizationIds);
+            }
+
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Member>(sqlBuilder.ToString(), param);
         }

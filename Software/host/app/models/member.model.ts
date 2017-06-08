@@ -64,3 +64,12 @@ export class MemberModel extends KeyModel implements ISelected {
         this.contacts = [];
     }
 }
+
+/**
+ * Запрос поиска участников
+ */
+export class FindOrganizationsQuery {
+    conferenceId?: number;
+    filter?: string;
+    organizationIds?: number[];
+}

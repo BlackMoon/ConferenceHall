@@ -2,7 +2,6 @@
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace domain.Common.Query

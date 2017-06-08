@@ -3,7 +3,7 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { AppointmentModel, ConferenceModel, ConfState, FindQuery, TimeRange } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, FindConferencesQuery, TimeRange } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -16,13 +16,13 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, memberIds: number[] = null): Observable<any> {
 
-        let body: FindQuery = { startDate: startDate, endDate: endDate, state: state};
+        let body: FindConferencesQuery = { startDate: startDate, endDate: endDate, state: state};
 
         hallIds && hallIds.length > 0 && (body.hallIds = hallIds); 
         memberIds && memberIds.length > 0 && (body.memberIds = memberIds); 
 
         return this.http
-            .post(isDevMode()? "http://localhost:64346/api/search" : "/api/search", body)
+            .post(`${this.url}/search`, body)
             .map((r: Response) => r
                 .json()
                 .map(conf => MapUtils.deserialize(ConferenceModel, conf))

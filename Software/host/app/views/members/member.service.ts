@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { MemberModel } from '../../models';
+import { FindOrganizationsQuery, MemberModel } from '../../models';
 import { ContactModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
@@ -30,14 +30,12 @@ export class MemberService extends HttpDataService<MemberModel> {
         return Observable.of(null);
     }
 
-    getAll(filter?: string, confid?: number): Observable<any> {
+    getAll(filter?: string, confid?: number, orgIds: number[] = null): Observable<any> {
        
-        let params: URLSearchParams = new URLSearchParams();
-        filter && params.append("filter", filter);
-        confid && params.append("confid", confid.toString());
-       
+        let body: FindOrganizationsQuery = { conferenceId: confid, filter: filter, organizationIds: orgIds };
+
         return this.http
-            .get(this.url, { params: params })
+            .post(`${this.url}/search`, body)
             .map((r: Response) => r
                 .json()
                 .map(m => MapUtils.deserialize(MemberModel, m))
