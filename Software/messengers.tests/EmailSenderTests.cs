@@ -1,6 +1,5 @@
-using host.EmailSystem;
-using host.EmailType;
 using host.Mail.Smtp;
+using messengers.Email;
 using Xunit;
 
 namespace messengers.tests
