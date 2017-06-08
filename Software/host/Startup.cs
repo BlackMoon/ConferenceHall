@@ -10,6 +10,8 @@ using host.Security.TokenProvider;
 using Kit.Core;
 using Kit.Core.CQRS.Job;
 using Kit.Dal.DbManager;
+using messengers;
+using messengers.Email;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -49,10 +51,15 @@ namespace host
                          ServiceLifetime.Transient));
 
             services.AddOptions();
+            
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
             
             // CORS в режиме debug'a
             services.AddCors(o => o.AddPolicy("AllowAll", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+            #region messenger's options
+            services.Configure<SmtpOptions>(Configuration.GetSection("SmtpConnection"));
+            #endregion
 
             services.Configure<TokenProviderOptions>(Configuration.GetSection("TokenAuthentication"));
             
@@ -107,6 +114,8 @@ namespace host
             #endregion
 
             // Startup Jobs
+            container.Register<IStartupJob, RegisterSenders>();
+
             IJobDispatcher dispatcher = container.Resolve<IJobDispatcher>(IfUnresolved.ReturnDefault);
             dispatcher?.Dispatch<IStartupJob>();
             

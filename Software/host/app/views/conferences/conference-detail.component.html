@@ -1,13 +1,14 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    <form [formGroup]="conferenceForm" novalidate  (ngSubmit)="save($event, conferenceForm.value)">
-        <input type="hidden" formControlName="id" />
-        <p-tabView>
-            <p-tabPanel header="Совещание" id="tabConference">
+    <p-tabView (onChange)="tabViewChangedHandle($event)">
+        <p-tabPanel header="Совещание" id="tabConference">
+            <form [formGroup]="conferenceForm" novalidate (ngSubmit)="save($event, conferenceForm.value)">
+                <input type="hidden" formControlName="id" />
+
                 <div class="ui-grid ui-grid-responsive ui-grid-pad">
                     <div class="ui-widget-header" style="padding: .5em .75em">
-                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" ></button>
+                        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o"></button>
                     </div>
-                    <hr class="ui-widget-content" style="border-top:0">
+                    <hr class="ui-widget-content" style="border-top: 0">
 
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
@@ -24,7 +25,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
@@ -40,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
@@ -48,7 +49,7 @@
                             </div>
                             <div class="ui-grid-col-8">
                                 <p-dropdown formControlName="hallId" [options]="halls" placeholder="Выберите холл" (onChange)="hallChanged(conferenceForm.value)"
-                                            [style]="{'width':'100%'}" ></p-dropdown>
+                                            [style]="{'width':'100%'}"></p-dropdown>
                             </div>
                             <div class="ui-grid-col-12">
                                 <div class="alert alert-danger" *ngIf="formErrors.hallId">
@@ -57,36 +58,36 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="ui-grid-row" *ngIf="confId && confId > 0">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
                                 Схема холла :
                             </div>
                             <div class="ui-grid-col-8">
-                                <p-dropdown formControlName="hallSchemeId" [options]="hallScheme"  placeholder="Выберите схему"  [style]="{'width':'100%'}"></p-dropdown>
+                                <p-dropdown formControlName="hallSchemeId" [options]="hallScheme" placeholder="Выберите схему" [style]="{'width':'100%'}"></p-dropdown>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="ui-grid-row" *ngIf="confId && confId > 0" >
+
+                    <div class="ui-grid-row" *ngIf="confId && confId > 0">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
                                 Тип совещания :
                             </div>
                             <div class="ui-grid-col-8">
-                                <p-dropdown formControlName="confState"  [options]="confTypes" [style]="{'width':'100 px'}" ></p-dropdown>
+                                <p-dropdown formControlName="confState" [options]="confTypes" [style]="{'width':'100 px'}"></p-dropdown>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
                                 Дата начала:
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar  formControlName="startDate" [showTime]="true" [style]="{'width':'100 px'}" [locale]="locale"></p-calendar>
+                                <p-calendar formControlName="startDate" [showTime]="true" [style]="{'width':'100 px'}" [locale]="locale"></p-calendar>
                             </div>
                             <div class="ui-grid-col-12">
                                 <div class="alert alert-danger" *ngIf="formErrors.startDate">
@@ -95,14 +96,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-7">
                             <div class="ui-grid-col-4">
                                 Дата окончания :
                             </div>
                             <div class="ui-grid-col-3">
-                                <p-calendar formControlName="endDate" [showTime]="true" [style]="{'width':'100 px'}" [locale]="locale" ></p-calendar>
+                                <p-calendar formControlName="endDate" [showTime]="true" [style]="{'width':'100 px'}" [locale]="locale"></p-calendar>
                             </div>
                             <div class="ui-grid-col-12">
                                 <div class="alert alert-danger" *ngIf="formErrors.endDate">
@@ -111,17 +112,25 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </p-tabPanel>
-            <p-tabPanel header="Участники" id="tabMember" *ngIf="confId && confId > 0">
-            </p-tabPanel>
-            <p-tabPanel header="Схема" id="tabSchema" *ngIf="confId && confId > 0">
-            </p-tabPanel>
-            <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0">
-            </p-tabPanel>
-        </p-tabView>
-    </form>
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Участники" id="tabMember" *ngIf="confId && confId > 0">
+        </p-tabPanel>
+        <p-tabPanel header="Схема" id="tabScheme" *ngIf="confId && confId > 0" lazy="true">
+            <div #tabSchemeWrapper class="ui-g">
+                <div class="ui-g-4 ui-g-nopad" style="height: 100%">
+                    <member-table ></member-table>
+                </div>
+                <div #schemeContent class="ui-g-8 ui-g-nopad" style="height: 100%">
+                    <scheme-main (schemeLoaded)="shemeMainLoaded($event)"></scheme-main>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0" lazy="true">
+        </p-tabPanel>
+    </p-tabView>
+
 </div>
 
 

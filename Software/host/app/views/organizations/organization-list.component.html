@@ -1,0 +1,12 @@
+﻿<p-toolbar>
+    <div class="ui-g">
+        <div class="ui-g-8 ui-g-nopad">
+            <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />
+        </div>
+        <div class="ui-g-4 ui-g-nopad">
+            <div class="ui-toolbar-group-right">
+                <button type="button" pButton icon="fa-plus" style="float: left" label="Добавить" (click)="addOrganization()"></button>
+            </div>
+        </div>
+    </div>
+</p-toolbar>
