@@ -43,9 +43,9 @@ namespace host.Controllers
         }
 
         [HttpPost("/api/[controller]/search")]
-        public Task<IEnumerable<Member>> Search([FromBody]FindMembersQuery value)
+        public Task<IEnumerable<Member>> Search([FromBody]FindEmployeesQuery value)
         {
-            return QueryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(value);
+            return QueryDispatcher.DispatchAsync<FindEmployeesQuery, IEnumerable<Member>>(value);
         }
     }
 }

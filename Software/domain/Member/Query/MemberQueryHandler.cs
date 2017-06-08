@@ -9,14 +9,14 @@ using System.Linq;
 
 namespace domain.Member.Query
 {
-    public class MemberQueryHandler : 
+    public class EmployeeQueryHandler : 
         KeyObjectQueryHandler<FindMemberByIdQuery, Member>,
         IQueryHandler<FindConferenceMembersQuery, IEnumerable<Member>>,
-        IQueryHandler<FindMembersQuery, IEnumerable<Member>>,
+        IQueryHandler<FindEmployeesQuery, IEnumerable<Member>>,
         IQueryHandler<FindMemberSeatQuery, Member>
     {
 
-        public MemberQueryHandler(IDbManager dbManager) : base(dbManager)
+        public EmployeeQueryHandler(IDbManager dbManager) : base(dbManager)
         {
         }
 
@@ -43,12 +43,12 @@ namespace domain.Member.Query
             return await DbManager.DbConnection.QueryAsync<Member>(sqlBuilder.ToString(), new { confid = query.ConferenceId });
         }
 
-        public IEnumerable<Member> Execute(FindMembersQuery query)
+        public IEnumerable<Member> Execute(FindEmployeesQuery query)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Member>> ExecuteAsync(FindMembersQuery query)
+        public async Task<IEnumerable<Member>> ExecuteAsync(FindEmployeesQuery query)
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
                 .Column("e.id")

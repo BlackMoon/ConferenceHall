@@ -1,10 +1,9 @@
 ﻿using domain.Common.Query;
 
-namespace domain.Member.Query
+namespace domain.Employee.Query
 {
     public class FindEmployeesQuery : GetAllQuery
     {
-        public int? ConferenceId { get; set; }
 
         public string Filter { get; set; }
 

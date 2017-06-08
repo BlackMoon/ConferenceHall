@@ -1,32 +1,49 @@
 ﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
+import { ContactModel } from '../models';
 
 /**
- * Модель. Схема клиента
- */
-export class EmployeeSchemeModel extends KeyModel {
-    name: string;
-}
-
-/**
- * Модель. Клиент
+ * Модель. Сотрудник
  */
 export class EmployeeModel extends KeyModel {
 
+    /**
+     * ФИО
+     */
     name: string;
-    jobTitle: string;
-    emailsList: string[];
-    phonesList: string[];
 
-    @JsonProperty({ clazz: EmployeeSchemeModel })
-    schemes?: EmployeeSchemeModel[];
+    /**
+     * Наименование организации
+     */
+    job: string;
+
+    /**
+     * Должность
+     */
+    position: string;
+
+    /**
+    * Роль (для пользователей)
+     */
+    role: string;
+
+    /**
+    * Контакты
+    */
+    contacts: ContactModel[];
+
+    lockedInt: number;
+    selected: boolean;
+
     constructor() {
 
         super();
+        this.id = undefined;
         this.name = undefined;
-        this.jobTitle = undefined;
-        this.emailsList = undefined;
-        this.phonesList = undefined;
-        this.schemes = undefined;
+        this.job = undefined;
+        this.position = undefined;
+        this.role = undefined;
+        this.lockedInt = 0;
+        this.contacts = [];
     }
 }

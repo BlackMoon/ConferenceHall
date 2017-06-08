@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ConfirmDialogModule, ConfirmationService, GrowlModule, SplitButtonModule, ToolbarModule } from 'primeng/primeng';
 import { ConferencesModule } from './conferences/conferences.module';
 import { ElementsModule } from './elements/elements.module';
+import { EmployeesModule } from './employees/employees.module';
 import { HallsModule } from './halls/halls.module';
 import { MembersModule } from './members/members.module';
 import { SchemesModule } from './schemes/schemes.module';
@@ -19,6 +20,7 @@ import { HomeView } from './home.view';
         ConferencesModule,
         SchemesModule,
         ElementsModule,
+        EmployeesModule,
         GrowlModule,
         HallsModule,
         MembersModule,

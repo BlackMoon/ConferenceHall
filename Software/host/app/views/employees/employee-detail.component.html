@@ -1,0 +1,60 @@
+﻿<form [formGroup]="memberForm" (ngSubmit)="save($event, memberForm.value)">
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
+        <input type="hidden" formControlName="id" />
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    ФИО *:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText type="text" formControlName="name" style="width: 100%" />
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    Должность *:
+                </div>
+                <div class="ui-grid-col-8">
+                    <input pInputText type="text" formControlName="jobTitle" style="width: 100%" />
+                </div>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-7">
+                <div class="ui-grid-col-4">
+                    Контакты *:
+                </div>
+                <!--<div class="ui-grid-col-8">
+                    <input pInputText type="text" id="phone" formControlName="phone" style="width: 100%"   (keypress)="phoneKeyPressed($event)" />
+                </div>-->
+                <div class="ui-grid-col-8">
+                    <p-dataTable [value]="contacts" [paginator]="fasle">
+                       
+                        <p-column field="address" header="Контакт" [editable]="true" ></p-column>
+                        <p-column styleClass="col-button" [style]="{'width':'100px'}" header="Активен" [editable]="true">
+                            <ng-template let-contact="rowData" pTemplate="body">
+                                <input type="checkbox"  /> 
+                             
+                            </ng-template>
+                        </p-column>
+                        <p-column styleClass="col-button" [style]="{'width':'50px'}">
+                            <ng-template let-contact="rowData" pTemplate="body">
+                                <i class="fa fa-trash-o" (click)="removeContact(contact.id, contact.address)" style="cursor: pointer;" title="Удалить"></i>
+                            </ng-template>
+                        </p-column>
+                            <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></p-footer>
+                    </p-dataTable>
+                </div>
+            </div>
+        </div>
+    
+        <hr class="ui-widget-content" style="border:0">
+        <div class="ui-grid-row inputw100p">
+            <div class="ui-grid-col-12">
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled" disabled="disabled"  ></button>
+            </div>
+        </div>
+    </div>
+</form>
