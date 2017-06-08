@@ -10,6 +10,7 @@ using host.Security.TokenProvider;
 using Kit.Core;
 using Kit.Core.CQRS.Job;
 using Kit.Dal.DbManager;
+using messengers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -107,6 +108,8 @@ namespace host
             #endregion
 
             // Startup Jobs
+            container.Register<IStartupJob, RegisterSenders>();
+
             IJobDispatcher dispatcher = container.Resolve<IJobDispatcher>(IfUnresolved.ReturnDefault);
             dispatcher?.Dispatch<IStartupJob>();
             
