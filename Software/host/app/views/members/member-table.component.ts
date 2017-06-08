@@ -22,7 +22,7 @@ export class MemberTableComponent implements OnInit {
 
     members: MemberModel[];
     filter: string;
-    selectedMember: MemberModel;
+
     @Input()
     conferenceId: number;
 
@@ -44,10 +44,7 @@ export class MemberTableComponent implements OnInit {
         debugger;
         this.router.navigate(["members/new"]);
     }
-    onRowSelect(event) {
-        this.router.navigate(["members/", event.data.id]);
-      
-    }
+
     loadMembers() {
         
         this.memberService

@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="WhatsApp\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\kit\Kit.Core\Kit.Core.csproj" />
   </ItemGroup>
 

@@ -1,32 +1,64 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using host.Mail.Smtp;
 using MailKit.Net.Smtp;
+using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace messengers.Email
 {
-    [SenderKind("Email")]
     public class EmailSender : IMessageSender
     {
 
-        public SmtpConnect SmtpSettings;
+        private readonly SmtpOptions _smtpSettings;
 
         
-        public EmailSender()
+        public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {
-
+            _smtpSettings = smtpOptions.Value;
         }
 
-        public string Recepients;
+        public string Recipients;
 
         // генерация сообщения
-        public async Task Send(string subject, string body)
+        public void Send(string subject, string body)
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
-            emailMessage.To.Add(new MailboxAddress("", Recepients));
+            string[] recipientList = Recipients.Split(';');
+            foreach (var email in recipientList)
+            {
+                emailMessage.To.Add(new MailboxAddress("", email));
+            }
+
+            /*emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
+            emailMessage.Subject = subject;
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
+                Text = body
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect(SmtpSettings.SmtpServer, SmtpSettings.SmtpPort, SmtpSettings.UseSSL);
+                client.Authenticate(SmtpSettings.EmailSender, SmtpSettings.PasswordSender);
+                client.Send(emailMessage);
+                client.Disconnect(true);
+            }*/
+
+        }
+
+        public async Task SendEmailAsync(string subject, string body)
+        {
+            var emailMessage = new MimeMessage();
+
+
+            string[] recipientList = Recipients.Split(';');
+            foreach (var email in recipientList)
+            {
+                emailMessage.To.Add(new MailboxAddress("", email));
+            }
+
+            /*emailMessage.From.Add(new MailboxAddress(SmtpSettings.NameSender, SmtpSettings.EmailSender));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
@@ -38,17 +70,17 @@ namespace messengers.Email
                 await client.ConnectAsync(SmtpSettings.SmtpServer, SmtpSettings.SmtpPort, SmtpSettings.UseSSL);
                 await client.AuthenticateAsync(SmtpSettings.EmailSender, SmtpSettings.PasswordSender);
                 await client.SendAsync(emailMessage);
-                await client.DisconnectAsync(true);
-            }
 
+                await client.DisconnectAsync(true);
+            }*/
         }
 
-        public void Send(string subject, string body, string[] email)
+        public IEnumerable<string> Errors { get; set; }
+        public void Send(string subject, string body, params string[] addresses)
         {
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<string> Errors { get; }
         public Task SendAsync(string subject, string body, params string[] addresses)
         {
             throw new System.NotImplementedException();

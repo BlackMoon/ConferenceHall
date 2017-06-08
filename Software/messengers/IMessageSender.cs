@@ -10,7 +10,7 @@ namespace messengers
     {
         IEnumerable<string> Errors { get; }
 
-        void Send(string subject, string body, params string [] addresses);
+        void Send(string subject, string body, params string[] addresses);
 
         Task SendAsync(string subject, string body, params string[] addresses);
     }
