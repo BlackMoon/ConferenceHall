@@ -11,19 +11,19 @@ namespace messengers
     public class RegisterSenders: IStartupJob
     {
         private readonly Assembly _assembly;
-
-        private readonly IContainer _contaner;
+        
+        private readonly IContainer _container;
         public RegisterSenders(IContainer container)
         {
             _assembly = GetType().GetTypeInfo().Assembly;
-            _contaner = container;
+            _container = container;
         }
 
         public void Run()
         {
             IDictionary<string, Type> messengers = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
             Func<Type, bool> pre = t => t.IsAssignableTo(typeof(IMessageSender));
-
+            
             foreach (Type t in _assembly.GetTypes().Where(pre))
             {
                 // Вид мессенджера --> из аттрибута
@@ -31,12 +31,12 @@ namespace messengers
                 if (attr != null)
                 {
                     messengers.Add(attr.MessengerKind, t);
-                    _contaner.Register(t);
+                    _container.Register(t);
                 }
             }
 
-            _contaner.Register<SenderManager>(reuse: Reuse.Singleton);
-            _contaner.RegisterInitializer<SenderManager>((m, r) => m.Messengers = messengers );
+            _container.Register<SenderManager>(reuse: Reuse.Singleton);
+            _container.RegisterInitializer<SenderManager>((m, r) => m.Messengers = messengers );
         }
 
         public Task RunAsync()

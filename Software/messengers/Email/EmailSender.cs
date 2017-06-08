@@ -12,8 +12,7 @@ namespace messengers.Email
 
         public SmtpConnect SmtpSettings;
 
-
-        // конструктор
+        
         public EmailSender()
         {
 
