@@ -55,11 +55,7 @@ namespace domain.Scheme.Query
                 param.Add("hall_id", query.HallId);
                 sqlBuilder.Where("s.hall_id = @hall_id");
             }
-            if (!string.IsNullOrEmpty(query.Filter))
-            {
-                sqlBuilder.Where("@filter");
-                param.Add("filter", query.Filter);
-            }
+           
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Scheme>(sqlBuilder.ToString(), param);
         }

@@ -205,7 +205,6 @@ export class ConferenceDetailComponent implements OnInit {
             //tabScheme
             case 2:
                 {
-                    
                     this.schemeMain.canvasBox.innerHTML = "";//удаляем старую схему обновления
                     if (this.conferenceForm.value && this.conferenceForm.value.hallSchemeId) 
                         this.schemeMain.schemeId = this.conferenceForm.value.hallSchemeId;

@@ -17,11 +17,10 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Scheme>> Get(int? hallId)
+        public Task<IEnumerable<Scheme>> GetByHallId(int? hallId)
         {
             FindSchemasQuery query = new FindSchemasQuery()
             {
-                //Filter = filter,
                 HallId = hallId
             };
             return QueryDispatcher.DispatchAsync<FindSchemasQuery, IEnumerable<Scheme>>(query);

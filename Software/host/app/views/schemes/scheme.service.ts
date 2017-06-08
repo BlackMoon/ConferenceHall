@@ -27,9 +27,7 @@ export class SchemeService extends HttpDataService<SchemeModel> {
     getAll(hallId?: number, filter?: string): Observable<any> {
 
         let params: URLSearchParams = new URLSearchParams();
-
         hallId && params.append("hallId", hallId.toString());
-        filter && params.append("filter", filter);
 
         return this.http
             .get(this.url, { params: params })
