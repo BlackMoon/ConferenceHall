@@ -11,7 +11,7 @@ import { EmployeeService } from './employee.service';
     selector: "employee-detail",
     templateUrl: "employee-detail.component.html"
 })
-export class MemberDetailComponent implements OnInit {
+export class EmployeeDetailComponent implements OnInit {
     displayDialog: boolean;
 
     contact: ContactModel;

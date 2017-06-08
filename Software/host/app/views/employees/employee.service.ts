@@ -46,7 +46,7 @@ export class EmployeeService extends HttpDataService<EmployeeModel> {
         debugger;
         return this.http
             .get(`${this.url}/${key}`)
-            .map((r: Response) => MapUtils.deserialize(MemberModel, r.json()))
+            .map((r: Response) => MapUtils.deserialize(EmployeeModel, r.json()))
             .catch(handleResponseError);
     }
 

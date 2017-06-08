@@ -1,8 +1,8 @@
 ﻿import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MemberModel } from '../../models';
-import { MemberService } from './member.service';
+import { EmployeeModel } from '../../models';
+import { EmployeeService } from './employee.service';
 import { Logger } from "../../common/logger";
 
 const minChars = 3;
@@ -15,7 +15,7 @@ const minChars = 3;
 export class EmployeeListComponent implements OnInit {
 
     filter: string;
-    members: MemberModel[];
+    employees: EmployeeModel[];
 
     selectedMemberIds: number[] = [];
 
@@ -27,7 +27,7 @@ export class EmployeeListComponent implements OnInit {
 
 
     ngOnInit() {
-        this.loadMembers();
+        this.loadEmployees();
     }
 
     /**
@@ -38,7 +38,7 @@ export class EmployeeListComponent implements OnInit {
         
         this.filter = value;
         if (value.length >= minChars || !value.length) {
-            this.loadMembers();
+            this.loadEmployees();
             this.selectedMemberIds = [];
         }
     }
@@ -50,22 +50,22 @@ export class EmployeeListComponent implements OnInit {
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 
-    loadMembers() {
+    loadEmployees() {
 
-        this.memberService
+        this.employeeService
             .getAll(this.filter)
             .subscribe(
-                members => this.members = members,
+                employees => this.employees = employees,
                 error => this.logger.error2(error));    
     }
 
-    selectMember(member) {
-        member.selected = !member.selected;
+    selectEmploye(employee) {
+        employee.selected = !employee.selected;
 
-        if (member.selected)
-            this.selectedMemberIds.push(member.id);
+        if (employee.selected)
+            this.selectedMemberIds.push(employee.id);
         else {
-            let ix = this.selectedMemberIds.indexOf(member.id);
+            let ix = this.selectedMemberIds.indexOf(employee.id);
             this.selectedMemberIds.splice(ix, 1);
         }
 
