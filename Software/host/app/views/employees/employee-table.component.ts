@@ -96,4 +96,7 @@ export class EmployeeTableComponent implements OnInit {
        
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
+    onRowSelect(event) {
+        this.router.navigate(["employees/", event.data.id]);
+    }
 }
