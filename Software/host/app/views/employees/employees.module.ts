@@ -20,9 +20,16 @@ import {
     ToolbarModule
 } from 'primeng/primeng';
 
+import { EmployeeDetailComponent } from './employee-detail.component';
+
+import {EmployeeTableComponent } from './employee-table.component';
+import { EmployeeRoutingModule } from './employee-routing.module';
+import { EmployeeService } from './employee.service';
+
 @NgModule({
-    declarations: [],
-    exports: [],
+    declarations: [EmployeeDetailComponent, EmployeeTableComponent],
+    exports: [EmployeeTableComponent],
+
     imports: [
         AccordionModule,
         ButtonModule,
@@ -36,15 +43,15 @@ import {
         FormsModule,      
         InputTextModule,
         InputTextareaModule,
-        
-        MenuModule,
-        
+        EmployeeRoutingModule,
+        MenuModule,        
         PanelModule,
         ReactiveFormsModule,
         SpinnerModule,
         TabViewModule,
         ToggleButtonModule,
         ToolbarModule
-    ]
+    ],
+    providers: [EmployeeService]
 })
 export class EmployeesModule { }

@@ -20,17 +20,19 @@ import {
     ToolbarModule
 } from 'primeng/primeng';
 
-import { MemberDetailComponent } from './member-detail.component';
+//import { MemberDetailComponent } from './member-detail.component';
 import { MemberListComponent } from './member-list.component';
-import { MemberTableComponent } from './member-table.component';
+//import { MemberTableComponent } from './member-table.component';
 import { MemberRoutingModule } from './members-routing.module';
 import { MemberService } from './member.service';
 import { OrgMemberTableComponent } from './org-member-table.component';
 import { OrganizationsModule } from '../organizations/organizations.module';
 
 @NgModule({
-    declarations: [MemberDetailComponent, MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
-    exports: [MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
+   // declarations: [MemberDetailComponent, MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
+   // exports: [MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
+    declarations: [ MemberListComponent,OrgMemberTableComponent],
+    exports: [MemberListComponent, OrgMemberTableComponent],
     imports: [
         AccordionModule,
         ButtonModule,

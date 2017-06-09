@@ -18,14 +18,14 @@ export class EmployeeDetailComponent implements OnInit {
     contacts: ContactModel[];
     newContact: boolean;
     id: number;
-    memberForm: FormGroup;
-    memberId: number;
-    members: EmployeeModel[];
-    member: EmployeeModel;
+    employeeForm: FormGroup;
+    employeeId: number;
+    employees: EmployeeModel[];
+    employee: EmployeeModel;
    
     constructor(private route: ActivatedRoute,
         private fb: FormBuilder,
-        private memberService: EmployeeService,
+        private employeeService: EmployeeService,
 
         private location: Location,
         private logger: Logger
@@ -43,10 +43,11 @@ export class EmployeeDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.memberForm = this.fb.group({
+        this.employeeForm = this.fb.group({
             id: [null],
             name: [null],
-            jobTitle: [null],
+            job: [null],
+            role: [null],
             contacts: []
         });
        
@@ -56,17 +57,17 @@ export class EmployeeDetailComponent implements OnInit {
                
                 // (+) converts string 'id' to a number
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return key ? this.memberService.get(key) : Observable.empty();
+                return key ? this.employeeService.get(key) : Observable.empty();
             })
-            .subscribe((member: EmployeeModel) => {
-               this.memberForm.patchValue(member);
+            .subscribe((employee: EmployeeModel) => {
+               this.employeeForm.patchValue(employee);
             });
     }
-    save(event, member) {
+    save(event, employee) {
 
         event.preventDefault();
 
-        this.memberService[member.id ? 'update' : 'add'](member)
+        this.employeeService[employee.id ? 'update' : 'add'](employee)
             .subscribe(_ => this.location.back(),
             error => this.logger.error2(error));
     }
