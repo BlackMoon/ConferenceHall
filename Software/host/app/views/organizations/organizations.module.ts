@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrganizationRoutingModule } from './organizations-routing.module';
 
 import {
+    ButtonModule,
     InputTextModule,
     SelectButtonModule,
     ToggleButtonModule,
@@ -18,6 +19,7 @@ import { OrganizationService } from "./organization.service";
     declarations: [OrganizationTreeComponent],
     exports: [OrganizationTreeComponent],
     imports: [
+        ButtonModule, 
         CommonModule,
         FormsModule,
         InputTextModule,

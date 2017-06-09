@@ -11,7 +11,6 @@ const minChars = 3;
 enum SearchKind { SearchOrg, SearchEmployee };
 
 @Component({
-    selector: "organization-tree",
     templateUrl: "organization-tree.component.html"
 })
 export class OrganizationTreeComponent implements OnInit {
@@ -30,11 +29,14 @@ export class OrganizationTreeComponent implements OnInit {
     constructor(
         private confirmationService: ConfirmationService,
         private organizationService: OrganizationService,
-        private logger: Logger) { }
+        private logger: Logger,
+        private router: Router) { }
 
     ngOnInit() {
         this.loadOrganizations();
     }
+
+    addOrganization = () => this.router.navigate(["orgs/new"]);
 
     filterChange(value) {
 

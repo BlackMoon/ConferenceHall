@@ -37,7 +37,9 @@ namespace domain.Organization.Query
                     .Column("e.org_id orgid")
                     .Column("e.name")
                     .Column("e.position")
+                    .Column("u.locked")
                     .From("conf_hall.employees e")
+                    .LeftJoin("conf_hall.users u ON u.employee_id = e.id")
                     .Where("e.org_id = @orgid")
                     .OrderBy("lower(e.name)");
 

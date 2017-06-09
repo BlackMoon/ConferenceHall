@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace domain.Common
 {
     /// <summary>

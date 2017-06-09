@@ -2,11 +2,12 @@
     <p-toolbar *ngIf="!conferenceId">
         <div class="ui-g">
             <div class="ui-g-8 ui-g-nopad">
-                <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />
+                <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />            
             </div>
             <div class="ui-g-4 ui-g-nopad">
                 <div class="ui-toolbar-group-right">
                     <p-toggleButton onIcon="fa fa-user-circle" onLabel="&zwnj;" offIcon="fa fa-sitemap" offLabel="&zwnj;" [(ngModel)]="emplSearch" [title]="searchTitle" (onChange)="searchKindChange($event)"></p-toggleButton>
+                    <button type="button" pButton icon="fa-plus" title="Добавить организацию" (click)="addOrganization()"></button>
                 </div>
             </div>
         </div>
@@ -14,5 +15,10 @@
     <p-treeTable [value]="nodes" (onNodeExpand)="loadNode($event)">
         <p-column field="name" header="Наименование"></p-column>
         <p-column field="description" header="Описание"></p-column>
+        <p-column field="locked" [style]="{ 'width':'60px'}">
+            <ng-template let-col let-node="rowData" pTemplate="body">
+                <i class="{{node.data.locked? 'fa fa-lock' : ''}}"></i>
+            </ng-template>
+        </p-column>
     </p-treeTable>
 </div>
