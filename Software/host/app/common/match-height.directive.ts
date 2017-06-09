@@ -1,4 +1,5 @@
-import { Directive, ElementRef, AfterViewChecked, Input, HostListener } from '@angular/core';
+import { Component, Directive, ElementRef, AfterViewChecked, Input, HostListener } from '@angular/core';
+import { Column } from "primeng/components/common/shared";
 
 @Directive({
     selector: '[matchHeight]'
@@ -48,5 +49,24 @@ export class MatchHeightDirective implements AfterViewChecked {
         // apply max height
         Array.from(children)
             .forEach((x: HTMLElement) => x.style.height = `${maxHeight}px`);
+    }
+}
+
+@Component({
+    selector: "p-comcolumn"
+})
+export class CommandColumnComponent extends Column {
+    
+    
+
+    ngOnInit() {
+        //debugger;
+        //let component = (<any>this.view)._element.component;
+
+        //TODO: add initialization code here
+    }
+
+    ngAfterContentInit() {
+        //debugger;
     }
 }

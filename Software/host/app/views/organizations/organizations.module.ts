@@ -2,11 +2,13 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrganizationRoutingModule } from './organizations-routing.module';
+import { UiModule } from '../../common/ui/ui.module';
 
 import {
     ButtonModule,
     InputTextModule,
     SelectButtonModule,
+    SplitButtonModule,
     ToggleButtonModule,
     ToolbarModule,
     TreeTableModule
@@ -26,9 +28,11 @@ import { OrganizationService } from "./organization.service";
         OrganizationRoutingModule,
         ReactiveFormsModule,
         SelectButtonModule,
+        SplitButtonModule,
         ToggleButtonModule,
         ToolbarModule,
-        TreeTableModule
+        TreeTableModule,
+        UiModule
     ],
     providers: [OrganizationService]
 })

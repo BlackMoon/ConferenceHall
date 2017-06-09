@@ -76,6 +76,16 @@ export class OrganizationTreeComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
+    nodeSelect(e) {
+        debugger;
+        e.node.data["selected"] = true;
+    }
+
+    nodeUnselect(e) {
+        debugger;
+        e.node.data["selected"] = false;
+    }
+
     removeOrganization(id: number, name?: string) {
         this.confirmationService.confirm({
             header: 'Вопрос',

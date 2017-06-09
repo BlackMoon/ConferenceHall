@@ -12,12 +12,17 @@
             </div>
         </div>
     </p-toolbar>
-    <p-treeTable [value]="nodes" (onNodeExpand)="loadNode($event)">
-        <p-column field="name" header="Наименование"></p-column>
-        <p-column field="description" header="Описание"></p-column>
-        <p-column field="locked" [style]="{ 'width':'60px'}">
+    <p-treeTable [value]="nodes" selectionMode="single" (onNodeExpand)="loadNode($event)" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+        <p-column field="name" header="Наименование">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                <i class="{{node.data.locked? 'fa fa-lock' : ''}}"></i>
+                {{node.data.name}}
+                <div><coqs *ngIf="node.data.selected"></coqs></div>
+            </ng-template>
+        </p-column>
+        <p-column field="description" header="Описание"></p-column>
+        <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'">
+            <ng-template let-col let-node="rowData" pTemplate="body">
+                <i class='fa fa-2x fa-lock' *ngIf="node.data.locked"></i>
             </ng-template>
         </p-column>
     </p-treeTable>
