@@ -7,6 +7,7 @@ import { ElementsModule } from './elements/elements.module';
 import { EmployeesModule } from './employees/employees.module';
 import { HallsModule } from './halls/halls.module';
 import { MembersModule } from './members/members.module';
+import { OrganizationsModule } from './organizations/organizations.module';
 import { SchemesModule } from './schemes/schemes.module';
 import { ScreenModule } from './screen/screen.module';
 import { HomeView } from './home.view';
@@ -24,6 +25,7 @@ import { HomeView } from './home.view';
         GrowlModule,
         HallsModule,
         MembersModule,
+        OrganizationsModule,
         RouterModule,
         SchemesModule,
         ScreenModule,
