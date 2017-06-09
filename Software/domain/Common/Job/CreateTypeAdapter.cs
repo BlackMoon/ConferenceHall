@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using domain.Conference.Command;
+using domain.Dto;
 using domain.Element.Command;
 using domain.Hall.Command;
 using domain.Scheme.Command;
@@ -40,6 +41,15 @@ namespace domain.Common.Job
             TypeAdapterConfig<DeleteHallCommand, Hall.Hall>
                 .ForType();
             #endregion
+
+            // Organization --> OrgDtoDto
+            TypeAdapterConfig<Organization.Organization, OrgEmployeeDto>
+                .ForType();
+
+            // Employee --> OrgDto
+            TypeAdapterConfig<Employee.Employee, OrgEmployeeDto>
+                .ForType()
+                .Map(dest => dest.Description, src => src.Position);
 
             #region Scheme
             // CreateSchemeCommand --> Scheme
