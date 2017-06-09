@@ -2,22 +2,30 @@
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
-import { ConfirmationService, TreeNode } from 'primeng/primeng';
+import { ConfirmationService, SelectItem, TreeNode } from 'primeng/primeng';
 import { OrganizationNode } from "../../models";
 import { OrganizationService } from "./organization.service";
 
 const minChars = 3;
 
+enum SearchKind { SearchOrg, SearchEmployee };
+
 @Component({
     selector: "organization-tree",
-    templateUrl: 'organization-tree.component.html'
+    templateUrl: "organization-tree.component.html"
 })
 export class OrganizationTreeComponent implements OnInit {
-
-    items: TreeNode[];
-
+    
     filter: string;
-    selectedOrgId?: number;
+
+    /**
+     * Поиск по сотрудникам/организациям
+     */
+    emplSearch: boolean;
+
+    nodes: TreeNode[] = [];
+
+    searchTitle: string = "По организациям";
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -46,9 +54,9 @@ export class OrganizationTreeComponent implements OnInit {
     loadNode(event) {
 
         if (event.node) {
-
+          
             this.organizationService
-                .getAll(event.node.data["id"], this.filter)
+                .getAll(this.emplSearch, event.node.data["id"], this.filter)
                 .subscribe(
                     nodes => event.node.children = nodes,
                     error => this.logger.error2(error));
@@ -60,9 +68,9 @@ export class OrganizationTreeComponent implements OnInit {
     loadOrganizations() {
 
         this.organizationService
-            .getAll(null, this.filter)
+            .getAll(this.emplSearch, null, this.filter)
             .subscribe(
-                nodes => this.items = nodes,
+                nodes => this.nodes = nodes,
                 error => this.logger.error2(error));
     }
 
@@ -84,5 +92,33 @@ export class OrganizationTreeComponent implements OnInit {
                     error => this.logger.error2(error))
 
         });
+    }
+
+    searchKindChange(e) {
+
+        let expanded = this.nodes
+            .filter(n => n.expanded)
+            .map(n => n.data.id);
+
+        // обновить дерево, учитывая открытые узлы
+        this.organizationService
+            .getAll(this.emplSearch, null, this.filter)
+            .subscribe(
+                nodes => {
+
+                    nodes.forEach(n => {
+
+                        if (expanded.indexOf(n.data.id) !== -1) {
+                            this.loadNode({ node: n });    
+                            n.expanded = true;
+                        }
+                        
+                    });
+
+                    this.nodes = nodes;
+                },
+                error => this.logger.error2(error));
+
+        this.searchTitle = e.checked ? "По сотрудникам" : "По организациям";
     }
 }

@@ -17,9 +17,14 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<OrganizationNode>> Get(int? orgId, string filter)
+        public Task<IEnumerable<OrganizationNode>> Get(bool emplSearch, int? orgId, string filter)
         {
-            FindOrganizationsQuery query = new FindOrganizationsQuery(){ OrganizationId = orgId, Filter = filter };
+            FindOrganizationsQuery query = new FindOrganizationsQuery()
+            {
+                EmployeeSearch = emplSearch,
+                OrganizationId = orgId,
+                Filter = filter
+            };
             return QueryDispatcher.DispatchAsync<FindOrganizationsQuery, IEnumerable<OrganizationNode>>(query);
         }
 

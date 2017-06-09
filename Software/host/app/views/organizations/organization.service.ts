@@ -12,9 +12,17 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
 
     constructor(http: Http) { super(http); }
 
-    getAll(orgid?:number, filter?: string): Observable<any> {
+    /**
+     * Поиск узлов дерева
+     * @param emplsearch - поиск по сотрудникам
+     * @param orgid      - id организации
+     * @param filter     - фильтра
+     */
+    getAll(emplsearch:boolean, orgid?:number, filter?: string): Observable<any> {
 
         let params: URLSearchParams = new URLSearchParams();
+
+        emplsearch && params.append("emplsearch", emplsearch.toString());
         orgid && params.append("orgid", orgid.toString());
         filter && params.append("filter", filter);
 

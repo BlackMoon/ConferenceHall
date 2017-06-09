@@ -44,7 +44,7 @@ namespace domain.Organization.Query
                 param.Add("orgid", query.OrganizationId);
 
                 // может задаваться фильтр
-                if (!string.IsNullOrEmpty(query.Filter))
+                if (query.EmployeeSearch && !string.IsNullOrEmpty(query.Filter))
                 {
                     sqlBuilder.Where("lower(e.name) LIKE lower(@filter)");
                     param.Add("filter", query.Filter + "%");
@@ -68,11 +68,20 @@ namespace domain.Organization.Query
             // может задаваться фильтр
             if (!string.IsNullOrEmpty(query.Filter))
             {
-                sqlBuilder
-                    .Where("lower(o.name) LIKE lower(@filter) OR exists (SELECT e.org_id FROM conf_hall.employees e WHERE e.org_id = o.id AND lower(e.name) LIKE lower(@filter1))");
+                string expr;
 
-                param.Add("filter", $"%{query.Filter}%");
-                param.Add("filter1", query.Filter + "%");
+                if (query.EmployeeSearch)
+                {
+                    expr = "exists (SELECT e.org_id FROM conf_hall.employees e WHERE e.org_id = o.id AND lower(e.name) LIKE lower(@filter))";
+                    param.Add("filter", query.Filter + "%");
+                }
+                else
+                {
+                    expr = "lower(o.name) LIKE lower(@filter)";
+                    param.Add("filter", $"%{query.Filter}%");
+                }
+
+                sqlBuilder.Where(expr);
             }
 
             var orgs = await DbManager.DbConnection.QueryAsync<Organization>(sqlBuilder.ToString(), param);

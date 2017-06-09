@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrganizationRoutingModule } from './organizations-routing.module';
 
 import {
-    ButtonModule,
-    DataTableModule,
     InputTextModule,
-    TreeTableModule,
-    ToolbarModule
+    SelectButtonModule,
+    ToggleButtonModule,
+    ToolbarModule,
+    TreeTableModule
 } from 'primeng/primeng';
 
 import { OrganizationTreeComponent } from "./organization-tree.component";
@@ -16,17 +16,17 @@ import { OrganizationService } from "./organization.service";
 
 @NgModule({
     declarations: [OrganizationTreeComponent],
-    exports: [DataTableModule, InputTextModule, OrganizationTreeComponent],
+    exports: [OrganizationTreeComponent],
     imports: [
-        ButtonModule,
         CommonModule,
-        DataTableModule,
         FormsModule,
         InputTextModule,
         OrganizationRoutingModule,
         ReactiveFormsModule,
-        TreeTableModule,
-        ToolbarModule
+        SelectButtonModule,
+        ToggleButtonModule,
+        ToolbarModule,
+        TreeTableModule
     ],
     providers: [OrganizationService]
 })

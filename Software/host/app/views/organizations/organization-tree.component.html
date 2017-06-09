@@ -4,9 +4,14 @@
             <div class="ui-g-8 ui-g-nopad">
                 <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />
             </div>
+            <div class="ui-g-4 ui-g-nopad">
+                <div class="ui-toolbar-group-right">
+                    <p-toggleButton onIcon="fa fa-user-circle" onLabel="&zwnj;" offIcon="fa fa-sitemap" offLabel="&zwnj;" [(ngModel)]="emplSearch" [title]="searchTitle" (onChange)="searchKindChange($event)"></p-toggleButton>
+                </div>
+            </div>
         </div>
     </p-toolbar>
-    <p-treeTable [value]="items" (onNodeExpand)="loadNode($event)">
+    <p-treeTable [value]="nodes" (onNodeExpand)="loadNode($event)">
         <p-column field="name" header="Наименование"></p-column>
         <p-column field="description" header="Описание"></p-column>
     </p-treeTable>
