@@ -12,9 +12,10 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
 
     constructor(http: Http) { super(http); }
 
-    getAll(filter?: string): Observable<any> {
+    getAll(orgid?:number, filter?: string): Observable<any> {
 
         let params: URLSearchParams = new URLSearchParams();
+        orgid && params.append("orgid", orgid.toString());
         filter && params.append("filter", filter);
 
         return this.http

@@ -2,23 +2,22 @@
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
-import { ConfirmationService } from 'primeng/primeng';
-import { OrganizationModel } from "../../models";
+import { ConfirmationService, TreeNode } from 'primeng/primeng';
+import { OrganizationNode } from "../../models";
 import { OrganizationService } from "./organization.service";
 
 const minChars = 3;
 
 @Component({
-    selector: "organization-list",
-    templateUrl: 'organization-list.component.html'
+    selector: "organization-tree",
+    templateUrl: 'organization-tree.component.html'
 })
-export class OrganizationListComponent implements OnInit {
+export class OrganizationTreeComponent implements OnInit {
+
+    items: TreeNode[];
 
     filter: string;
-    organizations: OrganizationModel[];
-
-    selectedAll: boolean;
-    selectedOrgIds: number[] = [];
+    selectedOrgId?: number;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -44,11 +43,26 @@ export class OrganizationListComponent implements OnInit {
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 
+    loadNode(event) {
+
+        if (event.node) {
+
+            this.organizationService
+                .getAll(event.node.data["id"], this.filter)
+                .subscribe(
+                    nodes => event.node.children = nodes,
+                    error => this.logger.error2(error));
+
+            
+        }
+    }
+
     loadOrganizations() {
 
         this.organizationService
-            .getAll(this.filter)
-            .subscribe(orgs => this.organizations = orgs,
+            .getAll(null, this.filter)
+            .subscribe(
+                nodes => this.items = nodes,
                 error => this.logger.error2(error));
     }
 
@@ -64,31 +78,11 @@ export class OrganizationListComponent implements OnInit {
                     .subscribe(
                     _ => {
 
-                        let ix = this.organizations.findIndex(h => h.id === id);
-                        this.organizations.splice(ix, 1);
+                        //let ix = this.organizations.findIndex(h => h.id === id);
+                        //this.organizations.splice(ix, 1);
                     },
                     error => this.logger.error2(error))
 
-        });           
-    }
-
-    selectAll() {
-       
-        this.organizations.forEach(o => {
-            o.selected = this.selectedAll;
         });
-
-        this.selectedAll ? this.selectedOrgIds = this.organizations.map(o => o.id) : [];
-    }
-
-    selectOrganization(org: OrganizationModel) {
-        org.selected = !org.selected;
-
-        if (org.selected)
-            this.selectedOrgIds.push(org.id);
-        else {
-            let ix = this.selectedOrgIds.indexOf(org.id);
-            this.selectedOrgIds.splice(ix, 1);
-        }
     }
 }

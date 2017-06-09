@@ -1,0 +1,13 @@
+﻿<div style="position: absolute; left: -140px; width: 980px">
+    <p-toolbar *ngIf="!conferenceId">
+        <div class="ui-g">
+            <div class="ui-g-8 ui-g-nopad">
+                <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />
+            </div>
+        </div>
+    </p-toolbar>
+    <p-treeTable [value]="items" (onNodeExpand)="loadNode($event)">
+        <p-column field="name" header="Наименование"></p-column>
+        <p-column field="description" header="Описание"></p-column>
+    </p-treeTable>
+</div>
