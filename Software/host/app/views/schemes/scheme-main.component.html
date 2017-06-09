@@ -2,7 +2,7 @@
     <div class="ui-g-12 ui-g-nopad" *ngIf="!readOnly">
         <p-toolbar>
             <div class="ui-g-6 ui-g-nopad">
-                <p-toggleButton onLabel="&nbsp;" offLabel="&nbsp;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
+                <p-toggleButton onLabel="&zwnj;" offLabel="&zwnj;" onIcon="fa-angle-double-up" offIcon="fa-angle-double-down" (onChange)="schemeformVisible = !schemeformVisible"></p-toggleButton>
                 <button pButton type="button" title="Добавить метку" icon="fa-map-marker" (click)="addMark()"></button><button pButton type="button" title="Дублировать" icon="fa-clone" [disabled]="cloneButtonDisabled" (click)="shapeClone()"></button><button pButton type="button" title="Удалить" icon="fa-trash-o" [disabled]="removeButtonDisabled" (click)="shapeRemove()"></button>
                 <button pButton type="button" title="Повернуть на 45&deg; влево" icon="fa-undo" [disabled]="removeButtonDisabled" (click)="shapeRotate(-45)"></button><button pButton type="button" title="Повернуть на 45&deg; вправо" icon="fa-repeat" [disabled]="removeButtonDisabled" (click)="shapeRotate(45)"></button>
                 <button pButton type="button" title="Сохранить" icon="fa-floppy-o" (click)="saveScheme(schemeForm.value)"></button>
