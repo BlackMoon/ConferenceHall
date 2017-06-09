@@ -1,41 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using domain.Common;
 using Newtonsoft.Json;
 
 namespace domain.Employee
 {
     [Table("conf_hall.employees")]
-    public class Employee
+    public class Employee : KeyObject
     {
-        public string Name { get; set; }
-
-        public int LockedInt { get; set; }
-
         /// <summary>
         /// Заблокирован? (для пользователей)
         /// </summary>
-
-        [Column("locked")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [JsonIgnore]
-        public bool Locked
-        {
-            set
-            {
-                LockedInt = value ? 1 : 0;
-            }
-        }
+        public bool Locked { get; set; }
 
+        [Column("org_id")]
+        public int OrgId { get; set; }
+
+        public string Name { get; set; }
 
         /// <summary>
         /// Должность
         /// </summary>
         public string Position { get; set; }
-
-        /// <summary>
-        /// Организация
-        /// </summary>
-        public string Job { get; set; }
 
         /// <summary>
         /// Роль (для пользователей)
