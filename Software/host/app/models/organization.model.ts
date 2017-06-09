@@ -1,16 +1,24 @@
 ﻿import { ISelected, KeyModel } from './index';
 
 /**
+ * Элемент дерева OrganizationsTree
+ */
+export class OrganizationNode extends KeyModel {
+    description: string;
+    name: string;
+}
+
+
+/**
  * Модель. Организация
  */
-export class OrganizationModel extends KeyModel implements ISelected {
+export class OrganizationModel extends KeyModel {
 
     address: string;
     code: string;
     description: string;
     name: string;
     selected: boolean;
-
     constructor() {
 
         super();
@@ -19,7 +27,6 @@ export class OrganizationModel extends KeyModel implements ISelected {
         this.code = undefined;
         this.description = undefined;
         this.name = undefined;
-        this.selected = false;
     }
     
 }
