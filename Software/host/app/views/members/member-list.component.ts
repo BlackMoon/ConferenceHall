@@ -20,7 +20,8 @@ export class MemberListComponent implements OnInit {
     selectedMemberIds: number[] = [];
 
     @Output() selectionChanged = new EventEmitter<number[]>();
-
+    @Output()
+    membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();
     constructor(
         private memberService: MemberService,
         private logger: Logger) { }

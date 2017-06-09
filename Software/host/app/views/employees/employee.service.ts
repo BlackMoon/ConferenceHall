@@ -10,16 +10,19 @@ import MapUtils from '../../common/map-utils';
 @Injectable()
 export class EmployeeService extends HttpDataService<EmployeeModel> {
 
-    url: string = isDevMode() ? "http://localhost:64346/api/members" : "api/members";
+    url: string = isDevMode() ? "http://localhost:64346/api/employees" : "api/employees";
 
     constructor(http: Http) { super(http); }
 
-    add(member): Observable<any> {
+    add(employee): Observable<any> {
 
         let formData: FormData = new FormData();
-        formData.append("name", member.name);
-        formData.append("jobTitle", member.jobTitle);
-        formData.append("contacts", member.contacts);
+        formData.append("name", employee.name);
+        formData.append("position", employee.position);
+        formData.append("job", employee.job);
+        formData.append("lockedInt", employee.lockedInt);
+        formData.append("role", employee.role);
+        formData.append("contacts", employee.contacts);
         return this.http
             .post(this.url, formData)
             .catch(handleResponseError);
@@ -50,7 +53,7 @@ export class EmployeeService extends HttpDataService<EmployeeModel> {
             .catch(handleResponseError);
     }
 
-    update(member): Observable<any> {
+    update(employee): Observable<any> {
         return Observable.of(null);
     }
 }
