@@ -4,7 +4,6 @@ using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Organization;
 using domain.Organization.Query;
-using domain.Common.Query;
 using Kit.Core.CQRS.Command;
 
 namespace host.Controllers
@@ -18,10 +17,10 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Organization>> Get(string filter)
+        public Task<IEnumerable<OrganizationNode>> Get(int? orgId, string filter)
         {
-            FindOrganizationsQuery query = new FindOrganizationsQuery(){ Filter = filter };
-            return QueryDispatcher.DispatchAsync<FindOrganizationsQuery, IEnumerable<Organization>>(query);
+            FindOrganizationsQuery query = new FindOrganizationsQuery(){ OrganizationId = orgId, Filter = filter };
+            return QueryDispatcher.DispatchAsync<FindOrganizationsQuery, IEnumerable<OrganizationNode>>(query);
         }
 
         // GET api/organizations/5
