@@ -14,7 +14,8 @@ enum SearchKind { SearchOrg, SearchEmployee };
     templateUrl: "organization-tree.component.html"
 })
 export class OrganizationTreeComponent implements OnInit {
-    
+
+    editMode: boolean;
     filter: string;
 
     /**
@@ -76,15 +77,10 @@ export class OrganizationTreeComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
-    nodeSelect(e) {
-        debugger;
-        e.node.data["selected"] = true;
-    }
-
-    nodeUnselect(e) {
-        debugger;
-        e.node.data["selected"] = false;
-    }
+    selectNode(e) {        
+        let selected = e.node.data["selected"];
+        e.node.data["selected"] = !selected;
+    }    
 
     removeOrganization(id: number, name?: string) {
         this.confirmationService.confirm({

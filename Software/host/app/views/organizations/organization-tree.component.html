@@ -1,28 +1,42 @@
-﻿<div style="position: absolute; left: -140px; width: 980px">
-    <p-toolbar *ngIf="!conferenceId">
-        <div class="ui-g">
-            <div class="ui-g-8 ui-g-nopad">
-                <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />            
-            </div>
-            <div class="ui-g-4 ui-g-nopad">
-                <div class="ui-toolbar-group-right">
-                    <p-toggleButton onIcon="fa fa-user-circle" onLabel="&zwnj;" offIcon="fa fa-sitemap" offLabel="&zwnj;" [(ngModel)]="emplSearch" [title]="searchTitle" (onChange)="searchKindChange($event)"></p-toggleButton>
-                    <button type="button" pButton icon="fa-plus" title="Добавить организацию" (click)="addOrganization()"></button>
+﻿<div style="position: absolute; left: -140px; width: 1200px">    
+    <p-treeTable [value]="nodes" selectionMode="{{editMode ? 'single' : ''}}" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)">                
+        <p-header>            
+            <div class="ui-g">
+                <div class="ui-g-8 ui-g-nopad">
+                    <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />
                 </div>
-            </div>
-        </div>
-    </p-toolbar>
-    <p-treeTable [value]="nodes" selectionMode="single" (onNodeExpand)="loadNode($event)" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)">
+                <div class="ui-g-4 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">
+                        <p-toggleButton onIcon="fa fa-user-circle" onLabel="&zwnj;" offIcon="fa fa-sitemap" offLabel="&zwnj;" [(ngModel)]="emplSearch" [title]="searchTitle" (onChange)="searchKindChange($event)"></p-toggleButton>                        
+                        <p-toggleButton onIcon="fa fa-ban" onLabel="Отмена" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="editMode = !editMode"></p-toggleButton>                        
+                    </div>
+                </div>
+            </div> 
+        </p-header>
+        <p-footer>
+            <div class="ui-g">   
+                <div class="ui-g-6 ui-g-nopad">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton icon="fa-trash" title="Удалить"  [disabled]="true" *ngIf="editMode"></button>
+                    </div>
+                </div>
+                <div class="ui-g-6 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">                        
+                        <button type="button" pButton icon="fa-plus" title="Добавить организацию" (click)="addOrganization()"></button>
+                    </div>
+                </div>
+            </div> 
+        </p-footer>
         <p-column field="name" header="Наименование">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                {{node.data.name}}
-                <div><coqs *ngIf="node.data.selected"></coqs></div>
+                <i class="fa fa-2x {{node.data.selected ? 'fa-check-square-o' : 'fa-square-o'}}" style="vertical-align:-15%" *ngIf="editMode"></i>
+                <span>&nbsp;{{node.data.name}}</span>                
             </ng-template>
-        </p-column>
+        </p-column>        
         <p-column field="description" header="Описание"></p-column>
         <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                <i class='fa fa-2x fa-lock' *ngIf="node.data.locked"></i>
+                <i class="fa fa-lg {{node.data.locked ? 'fa-lock' : ''}}" title="Блокирован"></i>
             </ng-template>
         </p-column>
     </p-treeTable>
