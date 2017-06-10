@@ -8,7 +8,7 @@ module.exports = {
     context: helpers.root('./app'),
     entry: {
         'app': './index.ts',
-        'theme': 'primeng/resources/themes/flick/theme.css',
+        'theme': 'primeng/resources/themes/bootstrap/theme.css',
         'polyfills': './polyfills.ts',
         'vendor': './vendor.ts'
     },
