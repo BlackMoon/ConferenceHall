@@ -25,8 +25,10 @@ export class OrganizationModel extends KeyModel {
     address: string;
     code: string;
     description: string;
+    logo: File;
     name: string;
-    selected: boolean;
+
+    
     constructor() {
 
         super();

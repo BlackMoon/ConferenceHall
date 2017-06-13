@@ -4,14 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeesModule } from '../employees/employees.module';
 import { OrganizationRoutingModule } from './organizations-routing.module';
 
-
 import {
+    AccordionModule,
     ButtonModule,
+    FileUploadModule,
     InputTextModule,
     InputTextareaModule,
     SelectButtonModule,
     SplitButtonModule,
-    TabMenuModule,
     ToggleButtonModule,
     ToolbarModule,
     TreeTableModule
@@ -25,9 +25,11 @@ import { OrganizationService } from "./organization.service";
     declarations: [OrganizationDetailComponent, OrganizationTreeComponent],
     exports: [OrganizationTreeComponent],
     imports: [
+        AccordionModule,
         ButtonModule, 
         CommonModule,
         EmployeesModule,
+        FileUploadModule,
         FormsModule,
         InputTextModule,
         InputTextareaModule,
@@ -35,7 +37,6 @@ import { OrganizationService } from "./organization.service";
         ReactiveFormsModule,
         SelectButtonModule,
         SplitButtonModule,
-        TabMenuModule,
         ToggleButtonModule,
         ToolbarModule,
         TreeTableModule

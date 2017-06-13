@@ -12,6 +12,22 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
 
     constructor(http: Http) { super(http); }
 
+
+    add(organization): Observable<any> {
+
+        let formData: FormData = new FormData();
+        formData.append("address", organization.address);
+        formData.append("code", organization.code);
+        formData.append("description", organization.description);
+        formData.append("name", organization.name);
+
+        organization.logo && formData.append("logo", organization.logo, organization.logo.name);
+
+        return this.http
+            .post(this.url, formData)
+            .catch(handleResponseError);
+    }
+
     /**
      * Удаляет организации и сотрудников
      * @param c
@@ -41,6 +57,22 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
         return this.http
             .get(this.url, { params: params })
             .map((r: Response) => r.json())
+            .catch(handleResponseError);
+    }
+
+    update(organization): Observable<any> {
+
+        let formData: FormData = new FormData();
+        formData.append("address", organization.address);
+        formData.append("code", organization.code);
+        formData.append("description", organization.description);
+        formData.append("logo", organization.logo, organization.logo.name);
+        formData.append("name", organization.name);
+
+        organization.logo && formData.append("logo", organization.logo, organization.logo.name);
+
+        return this.http
+            .put(`${this.url}/${organization.id}`, formData)
             .catch(handleResponseError);
     }
 }

@@ -1,11 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using domain.Element;
+using domain.Element.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Organization;
 using domain.Organization.Command;
 using domain.Organization.Query;
 using Kit.Core.CQRS.Command;
+using Microsoft.AspNetCore.Http;
 
 namespace host.Controllers
 {
@@ -36,16 +41,42 @@ namespace host.Controllers
             return QueryDispatcher.DispatchAsync<FindOrganizationByIdQuery, Organization>(new FindOrganizationByIdQuery() { Id = id });
         }
 
-        // POST api/conferences
+        /// <summary>
+        /// Отправляется файлы ('Content-Type', 'multipart/form-data')
+        /// </summary>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<int> Post(CreateOrganizationCommand value)
         {
+            IFormFile f = Request.Form.Files.FirstOrDefault();
+            if (f != null)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    await f.CopyToAsync(ms);
+                    value.Logo = ms.ToArray();
+                }
+            }
+
+            return await CommandDispatcher.DispatchAsync<CreateOrganizationCommand, int>(value);
         }
 
-        // PUT api/organizations/5
+        /// <summary>
+        /// Отправляется файлы ('Content-Type', 'multipart/form-data')
+        /// </summary>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task Put(int id, Organization value)
         {
+            IFormFile f = Request.Form.Files.FirstOrDefault();
+            if (f != null)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    await f.CopyToAsync(ms);
+                    value.Logo = ms.ToArray();
+                }
+            }
+
+            await CommandDispatcher.DispatchAsync<Organization, bool>(value);
         }
         
         [HttpPost("/api/[controller]/delete")]
