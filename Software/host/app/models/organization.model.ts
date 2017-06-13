@@ -1,6 +1,14 @@
 ﻿import { ISelected, KeyModel } from './index';
 
 /**
+ * Команда мульти-обработки узлов
+ */
+export class NodeGroupCommand {
+    organizationIds: number[];
+    employeeIds: number[];
+}
+
+/**
  * Элемент дерева OrganizationsTree
  */
 export class OrganizationNode extends KeyModel {
