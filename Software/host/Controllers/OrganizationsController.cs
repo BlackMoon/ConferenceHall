@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Organization;
+using domain.Organization.Command;
 using domain.Organization.Query;
 using Kit.Core.CQRS.Command;
 
@@ -46,12 +47,11 @@ namespace host.Controllers
         public void Put(int id, [FromBody]string value)
         {
         }
-
-        // DELETE api/organizations/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        
+        [HttpPost("/api/[controller]/delete")]
+        public Task DeleteNodes([FromBody]DeleteNodesCommand value)
         {
-            //return CommandDispatcher.DispatchAsync<>()
+            return CommandDispatcher.DispatchAsync<DeleteNodesCommand>(value);
         }
     }
 }
