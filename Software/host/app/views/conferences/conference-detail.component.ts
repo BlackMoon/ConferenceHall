@@ -3,16 +3,18 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, SchemeModel } from '../../models';
-import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule } from 'primeng/primeng';
+import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule, PanelModule } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { HallService } from '../halls/hall.service';
 import { SchemeService } from "../schemes/scheme.service";
+import { MemberService } from "../members/member.service";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TimeRange } from '../../models';
 import { DateToUtcPipe } from "../../common/pipes";
 import { locale } from "../../common/locale";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
-//import { MemberTableComponent} from '../members/member-table.component';
+//import { OrgMemberTableComponent } from '../members/org-member-table.component';
+import { EmployeeTableComponent} from '../employees/employee-table.component';
 
 @Component({
     selector: "conference-detail",
@@ -27,10 +29,12 @@ export class ConferenceDetailComponent implements OnInit {
     halls: any[];
     hallScheme: any[];
     locale: any;
+    confMembers: any[];
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
-    //@ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
+    //@ViewChild(EmployeeTableComponent) employeeTable: EmployeeTableComponent;
+    //@ViewChild(OrgMemberTableComponent) memberTable: OrgMemberTableComponent;
     @ViewChild('tabSchemeWrapper') tabSchemeWrapper: ElementRef;
-    @ViewChild('schemeContent') schemeContent: ElementRef;
+    @ViewChild('tabMemberWrapper') tabMemberWrapper: ElementRef;
 
     constructor(
         private dateToUtcPipe: DateToUtcPipe,
@@ -38,6 +42,7 @@ export class ConferenceDetailComponent implements OnInit {
         private conferenceService: ConferenceService,
         private hallService: HallService,
         private schemeService: SchemeService,
+        private memberService: MemberService,
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
@@ -202,25 +207,49 @@ export class ConferenceDetailComponent implements OnInit {
 
     tabViewChangedHandle(e) {
         switch (e.index) {
+            //tabMembers
+            case 1:
+                {
+                    debugger;
+                    this.tabMemberWrapper.nativeElement.style.height = "500px";
+                    if (!this.confId || this.confId <= 0) break;
+                    this.memberService
+                        .getAll(null, this.confId, null)
+                        .subscribe((members: any) => this.confMembers = members,
+                        error => this.logger.error2(error));
+                    break;
+                }
             //tabScheme
             case 2:
                 {
                     this.schemeMain.canvasBox.innerHTML = "";//удаляем старую схему обновления
-                    if (this.conferenceForm.value && this.conferenceForm.value.hallSchemeId) 
+                    if (this.conferenceForm.value && this.conferenceForm.value.hallSchemeId)
                         this.schemeMain.schemeId = this.conferenceForm.value.hallSchemeId;
 
-                    if (this.conferenceForm.value && this.conferenceForm.value.id) {
-                        //this.memberTable.conferenceId = this.conferenceForm.value.id;
-                        //this.memberTable.loadMembers();
-                    }
+                    //if (this.conferenceForm.value && this.conferenceForm.value.id) {
+                    //    this.memberTable.conferenceId = this.conferenceForm.value.id;
+                    //    this.memberTable.loadMembers();
+                    //}
                     break;
                 }
         }
     }
 
     shemeMainLoaded(e) {
-        debugger;
         this.tabSchemeWrapper.nativeElement.style.height = "500px";
         this.schemeMain && this.schemeMain.onResize();
+    }
+
+    memberDragEnd(e) {
+        debugger;
+
+    }
+
+    memberDrop(e) {
+        debugger;
+    }
+
+    memberDragStart($event, member: any) {
+        debugger;
     }
 }

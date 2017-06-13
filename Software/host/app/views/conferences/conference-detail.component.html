@@ -1,6 +1,6 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
     <p-tabView (onChange)="tabViewChangedHandle($event)">
-        <p-tabPanel header="Совещание" id="tabConference">
+        <p-tabPanel header="Совещание" id="tabConference" leftIcon="fa-calendar-check-o">
             <form [formGroup]="conferenceForm" novalidate (ngSubmit)="save($event, conferenceForm.value)">
                 <input type="hidden" formControlName="id" />
 
@@ -115,19 +115,40 @@
                 </div>
             </form>
         </p-tabPanel>
-        <p-tabPanel header="Участники" id="tabMember" *ngIf="confId && confId > 0">
-        </p-tabPanel>
-        <p-tabPanel header="Схема" id="tabScheme" *ngIf="confId && confId > 0" lazy="true">
-            <div #tabSchemeWrapper class="ui-g">
-                <div class="ui-g-4 ui-g-nopad" style="height: 100%">
-                    <!--<member-table ></member-table>-->
-                </div>
-                <div #schemeContent class="ui-g-8 ui-g-nopad" style="height: 100%">
-                    <scheme-main (schemeLoaded)="shemeMainLoaded($event)"></scheme-main>
+        <p-tabPanel header="Участники" id="tabMembers" *ngIf="confId && confId > 0" lazy="true" leftIcon="fa fa-users">
+            <div #tabMemberWrapper class="ui-grid ui-grid-pad ui-grid-responsive">
+                <div class="ui-grid-row" style="height:100%">
+                    <div class="ui-widget-content " style="height: 100%; overflow: auto; width: 40%;">
+                        <p-dataGrid [value]="confMembers">
+                            <ng-template let-member pTemplate="item">
+                                <div class="ui-g-12" pDraggable="member" (onDragStart)="memberDragStart($event, member)" (onDragEnd)="memberDragEnd($event)">
+                                    <div class="fa fa-user-circle">
+                                        {{member.name}}
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-dataGrid>
+                    </div>
+                    <div class="ui-widget-content" style="height: 100%; text-align: center; width: 50px;">
+                        <div class="fa fa-arrows-h verticalcenteredblock" style="font-size: 24px;"></div>
+                    </div>
+                    <div class="ui-widget-content" style="height: 100%; width: 60%" pDroppable="member" (onDrop)="memberDrop($event)">
+                    </div>
                 </div>
             </div>
         </p-tabPanel>
-        <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0" lazy="true">
+        <p-tabPanel header="Схема" id="tabScheme" *ngIf="confId && confId > 0" lazy="true" leftIcon="fa fa-object-group">
+            <div #tabSchemeWrapper class="ui-grid ui-grid-pad ui-grid-responsive">
+                <div class="ui-grid-row" style="height: 100%">
+                    <div class="ui-widget-content " style="height: 100%; overflow: auto; width: 40%;">
+                    </div>
+                    <div class="ui-widget-content " style="height: 100%; overflow: auto; width: 60%;">
+                        <scheme-main (schemeLoaded)="shemeMainLoaded($event)"></scheme-main>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel header="Сообщения" id="tabMessage" *ngIf="confId && confId > 0" lazy="true" leftIcon="fa-commenting-o">
         </p-tabPanel>
     </p-tabView>
 
