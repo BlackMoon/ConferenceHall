@@ -12,3 +12,9 @@
     background-color: #f2dede;
     border-color: #ebccd1;
 }
+
+.verticalcenteredblock {
+    vertical-align: middle;
+    position: relative;
+    top: 50%;
+}
