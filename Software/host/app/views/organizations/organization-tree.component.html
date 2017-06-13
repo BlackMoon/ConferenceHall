@@ -1,5 +1,5 @@
 ﻿<div style="position: absolute; left: -140px; width: 1200px">    
-    <p-treeTable [value]="nodes" selectionMode="checkbox" [(selection)]="selectedNodes" (onNodeExpand)="loadNode($event)">                
+    <p-treeTable [value]="nodes" selectionMode="{{this.editMode ?? 'checkbox' : 'single'" [(selection)]="selectedNodes" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)">                
         <p-header>            
             <div class="ui-g">
                 <div class="ui-g-8 ui-g-nopad">

@@ -14,11 +14,12 @@ import {
     TreeTableModule
 } from 'primeng/primeng';
 
+import { OrganizationDetailComponent } from "./organization-detail.component";
 import { OrganizationTreeComponent } from "./organization-tree.component";
 import { OrganizationService } from "./organization.service";
 
 @NgModule({
-    declarations: [OrganizationTreeComponent],
+    declarations: [OrganizationDetailComponent, OrganizationTreeComponent],
     exports: [OrganizationTreeComponent],
     imports: [
         ButtonModule, 

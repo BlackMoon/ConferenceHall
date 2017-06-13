@@ -55,14 +55,17 @@ export class OrganizationTreeComponent implements OnInit {
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 
-    loadNode(event) {
+    loadNode(e) {
 
-        if (event.node) {
-          
+        if (e.node && !e.node.hasOwnProperty("children")) {
+            
             this.organizationService
-                .getAll(this.emplSearch, event.node.data["id"], this.filter)
+                .getAll(this.emplSearch, e.node.data["id"], this.filter)
                 .subscribe(
-                    nodes => event.node.children = nodes,
+                nodes => {
+                        e.node.children = nodes;
+                        (e.node.partialSelected === false) && (this.selectedNodes = this.selectedNodes.concat(nodes));
+                    },
                     error => this.logger.error2(error));
 
             
@@ -78,10 +81,14 @@ export class OrganizationTreeComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
-    selectNode(e) {        
-        /*let selected = e.node.data["selected"];
-        e.node.data["selected"] = !selected;*/
-    }    
+    selectNode(e) {
+        
+        if (!this.editMode) {
+            let id = e.node.data["id"];
+            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
+        }
+    }
+
 
     removeOrganization(id: number, name?: string) {
         this.confirmationService.confirm({
