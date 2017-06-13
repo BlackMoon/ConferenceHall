@@ -1,10 +1,10 @@
 ﻿using domain.Common;
-using System.ComponentModel.DataAnnotations.Schema;
+using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 
 namespace domain.Organization
 {
-    [Table("conf_hall.organizations")]
+    [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.organizations")]
     public class Organization : KeyObject, ICommand
     {
         /// <summary>
@@ -17,6 +17,8 @@ namespace domain.Organization
         /// </summary>
         public string Code { get; set; }
 
+        [Write(false)]
+        public string ContentType { get; set; }
         /// <summary>
         /// Описание
         /// </summary>

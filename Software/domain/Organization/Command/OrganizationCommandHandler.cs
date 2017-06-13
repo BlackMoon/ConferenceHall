@@ -65,8 +65,8 @@ namespace domain.Organization.Command
 
         public override async Task<bool> ExecuteAsync(Organization command)
         {
-            //command.Data = ResizeImage(command.Data, MaxW, MaxH, command.MimeType);
-            
+            command.Icon = ImageScaler.ResizeImage(command.Logo, W, H, command.ContentType, 50);
+            command.Logo = ImageScaler.ResizeImage(command.Logo, MaxW, MaxH, command.ContentType);
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.UpdateAsync(command);
