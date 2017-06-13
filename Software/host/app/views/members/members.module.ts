@@ -25,14 +25,13 @@ import { MemberListComponent } from './member-list.component';
 //import { MemberTableComponent } from './member-table.component';
 import { MemberRoutingModule } from './members-routing.module';
 import { MemberService } from './member.service';
-import { OrgMemberTableComponent } from './org-member-table.component';
 import { OrganizationsModule } from '../organizations/organizations.module';
 
 @NgModule({
    // declarations: [MemberDetailComponent, MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
    // exports: [MemberListComponent, MemberTableComponent, OrgMemberTableComponent],
-    declarations: [ MemberListComponent,OrgMemberTableComponent],
-    exports: [MemberListComponent, OrgMemberTableComponent],
+    declarations: [ MemberListComponent],
+    exports: [MemberListComponent],
     imports: [
         AccordionModule,
         ButtonModule,

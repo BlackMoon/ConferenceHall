@@ -24,6 +24,7 @@ export class OrganizationTreeComponent implements OnInit {
     emplSearch: boolean;
 
     nodes: TreeNode[] = [];
+    selectedNodes: TreeNode[];
 
     searchTitle: string = "По организациям";
 

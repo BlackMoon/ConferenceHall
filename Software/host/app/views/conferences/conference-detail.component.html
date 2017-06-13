@@ -120,7 +120,7 @@
         <p-tabPanel header="Схема" id="tabScheme" *ngIf="confId && confId > 0" lazy="true">
             <div #tabSchemeWrapper class="ui-g">
                 <div class="ui-g-4 ui-g-nopad" style="height: 100%">
-                    <member-table ></member-table>
+                    <!--<member-table ></member-table>-->
                 </div>
                 <div #schemeContent class="ui-g-8 ui-g-nopad" style="height: 100%">
                     <scheme-main (schemeLoaded)="shemeMainLoaded($event)"></scheme-main>

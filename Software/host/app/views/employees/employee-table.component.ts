@@ -11,7 +11,7 @@ const minChars = 3;
 
 @Component({
     selector: "employee-table",
-    styleUrls: [`employee-table.component.css`],
+    //styleUrls: [`employee-table.component.css`],
     templateUrl: 'employee-table.component.html'
 })
 

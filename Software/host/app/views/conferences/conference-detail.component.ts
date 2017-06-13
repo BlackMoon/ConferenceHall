@@ -12,7 +12,7 @@ import { TimeRange } from '../../models';
 import { DateToUtcPipe } from "../../common/pipes";
 import { locale } from "../../common/locale";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
-import { MemberTableComponent} from '../members/member-table.component';
+//import { MemberTableComponent} from '../members/member-table.component';
 
 @Component({
     selector: "conference-detail",
@@ -28,7 +28,7 @@ export class ConferenceDetailComponent implements OnInit {
     hallScheme: any[];
     locale: any;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
-    @ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
+    //@ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
     @ViewChild('tabSchemeWrapper') tabSchemeWrapper: ElementRef;
     @ViewChild('schemeContent') schemeContent: ElementRef;
 
@@ -210,8 +210,8 @@ export class ConferenceDetailComponent implements OnInit {
                         this.schemeMain.schemeId = this.conferenceForm.value.hallSchemeId;
 
                     if (this.conferenceForm.value && this.conferenceForm.value.id) {
-                        this.memberTable.conferenceId = this.conferenceForm.value.id;
-                        this.memberTable.loadMembers();
+                        //this.memberTable.conferenceId = this.conferenceForm.value.id;
+                        //this.memberTable.loadMembers();
                     }
                     break;
                 }

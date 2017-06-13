@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { borderClass, markClass } from "../../common/svg-utils";
 import { MemberModel, MemberState, ScreenModel } from '../../models';
-import { MemberTableComponent } from "../members/member-table.component";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 import { HubService } from "../../common/hub-service";
 import { ScreenService } from "./screen.service";
@@ -66,7 +65,7 @@ export class ScreenComponent implements OnInit {
 
     @ViewChild('wrapper') wrapperElRef: ElementRef;
 
-    @ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
+    //@ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
 
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
 
@@ -101,7 +100,7 @@ export class ScreenComponent implements OnInit {
 
                                     this.schemeMain.toggleMark(member.seat);
 
-                                    this.memberTable.members.every(
+                                    /*this.memberTable.members.every(
                                         m => {
 
                                             if (m.id === member.id) {
@@ -110,7 +109,7 @@ export class ScreenComponent implements OnInit {
                                                 return false;
                                             }
                                             return true;
-                                        });
+                                        });*/
                                 });
                         });
 
@@ -126,12 +125,12 @@ export class ScreenComponent implements OnInit {
                 },
                 error => this.logger.error2(error));
 
-        Observable
+        /*Observable
             .combineLatest(this.schemeMain.schemeLoaded, this.memberTable.membersLoaded)
             .subscribe((a:Array<any>) => {
                 let members: MemberModel[] = a[1] || [];
                 [].forEach.call(members, m => this.schemeMain.toggleMark(m.seat));
-            });
+            });*/
             
 
         // clock
