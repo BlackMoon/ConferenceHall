@@ -7,8 +7,10 @@ import { UiModule } from '../../common/ui/ui.module';
 import {
     ButtonModule,
     InputTextModule,
+    InputTextareaModule,
     SelectButtonModule,
     SplitButtonModule,
+    TabMenuModule,
     ToggleButtonModule,
     ToolbarModule,
     TreeTableModule
@@ -26,10 +28,12 @@ import { OrganizationService } from "./organization.service";
         CommonModule,
         FormsModule,
         InputTextModule,
+        InputTextareaModule,
         OrganizationRoutingModule,
         ReactiveFormsModule,
         SelectButtonModule,
         SplitButtonModule,
+        TabMenuModule,
         ToggleButtonModule,
         ToolbarModule,
         TreeTableModule,

@@ -24,7 +24,7 @@ export class OrganizationTreeComponent implements OnInit {
     emplSearch: boolean;
 
     nodes: TreeNode[] = [];
-    selectedNodes: TreeNode[];
+    selectedNodes: TreeNode[] = [];
 
     searchTitle: string = "По организациям";
 
@@ -38,7 +38,15 @@ export class OrganizationTreeComponent implements OnInit {
         this.loadOrganizations();
     }
 
+    addEmployee = () => this.router.navigate(["emploees/new"]);
+
     addOrganization = () => this.router.navigate(["orgs/new"]);
+
+    changeEditMode() {
+        this.editMode = !this.editMode;
+        this.selectedNodes.length = 0;
+    }
+    
 
     filterChange(value) {
 
@@ -56,15 +64,19 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     loadNode(e) {
-
+        
         if (e.node && !e.node.hasOwnProperty("children")) {
-            
+            let id = e.node.data["id"];
+
             this.organizationService
-                .getAll(this.emplSearch, e.node.data["id"], this.filter)
+                .getAll(this.emplSearch, id, this.filter)
                 .subscribe(
-                nodes => {
+                    nodes => {
                         e.node.children = nodes;
-                        (e.node.partialSelected === false) && (this.selectedNodes = this.selectedNodes.concat(nodes));
+
+                        // node selected ?
+                        let ix = this.selectedNodes.findIndex(n => n.data["id"] === id);                
+                        (ix !== -1) && (this.selectedNodes = this.selectedNodes.concat(nodes));
                     },
                     error => this.logger.error2(error));
 
