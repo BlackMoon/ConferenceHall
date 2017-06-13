@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using domain.Element;
-using domain.Element.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using domain.Organization;
@@ -42,27 +40,36 @@ namespace host.Controllers
         }
 
         /// <summary>
+        /// Получить иконку логотипа организации (для отображения в дереве)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("/api/icon/{id}")]
+        public async Task<ActionResult> GetIcon(int id)
+        {
+            return await GetLogo(id, true);
+        }
+
+        /// <summary>
         /// Получить логотип организации
         /// </summary>
         /// <param name="id"></param>
         /// <param name="icon">иконка?</param>
         /// <returns></returns>
-        [HttpGet("/api/logo/{id}/{icon?}")]
-        public async Task<ActionResult> GetShape(int id, bool icon = true)
+        [HttpGet("/api/logo/{id}")]
+        public async Task<ActionResult> GetLogo(int id, bool icon = false)
         {
-            byte[] fileContents = { };
             string contentType = "image/*";
-
-            Organization org = await Get(id);
-            if (org != null)
+            
+            FindOrganizationLogoQuery query = new FindOrganizationLogoQuery()
             {
-                fileContents = icon ? org.Icon : org.Logo;
-                //contentType = el.MimeType;
-            }
+                Id = id,
+                Icon = icon
+            };
 
+            byte[] fileContents = await QueryDispatcher.DispatchAsync<FindOrganizationLogoQuery, byte[]>(query);
             return new FileContentResult(fileContents, contentType);
         }
-
 
         /// <summary>
         /// Отправляется файлы ('Content-Type', 'multipart/form-data')
@@ -78,7 +85,6 @@ namespace host.Controllers
                     await f.CopyToAsync(ms);
                     value.Logo = ms.ToArray();
                 }
-                value.ContentType = f.ContentType;
             }
 
             return await CommandDispatcher.DispatchAsync<CreateOrganizationCommand, int>(value);
@@ -98,7 +104,6 @@ namespace host.Controllers
                     await f.CopyToAsync(ms);
                     value.Logo = ms.ToArray();
                 }
-                //value.ContentType = f.ContentType;
             }
 
             await CommandDispatcher.DispatchAsync<Organization, bool>(value);
