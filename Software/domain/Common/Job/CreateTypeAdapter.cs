@@ -4,6 +4,7 @@ using domain.Conference.Command;
 using domain.Element.Command;
 using domain.Hall.Command;
 using domain.Organization;
+using domain.Organization.Command;
 using domain.Scheme.Command;
 using Kit.Core.CQRS.Job;
 using Mapster;
@@ -42,6 +43,12 @@ namespace domain.Common.Job
                 .ForType();
             #endregion
 
+            #region Organization
+
+            // CreateOrganizationCommand --> Organization
+            TypeAdapterConfig<CreateOrganizationCommand, Organization.Organization>
+                .ForType();
+
             // Organization --> OrgDtoDto
             TypeAdapterConfig<Organization.Organization, OrgEmployeeDto>
                 .ForType();
@@ -50,6 +57,8 @@ namespace domain.Common.Job
             TypeAdapterConfig<Employee.Employee, OrgEmployeeDto>
                 .ForType()
                 .Map(dest => dest.Description, src => src.Position);
+
+            #endregion
 
             #region Scheme
             // CreateSchemeCommand --> Scheme

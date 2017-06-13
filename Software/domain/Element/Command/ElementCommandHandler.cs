@@ -134,6 +134,7 @@ namespace domain.Element.Command
             element.Data = ResizeImage(element.Data, MaxW, MaxH, element.MimeType);
             element.Thumbnail = ResizeImage(element.Data, W, H, element.MimeType, 50);
 
+            await DbManager.OpenAsync();
             int newId = await DbManager.DbConnection.InsertAsync(element);
             
             DbManager.AddParameter("pscheme_element_id", new []{ newId });
