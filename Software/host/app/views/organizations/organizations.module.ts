@@ -1,6 +1,7 @@
 ﻿import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GlobalsModule } from '../../common/globals/globals.module';
 import { EmployeesModule } from '../employees/employees.module';
 import { OrganizationRoutingModule } from './organizations-routing.module';
 
@@ -28,6 +29,7 @@ import { OrganizationService } from "./organization.service";
         AccordionModule,
         ButtonModule, 
         CommonModule,
+        GlobalsModule,
         EmployeesModule,
         FileUploadModule,
         FormsModule,

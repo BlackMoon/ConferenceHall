@@ -10,9 +10,15 @@ import { OrganizationModel } from '../../models';
 import { OrganizationService } from "./organization.service";
 
 @Component({
+    styleUrls: ["organization-detail.component.css"],
     templateUrl: "organization-detail.component.html"
 })
 export class OrganizationDetailComponent implements OnInit {
+    /**
+     * id элемента
+     */
+    id?: number;
+
     orgForm: FormGroup;
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
@@ -29,23 +35,24 @@ export class OrganizationDetailComponent implements OnInit {
 
         this.orgForm = this.fb.group({
             id: [null],
-            code: [null, Validators.required],
-            name: [null, Validators.required],
             address: [null],
-            description: [null]
+            code: [null, Validators.required],
+            description: [null],
+            name: [null, Validators.required]
         });
 
         this.route.params
 
             .switchMap((params: Params) => {
-                debugger;
                 // (+) converts string 'id' to a number
-                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return key ? this.organizationService.get(key) : Observable.empty();
+                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                return this.id ? this.organizationService.get(this.id) : Observable.empty();
             })
             .subscribe((org: OrganizationModel) => this.orgForm.patchValue(org));
 
     }
+
+    onSelect = () => this.fileUpload.styleClass = "";
 
     save(event, org) {
         
