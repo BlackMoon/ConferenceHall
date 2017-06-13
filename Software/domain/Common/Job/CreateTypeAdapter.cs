@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using domain.Conference.Command;
-using domain.Dto;
 using domain.Element.Command;
 using domain.Hall.Command;
+using domain.Organization;
 using domain.Scheme.Command;
 using Kit.Core.CQRS.Job;
 using Mapster;
