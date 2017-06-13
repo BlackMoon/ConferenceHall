@@ -122,16 +122,13 @@ export class OrganizationTreeComponent implements OnInit {
                     .delete({ organizationIds: orgs, employeeIds: employees })
                     .subscribe(
                         _ => {
-                            debugger;
-                            orgs.forEach(key =>
-                            {
-                                let ix = this.nodes.findIndex(n => n.data["id"] === key);
-                                (ix !== -1) && this.nodes.splice(ix, 1);
-                            });
 
-                            employees.forEach(key => {
-                                let ix = this.nodes.findIndex(n => n.data["id"] === key);
-                                (ix !== -1) && this.nodes.splice(ix, 1);
+                            this.selectedNodes.forEach(n => {
+                                let id = n.data["id"],
+                                    nodes: TreeNode[] = n.leaf ? n.parent.children : this.nodes;
+
+                                let ix = nodes.findIndex(n => n.data["id"] === id);
+                                (ix !== -1) && nodes.splice(ix, 1);
                             });
 
                             this.selectedNodes.length = 0;
@@ -140,6 +137,10 @@ export class OrganizationTreeComponent implements OnInit {
             }
 
         });
+    }
+
+    removeNodeFromTree() {
+        
     }
 
     selectNode(e) {
