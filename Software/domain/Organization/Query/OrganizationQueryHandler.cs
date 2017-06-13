@@ -92,34 +92,7 @@ namespace domain.Organization.Query
                 OrgEmployeeDto dto = new OrgEmployeeDto();
                 return new OrganizationNode() { Data = o.Adapt(dto) };
             });
-           
-
-
-            /*
-            // может задаваться фильтр
-            if (!string.IsNullOrEmpty(query.Filter))
-            {
-                sqlBuilder.Where("lower(o.name) LIKE lower(@filter)");
-                param.Add("filter", query.Filter + "%");
-            }
-
-            IList<OrganizationNode> nodes = new List<OrganizationNode>();
-            nodes.Add(new OrganizationNode(){Data = new OrgEmployeeDto(){Name = "1"}, Leaf = false});
-            //return nodes;
-
-            await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<Organization, Employee.Employee, OrganizationNode>(sqlBuilder.ToString(),
-                (o, e) =>
-                {
-                    OrgEmployeeDto dto = new OrgEmployeeDto();
-
-                    if (o.Id != 0)
-                        return new OrganizationNode() { Data = o.Adapt(dto)};
-
-                    return new OrganizationNode()  {Data = e.Adapt(dto), Leaf = true };
-                },
-                splitOn: "OrgId",
-                param: param);*/
+            
         }
     }
 }
