@@ -1,8 +1,9 @@
 ﻿import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EmployeesModule } from '../employees/employees.module';
 import { OrganizationRoutingModule } from './organizations-routing.module';
-import { UiModule } from '../../common/ui/ui.module';
+
 
 import {
     ButtonModule,
@@ -26,6 +27,7 @@ import { OrganizationService } from "./organization.service";
     imports: [
         ButtonModule, 
         CommonModule,
+        EmployeesModule,
         FormsModule,
         InputTextModule,
         InputTextareaModule,
@@ -36,8 +38,7 @@ import { OrganizationService } from "./organization.service";
         TabMenuModule,
         ToggleButtonModule,
         ToolbarModule,
-        TreeTableModule,
-        UiModule
+        TreeTableModule
     ],
     providers: [OrganizationService]
 })

@@ -94,11 +94,13 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     selectNode(e) {
-        
-        if (!this.editMode) {
-            let id = e.node.data["id"];
-            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
+
+        let id = e.node.data["id"];
+        if (this.editMode) {
+            let ix = this.selectedNodes.findIndex(n => n.data["id"] === id);                    
         }
+        else
+            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
     }
 
 
