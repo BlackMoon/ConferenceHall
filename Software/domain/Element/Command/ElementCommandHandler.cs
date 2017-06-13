@@ -5,9 +5,8 @@ using domain.Common.Command;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
-using SkiaSharp;
-using System.IO;
 using CacheManager.Core;
+using domain.Common;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
@@ -35,78 +34,7 @@ namespace domain.Element.Command
         {
             _cacheManager = cacheManager;
         }
-
-        /// <summary>
-        /// Изменяет размер изображения. Размер меняется только, если его высота или ширина больше параметров height и width соответственно
-        /// </summary>
-        /// <param name="blob"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="mimeType">mime тип</param>
-        /// <param name="quality">качество сжатия</param>
-        /// <returns></returns>
-        private byte[] ResizeImage(byte [] blob, int width, int height, string mimeType = "", int quality = 75)
-        {
-            byte[] buff = blob;
-
-            if (blob != null)
-            {
-                using (MemoryStream dataStream = new MemoryStream(blob))
-                {
-                    SKManagedStream inputStream = new SKManagedStream(dataStream);
-                    using (SKBitmap original = SKBitmap.Decode(inputStream))
-                    {
-                        if (original.Width > width || original.Height > height)
-                        {
-                            int w, h;
-                            if (original.Width > original.Height)
-                            {
-                                w = width;
-                                h = original.Height * height / original.Width;
-                            }
-                            else
-                            {
-                                w = original.Width * width / original.Height;
-                                h = height;
-                            }
-
-                            using (SKBitmap resized = original.Resize(new SKImageInfo(w, h), SKBitmapResizeMethod.Lanczos3))
-                            {
-                                if (resized != null)
-                                {
-                                    using (SKImage image = SKImage.FromBitmap(resized))
-                                    {
-                                        SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Bmp;
-
-                                        switch (mimeType)
-                                        {
-                                            case "image/gif":
-                                                imageFormat = SKEncodedImageFormat.Gif;
-                                                break;
-
-                                            case "image/jpeg":
-                                                imageFormat = SKEncodedImageFormat.Jpeg;
-                                                break;
-
-                                            case "image/png":
-                                                imageFormat = SKEncodedImageFormat.Png;
-                                                break;
-                                        }
-
-                                        buff = image
-                                            .Encode(imageFormat, quality)
-                                            .ToArray();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return buff;
-        }
-
+    
         public void Execute(AddToFavoritesCommand command)
         {
             throw new NotImplementedException();
@@ -131,8 +59,8 @@ namespace domain.Element.Command
             Element element = new Element();
             command.Adapt(element);
 
-            element.Data = ResizeImage(element.Data, MaxW, MaxH, element.MimeType);
-            element.Thumbnail = ResizeImage(element.Data, W, H, element.MimeType, 50);
+            element.Data = ImageScaler.ResizeImage(element.Data, MaxW, MaxH, element.MimeType);
+            element.Thumbnail = ImageScaler.ResizeImage(element.Data, W, H, element.MimeType, 50);
 
             await DbManager.OpenAsync();
             int newId = await DbManager.DbConnection.InsertAsync(element);

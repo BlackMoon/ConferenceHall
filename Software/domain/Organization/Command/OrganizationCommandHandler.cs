@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
+using domain.Common;
 using domain.Common.Command;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
@@ -14,12 +15,20 @@ namespace domain.Organization.Command
         KeyObjectCommandHandler<Organization>,
         ICommandHandlerWithResult<CreateOrganizationCommand, int>,
         ICommandHandler<DeleteNodesCommand>
+
     {
+        private const int H = 32;
+        private const int W = 32;
+
+        /// <summary>
+        ///Максимально допустимые высота и ширина логотипа организации
+        /// </summary>
+        private const int MaxH = 256;
+        private const int MaxW = 256;
+
         public OrganizationCommandHandler(IDbManager dbManager, ILogger<OrganizationCommandHandler> logger) : base(dbManager, logger)
         {
         }
-
-        
 
         public int Execute(CreateOrganizationCommand command)
         {
@@ -31,8 +40,8 @@ namespace domain.Organization.Command
             Organization organization = new Organization();
             command.Adapt(organization);
 
-            //organization.Data = ResizeImage(element.Data, MaxW, MaxH, element.MimeType);
-            //element.Thumbnail = ResizeImage(element.Data, W, H, element.MimeType, 50);
+            organization.Logo = ImageScaler.ResizeImage(command.Logo, MaxW, MaxH, command.ContentType);
+            organization.Icon = ImageScaler.ResizeImage(command.Logo, W, H, command.ContentType, 50);
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.InsertAsync(organization);

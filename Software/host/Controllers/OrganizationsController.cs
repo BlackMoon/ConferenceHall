@@ -42,6 +42,29 @@ namespace host.Controllers
         }
 
         /// <summary>
+        /// Получить логотип организации
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="icon">иконка?</param>
+        /// <returns></returns>
+        [HttpGet("/api/logo/{id}/{icon?}")]
+        public async Task<ActionResult> GetShape(int id, bool icon = true)
+        {
+            byte[] fileContents = { };
+            string contentType = "image/*";
+
+            Organization org = await Get(id);
+            if (org != null)
+            {
+                fileContents = icon ? org.Icon : org.Logo;
+                //contentType = el.MimeType;
+            }
+
+            return new FileContentResult(fileContents, contentType);
+        }
+
+
+        /// <summary>
         /// Отправляется файлы ('Content-Type', 'multipart/form-data')
         /// </summary>
         [HttpPost]
@@ -55,6 +78,7 @@ namespace host.Controllers
                     await f.CopyToAsync(ms);
                     value.Logo = ms.ToArray();
                 }
+                value.ContentType = f.ContentType;
             }
 
             return await CommandDispatcher.DispatchAsync<CreateOrganizationCommand, int>(value);
@@ -74,6 +98,7 @@ namespace host.Controllers
                     await f.CopyToAsync(ms);
                     value.Logo = ms.ToArray();
                 }
+                //value.ContentType = f.ContentType;
             }
 
             await CommandDispatcher.DispatchAsync<Organization, bool>(value);

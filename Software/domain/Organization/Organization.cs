@@ -21,7 +21,12 @@ namespace domain.Organization
         /// Описание
         /// </summary>
         public string Description { get; set; }
-        
+
+        /// <summary>
+        /// Иконка
+        /// </summary>
+        public byte[] Icon { get; set; }
+
         /// <summary>
         /// Логотип
         /// </summary>

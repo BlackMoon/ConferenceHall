@@ -11,7 +11,8 @@ namespace domain.Organization.Query
 {
     public class OrganizationQueryHandler: 
         KeyObjectQueryHandler<FindOrganizationByIdQuery, Organization>,
-        IQueryHandler<FindOrganizationsQuery, IEnumerable<OrganizationNode>>
+        IQueryHandler<FindOrganizationsQuery, IEnumerable<OrganizationNode>>,
+        IQueryHandler<FindOrganizationLogoQuery, byte[]>
     {
         public OrganizationQueryHandler(IDbManager dbManager) : base(dbManager)
         {
@@ -92,6 +93,21 @@ namespace domain.Organization.Query
                 return new OrganizationNode() { Data = o.Adapt(dto) };
             });
             
+        }
+
+        public byte[] Execute(FindOrganizationLogoQuery query)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<byte[]> ExecuteAsync(FindOrganizationLogoQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.organizations o")
+                .Column(query.Icon ? "o.icon" : "o.logo")
+                .Where("o.id = @id");
+
+            await DbManager.OpenAsync();
+            return DbManager.DbConnection.QuerySingleOrDefault<byte[]>(sqlBuilder.ToString(), new { id = query.Id });
         }
     }
 }
