@@ -1,5 +1,5 @@
 ﻿<div style="position: absolute; left: -140px; width: 1200px">    
-    <p-treeTable [value]="nodes" selectionMode="{{editMode ? 'single' : ''}}" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)">                
+    <p-treeTable [value]="nodes" selectionMode="{{editMode ? 'checkbox' : 'single'}}" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)">                
         <p-header>            
             <div class="ui-g">
                 <div class="ui-g-8 ui-g-nopad">
@@ -27,16 +27,12 @@
                 </div>
             </div> 
         </p-footer>
-        <p-column field="name" header="Наименование">
-            <ng-template let-col let-node="rowData" pTemplate="body">
-                <i class="fa fa-2x {{node.data.selected ? 'fa-check-square-o' : 'fa-square-o'}}" style="vertical-align:-15%" *ngIf="editMode"></i>
-                <span>&nbsp;{{node.data.name}}</span>                
-            </ng-template>
-        </p-column>        
+        <p-column field="name" header="Наименование"></p-column>        
         <p-column field="description" header="Описание"></p-column>
         <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                <i class="fa fa-lg {{node.data.locked ? 'fa-lock' : ''}}" title="Блокирован"></i>
+                <i class="fa fa-lg fa-user-plus" title="Блокирован" *ngIf="!node.leaf && editMode"></i>
+                <i class="fa fa-lg fa-lock" title="Блокирован" *ngIf="node.leaf && node.data['locked']"></i>
             </ng-template>
         </p-column>
     </p-treeTable>

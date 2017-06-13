@@ -78,8 +78,8 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     selectNode(e) {        
-        let selected = e.node.data["selected"];
-        e.node.data["selected"] = !selected;
+        /*let selected = e.node.data["selected"];
+        e.node.data["selected"] = !selected;*/
     }    
 
     removeOrganization(id: number, name?: string) {
