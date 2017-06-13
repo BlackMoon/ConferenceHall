@@ -47,6 +47,7 @@ export class EmployeeDetailComponent implements OnInit {
             id: [null],
             name: [null],
             job: [null],
+            position: [null],
             role: [null],
             contacts: []
         });
