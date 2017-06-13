@@ -1,5 +1,4 @@
-﻿
-using domain.Common;
+﻿using domain.Common;
 using Newtonsoft.Json;
 
 namespace domain.Dto
