@@ -17,7 +17,7 @@
             <div class="ui-g">   
                 <div class="ui-g-6 ui-g-nopad">
                     <div class="ui-toolbar-group-left">
-                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedNodes.length === 0" *ngIf="editMode"></button>
+                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedNodes.length === 0" *ngIf="editMode" (click)="removeNodes()"></button>
                     </div>
                 </div>
                 <div class="ui-g-6 ui-g-nopad">
@@ -31,7 +31,7 @@
         <p-column field="description" header="Описание"></p-column>
         <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                <i class="fa fa-lg fa-user-plus" title="Добавить сотрудника" *ngIf="!node.leaf && editMode" [routerLink]="['/employees/new']"></i>
+                <i class="fa fa-lg fa-user-plus" title="Добавить сотрудника" *ngIf="!node.leaf && editMode" (click)="addEmployee($event)"></i>
                 <i class="fa fa-lg fa-lock" title="Блокирован" *ngIf="node.leaf && node.data['locked']"></i>
             </ng-template>
         </p-column>

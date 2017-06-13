@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { ConfirmationService, SelectItem, TreeNode } from 'primeng/primeng';
-import { OrganizationNode } from "../../models";
+import { OrganizationNode, NodeGroupCommand } from "../../models";
 import { OrganizationService } from "./organization.service";
 
 const minChars = 3;
@@ -38,9 +38,10 @@ export class OrganizationTreeComponent implements OnInit {
         this.loadOrganizations();
     }
 
-    addEmployee = () => this.router.navigate(["emploees/new"]);
-
-    addOrganization = () => this.router.navigate(["orgs/new"]);
+    addEmployee(e) {
+        e.stopPropagation();
+        this.router.navigate(["/employees/new"]);
+    };
 
     changeEditMode() {
         this.editMode = !this.editMode;
@@ -93,35 +94,74 @@ export class OrganizationTreeComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
-    selectNode(e) {
+    removeNodes(id: number) {
 
-        let id = e.node.data["id"];
-        if (this.editMode) {
-            let ix = this.selectedNodes.findIndex(n => n.data["id"] === id);                    
-        }
-        else
-            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
-    }
-
-
-    removeOrganization(id: number, name?: string) {
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить [${name}]?`,
-            accept: () =>
+            message: `Удалить выбранные записи?`,
+            accept: () => {
+
+                let employees: number[] = [],
+                    orgs: number[] = [];
+
+                this.selectedNodes.forEach(n => {
+
+                    if (n.leaf) {
+                        let parent = n.parent,
+                            id = parent.data["id"];
+
+                        let ix = this.selectedNodes.findIndex(n => !n.leaf && n.data["id"] === id);
+                        (ix === -1) && employees.push(n.data["id"]);
+                    }
+                    else
+                        orgs.push(n.data["id"]);
+                });
 
                 this.organizationService
-                    .delete(id)
+                    .delete({ organizationIds: orgs, employeeIds: employees })
                     .subscribe(
-                    _ => {
+                        _ => {
+                            debugger;
+                            orgs.forEach(key =>
+                            {
+                                let ix = this.nodes.findIndex(n => n.data["id"] === key);
+                                (ix !== -1) && this.nodes.splice(ix, 1);
+                            });
 
-                        //let ix = this.organizations.findIndex(h => h.id === id);
-                        //this.organizations.splice(ix, 1);
-                    },
-                    error => this.logger.error2(error))
+                            employees.forEach(key => {
+                                let ix = this.nodes.findIndex(n => n.data["id"] === key);
+                                (ix !== -1) && this.nodes.splice(ix, 1);
+                            });
+
+                            this.selectedNodes.length = 0;
+                        },
+                        error => this.logger.error2(error));
+            }
 
         });
+    }
+
+    selectNode(e) {
+        
+        let id;
+        if (this.editMode) {
+            
+            if (e.node.parent) {
+
+                let parent = e.node.parent;
+                id = parent.data["id"];
+                
+                // поиск только среди корневых
+                let ix = this.selectedNodes.findIndex(n => !n.leaf && n.data["id"] === id);
+                (ix !== -1) && this.selectedNodes.splice(ix, 1);
+                delete parent["partialSelected"];
+            }
+        }
+        else {
+            id = e.node.data["id"];
+            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
+        }
     }
 
     searchKindChange(e) {

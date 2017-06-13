@@ -3,7 +3,7 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { OrganizationModel } from '../../models';
+import { OrganizationModel, NodeGroupCommand } from '../../models';
 
 @Injectable()
 export class OrganizationService extends HttpDataService<OrganizationModel> {
@@ -11,6 +11,18 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
     url: string = isDevMode() ? "http://localhost:64346/api/organizations" : "api/organizations";
 
     constructor(http: Http) { super(http); }
+
+    /**
+     * Удаляет организации и сотрудников
+     * @param c
+     */
+    delete(c: NodeGroupCommand): Observable<any> {
+
+        return this.http
+            .post(`${this.url}/delete`, c)
+            .catch(handleResponseError);    
+    }
+
 
     /**
      * Поиск узлов дерева
