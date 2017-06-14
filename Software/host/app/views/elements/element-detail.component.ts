@@ -14,14 +14,14 @@ import { ElementService } from './element.service';
     templateUrl: 'element-detail.component.html'
 })
 export class ElementDetailComponent implements OnInit {
-
-    @ViewChild('fileUpload') fileUpload: FileUpload;
-
+    
     /**
      * id элемента
      */
     id?:number;
     elementForm: FormGroup;
+
+    @ViewChild('fileUpload') fileUpload: FileUpload;
 
     constructor(
         private elementService: ElementService,
@@ -58,6 +58,8 @@ export class ElementDetailComponent implements OnInit {
             })
             .subscribe((element: ElementModel) => this.elementForm.patchValue(element));
     }
+
+    onSelect = () => this.fileUpload.styleClass = "";
 
     save(event, element) {
         

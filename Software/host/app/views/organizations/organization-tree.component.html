@@ -27,11 +27,16 @@
                 </div>
             </div> 
         </p-footer>
-        <p-column field="name" header="Наименование"></p-column>        
+        <p-column field="name" header="Наименование">
+            <ng-template let-col let-node="rowData" pTemplate="body">
+                <img #icon src="/api/icon/{{node.data['id'] | uniquesuffix}}" width="32" (load)="icon.style.display=''" style="display: none">
+                {{node.data["name"]}}
+            </ng-template>
+        </p-column>        
         <p-column field="description" header="Описание"></p-column>
         <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                <i class="fa fa-lg fa-user-plus" title="Добавить сотрудника" *ngIf="!node.leaf && editMode" (click)="addEmployee($event)"></i>
+                <i class="fa fa-lg fa-user-plus" title="Добавить сотрудника" *ngIf="!node.leaf && editMode" (click)="addEmployee($event, node.data['id'])"></i>
                 <i class="fa fa-lg fa-lock" title="Блокирован" *ngIf="node.leaf && node.data['locked']"></i>
             </ng-template>
         </p-column>

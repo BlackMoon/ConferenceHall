@@ -66,9 +66,8 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
         formData.append("address", organization.address);
         formData.append("code", organization.code);
         formData.append("description", organization.description);
-        formData.append("logo", organization.logo, organization.logo.name);
         formData.append("name", organization.name);
-
+        
         organization.logo && formData.append("logo", organization.logo, organization.logo.name);
 
         return this.http

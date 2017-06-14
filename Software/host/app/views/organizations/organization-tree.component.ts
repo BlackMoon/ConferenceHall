@@ -38,9 +38,9 @@ export class OrganizationTreeComponent implements OnInit {
         this.loadOrganizations();
     }
 
-    addEmployee(e) {
+    addEmployee(e, orgid) {
         e.stopPropagation();
-        this.router.navigate(["/employees/new"]);
+        this.router.navigate(["/employees/new", orgid]);
     };
 
     changeEditMode() {
