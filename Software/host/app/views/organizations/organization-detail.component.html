@@ -1,12 +1,11 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
 
-
     <form [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
 
         <div class="ui-widget-header" style="padding: .5em .75em">
             <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!orgForm.valid"></button>
         </div>
-        <hr class="ui-widget-content" style="border-top:0">
+        <hr class="ui-widget-content" style="border-top: 0">
 
         <input type="hidden" formControlName="id" />
 
@@ -34,7 +33,7 @@
                             Описание :
                         </div>
                         <div class="ui-g-8">
-                            <textarea pInputTextarea type="text" rows="12" formControlName="description" class="w100p"></textarea>
+                            <textarea pInputTextarea type="text" rows="6" formControlName="description" class="w100p"></textarea>
                         </div>
                     </div>
                 </div>
@@ -47,7 +46,7 @@
                             &nbsp;
                         </div>
                         <div class="ui-g-8">
-                            <textarea pInputTextarea type="text" rows="12" formControlName="address" class="w100p"></textarea>
+                            <textarea pInputTextarea type="text" rows="6" formControlName="address" class="w100p"></textarea>
                         </div>
                     </div>
 

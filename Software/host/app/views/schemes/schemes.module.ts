@@ -22,7 +22,6 @@ import { SchemeTableComponent } from "./scheme-table.component";
 import { SchemeToolboxComponent } from './scheme-toolbox.component';
 import { SchemeRoutingModule } from './schemes-routing.module';
 import { SchemeService } from './scheme.service';
-
 import { ShapePropertiesComponent } from './shape-properties.component';
 
 @NgModule({
