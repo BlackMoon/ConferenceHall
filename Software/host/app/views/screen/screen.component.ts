@@ -7,6 +7,7 @@ import { MemberModel, MemberState, ScreenModel } from '../../models';
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 import { HubService } from "../../common/hub-service";
 import { ScreenService } from "./screen.service";
+import { MemberTableComponent } from "../members/member-table.component";
 
 const tickInterval = 5000;
 
@@ -65,7 +66,7 @@ export class ScreenComponent implements OnInit {
 
     @ViewChild('wrapper') wrapperElRef: ElementRef;
 
-    //@ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
+    @ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
 
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
 
@@ -97,10 +98,10 @@ export class ScreenComponent implements OnInit {
                             this.hubService
                                 .confirmMember
                                 .subscribe(member => {
-
+                                    
                                     this.schemeMain.toggleMark(member.seat);
 
-                                    /*this.memberTable.members.every(
+                                    this.memberTable.members.every(
                                         m => {
 
                                             if (m.id === member.id) {
@@ -109,7 +110,7 @@ export class ScreenComponent implements OnInit {
                                                 return false;
                                             }
                                             return true;
-                                        });*/
+                                        });
                                 });
                         });
 
@@ -125,13 +126,13 @@ export class ScreenComponent implements OnInit {
                 },
                 error => this.logger.error2(error));
 
-        /*Observable
+        Observable
             .combineLatest(this.schemeMain.schemeLoaded, this.memberTable.membersLoaded)
-            .subscribe((a:Array<any>) => {
+            .subscribe((a: Array<any>) => {
+                // занятые места
                 let members: MemberModel[] = a[1] || [];
                 [].forEach.call(members, m => this.schemeMain.toggleMark(m.seat));
-            });*/
-            
+            });
 
         // clock
         setInterval(() => this.now = new Date(), 1000);

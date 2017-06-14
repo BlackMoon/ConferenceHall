@@ -214,7 +214,7 @@ export class ConferenceDetailComponent implements OnInit {
                     this.tabMemberWrapper.nativeElement.style.height = "500px";
                     if (!this.confId || this.confId <= 0) break;
                     this.memberService
-                        .getAll(null, this.confId, null)
+                        .getAll(this.confId)
                         .subscribe((members: any) => this.confMembers = members,
                         error => this.logger.error2(error));
                     break;

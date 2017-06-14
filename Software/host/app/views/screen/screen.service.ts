@@ -18,9 +18,7 @@ export class ScreenService extends HttpDataService<ScreenModel> {
 
         return this.http
             .get(`${this.url}/${key}`)
-            .map((r: Response) => {
-                return MapUtils.deserialize(ScreenModel, r.json());
-            })
+            .map((r: Response) => MapUtils.deserialize(ScreenModel, r.json()))
             .catch(handleResponseError);
     }
 }

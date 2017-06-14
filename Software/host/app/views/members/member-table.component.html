@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<p-dataTable [value]="members" [rows]="10" [paginator]="true">
+    <p-column field="name" header="ФИО"></p-column>
+    <p-column field="job" header="Организация"></p-column>
+    <p-column field="position" header="Должность"></p-column>
+    <p-column field="seat" header="Место" *ngIf="conferenceId" [style]="{ 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
+        <ng-template let-member="rowData" pTemplate="body">
+            <span class="fa-stack circle {{member.memberState === MemberState.Confirmed ? 'on' : ''}}">
+                <strong class="fa-stack-1x">{{member.seat}}</strong>
+            </span>
+        </ng-template>
+    </p-column>
+</p-dataTable>

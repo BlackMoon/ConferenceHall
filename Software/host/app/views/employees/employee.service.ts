@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { FindOrganizationsQuery, EmployeeModel } from '../../models';
+import { EmployeeModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -30,19 +30,6 @@ export class EmployeeService extends HttpDataService<EmployeeModel> {
 
     delete(key): Observable<any> {
         return Observable.of(null);
-    }
-
-    getAll(filter?: string, confid?: number, orgIds: number[] = null): Observable<any> {
-       
-        let body: FindOrganizationsQuery = { conferenceId: confid, filter: filter, organizationIds: orgIds };
-
-        return this.http
-            .post(`${this.url}/search`, body)
-            .map((r: Response) => r
-                .json()
-                .map(m => MapUtils.deserialize(EmployeeModel, m))
-            )
-            .catch(handleResponseError);
     }
 
     get(key): Observable<any> {
