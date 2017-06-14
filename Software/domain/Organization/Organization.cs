@@ -1,6 +1,7 @@
 ﻿using domain.Common;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
+using Newtonsoft.Json;
 
 namespace domain.Organization
 {
@@ -27,11 +28,13 @@ namespace domain.Organization
         /// <summary>
         /// Иконка
         /// </summary>
+        [JsonIgnore]
         public byte[] Icon { get; set; }
 
         /// <summary>
         /// Логотип
         /// </summary>
+        [JsonIgnore]
         public byte[] Logo { get; set; }
 
         /// <summary>

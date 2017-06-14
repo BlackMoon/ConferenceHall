@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dto\**" />
+    <EmbeddedResource Remove="Dto\**" />
+    <None Remove="Dto\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\kit\Kit.Core\Kit.Core.csproj" />
     <ProjectReference Include="..\..\..\kit\Kit.Dal.Postgre\Kit.Dal.Postgre.csproj" />
   </ItemGroup>
@@ -20,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\" />
     <Folder Include="Employee\Command\" />
   </ItemGroup>
 

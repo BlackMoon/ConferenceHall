@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using SkiaSharp;
 
-namespace domain.Common
+namespace domain
 {
     public static class ImageScaler
     {

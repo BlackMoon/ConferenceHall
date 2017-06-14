@@ -76,15 +76,27 @@ namespace domain.Conference.Query
                 param.Add("hallIds", query.HallIds);
             }
 
-            // фильтр по участникам
-            if (query.MemberIds != null)
-            {
-                sqlBuilder
-                    .Join("conf_members m ON m.conf_id = c.id")
-                    .Where("m.id = ANY(@memberIds)");
+            string expr = string.Empty; 
 
-                param.Add("memberIds", query.MemberIds);
+            // фильтр по сотрудникам
+            if (query.EmployeeIds != null)
+            {
+                expr = "c.id in (SELECT m.conf_id FROM conf_hall.conf_members m WHERE m.employee_id = ANY(@employeeIds))";
+                param.Add("employeeIds", query.EmployeeIds);
             }
+
+            // фильтр по организациям
+            if (query.OrganizationIds != null)
+            {
+                if (query.EmployeeIds != null)
+                    expr += " OR";
+
+                expr += "c.id in (SELECT m.conf_id FROM conf_hall.conf_members m JOIN conf_hall.employees e ON e.id = m.employee_id WHERE e.org_id = ANY(@orgIds))";
+                param.Add("orgIds", query.OrganizationIds);
+            }
+
+            if (!string.IsNullOrEmpty(expr))
+                sqlBuilder.Where(expr);
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Conference>(sqlBuilder.ToString(), param);

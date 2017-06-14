@@ -97,8 +97,8 @@ namespace domain.Element.Command
         
         public override async Task<bool> ExecuteAsync(Element command)
         {
-            command.Data = ImageScaler.ResizeImage(command.Data, MaxW, MaxH, command.MimeType);
             command.Thumbnail = ImageScaler.ResizeImage(command.Data, W, H, command.MimeType, 50);
+            command.Data = ImageScaler.ResizeImage(command.Data, MaxW, MaxH, command.MimeType);
 
             await DbManager.OpenAsync();
             await DbManager.DbConnection.UpdateAsync(command);
