@@ -43,7 +43,8 @@ export class FindConferencesQuery {
     startDate?: Date;
     endDate?: Date;
     hallIds?: number[];
-    memberIds?: number[];
+    employeeIds?: number[];
+    organizationIds?: number[];
 }
 
 
