@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } from '@angular/core';
+﻿import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -11,9 +11,7 @@ const minChars = 3;
 enum SearchKind { SearchOrg, SearchEmployee };
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
     selector: "organization-tree",
-    styles: [".no-header thead { display: none; }"],
     templateUrl: "organization-tree.component.html"
 })
 export class OrganizationTreeComponent implements OnInit {

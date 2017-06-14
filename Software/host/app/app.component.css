@@ -450,6 +450,10 @@ Raleway font
     text-align: center;
 }
 
+.no-header thead {
+    display: none;
+}
+
 .ui-treetable .ui-treetable-header, .ui-treetable .ui-treetable-footer {
     padding: 0.25em 0.5em;
 }

@@ -6,6 +6,7 @@ import {
     ButtonModule,
     DataGridModule,
     DataListModule,
+    DataTableModule,
     DragDropModule,
     DropdownModule,
     FieldsetModule,
@@ -24,6 +25,7 @@ import { GroupsModule } from "../groups/groups.module";
 import { SchemeDetailComponent } from "./scheme-detail.component";
 import { SchemeMainComponent } from './scheme-main.component';
 import { SchemeListComponent } from "./scheme-list.component";
+import { SchemeTableComponent } from "./scheme-table.component";
 import { SchemeToolboxComponent } from './scheme-toolbox.component';
 import { SchemeRoutingModule } from './schemes-routing.module';
 import { SchemeService } from './scheme.service';
@@ -31,18 +33,13 @@ import { SchemeService } from './scheme.service';
 import { ShapePropertiesComponent } from './shape-properties.component';
 
 @NgModule({
-    declarations: [SchemeDetailComponent, SchemeMainComponent, SchemeListComponent, SchemeToolboxComponent, ShapePropertiesComponent],
+    declarations: [SchemeDetailComponent, SchemeMainComponent, SchemeListComponent, SchemeTableComponent, SchemeToolboxComponent, ShapePropertiesComponent],
     exports: [
-        ButtonModule,
-        DataGridModule,
-        FieldsetModule,
-        InputTextModule,
-        InputTextareaModule,
         SchemeListComponent,
         SchemeMainComponent,
+        SchemeTableComponent,
         SchemeToolboxComponent,
-        ShapePropertiesComponent,
-        SpinnerModule
+        ShapePropertiesComponent
     ],
     imports: [
         AccordionModule,
@@ -50,6 +47,7 @@ import { ShapePropertiesComponent } from './shape-properties.component';
         CommonModule,
         DataGridModule,
         DataListModule,
+        DataTableModule,
         DragDropModule,
         DropdownModule,
         ElementsModule,
