@@ -30,14 +30,14 @@
     <p-column field="name" header="Наименование">
         <ng-template let-col let-node="rowData" pTemplate="body">
             <img #icon src="/api/icon/{{node.data['id'] | uniquesuffix}}" width="32" (load)="icon.classList.remove('ui-helper-hidden')" class="ui-helper-hidden" *ngIf="!node.leaf">
-            {{node.data["name"]}}
+            {{node.data[col.field]}}
         </ng-template>
     </p-column>
     <p-column field="description" header="Описание" *ngIf="!readOnly"></p-column>
     <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="!readOnly">
         <ng-template let-col let-node="rowData" pTemplate="body">
             <i class="fa fa-lg fa-user-plus" title="Добавить сотрудника" *ngIf="!node.leaf && editMode" (click)="addEmployee($event, node.data['id'])"></i>
-            <i class="fa fa-lg fa-lock" title="Блокирован" *ngIf="node.leaf && node.data['locked']"></i>
+            <i class="fa fa-lg fa-lock" title="Блокирован" *ngIf="node.leaf && node.data[col.field]"></i>
         </ng-template>
     </p-column>
 </p-treeTable>
