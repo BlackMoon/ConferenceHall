@@ -9,7 +9,7 @@ export enum MemberState { Invited, Registered, Confirmed };
 /**
  * Модель. Участник
  */
-export class MemberModel extends KeyModel implements ISelected {
+export class MemberModel extends KeyModel {
 
     /**
      * ФИО
@@ -29,26 +29,14 @@ export class MemberModel extends KeyModel implements ISelected {
     /**
      * Должность
      */
-    position: string;   
+    position: string;  
 
-    /**
-    * Роль (для пользователей)
-     */
-    role: string;
     
     /**
      * Место
      */
     seat: string;
-
-    
-    /**
-    * Контакты
-    */
-    contacts: ContactModel[];
-
-    lockedInt: number;
-    selected: boolean;
+   
 
     constructor() {
 
@@ -58,18 +46,6 @@ export class MemberModel extends KeyModel implements ISelected {
         this.job = undefined;      
         this.memberState = MemberState.Invited;
         this.position = undefined;
-        this.role = undefined;
         this.seat = undefined;
-        this.lockedInt = 0;
-        this.contacts = [];
     }
-}
-
-/**
- * Запрос поиска участников
- */
-export class FindOrganizationsQuery {
-    conferenceId?: number;
-    filter?: string;
-    organizationIds?: number[];
 }

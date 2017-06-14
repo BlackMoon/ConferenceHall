@@ -10,14 +10,11 @@ export class ScreenModel {
     startDate: Date;
     endDate: Date;
     subject: string;
-
-    @JsonProperty({ clazz: MemberModel })
-    members: MemberModel[];
+    
     tickers: string[];
 
     constructor() {
-        
-        this.members = null;
+    
         this.schemeId = null;
         this.startDate = null;
         this.endDate = null;

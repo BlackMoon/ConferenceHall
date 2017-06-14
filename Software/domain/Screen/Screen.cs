@@ -1,6 +1,4 @@
 ﻿using System;
-using domain.Common;
-using Newtonsoft.Json;
 
 namespace domain.Screen
 {
@@ -16,8 +14,6 @@ namespace domain.Screen
 
         public string Subject { get; set; }
         
-        public Member.Member[] Members { get; set; }
-
         /// <summary>
         /// Сообщения бегущей строки
         /// </summary>

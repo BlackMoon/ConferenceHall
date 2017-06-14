@@ -21,7 +21,7 @@ namespace domain.Screen.Query
         public override async Task<Screen> ExecuteAsync(FindScreenByIdQuery query)
         {
             // sql для выбора конференции
-            SqlBuilder sqlBuilder1 = new SqlBuilder("conf_hall.conferences c")
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
                 .Column("c.subject")
                 .Column("c.hall_scheme_id schemeid")
                 .Column("lower(c.period) startDate")
@@ -30,25 +30,8 @@ namespace domain.Screen.Query
                 .Join("conf_hall.halls h ON h.id = c.hall_id")
                 .Where("c.id = @id");
 
-            // sql для выбора участников
-            SqlBuilder sqlBuilder2 = new SqlBuilder("conf_hall.conf_members m")
-                .Column("m.id")
-                .Column("m.seat")
-                .Column("m.state")
-                .Column("e.name")
-                .Join("conf_hall.employees e ON e.id = m.employee_id")
-                .Where("m.conf_id = @id");
-
             await DbManager.OpenAsync();
-
-            Screen screen;
-            using (var multi = await DbManager.DbConnection.QueryMultipleAsync($"{sqlBuilder1}; {sqlBuilder2}", new { id = query.Id }))
-            {
-                screen = multi.Read<Screen>().Single();
-                screen.Members = multi.Read<Member.Member>().ToArray();
-            }
-            
-            return screen;
+            return DbManager.DbConnection.QuerySingleOrDefault<Screen>(sqlBuilder.ToString(), new { id = query.Id });
         }
 
         public IEnumerable<string> Execute(FindTickersByConference query)

@@ -1,4 +1,6 @@
-﻿namespace domain.Member.Query
+﻿using domain.Common.Query;
+
+namespace domain.Member.Query
 {
     /// <summary>
     /// Запрос. Найти место участника
