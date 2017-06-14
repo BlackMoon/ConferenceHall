@@ -184,7 +184,7 @@ export class OrganizationTreeComponent implements OnInit {
                                     nodes: TreeNode[] = n.leaf ? n.parent.children : this.nodes;
 
                                 let ix = nodes.findIndex(n => n.data["id"] === id);
-                                (ix !== -1) && nodes.splice(ix, 1);
+                                nodes.splice(ix, 1);
                             });
 
                             this.selectedNodes.length = 0;

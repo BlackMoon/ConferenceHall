@@ -48,11 +48,10 @@ namespace host.Controllers
             return CommandDispatcher.DispatchAsync<Scheme, bool>(value);
         }
 
-        
-        [HttpDelete("{id}")]
-        public Task Delete(int id)
+        [HttpPost("/api/[controller]/delete")]
+        public Task DeleteSchemes([FromBody]DeleteSchemesCommand value)
         {
-            return CommandDispatcher.DispatchAsync<DeleteSchemeCommand, bool>(new DeleteSchemeCommand() { Id = id });
+            return CommandDispatcher.DispatchAsync(value);
         }
     }
 }

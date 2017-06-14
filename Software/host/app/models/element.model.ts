@@ -1,4 +1,4 @@
-﻿import { ISelected, KeyModel } from './index';
+﻿import { ISelected, KeyModel, GroupCommand } from './index';
 
 /**
  * Константы для операций Drag & Drop
@@ -9,8 +9,7 @@ export const elemDragType = "element";
 /**
  * Команда мульти-обработки элементов
  */
-export class ElementGroupCommand {
-    ids: number[];
+export class ElementGroupCommand extends GroupCommand {
     groupId?: number;
 }
 

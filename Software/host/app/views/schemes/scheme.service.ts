@@ -3,7 +3,7 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { SchemeModel } from '../../models';
+import { GroupCommand, SchemeModel } from '../../models';
 import MapUtils from '../../common/map-utils';
 
 @Injectable()
@@ -35,6 +35,17 @@ export class SchemeService extends HttpDataService<SchemeModel> {
                 .json()
                 .map(el => MapUtils.deserialize(SchemeModel, el))
             )
+            .catch(handleResponseError);
+    }
+
+    /**
+     * Удаляет схемы
+     * @param c
+     */
+    delete(c: GroupCommand): Observable<any> {
+
+        return this.http
+            .post(`${this.url}/delete`, c)
             .catch(handleResponseError);
     }
 }

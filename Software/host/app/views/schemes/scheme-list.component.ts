@@ -59,7 +59,7 @@ export class SchemeListComponent {
 
     removeScheme(id: number, name?: string) {
 
-        this.confirmationService.confirm({
+        /*this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
             message: `Удалить [${name}]?`,
@@ -74,6 +74,6 @@ export class SchemeListComponent {
                         },
                         error => this.logger.error2(error));
             }
-        });   
+        });  */ 
     }
 }

@@ -25,3 +25,7 @@ export class KeyModel {
         this.id = undefined;
     }
 }
+
+export class GroupCommand {
+    ids: number[];
+}

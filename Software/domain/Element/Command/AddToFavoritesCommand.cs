@@ -1,17 +1,12 @@
-﻿using Kit.Core.CQRS.Command;
+﻿using domain.Common.Command;
 
 namespace domain.Element.Command
 {
     /// <summary>
     /// Команда. Добавить в избранное
     /// </summary>
-    public class AddToFavoritesCommand : ICommand
+    public class AddToFavoritesCommand : GroupCommand
     {
-        /// <summary>
-        /// id элементов
-        /// </summary>
-        public int[] Ids { get; set; }
-
         public int UserId { get; set; }
 
     }

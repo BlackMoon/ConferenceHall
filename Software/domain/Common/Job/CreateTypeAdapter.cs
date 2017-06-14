@@ -64,10 +64,6 @@ namespace domain.Common.Job
             // CreateSchemeCommand --> Scheme
             TypeAdapterConfig<CreateSchemeCommand, Scheme.Scheme>
                 .ForType();
-
-            // DeleteSchemeCommand --> Scheme
-            TypeAdapterConfig<DeleteSchemeCommand, Scheme.Scheme>
-                .ForType();
             #endregion
         }
 

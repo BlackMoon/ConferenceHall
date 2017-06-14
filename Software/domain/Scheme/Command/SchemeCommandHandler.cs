@@ -12,9 +12,9 @@ using Microsoft.Extensions.Logging;
 namespace domain.Scheme.Command
 {
     public class SchemeCommandHandler : KeyObjectCommandHandler<Scheme>,
+        ICommandHandler<DeleteSchemesCommand>,
         ICommandHandlerWithResult<CopySchemeCommand, Scheme>,
-        ICommandHandlerWithResult<CreateSchemeCommand, int>, 
-        ICommandHandlerWithResult<DeleteSchemeCommand, bool>
+        ICommandHandlerWithResult<CreateSchemeCommand, int>
     {
         public SchemeCommandHandler(IDbManager dbManager, ILogger<SchemeCommandHandler> logger) : base(dbManager, logger)
         {
@@ -64,19 +64,17 @@ namespace domain.Scheme.Command
             return await DbManager.DbConnection.InsertAsync(command.Adapt(scheme));
         }
 
-        public bool Execute(DeleteSchemeCommand command)
+        public void Execute(DeleteSchemesCommand command)
         {
-            DbManager.Open();
-            Scheme scheme = new Scheme();
-            return DbManager.DbConnection.Delete(command.Adapt(scheme));
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> ExecuteAsync(DeleteSchemeCommand command)
+        public async Task ExecuteAsync(DeleteSchemesCommand command)
         {
-            await DbManager.OpenAsync();
+            DbManager.AddParameter("Ids", command.Ids);
 
-            Scheme scheme = new Scheme();
-            return await DbManager.DbConnection.DeleteAsync(command.Adapt(scheme));
+            await DbManager.OpenAsync();
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.hall_scheme WHERE id = ANY(@Ids)");
         }
 
         public override async Task<bool> ExecuteAsync(Scheme command)

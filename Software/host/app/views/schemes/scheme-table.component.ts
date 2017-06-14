@@ -41,7 +41,7 @@ export class SchemeTableComponent {
     }
 
     addScheme(scheme) {
-
+        
         scheme.hallId = this.hallId;
         this.schemeService
             .add(scheme)
@@ -49,7 +49,6 @@ export class SchemeTableComponent {
             key => {
                 scheme.id = key;
                 this.schemes.push(scheme);
-                this.schemeformVisible = false;
                 this.schemeform.reset();
             },
             error => this.logger.error2(error));
@@ -68,23 +67,35 @@ export class SchemeTableComponent {
         this.selectedSchemes.length = 0;
     }
 
-    removeScheme(id: number, name?: string) {
+    removeRows() {
 
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить [${name}]?`,
+            message: `Удалить выбранные записи?`,
             accept: _ => {
-                return this.schemeService
-                    .delete(id)
+
+                let c = { ids: this.selectedSchemes.map(s => s.id) };
+
+                this.schemeService
+                    .delete(c)
                     .subscribe(
                     _ => {
 
-                        let ix = this.schemes.findIndex(s => s.id === id);
-                        this.schemes.splice(ix, 1);
+                        this.selectedSchemes.forEach(s => {
+                            let ix = this.schemes.findIndex(n => n.id === s.id);
+                            this.schemes.splice(ix, 1);
+                        });
+
+                        this.selectedSchemes.length = 0;
                     },
                     error => this.logger.error2(error));
             }
         });
+    }
+
+    selectRow(e) {
+
+        !this.editMode && this.router.navigate(["/schemes", e.data["id"]]);
     }
 }
