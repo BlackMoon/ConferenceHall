@@ -36,7 +36,11 @@ export class MemberModel extends KeyModel {
      * Место
      */
     seat: string;
-   
+
+    /**
+     * Пред. место
+     */
+    oldSeat: string;
 
     constructor() {
 
@@ -47,5 +51,6 @@ export class MemberModel extends KeyModel {
         this.memberState = MemberState.Invited;
         this.position = undefined;
         this.seat = undefined;
+        this.oldSeat = undefined;
     }
 }

@@ -1,12 +1,15 @@
-﻿<p-dataTable [value]="members" [rows]="10" [paginator]="true">
+﻿<p-dataTable [value]="members" [rows]="10" [editable]="editable" [paginator]="true">
     <p-column field="name" header="ФИО"></p-column>
     <p-column field="job" header="Организация"></p-column>
     <p-column field="position" header="Должность"></p-column>
-    <p-column field="seat" header="Место" *ngIf="conferenceId" [style]="{ 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
-        <ng-template let-member="rowData" pTemplate="body">
+    <p-column field="seat" header="Место" [editable]="editable" [style]="{ 'overflow':'visible', 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
+        <ng-template let-col let-member="rowData" pTemplate="body">
             <span class="fa-stack circle {{member.memberState === MemberState.Confirmed ? 'on' : ''}}">
-                <strong class="fa-stack-1x">{{member.seat}}</strong>
+                <strong class="fa-stack-1x">{{member[col.field]}}</strong>
             </span>
+        </ng-template>
+        <ng-template let-col let-member="rowData" pTemplate="editor">
+            <p-dropdown [(ngModel)]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" required="true" (onChange)="changeSeat(member)"></p-dropdown>
         </ng-template>
     </p-column>
 </p-dataTable>

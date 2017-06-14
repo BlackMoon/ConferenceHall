@@ -98,7 +98,8 @@ export class ScreenComponent implements OnInit {
                             this.hubService
                                 .confirmMember
                                 .subscribe(member => {
-                                    
+
+                                    this.schemeMain.toggleMark(member.oldSeat);
                                     this.schemeMain.toggleMark(member.seat);
 
                                     this.memberTable.members.every(

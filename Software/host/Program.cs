@@ -53,7 +53,7 @@ namespace host
 
                             NameValueCollection nvc = new NameValueCollection();
 
-                            // строка вида [confid=..&memberid=...]
+                            // строка вида [confid=..&memberid=...&oldseat=...]
                             foreach (string s in Regex.Split(info, "&"))
                             {
                                 string[] pair = Regex.Split(s, "=");
@@ -67,9 +67,10 @@ namespace host
                             info = nvc["confid"];
                             if (int.TryParse(info, out confId) && int.TryParse(nvc["id"], out memberId))
                             {
-                                var seat = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
+                                var member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
+                                member.OldSeat = nvc["oldseat"];
                                 // отправить уведомления signalR клиенту(ам)
-                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(seat);
+                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
                             }
 
                             break;

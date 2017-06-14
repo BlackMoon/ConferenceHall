@@ -44,6 +44,11 @@ namespace domain.Member
         public string Seat { get; set; }
 
         /// <summary>
+        /// Пред. место
+        /// </summary>
+        public string OldSeat { get; set; }
+
+        /// <summary>
         /// Статус
         /// </summary>
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]

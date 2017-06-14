@@ -14,6 +14,20 @@ export class MemberService extends HttpDataService<MemberModel> {
 
     constructor(http: Http) { super(http); }
 
+    /**
+     * Поменять место
+     * @param memberid     
+     */
+    changeSeat(memberid: number, seat): Observable<any> {
+
+        let body = [{ op: 'replace', path: '/seat', value: seat }];
+
+        return this.http
+            .patch(`${this.url}/${memberid}`, body)
+            .catch(handleResponseError);
+    }
+
+
     getAll(confid: number): Observable<any> {
 
         return this.http
