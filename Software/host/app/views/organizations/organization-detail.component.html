@@ -61,7 +61,7 @@
                         <div>
                             <div class="ui-fileupload-row">
                                 <div>
-                                    <img #img class="center" src="/api/logo/{{id | uniquesuffix }}" width="256" (load)="icon.style.display=''" style="display: none">
+                                    <img #logo src="/api/logo/{{id | uniquesuffix }}" width="256" (load)="logo.classList.remove('ui-helper-hidden')" class="ui-helper-hidden">
                                 </div>
                             </div>
                         </div>

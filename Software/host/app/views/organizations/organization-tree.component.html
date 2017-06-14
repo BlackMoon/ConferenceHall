@@ -29,7 +29,7 @@
         </p-footer>
         <p-column field="name" header="Наименование">
             <ng-template let-col let-node="rowData" pTemplate="body">
-                <img #icon src="/api/icon/{{node.data['id'] | uniquesuffix}}" width="32" (load)="icon.style.display=''" style="display: none">
+                <img #icon src="/api/icon/{{node.data['id'] | uniquesuffix}}" width="32" (load)="icon.classList.remove('ui-helper-hidden')" class="ui-helper-hidden">
                 {{node.data["name"]}}
             </ng-template>
         </p-column>        
