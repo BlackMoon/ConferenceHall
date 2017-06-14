@@ -31,7 +31,7 @@ export class ConferenceScheduleComponent {
     
     selectedConference: ConferenceModel;
     selectedHallIds: number[];
-    selectedMemberIds: number[];
+    selectedEmployeeIds: number[];
     selectedEvent: any;
 
     constructor(
@@ -177,14 +177,14 @@ export class ConferenceScheduleComponent {
                 });
     }
 
-    hallListChanged(ids: number[]) {
-        this.selectedHallIds = ids;
+    employeeTreeChanged(ids: number[]) {
+        this.selectedEmployeeIds = ids;
 
         this.loadEvents();
     }
 
-    memberListChanged(ids: number[]) {
-        this.selectedMemberIds = ids;
+    hallListChanged(ids: number[]) {
+        this.selectedHallIds = ids;
 
         this.loadEvents();
     }
@@ -217,7 +217,7 @@ export class ConferenceScheduleComponent {
 
     loadEvents() {
         this.conferrenceService
-            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedMemberIds)
+            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds)
             .subscribe(
                 conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
                 error => this.logger.error2(error));

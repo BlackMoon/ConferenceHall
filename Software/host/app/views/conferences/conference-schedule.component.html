@@ -18,7 +18,7 @@
                     <hall-list (selectionChanged)="hallListChanged($event)"></hall-list>
                 </p-tabPanel>
                 <p-tabPanel header="Участники">
-                    <member-list (selectionChanged)="memberListChanged($event)"></member-list>
+                    <organization-tree [emplSearch]="true" [readOnly]="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>
                 </p-tabPanel>
             </p-tabView>
         </div>
