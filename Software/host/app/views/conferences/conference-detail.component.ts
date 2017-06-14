@@ -10,7 +10,7 @@ import { SchemeService } from "../schemes/scheme.service";
 import { MemberService } from "../members/member.service";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TimeRange } from '../../models';
-import { DateToUtcPipe } from "../../common/pipes";
+import { DateToUtcPipe } from "../../common/globals/pipes";
 import { locale } from "../../common/locale";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 //import { OrgMemberTableComponent } from '../members/org-member-table.component';

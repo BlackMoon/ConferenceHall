@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
-import { AppointmentModel, ConferenceModel, ConfState, confDragType, TimeRange } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, confDragType, NodeGroupCommand, TimeRange } from '../../models';
 import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
@@ -32,6 +32,7 @@ export class ConferenceScheduleComponent {
     selectedConference: ConferenceModel;
     selectedHallIds: number[];
     selectedEmployeeIds: number[];
+    selectedOrganizationIds: number[];
     selectedEvent: any;
 
     constructor(
@@ -177,9 +178,9 @@ export class ConferenceScheduleComponent {
                 });
     }
 
-    employeeTreeChanged(ids: number[]) {
-        this.selectedEmployeeIds = ids;
-
+    employeeTreeChanged(c: NodeGroupCommand) {
+        this.selectedEmployeeIds = c.employeeIds;
+        this.selectedOrganizationIds = c.organizationIds;
         this.loadEvents();
     }
 
@@ -217,7 +218,7 @@ export class ConferenceScheduleComponent {
 
     loadEvents() {
         this.conferrenceService
-            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds)
+            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds, this.selectedOrganizationIds)
             .subscribe(
                 conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
                 error => this.logger.error2(error));

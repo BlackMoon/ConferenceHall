@@ -43,12 +43,13 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             .catch(handleResponseError);    
     }
 
-    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, memberIds: number[] = null): Observable<any> {
+    getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, employeeIds: number[] = null, organizationIds: number[] = null): Observable<any> {
 
         let body: FindConferencesQuery = { startDate: startDate, endDate: endDate, state: state };
 
         hallIds && hallIds.length > 0 && (body.hallIds = hallIds);
-        memberIds && memberIds.length > 0 && (body.memberIds = memberIds);
+        employeeIds && employeeIds.length > 0 && (body.employeeIds = employeeIds);
+        organizationIds && organizationIds.length > 0 && (body.organizationIds = organizationIds);
 
         return this.http
             .post(`${this.url}/search`, body)
