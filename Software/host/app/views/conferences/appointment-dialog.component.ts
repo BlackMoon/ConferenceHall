@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
 import { AppointmentModel } from '../../models';
-import { DateToUtcPipe } from "../../common/pipes";
+import { DateToUtcPipe } from "../../common/globals/pipes";
 import { HallService } from '../halls/hall.service';
 
 @Component({

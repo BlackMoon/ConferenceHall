@@ -10,7 +10,7 @@ import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
 import { HallsModule } from '../halls/halls.module';
 import { MembersModule } from '../members/members.module';
-import { DateToUtcPipe } from "../../common/pipes";
+import { DateToUtcPipe } from "../../common/globals/pipes";
 import { HubService } from "../../common/hub-service";
 import { SchemesModule } from '../schemes/schemes.module';
 //import { EmployeesModule } from '../employees/employees.module';
