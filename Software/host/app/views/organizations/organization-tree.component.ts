@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+﻿import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -11,6 +11,9 @@ const minChars = 3;
 enum SearchKind { SearchOrg, SearchEmployee };
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
+    selector: "organization-tree",
+    styles: [".no-header thead { display: none; }"],
     templateUrl: "organization-tree.component.html"
 })
 export class OrganizationTreeComponent implements OnInit {
@@ -19,9 +22,18 @@ export class OrganizationTreeComponent implements OnInit {
     filter: string;
 
     /**
+     * Режим чтения (для вставки в другой компонент)
+     */
+    @Input()
+    readOnly: boolean;
+
+    /**
      * Поиск по сотрудникам/организациям
      */
+    @Input()
     emplSearch: boolean;
+
+    @Output() selectionChanged = new EventEmitter<number[]>();
 
     nodes: TreeNode[] = [];
     selectedNodes: TreeNode[] = [];
@@ -47,7 +59,34 @@ export class OrganizationTreeComponent implements OnInit {
         this.editMode = !this.editMode;
         this.selectedNodes.length = 0;
     }
-    
+
+    changeSearchKind(e) {
+
+        let expanded = this.nodes
+            .filter(n => n.expanded)
+            .map(n => n.data.id);
+
+        // обновить дерево, учитывая открытые узлы
+        this.organizationService
+            .getAll(this.emplSearch, null, this.filter)
+            .subscribe(
+            nodes => {
+
+                nodes.forEach(n => {
+
+                    if (expanded.indexOf(n.data.id) !== -1) {
+                        this.loadNode({ node: n });
+                        n.expanded = true;
+                    }
+
+                });
+
+                this.nodes = nodes;
+            },
+            error => this.logger.error2(error));
+
+        this.searchTitle = e.checked ? "По сотрудникам" : "По организациям";
+    }
 
     filterChange(value) {
 
@@ -90,7 +129,19 @@ export class OrganizationTreeComponent implements OnInit {
         this.organizationService
             .getAll(this.emplSearch, null, this.filter)
             .subscribe(
-                nodes => this.nodes = nodes,
+                nodes => {
+
+                    // в режиме [поиск по сотрудникам] --> открывать узлы организаций
+                    if (this.emplSearch && this.filter && this.filter.length >= minChars) {
+                        nodes.forEach(n => {
+
+                            this.loadNode({ node: n });
+                            n.expanded = true;
+                        });
+                    }
+
+                    this.nodes = nodes;
+                },
                 error => this.logger.error2(error));
     }
 
@@ -139,10 +190,6 @@ export class OrganizationTreeComponent implements OnInit {
         });
     }
 
-    removeNodeFromTree() {
-        
-    }
-
     selectNode(e) {
         
         let id;
@@ -160,36 +207,21 @@ export class OrganizationTreeComponent implements OnInit {
             }
         }
         else {
-            id = e.node.data["id"];
-            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
+
+            if (this.readOnly) {
+                // отправить только id сотрудников
+                this.selectionChanged.emit(this.selectedNodes.filter(n => !n.leaf).map(n => n.data["id"]));
+            }
+            else
+            {
+                id = e.node.data["id"];
+                this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
+            }
         }
     }
 
-    searchKindChange(e) {
-
-        let expanded = this.nodes
-            .filter(n => n.expanded)
-            .map(n => n.data.id);
-
-        // обновить дерево, учитывая открытые узлы
-        this.organizationService
-            .getAll(this.emplSearch, null, this.filter)
-            .subscribe(
-                nodes => {
-
-                    nodes.forEach(n => {
-
-                        if (expanded.indexOf(n.data.id) !== -1) {
-                            this.loadNode({ node: n });    
-                            n.expanded = true;
-                        }
-                        
-                    });
-
-                    this.nodes = nodes;
-                },
-                error => this.logger.error2(error));
-
-        this.searchTitle = e.checked ? "По сотрудникам" : "По организациям";
+    unSelectNode() {
+        // отправить только id сотрудников
+        this.readOnly && this.selectionChanged.emit(this.selectedNodes.filter(n => !n.leaf).map(n => n.data["id"]));    
     }
 }
