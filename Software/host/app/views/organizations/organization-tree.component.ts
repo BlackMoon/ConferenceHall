@@ -33,7 +33,7 @@ export class OrganizationTreeComponent implements OnInit {
     @Input()
     emplSearch: boolean;
 
-    @Output() selectionChanged = new EventEmitter<number[]>();
+    @Output() selectionChanged = new EventEmitter<NodeGroupCommand>();
 
     nodes: TreeNode[] = [];
     selectedNodes: TreeNode[] = [];
@@ -103,6 +103,28 @@ export class OrganizationTreeComponent implements OnInit {
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 
+    getNodeGroupCommand(): NodeGroupCommand {
+
+        let employees: number[] = [],
+            orgs: number[] = [];
+
+        this.selectedNodes.forEach(n => {
+
+            if (n.leaf) {
+                let parent = n.parent,
+                    id = parent.data["id"];
+
+                let ix = this.selectedNodes.findIndex(n => !n.leaf && n.data["id"] === id);
+                (ix === -1) && employees.push(n.data["id"]);
+            }
+            else
+                orgs.push(n.data["id"]);
+        });
+        
+        return { organizationIds: orgs, employeeIds: employees };
+
+    }
+
     loadNode(e) {
         
         if (e.node && !e.node.hasOwnProperty("children")) {
@@ -152,25 +174,10 @@ export class OrganizationTreeComponent implements OnInit {
             icon: 'fa fa-trash',
             message: `Удалить выбранные записи?`,
             accept: () => {
-
-                let employees: number[] = [],
-                    orgs: number[] = [];
-
-                this.selectedNodes.forEach(n => {
-
-                    if (n.leaf) {
-                        let parent = n.parent,
-                            id = parent.data["id"];
-
-                        let ix = this.selectedNodes.findIndex(n => !n.leaf && n.data["id"] === id);
-                        (ix === -1) && employees.push(n.data["id"]);
-                    }
-                    else
-                        orgs.push(n.data["id"]);
-                });
-
+                
+                let c = this.getNodeGroupCommand();
                 this.organizationService
-                    .delete({ organizationIds: orgs, employeeIds: employees })
+                    .delete(c)
                     .subscribe(
                         _ => {
 
@@ -209,8 +216,8 @@ export class OrganizationTreeComponent implements OnInit {
         else {
 
             if (this.readOnly) {
-                // отправить только id сотрудников
-                this.selectionChanged.emit(this.selectedNodes.filter(n => !n.leaf).map(n => n.data["id"]));
+                let c = this.getNodeGroupCommand();
+                this.selectionChanged.emit(c);
             }
             else
             {
@@ -221,7 +228,10 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     unSelectNode() {
-        // отправить только id сотрудников
-        this.readOnly && this.selectionChanged.emit(this.selectedNodes.filter(n => !n.leaf).map(n => n.data["id"]));    
+
+        if (this.readOnly) {
+            let c = this.getNodeGroupCommand();
+            this.selectionChanged.emit(c);
+        }
     }
 }
