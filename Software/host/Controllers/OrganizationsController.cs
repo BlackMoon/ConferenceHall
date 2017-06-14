@@ -85,6 +85,7 @@ namespace host.Controllers
                     await f.CopyToAsync(ms);
                     value.Logo = ms.ToArray();
                 }
+                value.ContentType = f.ContentType;
             }
 
             return await CommandDispatcher.DispatchAsync<CreateOrganizationCommand, int>(value);
@@ -104,6 +105,7 @@ namespace host.Controllers
                     await f.CopyToAsync(ms);
                     value.Logo = ms.ToArray();
                 }
+                value.ContentType = f.ContentType;
             }
 
             await CommandDispatcher.DispatchAsync<Organization, bool>(value);
