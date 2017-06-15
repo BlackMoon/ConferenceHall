@@ -1,17 +1,17 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
 
     <form [formGroup]="hallForm" (ngSubmit)="save($event, hallForm.value)">
-        
+
         <div class="ui-widget-header" style="padding: .5em .75em">
             <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!hallForm.valid"></button>
         </div>
         <hr class="ui-widget-content" style="border-top: 0">
 
         <input type="hidden" formControlName="id" />
-        
+
         <p-accordion [multiple]="true">
             <p-accordionTab header="Холл" [selected]="true">
-                
+
                 <div class="ui-g">
                     <div class="ui-g-8 ui-g-nopad">
                         <div class="ui-g-4">
@@ -29,37 +29,38 @@
                             <textarea pInputTextarea type="text" rows="6" formControlName="description" class="w100p"></textarea>
                         </div>
                     </div>
-                    
-                    <div class="ui-g-8">
-                        <p-fieldset legend="Размер">
-                            <div class="ui-g-4">
-                                <div class="ui-g-6">
-                                    Длина *:
-                                </div>
-                                <div class="ui-g-6">
-                                    <p-spinner formControlName="height" [min]="1" [step]="0.5"></p-spinner>
-                                </div>
-                            </div>
-                            <div class="ui-g-2"></div>
-                            <div class="ui-g-4">
-                                <div class="ui-g-6">
-                                    Ширина *:
-                                </div>
-                                <div class="ui-g-6">
-                                    <p-spinner formControlName="width" [min]="1" [step]="0.5"></p-spinner>
-                                </div>
-                            </div>
-                        </p-fieldset>
-                    </div>
-
                 </div>
 
             </p-accordionTab>
+
+            <p-accordionTab header="Размер">
+                <div class="ui-g">
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            <div class="ui-g-6">
+                                Длина *:
+                            </div>
+                            <div class="ui-g-6">
+                                <p-spinner formControlName="height" [min]="1" [step]="0.5"></p-spinner>
+                            </div>
+                        </div>
+                        <div class="ui-g-2"></div>
+                        <div class="ui-g-4">
+                            <div class="ui-g-6">
+                                Ширина *:
+                            </div>
+                            <div class="ui-g-6">
+                                <p-spinner formControlName="width" [min]="1" [step]="0.5"></p-spinner>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-accordionTab>
+
             <p-accordionTab header="Схемы">
                 <scheme-table [hallId]="hallForm.value.id" [schemes]="schemes"></scheme-table>
             </p-accordionTab>
         </p-accordion>
 
-</form>
+    </form>
 </div>
-

@@ -8,7 +8,7 @@
             <div class="ui-g-4 ui-g-nopad" *ngIf="!readOnly">
                 <div class="ui-toolbar-group-right">
                     <p-toggleButton onIcon="fa fa-user-circle" onLabel="&zwnj;" offIcon="fa fa-building" offLabel="&zwnj;" [(ngModel)]="emplSearch" [title]="searchTitle" (onChange)="changeSearchKind($event)"></p-toggleButton>
-                    <p-toggleButton onIcon="fa fa-ban" onLabel="Отмена" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
+                    <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
                 </div>
             </div>
         </div>
