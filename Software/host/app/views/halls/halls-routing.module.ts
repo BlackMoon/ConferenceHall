@@ -2,7 +2,6 @@
 import { RouterModule, Routes } from '@angular/router';
 
 import { HallDetailComponent } from './hall-detail.component';
-import { HallGridComponent } from './hall-grid.component';
 import { HallTableComponent } from './hall-table.component';
 
 const hallRoutes: Routes = [

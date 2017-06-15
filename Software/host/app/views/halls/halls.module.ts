@@ -17,16 +17,14 @@ import {
 } from 'primeng/primeng';
 
 import { HallDetailComponent } from './hall-detail.component';
-import { HallGridComponent } from './hall-grid.component';
-import { HallListComponent } from './hall-list.component';
 import { HallTableComponent } from './hall-table.component';
 import { HallRoutingModule } from './halls-routing.module';
 import { HallService } from './hall.service';
 import { SchemesModule } from "../schemes/schemes.module";
 
 @NgModule({
-    declarations: [HallDetailComponent, HallGridComponent, HallListComponent, HallTableComponent],
-    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, HallListComponent, HallTableComponent],
+    declarations: [HallDetailComponent, HallTableComponent],
+    exports: [ButtonModule, DataGridModule, FieldsetModule, InputTextModule, InputTextareaModule, SpinnerModule, HallTableComponent],
     imports: [
         AccordionModule,
         ButtonModule,
