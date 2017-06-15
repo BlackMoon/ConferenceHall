@@ -14,7 +14,6 @@ import { DateToUtcPipe } from "../../common/globals/pipes";
 import { locale } from "../../common/locale";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 //import { OrgMemberTableComponent } from '../members/org-member-table.component';
-import { EmployeeTableComponent} from '../employees/employee-table.component';
 
 @Component({
     selector: "conference-detail",

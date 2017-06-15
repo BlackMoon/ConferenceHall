@@ -3,85 +3,60 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SelectItem, TreeNode } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { ContactModel, EmployeeModel } from '../../models';
 import { EmployeeService } from './employee.service';
+import { OrganizationService } from '../organizations/organization.service';
 
 @Component({
     selector: "employee-detail",
     templateUrl: "employee-detail.component.html"
 })
 export class EmployeeDetailComponent implements OnInit {
-    displayDialog: boolean;
-
-    contact: ContactModel;
-    contacts: ContactModel[];
-    newContact: boolean;
-    id: number;
+    
     employeeForm: FormGroup;
-    employeeId: number;
-    employees: EmployeeModel[];
-    employee: EmployeeModel;
-   
-    constructor(private route: ActivatedRoute,
-        private fb: FormBuilder,
+    orgs: SelectItem[];
+
+    constructor(
         private employeeService: EmployeeService,
-
+        private organizationService: OrganizationService,
+        private fb: FormBuilder,
         private location: Location,
-        private logger: Logger
-    ) {
-
-        //this.route.params
-        //    .subscribe((params: Params) => {
-        //        // (+) converts string 'id' to a number
-        //        this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
-
-        //        // (+) converts string 'id' to a number
-        //        console.log(params["id"]);
-        //        //this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
-        //    });
+        private logger: Logger,
+        private route: ActivatedRoute) {
     }
 
     ngOnInit() {
+
         this.employeeForm = this.fb.group({
             id: [null],
-            name: [null],
-            job: [null],
-            position: [null],
-            role: [null],
-            contacts: []
+            name: [null, Validators.required],
+            orgId: [null, Validators.required],
+            position: [null]
         });
-       
-        this.route.params
 
+        this.organizationService
+            .getAll(false)
+            .subscribe(nodes => this.orgs = nodes.map(n => <any>{ label: n.data["name"], value: n.data["id"] }));
+
+        this.route.params
             .switchMap((params: Params) => {
-               
                 // (+) converts string 'id' to a number
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? this.employeeService.get(key) : Observable.empty();
             })
-            .subscribe((employee: EmployeeModel) => {
-               this.employeeForm.patchValue(employee);
-            });
+            .subscribe(employee => this.employeeForm.patchValue(employee));
     }
+
     save(event, employee) {
 
         event.preventDefault();
 
         this.employeeService[employee.id ? 'update' : 'add'](employee)
-            .subscribe(_ => this.location.back(),
-            error => this.logger.error2(error));
+            .subscribe(
+                _ => this.location.back(),
+                error => this.logger.error2(error));
     }
-
-    phoneKeyPressed(event) {
-
-                (event.keyCode === 13) && alert(event.target.value);
-            }
-    showDialogToAdd() {
-                debugger;
-                this.newContact = true;
-                this.contact = new ContactModel();
-                this.displayDialog = true;
-            }
-        }
+}
             

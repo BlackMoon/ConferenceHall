@@ -2,7 +2,6 @@
 import { JsonProperty } from '../common/map-utils';
 import { ContactModel } from '../models';
 
-
 /**
  * Модель. Сотрудник
  */
@@ -15,9 +14,9 @@ export class EmployeeModel extends KeyModel {
     name: string;
 
     /**
-     * Наименование организации
+     * id организации
      */
-    job: string;
+    orgId: number;
 
     /**
      * Должность
@@ -35,14 +34,13 @@ export class EmployeeModel extends KeyModel {
     contacts: ContactModel[];
 
     locked: boolean;
-    selected: boolean;
 
     constructor() {
 
         super();
         this.id = undefined;
         this.name = undefined;
-        this.job = undefined;
+        this.orgId = undefined;
         this.position = undefined;
         this.role = undefined;
         this.locked = false;

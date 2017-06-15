@@ -57,7 +57,7 @@
                 </div>
             </p-accordionTab>
 
-            <p-accordionTab header="Схемы">
+            <p-accordionTab header="Схемы" *ngIf="hallForm.value.id">
                 <scheme-table [hallId]="hallForm.value.id" [schemes]="schemes"></scheme-table>
             </p-accordionTab>
         </p-accordion>

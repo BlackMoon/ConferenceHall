@@ -21,15 +21,11 @@ import {
 } from 'primeng/primeng';
 
 import { EmployeeDetailComponent } from './employee-detail.component';
-
-import {EmployeeTableComponent } from './employee-table.component';
 import { EmployeeRoutingModule } from './employee-routing.module';
 import { EmployeeService } from './employee.service';
 
 @NgModule({
-    declarations: [EmployeeDetailComponent, EmployeeTableComponent],
-    exports: [EmployeeTableComponent],
-
+    declarations: [EmployeeDetailComponent],
     imports: [
         AccordionModule,
         ButtonModule,
