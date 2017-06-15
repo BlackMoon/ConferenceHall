@@ -3,10 +3,11 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
-import { HallModel } from '../../models';
+import { HallModel, GroupCommand } from '../../models';
 import { HallService } from './hall.service';
 
 @Component({
+    selector: 'hall-table',
     templateUrl: 'hall-table.component.html'
 })
 export class HallTableComponent implements OnInit {
@@ -21,6 +22,8 @@ export class HallTableComponent implements OnInit {
      */
     @Input()
     readOnly: boolean;
+
+    @Output() selectionChanged = new EventEmitter<GroupCommand>();
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -71,6 +74,35 @@ export class HallTableComponent implements OnInit {
 
     selectRow(e) {
 
-        !this.editMode && this.router.navigate(["/halls", e.data["id"]]);
+        if (!this.editMode) {
+            
+            let id = e.data["id"];
+
+            if (this.readOnly) {
+                
+                let ids = this.selectedHalls.map(h => h.id);
+                (ids.indexOf(id) === -1) && ids.push(id);
+                
+                let c: GroupCommand = { ids: ids };
+                    this.selectionChanged.emit(c);
+            }
+            else
+                this.router.navigate(["/halls", id]);
+        }
+    }
+
+    unSelectRow(e) {
+        
+        if (this.readOnly) {
+            
+            let id = e.data["id"],
+                ids = this.selectedHalls.map(h => h.id),
+                ix = ids.indexOf(id);
+
+            ids.splice(ix, 1);
+
+            let c: GroupCommand = { ids: ids };
+            this.selectionChanged.emit(c);
+        }
     }
 }

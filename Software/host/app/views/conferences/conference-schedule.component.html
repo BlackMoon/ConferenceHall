@@ -15,7 +15,7 @@
                     <conference-list [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)" (conferenceRemoveClick)="removeEventFromList($event, false)"></conference-list>
                 </p-tabPanel>
                 <p-tabPanel header="Холлы">
-                    <hall-list (selectionChanged)="hallListChanged($event)"></hall-list>
+                    <hall-table [readOnly]="true" (selectionChanged)="hallTableChanged($event)"></hall-table>
                 </p-tabPanel>
                 <p-tabPanel header="Участники">
                     <organization-tree [emplSearch]="true" [readOnly]="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>

@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
-import { AppointmentModel, ConferenceModel, ConfState, confDragType, NodeGroupCommand, TimeRange } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, confDragType, GroupCommand, NodeGroupCommand, TimeRange } from '../../models';
 import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceListComponent } from "./conference-list.component";
@@ -184,9 +184,9 @@ export class ConferenceScheduleComponent {
         this.loadEvents();
     }
 
-    hallListChanged(ids: number[]) {
-        this.selectedHallIds = ids;
-
+    hallTableChanged(c: GroupCommand) {
+        this.selectedHallIds = c.ids;
+       
         this.loadEvents();
     }
 

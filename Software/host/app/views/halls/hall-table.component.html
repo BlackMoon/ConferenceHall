@@ -1,5 +1,6 @@
-﻿<p-dataTable dataKey="id" [value]="halls" [rows]="10" selectionMode="{{editMode ? 'multiple' : 'single'}}" [(selection)]="selectedHalls" (onRowSelect)="selectRow($event)">
-    <p-header>
+﻿<p-dataTable dataKey="id" [value]="halls" [rows]="10" selectionMode="{{this.editMode || this.readOnly ? 'multiple' : 'single'}}" styleClass="{{this.readOnly ? 'no-header' : ''}}" 
+             [(selection)]="selectedHalls" (onRowSelect)="selectRow($event)" (onRowUnselect)="unSelectRow($event)">
+    <p-header *ngIf="!readOnly">
         <div class="ui-g">
             <div class="ui-g-12 ui-g-nopad">
                 <div class="ui-toolbar-group-right">
@@ -22,10 +23,10 @@
             </div>
         </div>
     </p-footer>
-    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
+    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode || readOnly"></p-column>
     <p-column field="name" header="Наименование"></p-column>
-    <p-column field="description" header="Описание"></p-column>
-    <p-column field="size" header="Размер" [style]="{ 'width':'15%'}">
+    <p-column field="description" header="Описание" *ngIf="!readOnly"></p-column>
+    <p-column field="size" header="Размер" [style]="{ 'width':'15%'}" *ngIf="!readOnly">
         <ng-template let-hall="rowData" pTemplate="body">
             {{hall.width}} x {{hall.height}}
         </ng-template>
