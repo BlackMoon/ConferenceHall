@@ -18,6 +18,8 @@ export class AppointmentDialogComponent implements OnInit {
 
     halls: any[];
 
+    @Input() header:string = "Назначить";
+
     @Input() visible: boolean;
 
     // event Handlers

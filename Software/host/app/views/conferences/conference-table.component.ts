@@ -7,12 +7,11 @@ import { ConferenceModel, ConfState, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
 
 @Component({
-    selector: "conference-list",
-    templateUrl: "conference-list.component.html"
+    selector: "conference-table",
+    templateUrl: "conference-table.component.html"
 })
-export class ConferenceListComponent implements OnInit, OnChanges {
+export class ConferenceTableComponent implements OnInit, OnChanges {
     
-    actions: MenuItem[];
     states: any[];
 
     /**
@@ -22,13 +21,14 @@ export class ConferenceListComponent implements OnInit, OnChanges {
     actionLabel: string;
     actionIcon: string;
 
+    editMode: boolean;
+
     @Input()
     endDate: Date;
 
     @Input()
     startDate: Date;
-
-    @Input()
+   
     selectedConference: ConferenceModel;
     selectedState: ConfState = ConfState.Planned;
 
@@ -37,14 +37,14 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
     conferences: ConferenceModel[];
 
-    public ConfState = ConfState; 
+    public ConfState = ConfState;
 
     constructor(
         private conferrenceService: ConferenceService,
         private confirmationService: ConfirmationService,
         private logger: Logger,
         private router: Router) {
-        
+
         let stateKeys = Object
             .keys(ConfState)
             .filter(k => typeof ConfState[k] !== "function");
@@ -52,18 +52,18 @@ export class ConferenceListComponent implements OnInit, OnChanges {
         this.states = stateKeys
             .slice(stateKeys.length / 2)
             .map(k => {
-                    let state = ConfState[k];
-                    return <any>
+                let state = ConfState[k];
+                return <any>
                     {
                         label: ConfState.toName(state),
                         value: state
                     }
-                }
+            }
             );
     }
-    
+
     ngOnChanges(changes: SimpleChanges) {
-       
+
         let startDateChange = changes["startDate"],
             endDateChange = changes["endDate"];
 
@@ -88,6 +88,10 @@ export class ConferenceListComponent implements OnInit, OnChanges {
 
     addConferenceToList = (conference: ConferenceModel) => this.conferences.push(conference);
 
+    changeEditMode() {
+        this.editMode = !this.editMode;
+    }
+
     changeState(state: ConfState) {
 
         this.selectedState = state;
@@ -98,87 +102,51 @@ export class ConferenceListComponent implements OnInit, OnChanges {
                 conferences => this.conferences = conferences,
                 error => this.logger.error2(error));
 
-        this.actions = [];
-
-        switch (state) {
-            case ConfState.Planned:
-
-                this.actions
-                    .push({
-                        label: "Добавить",
-                        icon: "fa-plus",
-                        routerLink: ["conferences/new"]
-                    },
-                    {
-                        label: "Изменить",
-                        icon: "fa-pencil",
-                        command: () => this.selectedConference && this.router.navigate(["/conferences", this.selectedConference.id])
-                    });
-
-                this.actionCommand = () => this.makeAppointment();
-                this.actionLabel = "Назначить";
-                this.actionIcon = "fa-calendar-times-o";
-
-                break;
-
-            case ConfState.Active:
-            case ConfState.Closed:
-            case ConfState.Preparing:
-
-                this.actionCommand = () => this.selectedConference && this.router.navigate(["/conferences", this.selectedConference.id]);
-                this.actionLabel = "Изменить";
-                this.actionIcon = "fa-pencil";
-                break;
-        }
-
-        this.actions
-            .push({
-                label: "Удалить",
-                icon: "fa-trash",
-                command: () => { this.selectedConference && this.removeConference(this.selectedConference); }
-            });
-
         this.selectedConference = null;
     }
 
-    dragStart(event, conference) {
-        event.dataTransfer.setData(confDragType, JSON.stringify(conference));
-    }
-    
-    makeAppointment() {
-        (this.selectedConference) && this.appointmentButtonClick.emit(this.selectedConference);
+    dragStart(e, conference) {
+        e.currentTarget.click();
+        e.dataTransfer.setData(confDragType, JSON.stringify(conference));
     }
 
-    removeConference(conference: ConferenceModel) {
+    editConference(e, id: number) {
+        e.stopPropagation();
+        this.router.navigate(["/conferences", id]);
+    }
+
+    makeAppointment = () => this.appointmentButtonClick.emit(this.selectedConference);
+
+    removeConference() {
 
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить [${conference.subject}]?`,
+            message: `Удалить [${this.selectedConference.subject}]?`,
             accept: _ => {
                 return this.conferrenceService
-                    .delete(conference.id)
+                    .delete(this.selectedConference.id)
                     .subscribe(
-                        _ => this.removeConferenceFromList(conference.id),
+                        _ => this.removeConferenceFromList(this.selectedConference.id),
                         error => this.logger.error2(error));
             }
         });
     }
-    
+
     /**
      * Удаляет конференцию из списка
      * @param id 
      * @param emit     
      */
-    removeConferenceFromList(id, emit:boolean = true) {
-        
+    removeConferenceFromList(id, emit: boolean = true) {
+
         this.selectedConference = null;
 
         let ix = this.conferences.findIndex(c => c.id === id);
         this.conferences.splice(ix, 1);
 
         emit && this.conferenceRemoveClick.emit(id);
-    } 
+    }
 
     selectConference(conference) {
 
@@ -187,7 +155,7 @@ export class ConferenceListComponent implements OnInit, OnChanges {
             for (let conf of this.conferences) {
                 conf.selected = (conf.id === conference.id);
             }
-            
+
             this.selectedConference = conference;
         }
     }

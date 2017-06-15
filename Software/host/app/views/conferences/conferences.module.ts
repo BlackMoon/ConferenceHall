@@ -1,14 +1,31 @@
-﻿import { CommonModule } from '@angular/common';
+﻿import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { AccordionModule, ButtonModule, CalendarModule, DataListModule, DialogModule, DragDropModule, DropdownModule, MenuModule, ScheduleModule, SplitButtonModule, TabViewModule, ToolbarModule, PanelModule } from 'primeng/primeng';
+import {
+    AccordionModule,
+    ButtonModule,
+    CalendarModule,
+    DataListModule,
+    DataTableModule,
+    DialogModule,
+    DragDropModule,
+    DropdownModule,
+    MenuModule,
+    ScheduleModule,
+    SplitButtonModule,
+    TabViewModule,
+    ToggleButtonModule,
+    ToolbarModule,
+    PanelModule
+} from 'primeng/primeng';
+
 import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { DateToUtcPipe } from "../../common/globals/pipes";
 import { HubService } from "../../common/hub-service";
 
 import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceDetailComponent } from './conference-detail.component';
-import { ConferenceListComponent } from './conference-list.component';
+import { ConferenceTableComponent } from './conference-table.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceService } from './conference.service';
 
@@ -20,7 +37,7 @@ import { SchemesModule } from '../schemes/schemes.module';
 
 
 @NgModule({
-    declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceListComponent, ConferenceScheduleComponent],
+    declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceTableComponent, ConferenceScheduleComponent],
     imports: [
         
   //      EmployeesModule,
@@ -31,6 +48,7 @@ import { SchemesModule } from '../schemes/schemes.module';
         CommonModule,
         ConferenceRoutingModule,
         DataListModule,
+        DataTableModule,
         DialogModule,
         DragDropModule,
         DropdownModule,
@@ -43,8 +61,9 @@ import { SchemesModule } from '../schemes/schemes.module';
         ScheduleModule,
         SplitButtonModule,
         TabViewModule,
+        ToggleButtonModule,
         ToolbarModule,
         PanelModule],
-    providers: [ConferenceService, HubService, DateToUtcPipe]
+    providers: [ConferenceService, DatePipe, DateToUtcPipe, HubService]
 })
 export class ConferencesModule { }

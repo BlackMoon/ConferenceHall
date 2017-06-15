@@ -1,4 +1,5 @@
-﻿import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { DatePipe } from '@angular/common';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -7,20 +8,19 @@ import { AppointmentDialogComponent } from "./appointment-dialog.component";
 import { AppointmentModel, ConferenceModel, ConfState, confDragType, GroupCommand, NodeGroupCommand, TimeRange } from '../../models';
 import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
-import { ConferenceListComponent } from "./conference-list.component";
+import { ConferenceTableComponent } from "./conference-table.component";
 
 declare var $: any;
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    styles: [`.ui-accordion .ui-accordion-content { padding: 0}`,
-            `.p0501 .ui-tabview-panel { padding: 0.5em 0.1em; }`],
+    styles: [".p0501 .ui-tabview-panel { padding: 0.5em 0.1em !important; }"],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent {
     
     @ViewChild(AppointmentDialogComponent) appointmentDialog: AppointmentDialogComponent;
-    @ViewChild(ConferenceListComponent) conferenceList: ConferenceListComponent;
+    @ViewChild(ConferenceTableComponent) conferenceTable: ConferenceTableComponent;
 
     events: any[];
     headerConfig: any;
@@ -38,6 +38,7 @@ export class ConferenceScheduleComponent {
     constructor(
         private conferrenceService: ConferenceService,
         private confirmationService: ConfirmationService,
+        public datePipe: DatePipe,
         private logger: Logger,
         private router: Router) {
 
@@ -67,7 +68,7 @@ export class ConferenceScheduleComponent {
                                 .subscribe(
                                     _ => {
 
-                                        if (this.conferenceList.selectedState === ConfState.Planned)
+                                        if (this.conferenceTable.selectedState === ConfState.Planned)
                                         {
                                             let conference: ConferenceModel = 
                                             {
@@ -77,7 +78,7 @@ export class ConferenceScheduleComponent {
                                                 selected: false,
                                                 state: ConfState.Planned
                                             };
-                                            this.conferenceList.addConferenceToList(conference);
+                                            this.conferenceTable.addConferenceToList(conference);
                                         }
 
                                         this.removeEventFromList(this.selectedEvent.id);
@@ -109,7 +110,7 @@ export class ConferenceScheduleComponent {
                                 start: period.lowerBound,
                                 end: period.upperBound
                             });
-                        this.conferenceList.removeConferenceFromList(this.selectedConference.id, false);
+                        this.conferenceTable.removeConferenceFromList(this.selectedConference.id, false);
                         this.selectedConference = null;
                     },
                     error =>
@@ -213,6 +214,10 @@ export class ConferenceScheduleComponent {
         }
         
         this.selectedConference = conference;
+
+        if (defaultDate != null)
+            this.appointmentDialog.header = `Назначить на ${this.datePipe.transform(defaultDate, "dd.MM.yyyy")}`;
+
         this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date(this.startDate.getFullYear(), month, date) }, calendarVisible);    
     }
 

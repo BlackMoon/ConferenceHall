@@ -1,4 +1,4 @@
-﻿<p-dialog header="Назначить" [(visible)]="visible" modal="modal" minHeight="420" minWidth="300" width="400" dismissableMask="true" [responsive]="true" (onHide)="onHide()">
+﻿<p-dialog [header]="header" [(visible)]="visible" modal="modal" minHeight="420" minWidth="300" width="400" dismissableMask="true" [responsive]="true" (onHide)="onHide()">
     <form [formGroup]="appointmentForm" (ngSubmit)="save($event, appointmentForm.value)">
         <div class="ui-g">
             <div class="ui-g-12 ui-g-nopad">
