@@ -43,8 +43,8 @@
             </p-accordionTab>
 
             <p-accordionTab header="Контакты" *ngIf="employeeForm.value.id">
-            </p-accordionTab>
-
+                <contact-table [contacts]="contacts"></contact-table>
+             </p-accordionTab>
         </p-accordion>
 
     </form>

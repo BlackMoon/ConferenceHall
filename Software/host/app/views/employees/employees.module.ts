@@ -4,49 +4,32 @@ import { NgModule } from '@angular/core';
 import {
     AccordionModule,
     ButtonModule,
-    DataGridModule,
-    DataListModule,
     DataTableModule,
-    DragDropModule,
     DropdownModule,
-    FieldsetModule,
+    InputSwitchModule,
     InputTextModule,
-    InputTextareaModule,
-    MenuModule,
-    PanelModule,
-    SpinnerModule,
-    TabViewModule,
-    ToggleButtonModule,
-    ToolbarModule
+    ToggleButtonModule
 } from 'primeng/primeng';
 
+import { ContactTableComponent } from './contact-table.component';
 import { EmployeeDetailComponent } from './employee-detail.component';
 import { EmployeeRoutingModule } from './employee-routing.module';
 import { EmployeeService } from './employee.service';
 
 @NgModule({
-    declarations: [EmployeeDetailComponent],
+    declarations: [ContactTableComponent, EmployeeDetailComponent],
     imports: [
         AccordionModule,
         ButtonModule,
         CommonModule,
-        DataGridModule,
-        DataListModule,
         DataTableModule,
-        DragDropModule,
-        DropdownModule,       
-        FieldsetModule,
+        DropdownModule,   
         FormsModule,      
+        InputSwitchModule,
         InputTextModule,
-        InputTextareaModule,
         EmployeeRoutingModule,
-        MenuModule,        
-        PanelModule,
         ReactiveFormsModule,
-        SpinnerModule,
-        TabViewModule,
-        ToggleButtonModule,
-        ToolbarModule
+        ToggleButtonModule
     ],
     providers: [EmployeeService]
 })

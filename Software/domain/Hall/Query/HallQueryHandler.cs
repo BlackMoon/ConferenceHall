@@ -28,12 +28,17 @@ namespace domain.Hall.Query
             {
                 if (prev != null && prev.Id == h.Id)
                 {
-                    prev.Schemes.Add(s);
+                    if (s != null)
+                        prev.Schemes.Add(s);
+
                     return null;
                 }
 
                 prev = h;
-                prev.Schemes = new List<Scheme.Scheme> {s};
+                prev.Schemes = new List<Scheme.Scheme>();
+
+                if (s != null)
+                    prev.Schemes.Add(s);
 
                 return h;
             };

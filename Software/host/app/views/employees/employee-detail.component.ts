@@ -16,6 +16,8 @@ import { OrganizationService } from '../organizations/organization.service';
 export class EmployeeDetailComponent implements OnInit {
     
     employeeForm: FormGroup;
+
+    contacts: ContactModel[];
     orgs: SelectItem[];
 
     constructor(
@@ -50,7 +52,10 @@ export class EmployeeDetailComponent implements OnInit {
                 return key ? this.employeeService.get(key) : Observable.empty();
             })
             .subscribe(
-                employee => this.employeeForm.patchValue(employee),
+                employee => {
+                    this.contacts = employee.contacts;
+                    this.employeeForm.patchValue(employee);
+                },
                 error => this.logger.error2(error)
             );
     }

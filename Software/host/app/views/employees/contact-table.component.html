@@ -1,0 +1,31 @@
+﻿<p-dataTable dataKey="id" [value]="contacts" [rows]="10">
+    <p-header>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-g-nopad">
+                <div class="ui-toolbar-group-right">
+                    <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
+                </div>
+            </div>
+        </div>
+    </p-header>
+    <p-footer>
+        <div class="ui-g">
+            <div class="ui-g-6 ui-g-nopad">
+                <div class="ui-toolbar-group-left">
+                    <button type="button" pButton icon="fa-trash" title="Удалить" *ngIf="editMode" (click)="removeRows()"></button>
+                </div>
+            </div>
+            <div class="ui-g-6 ui-g-nopad">
+                <div class="ui-toolbar-group-right">
+                    <button type="button" pButton icon="fa-plus" title="Добавить контакт"></button>
+                </div>
+            </div>
+        </div>
+    </p-footer>
+    <p-column field="address"></p-column>
+    <p-column field="active">
+        <ng-template let-contact="rowData" pTemplate="body">
+            <p-inputSwitch onLabel="Вкл" offLabel="Откл" [(ngModel)]="contact.active"></p-inputSwitch>
+        </ng-template>
+    </p-column>
+</p-dataTable>

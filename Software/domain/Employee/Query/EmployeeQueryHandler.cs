@@ -33,12 +33,17 @@ namespace domain.Employee.Query
             {
                 if (prev != null && prev.Id == e.Id)
                 {
-                    prev.Contacts.Add(c);
+                    if (c != null)
+                        prev.Contacts.Add(c);
+
                     return null;
                 }
 
                 prev = e;
-                prev.Contacts = new List<Contact> { c };
+                prev.Contacts = new List<Contact>();
+
+                if (c != null)
+                    prev.Contacts.Add(c);
 
                 return e;
             };
