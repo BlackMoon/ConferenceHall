@@ -19,10 +19,10 @@ import {
     PanelModule
 } from 'primeng/primeng';
 
-import { AppointmentDialogComponent } from './appointment-dialog.component';
-import { DateToUtcPipe } from "../../common/globals/pipes";
 import { HubService } from "../../common/hub-service";
 
+import { AppointmentDialogComponent } from './appointment-dialog.component';
+import { DateToUtcPipe } from "../../common/globals/pipes";
 import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceDetailComponent } from './conference-detail.component';
 import { ConferenceTableComponent } from './conference-table.component';
