@@ -6,12 +6,13 @@ using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace domain.Hall.Command
 {
     public class HallCommandHandler : KeyObjectCommandHandler<Hall>,
-        ICommandHandlerWithResult<CreateHallCommand, int>,
-        ICommandHandlerWithResult<DeleteHallCommand, bool>
+        ICommandHandler<DeleteHallsCommand>,
+        ICommandHandlerWithResult<CreateHallCommand, int>
     {
         public HallCommandHandler(IDbManager dbManager, ILogger<HallCommandHandler> logger) : base(dbManager, logger)
         {
@@ -41,18 +42,17 @@ namespace domain.Hall.Command
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public bool Execute(DeleteHallCommand command)
+        public void Execute(DeleteHallsCommand command)
         {
-            DbManager.Open();
-            return DbManager.DbConnection.Delete(new Hall() {Id = command.Id});
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> ExecuteAsync(DeleteHallCommand command)
+        public async Task ExecuteAsync(DeleteHallsCommand command)
         {
-            await DbManager.OpenAsync();
+            DbManager.AddParameter("Ids", command.Ids);
 
-            Hall hall = new Hall();
-            return await DbManager.DbConnection.DeleteAsync(command.Adapt(hall));
+            await DbManager.OpenAsync();
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.halls WHERE id = ANY(@Ids)");
         }
     }
 }

@@ -1,7 +1,21 @@
 ﻿import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { AccordionModule, ButtonModule, DataGridModule, DataListModule, FieldsetModule, InputTextModule, InputTextareaModule, PanelModule, SpinnerModule, TabViewModule, ToolbarModule } from 'primeng/primeng';
+import {
+    AccordionModule,
+    ButtonModule,
+    DataGridModule,
+    DataListModule,
+    DataTableModule,
+    FieldsetModule,
+    InputTextModule,
+    InputTextareaModule,
+    PanelModule,
+    SpinnerModule,
+    ToggleButtonModule,
+    ToolbarModule
+} from 'primeng/primeng';
+
 import { HallDetailComponent } from './hall-detail.component';
 import { HallGridComponent } from './hall-grid.component';
 import { HallListComponent } from './hall-list.component';
@@ -19,6 +33,7 @@ import { SchemesModule } from "../schemes/schemes.module";
         CommonModule,
         DataGridModule,
         DataListModule,
+        DataTableModule,
         FieldsetModule,
         FormsModule,
         HallRoutingModule,
@@ -28,7 +43,7 @@ import { SchemesModule } from "../schemes/schemes.module";
         ReactiveFormsModule,
         SchemesModule, 
         SpinnerModule,
-        TabViewModule,
+        ToggleButtonModule,
         ToolbarModule],
     providers: [HallService]
 })

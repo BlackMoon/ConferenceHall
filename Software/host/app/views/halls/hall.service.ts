@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { HallModel } from '../../models/index';
+import { HallModel, GroupCommand } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
@@ -22,14 +22,14 @@ export class HallService extends HttpDataService<HallModel> {
             .catch(handleResponseError);
     }
 
-    getAll(): Observable<any> {
-        
+    /**
+     * Удаляет схемы
+     * @param c
+     */
+    delete(c: GroupCommand): Observable<any> {
+
         return this.http
-            .get(this.url)
-            .map((r: Response) => r
-                    .json()
-                    .map(h => MapUtils.deserialize(HallModel, h))
-            )
+            .post(`${this.url}/delete`, c)
             .catch(handleResponseError);
     }
 }

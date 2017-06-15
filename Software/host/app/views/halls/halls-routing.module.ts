@@ -3,9 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HallDetailComponent } from './hall-detail.component';
 import { HallGridComponent } from './hall-grid.component';
+import { HallTableComponent } from './hall-table.component';
 
 const hallRoutes: Routes = [
-    { path: 'halls', component: HallGridComponent },
+    { path: 'halls', component: HallTableComponent },
     { path: 'halls/new', component: HallDetailComponent },    
     { path: 'halls/:id', component: HallDetailComponent }
 ];

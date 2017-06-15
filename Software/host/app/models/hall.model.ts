@@ -27,6 +27,4 @@ export class HallModel extends KeyModel implements ISelected {
 
         this.schemes = undefined;
     }
-
-    area = (): string => `(Размеры: ${this.width}м x ${this.height}м)`;
 }

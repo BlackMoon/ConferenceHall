@@ -8,7 +8,6 @@ using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
-// ReSharper disable ExpressionIsAlwaysNull
 namespace domain.Scheme.Command
 {
     public class SchemeCommandHandler : KeyObjectCommandHandler<Scheme>,

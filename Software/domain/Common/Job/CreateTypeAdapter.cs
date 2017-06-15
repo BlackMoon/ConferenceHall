@@ -37,10 +37,7 @@ namespace domain.Common.Job
             // CreateHallCommand --> Hall
             TypeAdapterConfig<CreateHallCommand, Hall.Hall>
                 .ForType();
-
-            // DeleteHallCommand --> Hall
-            TypeAdapterConfig<DeleteHallCommand, Hall.Hall>
-                .ForType();
+            
             #endregion
 
             #region Organization

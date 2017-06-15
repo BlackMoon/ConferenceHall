@@ -46,11 +46,10 @@ namespace host.Controllers
             return CommandDispatcher.DispatchAsync<Hall, bool>(value);
         }
 
-        // DELETE api/halls/5
-        [HttpDelete("{id}")]
-        public Task Delete(int id)
+        [HttpPost("/api/[controller]/delete")]
+        public Task DeleteSchemes([FromBody]DeleteHallsCommand value)
         {
-            return CommandDispatcher.DispatchAsync<DeleteHallCommand, bool>(new DeleteHallCommand() {Id = id});
+            return CommandDispatcher.DispatchAsync(value);
         }
     }
 }

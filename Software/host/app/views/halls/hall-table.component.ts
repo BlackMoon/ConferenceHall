@@ -1,5 +1,6 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { HallModel } from '../../models';
@@ -10,40 +11,66 @@ import { HallService } from './hall.service';
 })
 export class HallTableComponent implements OnInit {
 
-    halls: HallModel[] = [<any>{ name: 'Создать', description: 'Новый холл' }];
+    editMode: boolean;
+
+    halls: HallModel[];
+    selectedHalls: HallModel[] = [];
+
+    /**
+     * Режим чтения (для вставки в другой компонент)
+     */
+    @Input()
+    readOnly: boolean;
 
     constructor(
         private confirmationService: ConfirmationService,
         private hallService: HallService,
-        private logger: Logger) { }
+        private logger: Logger,
+        private router: Router) { }
 
     ngOnInit() {
 
         this.hallService
             .getAll()
             .subscribe(
-            halls => this.halls = this.halls.concat(halls),
-            error => this.logger.error2(error));
+                halls => this.halls = halls,
+                error => this.logger.error2(error));
     }
 
-    removeHall(id: number, name?: string) {
+    changeEditMode() {
+        this.editMode = !this.editMode;
+        this.selectedHalls.length = 0;
+    }
+
+    removeRows() {
 
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить [${name}]?`,
-            accept: () =>
+            message: `Удалить выбранные записи?`,
+            accept: _ => {
+
+                let c = { ids: this.selectedHalls.map(h => h.id) };
 
                 this.hallService
-                    .delete(id)
+                    .delete(c)
                     .subscribe(
                     _ => {
 
-                        let ix = this.halls.findIndex(h => h.id === id);
-                        this.halls.splice(ix, 1);
-                    },
-                    error => this.logger.error2(error))
+                        this.selectedHalls.forEach(h => {
+                            let ix = this.halls.findIndex(n => n.id === h.id);
+                            this.halls.splice(ix, 1);
+                        });
 
+                        this.selectedHalls.length = 0;
+                    },
+                    error => this.logger.error2(error));
+            }
         });
+    }
+
+    selectRow(e) {
+
+        !this.editMode && this.router.navigate(["/halls", e.data["id"]]);
     }
 }

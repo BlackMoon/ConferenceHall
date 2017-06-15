@@ -27,24 +27,5 @@ export class HallGridComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
-    removeHall(id:number, name?: string) {
-       
-        this.confirmationService.confirm({
-            header: 'Вопрос',
-            icon: 'fa fa-trash',
-            message: `Удалить [${name}]?`,
-            accept: () => 
-                
-                this.hallService
-                    .delete(id)
-                    .subscribe(
-                        _ => {
-                    
-                            let ix = this.halls.findIndex(h => h.id === id);
-                            this.halls.splice(ix, 1);
-                        },
-                        error => this.logger.error2(error))
-            
-        });
-    }
+    
 }
