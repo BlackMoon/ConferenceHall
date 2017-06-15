@@ -1,57 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Dapper;
-using Kit.Core.CQRS.Query;
+
 using Kit.Dal.DbManager;
 
 namespace domain.Employee.Query
 {
-    public class EmployeeQueryHandler : 
-        KeyObjectQueryHandler<FindEmployeeByIdQuery, Employee>,
-        IQueryHandler<FindEmployeesQuery, IEnumerable<Employee>>
+    public class EmployeeQueryHandler :
+        KeyObjectQueryHandler<FindEmployeeByIdQuery, Employee>
     {
 
         public EmployeeQueryHandler(IDbManager dbManager) : base(dbManager)
         {
         }
 
-        public IEnumerable<Employee> Execute(FindEmployeesQuery query)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Employee>> ExecuteAsync(FindEmployeesQuery query)
+        public override async Task<Employee> ExecuteAsync(FindEmployeeByIdQuery query)
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
-                .Column("e.id")
-                .Column("e.name")
-                .Column("e.position")
-                .Column("o.name job")
-                .Column("u.role")
-                .Column("u.locked")
-                .Join("conf_hall.organizations o ON o.id = e.org_id")
-                .LeftJoin("conf_hall.users u ON u.employee_id = e.id")
-                .OrderBy("lower(e.name)");
+                .Column("e.*")
+                .Column("c.id")
+                .Column("c.active")
+                .Column("c.address")
+                .Column("c.kind")
+                .LeftJoin("conf_hall.contacts c ON c.employee_id = e.id")
+                .Where("e.id = @id");
 
-            DynamicParameters param = new DynamicParameters();
-
-            // может задаваться фильтр
-            if (!string.IsNullOrEmpty(query.Filter))
+            Employee prev = null;
+            Func<Employee, Contact, Employee> map = (e, c) =>
             {
-                sqlBuilder.Where("lower(e.name) LIKE lower(@filter)");
-                param.Add("filter", query.Filter + "%");
-            }
+                if (prev != null && prev.Id == e.Id)
+                {
+                    prev.Contacts.Add(c);
+                    return null;
+                }
 
-            // фильтр по организациям
-            if (query.OrganizationIds != null)
-            {
-                sqlBuilder.Where("c.org_id = ANY(@orgIds)");
-                param.Add("orgIds", query.OrganizationIds);
-            }
+                prev = e;
+                prev.Contacts = new List<Contact> { c };
+
+                return e;
+            };
 
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<Employee>(sqlBuilder.ToString(), param);
+            var employees = await DbManager.DbConnection.QueryAsync(sqlBuilder.ToString(), map, new { id = query.Id });
+
+            return employees.SingleOrDefault(e => e != null);
         }
     }
 }

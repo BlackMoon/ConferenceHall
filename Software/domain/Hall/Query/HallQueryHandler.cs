@@ -10,14 +10,19 @@ namespace domain.Hall.Query
 {
     public class HallQueryHandler: KeyObjectQueryHandler<FindHallByIdQuery, Hall>
     {
-        private const string SelectHall = "SELECT h.*, s.id, s.name FROM conf_hall.halls h LEFT JOIN conf_hall.hall_scheme s ON s.hall_id = h.id";
-
         public HallQueryHandler(IDbManager dbManager) : base(dbManager)
         {
         }
 
         public override async Task<Hall> ExecuteAsync(FindHallByIdQuery query)
         {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.halls h")
+                .Column("h.*")
+                .Column("s.id")
+                .Column("s.name")
+                .LeftJoin("conf_hall.hall_scheme s ON s.hall_id = h.id")
+                .Where("h.id = @id");
+
             Hall prev = null;
             Func<Hall, Scheme.Scheme, Hall> map = (h, s) =>
             {
@@ -34,7 +39,7 @@ namespace domain.Hall.Query
             };
 
             await DbManager.OpenAsync();
-            var halls = await DbManager.DbConnection.QueryAsync($"{SelectHall} WHERE h.id = @id", map, new { id = query.Id});
+            var halls = await DbManager.DbConnection.QueryAsync(sqlBuilder.ToString(), map, new { id = query.Id});
 
             return halls.SingleOrDefault(h => h != null);
         }

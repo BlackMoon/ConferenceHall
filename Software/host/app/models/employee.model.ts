@@ -1,12 +1,31 @@
 ﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
-import { ContactModel } from '../models';
+
+/**
+ * Модель. Контакт
+ */
+export class ContactModel extends KeyModel {
+
+    kind: string;
+
+    address: string;
+
+    active: boolean;
+
+    constructor() {
+        super();
+
+        this.kind = undefined;
+        this.address = undefined;
+        this.active = false;
+
+    }
+}
 
 /**
  * Модель. Сотрудник
  */
 export class EmployeeModel extends KeyModel {
-
    
     /**
      * ФИО
@@ -31,7 +50,8 @@ export class EmployeeModel extends KeyModel {
     /**
     * Контакты
     */
-    contacts: ContactModel[];
+    @JsonProperty({ clazz: ContactModel })
+    contacts?: ContactModel[];
 
     locked: boolean;
 
@@ -44,6 +64,7 @@ export class EmployeeModel extends KeyModel {
         this.position = undefined;
         this.role = undefined;
         this.locked = false;
-        this.contacts = [];
+
+        this.contacts = undefined;
     }
 }

@@ -13,4 +13,3 @@ export * from "./screen.model";
 export * from "./sysuser.model";
 export * from "./ui.model";
 export * from "./member.model";
-export * from "./contact.model";

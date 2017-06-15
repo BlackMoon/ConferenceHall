@@ -38,7 +38,10 @@ export class EmployeeDetailComponent implements OnInit {
 
         this.organizationService
             .getAll(false)
-            .subscribe(nodes => this.orgs = nodes.map(n => <any>{ label: n.data["name"], value: n.data["id"] }));
+            .subscribe(
+                nodes => this.orgs = nodes.map(n => <any>{ label: n.data["name"], value: n.data["id"] }),
+                error => this.logger.error2(error)
+            );
 
         this.route.params
             .switchMap((params: Params) => {
@@ -46,7 +49,10 @@ export class EmployeeDetailComponent implements OnInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? this.employeeService.get(key) : Observable.empty();
             })
-            .subscribe(employee => this.employeeForm.patchValue(employee));
+            .subscribe(
+                employee => this.employeeForm.patchValue(employee),
+                error => this.logger.error2(error)
+            );
     }
 
     save(event, employee) {

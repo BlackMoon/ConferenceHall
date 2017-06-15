@@ -29,6 +29,6 @@ namespace domain.Employee
         /// </summary>
         public string Role { get; set; }
 
-        public IList<Contact.Contact> Contacts { get; set; }
+        public IList<Contact> Contacts { get; set; }
     }
 }
