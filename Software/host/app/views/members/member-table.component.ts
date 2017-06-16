@@ -33,7 +33,6 @@ export class MemberTableComponent {
 
     @Input()
     set conferenceId(value: number) {
-        debugger;
         this._conferenceId = value;
         value && this.loadMembers();
     }

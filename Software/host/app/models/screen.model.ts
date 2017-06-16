@@ -1,10 +1,9 @@
-﻿import { MemberModel, TimeRange } from './index';
-import { JsonProperty } from '../common/map-utils';
+﻿import { KeyModel } from './index';
 
 /**
  * Модель. Активная конференция (на отдельном экране)
  */
-export class ScreenModel {
+export class ScreenModel{
     
     schemeId: string;
     startDate: Date;
@@ -14,7 +13,7 @@ export class ScreenModel {
     tickers: string[];
 
     constructor() {
-    
+
         this.schemeId = null;
         this.startDate = null;
         this.endDate = null;
