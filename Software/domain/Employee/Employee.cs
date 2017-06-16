@@ -45,19 +45,7 @@ namespace domain.Employee
         /// Роль (для пользователей)
         /// </summary>
         [Write(false)]
-        public UserRole UserRole { get; set; }
-
-        [Column("role")]
-        [JsonIgnore]
-        public string Role
-        {
-            set
-            {
-                UserRole userRole;
-                Enum.TryParse(value, true, out userRole);
-                UserRole = userRole;
-            }
-        }
+        public UserRole Role { get; set; }
 
         [Write(false)]
         public IList<Contact> Contacts { get; set; }

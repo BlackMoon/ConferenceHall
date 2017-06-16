@@ -19,7 +19,7 @@ export class SchemeService extends HttpDataService<SchemeModel> {
     copy(key): Observable<any> {
 
         return this.http
-            .post(`/api/schemes/copy`, key)
+            .post(`${this.url}/copy`, key)
             .map((r: Response) => r.json())
             .catch(handleResponseError);
     }

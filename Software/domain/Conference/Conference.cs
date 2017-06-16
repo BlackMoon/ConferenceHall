@@ -56,8 +56,7 @@ namespace domain.Conference
         public string Description { get; set; }
 
         public ConfState ConfState { get; set; }
-
-        [Column("state")]
+        
         [JsonIgnore]
         public string State
         {

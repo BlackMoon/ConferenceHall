@@ -25,6 +25,7 @@ namespace domain.Employee.Query
                 .Column("c.active")
                 .Column("c.address")
                 .Column("c.kind")
+                .Column("u.id")
                 .Column("u.locked")
                 .Column("u.login")
                 .Column("u.role")
@@ -33,7 +34,7 @@ namespace domain.Employee.Query
                 .Where("e.id = @id");
 
             Employee prev = null;
-            Func<Employee, Contact, Employee> map = (e, c) =>
+            Func<Employee, Contact, SysUser.SysUser, Employee> map = (e, c, u) =>
             {
                 if (prev != null && prev.Id == e.Id)
                 {
@@ -42,6 +43,10 @@ namespace domain.Employee.Query
 
                     return null;
                 }
+                
+                e.Locked = u.Locked;
+                e.Login = u.Login;
+                e.Role = u.UserRole;
 
                 prev = e;
                 prev.Contacts = new List<Contact>();
