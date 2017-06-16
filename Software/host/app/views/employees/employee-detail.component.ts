@@ -64,6 +64,8 @@ export class EmployeeDetailComponent implements OnInit {
 
         event.preventDefault();
 
+        employee.contacts = this.contacts;
+
         this.employeeService[employee.id ? 'update' : 'add'](employee)
             .subscribe(
                 _ => this.location.back(),

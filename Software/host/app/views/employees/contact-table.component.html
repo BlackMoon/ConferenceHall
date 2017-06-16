@@ -1,4 +1,4 @@
-﻿<p-dataTable dataKey="id" [value]="contacts" [rows]="10">
+﻿<p-dataTable dataKey="id" [value]="contacts" [rows]="10" styleClass="no-header" selectionMode="{{editMode ? 'multiple' : ''}}" [(selection)]="selectedContacts">
     <p-header>
         <div class="ui-g">
             <div class="ui-g-12 ui-g-nopad">
@@ -9,19 +9,30 @@
         </div>
     </p-header>
     <p-footer>
-        <div class="ui-g">
-            <div class="ui-g-6 ui-g-nopad">
-                <div class="ui-toolbar-group-left">
-                    <button type="button" pButton icon="fa-trash" title="Удалить" *ngIf="editMode" (click)="removeRows()"></button>
+        
+        <form [formGroup]="contactform" (ngSubmit)="addContact(contactform.value)">
+            <div class="ui-g">
+                <div class="ui-g-2 ui-g-nopad">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedContacts.length === 0" *ngIf="editMode" (click)="removeRows()"></button>
+                    </div>
+                </div>
+                <div class="ui-g-2 ui-g-nopad">
+                    <p-dropdown formControlName="kind" [options]="kinds" autoWidth="false"></p-dropdown>
+                </div>
+                <div class="ui-g-6 ui-g-nopad">
+                    <input pInputText type="text" formControlName="address" class="w100p"/>
+                </div>
+                <div class="ui-g-2 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">
+                        <button type="submit" pButton icon="fa-plus" title="Добавить контакт" [disabled]="!contactform.valid"></button>
+                    </div>
                 </div>
             </div>
-            <div class="ui-g-6 ui-g-nopad">
-                <div class="ui-toolbar-group-right">
-                    <button type="button" pButton icon="fa-plus" title="Добавить контакт"></button>
-                </div>
-            </div>
-        </div>
+        </form>
     </p-footer>
+    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
+    <p-column field="kind"></p-column>
     <p-column field="address"></p-column>
     <p-column field="active">
         <ng-template let-contact="rowData" pTemplate="body">

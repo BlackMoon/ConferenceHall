@@ -1,4 +1,4 @@
-﻿import { Component, Input } from '@angular/core';
+﻿import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/primeng';
@@ -11,11 +11,10 @@ import { SchemeService } from './scheme.service';
     templateUrl: 'scheme-table.component.html'
 
 })
-export class SchemeTableComponent {
+export class SchemeTableComponent implements OnInit {
 
     editMode: boolean;
-
-    schemeformVisible: boolean;
+    
     schemeform: FormGroup;
 
     @Input()
@@ -46,12 +45,12 @@ export class SchemeTableComponent {
         this.schemeService
             .add(scheme)
             .subscribe(
-            key => {
-                scheme.id = key;
-                this.schemes.push(scheme);
-                this.schemeform.reset();
-            },
-            error => this.logger.error2(error));
+                key => {
+                    scheme.id = key;
+                    this.schemes.push(scheme);
+                    this.schemeform.reset();
+                },
+                error => this.logger.error2(error));
     }
 
     copyScheme(e, id: number) {
