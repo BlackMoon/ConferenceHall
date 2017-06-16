@@ -4,6 +4,8 @@ using domain.Common;
 using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
+using domain.SysUser;
+using System;
 
 namespace domain.Employee
 {
@@ -20,7 +22,19 @@ namespace domain.Employee
         [Column("org_id")]
         public int OrgId { get; set; }
 
+        /// <summary>
+        /// Логин (для пользователей)
+        /// </summary>
+        [Write(false)]
+        public string Login { get; set; }
+
         public string Name { get; set; }
+
+        /// <summary>
+        /// Пароль (для пользователей)
+        /// </summary>
+        [Write(false)]
+        public string Password { get; set; }
 
         /// <summary>
         /// Должность
@@ -31,7 +45,19 @@ namespace domain.Employee
         /// Роль (для пользователей)
         /// </summary>
         [Write(false)]
-        public string Role { get; set; }
+        public UserRole UserRole { get; set; }
+
+        [Column("role")]
+        [JsonIgnore]
+        public string Role
+        {
+            set
+            {
+                UserRole userRole;
+                Enum.TryParse(value, true, out userRole);
+                UserRole = userRole;
+            }
+        }
 
         [Write(false)]
         public IList<Contact> Contacts { get; set; }

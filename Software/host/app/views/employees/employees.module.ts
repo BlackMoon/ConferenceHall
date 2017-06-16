@@ -4,10 +4,12 @@ import { NgModule } from '@angular/core';
 import {
     AccordionModule,
     ButtonModule,
+    CheckboxModule,
     DataTableModule,
     DropdownModule,
     InputSwitchModule,
     InputTextModule,
+    PasswordModule,
     ToggleButtonModule
 } from 'primeng/primeng';
 
@@ -21,6 +23,7 @@ import { EmployeeService } from './employee.service';
     imports: [
         AccordionModule,
         ButtonModule,
+        CheckboxModule,
         CommonModule,
         DataTableModule,
         DropdownModule,   
@@ -28,6 +31,7 @@ import { EmployeeService } from './employee.service';
         InputSwitchModule,
         InputTextModule,
         EmployeeRoutingModule,
+        PasswordModule,
         ReactiveFormsModule,
         ToggleButtonModule
     ],

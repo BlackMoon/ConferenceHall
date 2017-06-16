@@ -3,13 +3,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace domain.SysUser
 {
+    /// <summary>
+    /// Роль пользователя
+    /// </summary>
+    public enum UserRole
+    {
+        User,
+
+        PowerUser,
+
+        Admin,
+
+        System
+    }
+
     [Table("conf_hall.users")]
     public class SysUser : KeyObject
     {
-        [Column("login")]
-        public string Login { get; set; }
+        public bool Locked { get; set; }
 
-        [Column("role")]
-        public string Role { get; set; }
+        public string Login { get; set; }
+        
+        public UserRole Role { get; set; }
     }
 }

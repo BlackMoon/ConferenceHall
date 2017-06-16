@@ -44,7 +44,57 @@
 
             <p-accordionTab header="Контакты">
                 <contact-table [contacts]="contacts"></contact-table>
-             </p-accordionTab>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Пользователь">
+                
+                <div class="ui-g">
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Привязан:
+                        </div>
+                        <div class="ui-g-8">
+                            <p-inputSwitch onLabel="Да" offLabel="Нет"></p-inputSwitch>    
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Логин *:
+                        </div>
+                        <div class="ui-g-8">
+                            <input pInputText type="text" formControlName="name" class="w100p"/>
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Роль *:
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown formControlName="orgId" [options]="orgs" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Пароль *:
+                        </div>
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-5">
+                                <input type="password" pPassword class="w100p"/>
+                            </div>
+                            <div class="ui-g-1">
+                            </div>
+                            <div class="ui-g-3">
+                                Заблокирован :
+                            </div>
+                            <div class="ui-g-3">
+                                <p-inputSwitch onLabel="Да" offLabel="Нет"></p-inputSwitch>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </p-accordionTab>
+
         </p-accordion>
 
     </form>

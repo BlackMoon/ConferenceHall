@@ -25,7 +25,11 @@ namespace domain.Employee.Query
                 .Column("c.active")
                 .Column("c.address")
                 .Column("c.kind")
+                .Column("u.locked")
+                .Column("u.login")
+                .Column("u.role")
                 .LeftJoin("conf_hall.contacts c ON c.employee_id = e.id")
+                .LeftJoin("conf_hall.users u ON u.employee_id = e.id")
                 .Where("e.id = @id");
 
             Employee prev = null;
