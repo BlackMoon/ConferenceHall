@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using domain.Conference.Command;
 using domain.Element.Command;
+using domain.Employee.Command;
 using domain.Hall.Command;
 using domain.Organization;
 using domain.Organization.Command;
@@ -22,6 +23,12 @@ namespace domain.Common.Job
 
             // DeleteConferenceCommand --> Conference
             TypeAdapterConfig<DeleteConferenceCommand, Conference.Conference>
+                .ForType();
+            #endregion
+
+            #region Employee
+            // CreateEmployeeCommand --> Employee
+            TypeAdapterConfig<CreateEmployeeCommand, Employee.Employee>
                 .ForType();
             #endregion
 

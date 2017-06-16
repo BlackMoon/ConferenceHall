@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
+using Dapper.Contrib.Extensions;
+using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
 
 namespace domain.Employee
 {
-    [Table("conf_hall.employees")]
-    public class Employee : KeyObject
+    [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.employees")]
+    public class Employee : KeyObject, ICommand
     {
         /// <summary>
         /// Заблокирован? (для пользователей)
         /// </summary>
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [Write(false)]
         public bool Locked { get; set; }
 
         [Column("org_id")]
@@ -27,8 +30,10 @@ namespace domain.Employee
         /// <summary>
         /// Роль (для пользователей)
         /// </summary>
+        [Write(false)]
         public string Role { get; set; }
 
+        [Write(false)]
         public IList<Contact> Contacts { get; set; }
     }
 }

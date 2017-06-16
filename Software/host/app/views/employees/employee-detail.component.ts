@@ -17,7 +17,7 @@ export class EmployeeDetailComponent implements OnInit {
     
     employeeForm: FormGroup;
 
-    contacts: ContactModel[];
+    contacts: ContactModel[] = [];
     orgs: SelectItem[];
 
     constructor(
@@ -47,6 +47,9 @@ export class EmployeeDetailComponent implements OnInit {
 
         this.route.params
             .switchMap((params: Params) => {
+                let orgid = params.hasOwnProperty("orgid") ? +params["orgid"] : undefined;
+                orgid && this.employeeForm.patchValue({ orgId: orgid });
+
                 // (+) converts string 'id' to a number
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? this.employeeService.get(key) : Observable.empty();

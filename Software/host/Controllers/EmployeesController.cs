@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using domain.Employee;
+using domain.Employee.Command;
 using domain.Employee.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
@@ -24,14 +25,16 @@ namespace host.Controllers
 
         // POST api/members
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Task<int> Post([FromBody]CreateEmployeeCommand value)
         {
+            return CommandDispatcher.DispatchAsync<CreateEmployeeCommand, int>(value);
         }
 
         // PUT api/members/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public Task Put(int id, [FromBody]Employee value)
         {
+            return CommandDispatcher.DispatchAsync<Employee, bool>(value);
         }
 
         // DELETE api/members/5
