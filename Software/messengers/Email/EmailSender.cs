@@ -6,6 +6,7 @@ using MimeKit;
 
 namespace messengers.Email
 {
+    [SenderKind("Email")]
     public class EmailSender : IMessageSender
     {
 
