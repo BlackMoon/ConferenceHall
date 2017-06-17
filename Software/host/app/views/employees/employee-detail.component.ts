@@ -5,7 +5,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SelectItem, TreeNode } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
-import { ContactModel, EmployeeModel } from '../../models';
+import { ContactModel, EmployeeModel, UserOperation } from '../../models';
 import { EmployeeService } from './employee.service';
 import { OrganizationService } from '../organizations/organization.service';
 
@@ -18,7 +18,7 @@ export class EmployeeDetailComponent implements OnInit {
     employeeForm: FormGroup;
 
     contacts: ContactModel[] = [];
-    orgs: SelectItem[];
+    orgs: SelectItem[];    
 
     constructor(
         private employeeService: EmployeeService,
@@ -26,8 +26,7 @@ export class EmployeeDetailComponent implements OnInit {
         private fb: FormBuilder,
         private location: Location,
         private logger: Logger,
-        private route: ActivatedRoute) {
-    }
+        private route: ActivatedRoute) { }
 
     ngOnInit() {
 
@@ -35,7 +34,15 @@ export class EmployeeDetailComponent implements OnInit {
             id: [null],
             name: [null, Validators.required],
             orgId: [null, Validators.required],
-            position: [null]
+            position: [null],
+            user: this.fb.group({
+                id: [null],
+                login: [null],
+                locked: [false],
+                operation: [false],
+                role: [null],
+                password: [null],
+            })
         });
 
         this.organizationService
@@ -57,17 +64,30 @@ export class EmployeeDetailComponent implements OnInit {
             .subscribe(
                 employee => {
                     this.contacts = employee.contacts;
-                    this.employeeForm.patchValue(employee);
+
+                    employee.user = employee.user || {};
+                    this.employeeForm.patchValue(employee, false);
                 },
                 error => this.logger.error2(error)
             );
     }
 
     save(event, employee) {
-
+        
         event.preventDefault();
 
         employee.contacts = this.contacts;
+
+        let user = employee.user,
+            operation: UserOperation;        
+
+        // существующего пользователя можно только отвязать, а нового привязать !
+        if (user.id)
+            operation = user.operation ? UserOperation.Unbind : UserOperation.None;
+        else
+            operation = user.operation ? UserOperation.Bind : UserOperation.None;            
+
+        user.operation = operation;
 
         this.employeeService[employee.id ? 'update' : 'add'](employee)
             .subscribe(

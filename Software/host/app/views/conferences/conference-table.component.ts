@@ -1,7 +1,7 @@
 ﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ConfirmationService, MenuItem } from 'primeng/primeng';
+import { ConfirmationService, MenuItem, SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, confDragType } from '../../models';
 import { ConferenceService } from './conference.service';
@@ -12,8 +12,6 @@ import { ConferenceService } from './conference.service';
 })
 export class ConferenceTableComponent implements OnInit, OnChanges {
     
-    states: any[];
-
     /**
      * Активная команда splitButton'a    
      */
@@ -22,6 +20,8 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
     actionIcon: string;
 
     editMode: boolean;
+
+    states: SelectItem[];
 
     @Input()
     endDate: Date;
@@ -58,8 +58,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
                         label: ConfState.toName(state),
                         value: state
                     }
-            }
-            );
+            });
     }
 
     ngOnChanges(changes: SimpleChanges) {

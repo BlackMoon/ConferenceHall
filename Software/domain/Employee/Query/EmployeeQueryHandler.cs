@@ -43,10 +43,8 @@ namespace domain.Employee.Query
 
                     return null;
                 }
-                
-                e.Locked = u.Locked;
-                e.Login = u.Login;
-                e.Role = u.UserRole;
+
+                e.User = u;                
 
                 prev = e;
                 prev.Contacts = new List<Contact>();

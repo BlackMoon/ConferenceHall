@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Command;
@@ -31,6 +30,17 @@ namespace domain.Employee.Command
 
             Employee employee = new Employee();
             int newId = await DbManager.DbConnection.InsertAsync(command.Adapt(employee));
+
+            // Привязать пользователя
+            if (command.User != null && command.User.Operation == SysUser.UserOperation.Bind)
+            {
+                DbManager.AddParameter("locked", command.User.Locked);
+                DbManager.AddParameter("login", command.User.Login);
+                DbManager.AddParameter("password", command.User.Password);
+                DbManager.AddParameter("role", $"{command.User.Role}::user_role");
+
+                await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "P1");
+            }
 
             // добавить новые контакты
             if (command.Contacts.Any())
@@ -66,7 +76,36 @@ namespace domain.Employee.Command
             // удалить пред. контакты
             DbManager.AddParameter("employeeId", command.Id);
             await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.contacts WHERE employee_id = @employeeId");
-            
+
+            // Привязать/отвязать пользователя
+            if (command.User != null)
+            {
+                DbManager.ClearParameters();
+
+                switch (command.User.Operation)
+                {
+                    case SysUser.UserOperation.Bind:
+
+                        DbManager.AddParameter("locked", command.User.Locked);
+                        DbManager.AddParameter("login", command.User.Login);                        
+                        DbManager.AddParameter("password", command.User.Password);
+                        DbManager.AddParameter("role", $"{command.User.Role}::user_role");
+
+                        await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "P1");
+
+                        break;
+                    
+                    // отвязать пользователя
+                    case SysUser.UserOperation.Unbind:
+
+                        DbManager.AddParameter("employeeId", command.Id);
+                        await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.users WHERE employee_id = @employeeId");
+
+                        break;
+                }
+
+            }
+
             // добавить новые контакты
             if (command.Contacts.Any())
             {

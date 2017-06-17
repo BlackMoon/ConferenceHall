@@ -1,5 +1,9 @@
-﻿import { KeyModel } from './index';
+﻿import { KeyModel } from "./index";
 import { JsonProperty } from '../common/map-utils';
+
+// для JsonProperty необходимо объявить через require()
+import sysuser = require("./sysuser.model");
+import SysUserModel = sysuser.SysUserModel;
 
 /**
  * Модель. Контакт
@@ -40,20 +44,19 @@ export class EmployeeModel extends KeyModel {
     /**
      * Должность
      */
-    position: string;
+    position: string;    
 
     /**
-    * Роль (для пользователей)
-     */
-    role: string;
+    * Системный пользователь
+    */
+    @JsonProperty({ clazz: SysUserModel })
+    user: SysUserModel;
 
     /**
     * Контакты
     */
     @JsonProperty({ clazz: ContactModel })
-    contacts?: ContactModel[];
-
-    locked: boolean;
+    contacts?: ContactModel[];    
 
     constructor() {
 
@@ -62,9 +65,8 @@ export class EmployeeModel extends KeyModel {
         this.name = undefined;
         this.orgId = undefined;
         this.position = undefined;
-        this.role = undefined;
-        this.locked = false;
 
+        this.user = undefined;
         this.contacts = undefined;
     }
 }

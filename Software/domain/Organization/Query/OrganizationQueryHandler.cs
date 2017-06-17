@@ -6,6 +6,7 @@ using Dapper;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 using Mapster;
+using System;
 
 namespace domain.Organization.Query
 {
@@ -33,10 +34,10 @@ namespace domain.Organization.Query
             if (query.OrganizationId.HasValue)
             {
                 sqlBuilder
-                    .Column("e.id")
-                    .Column("e.org_id orgid")
+                    .Column("e.id")                    
                     .Column("e.name")
                     .Column("e.position")
+                    .Column("u.id")
                     .Column("u.locked")
                     .From("conf_hall.employees e")
                     .LeftJoin("conf_hall.users u ON u.employee_id = e.id")
@@ -52,7 +53,10 @@ namespace domain.Organization.Query
                     param.Add("filter", query.Filter + "%");
                 }
 
-                var employees = await DbManager.DbConnection.QueryAsync<Employee.Employee>(sqlBuilder.ToString(), param);
+                Func<Employee.Employee, SysUser.SysUser, Employee.Employee> map = (e, u) => { e.User = u; return e; };                
+
+                var employees = await DbManager.DbConnection.QueryAsync(sqlBuilder.ToString(), map, param);
+
                 return employees.Select(e =>
                 {
                     OrgEmployeeDto dto = new OrgEmployeeDto();
