@@ -66,7 +66,7 @@ export class EmployeeDetailComponent implements OnInit {
                     this.contacts = employee.contacts;
 
                     employee.user = employee.user || {};
-                    this.employeeForm.patchValue(employee, false);
+                    this.employeeForm.patchValue(employee);
                 },
                 error => this.logger.error2(error)
             );

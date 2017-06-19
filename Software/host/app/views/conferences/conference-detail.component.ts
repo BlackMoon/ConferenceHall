@@ -1,19 +1,20 @@
 ﻿import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, SchemeModel } from '../../models';
+import { Observable } from 'rxjs';
 import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule, PanelModule } from 'primeng/primeng';
+import { locale } from "../../common/locale";
+import { Logger } from "../../common/logger";
+import { ConferenceModel, ConfState, SchemeModel, TimeRange } from '../../models';
+
 import { ConferenceService } from './conference.service';
 import { HallService } from '../halls/hall.service';
 import { SchemeService } from "../schemes/scheme.service";
 import { MemberService } from "../members/member.service";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TimeRange } from '../../models';
+
 import { DateToUtcPipe } from "../../common/globals/pipes";
-import { locale } from "../../common/locale";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
-//import { OrgMemberTableComponent } from '../members/org-member-table.component';
 
 @Component({
     selector: "conference-detail",
@@ -29,9 +30,8 @@ export class ConferenceDetailComponent implements OnInit {
     hallScheme: any[];
     locale: any;
     confMembers: any[];
+
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
-    //@ViewChild(EmployeeTableComponent) employeeTable: EmployeeTableComponent;
-    //@ViewChild(OrgMemberTableComponent) memberTable: OrgMemberTableComponent;
     @ViewChild('tabSchemeWrapper') tabSchemeWrapper: ElementRef;
     @ViewChild('tabMemberWrapper') tabMemberWrapper: ElementRef;
 
@@ -47,6 +47,7 @@ export class ConferenceDetailComponent implements OnInit {
         private route: ActivatedRoute) {
 
         this.locale = locale;
+
         this.confTypes = [];
 
         let stateKeys = Object
@@ -62,54 +63,51 @@ export class ConferenceDetailComponent implements OnInit {
                         label: ConfState.toName(state),
                         value: state
                     }
-            }
-            );
+            });
+    }
+
+    ngOnInit() {
 
         this.conferenceForm = this.fb.group({
             id: [null],
+            confState: [null],
             subject: [null, Validators.required],
             hallId: [null, Validators.required],
+            schemeId: [null],
             description: [null, Validators.required],
-            startDate: [null, this.confId && this.confId > 0 ? [Validators.required, this.validateStartAndEndDate] : this.validateStartAndEndDate],
-            endDate: [null, this.confId && this.confId > 0 ? [Validators.required, this.validateStartAndEndDate] : this.validateStartAndEndDate],
-            confState: [null],
-            hallSchemeId: [null]
+            startDate: [null],
+            endDate: [null]
         });
-
-        this.route.params
-            .subscribe((params: Params) => {
-                this.confId = params.hasOwnProperty("id") ? +params["id"] : null;
-                if (this.confId && this.confId > 0)
-                    this.conferenceService
-                        .get(this.confId)
-                        .subscribe((conf: ConferenceModel) => {
-
-                            if (!conf) return;
-                            this.dataBindScheme(conf.hallId);
-                            conf.startDate = new Date(conf.startDate);
-                            conf.endDate = new Date(conf.endDate);
-
-                            this.conferenceForm.patchValue(conf);
-                        });
-
-                console.log("id = " + this.confId);
-            }, error => this.logger.error2(error));
 
         this.hallService
             .getAll()
             .subscribe(
-            halls => this.halls = halls.map(h => <any>{ label: h.name, value: h.id }),
-            error => this.logger.error2(error));
+                halls => this.halls = halls.map(h => <any>{ label: h.name, value: h.id }),
+                error => this.logger.error2(error));
 
-        this.conferenceForm.valueChanges
+        this.route.params
+            .switchMap((params: Params) => {
+                // (+) converts string 'id' to a number
+                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                return key ? this.conferenceService.get(key) : Observable.empty();
+            })
+            .subscribe(conference => {
+                            //this.dataBindScheme(conf.hallId);
+                            //conf.startDate = new Date(conf.startDate);
+                            //conf.endDate = new Date(conf.endDate);
+                    debugger;
+                    this.conferenceForm.patchValue(conference);
+                },
+                error => this.logger.error2(error));
+
+
+        /*this.conferenceForm.valueChanges
             .subscribe(data => this.onValueChanged(data), error => this.logger.error2(error));
-    }
 
-    ngOnInit() {
         for (var item in this.validationMessages) {
             if (!this.validationMessages.hasOwnProperty(item)) continue;
             this.formErrors[item] = '';
-        }
+        }*/
     }
 
     save(event, conferenceObj) {
