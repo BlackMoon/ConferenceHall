@@ -4,15 +4,15 @@
 
     <div class="ui-g-8 ui-g-nopad">
         <div class="ui-g-4">
-            {{operationLabel}} :
+            {{bindLabel}} :
         </div>
         <div class="ui-g-8">
-            <p-inputSwitch formControlName="operation" onLabel="Да" offLabel="Нет"></p-inputSwitch>
+            <p-inputSwitch formControlName="bind" onLabel="Да" offLabel="Нет"></p-inputSwitch>
         </div>
     </div>
     <div class="ui-g-8 ui-g-nopad">
         <div class="ui-g-4">
-            Логин <span *ngIf="requireValidation">*</span>:
+            Логин <span *ngIf="requireCredentialsValidation">*</span>:
         </div>
         <div class="ui-g-8">
             <input pInputText type="text" formControlName="login" class="w100p" />
@@ -20,7 +20,7 @@
     </div>
     <div class="ui-g-8 ui-g-nopad">
         <div class="ui-g-4">
-            Роль <span *ngIf="requireValidation">*</span>:
+            Роль <span *ngIf="requireCredentialsValidation">*</span>:
         </div>
         <div class="ui-g-8">
             <p-dropdown formControlName="role" [options]="roles" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
@@ -28,11 +28,11 @@
     </div>
     <div class="ui-g-8 ui-g-nopad">
         <div class="ui-g-4">
-            Пароль <span *ngIf="requireValidation">*</span>:
+            Пароль <span *ngIf="requirePasswordValidation">*</span>:
         </div>
         <div class="ui-g-8 ui-g-nopad">
             <div class="ui-g-5">
-                <input type="password" pPassword formControlName="password" class="w100p" />
+                <input type="password" pPassword formControlName="password" placeholder="Пароль" class="w100p" />
             </div>
             <div class="ui-g-1">
             </div>

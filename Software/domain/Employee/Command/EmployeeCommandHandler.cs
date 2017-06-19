@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Command;
@@ -38,7 +39,7 @@ namespace domain.Employee.Command
                 DbManager.AddParameter("plocked", command.User.Locked);
                 DbManager.AddParameter("plogin", command.User.Login);
                 DbManager.AddParameter("ppassword", command.User.Password);
-                DbManager.AddParameter("prole", $"{command.User.Role}::user_role");
+                DbManager.AddParameter("prole", command.User.Role);
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
             }
@@ -71,7 +72,7 @@ namespace domain.Employee.Command
         {
             await DbManager.OpenAsync();
             DbManager.BeginTransaction();
-
+            
             bool updated = await DbManager.DbConnection.UpdateAsync(command);
 
             // удалить пред. контакты (параметр pemployee_id из хранимой процедуры)
@@ -87,8 +88,8 @@ namespace domain.Employee.Command
                         
                         DbManager.AddParameter("plocked", command.User.Locked);
                         DbManager.AddParameter("plogin", command.User.Login);                        
-                        DbManager.AddParameter("ppassword", command.User.Password);
-                        DbManager.AddParameter("prole", $"{command.User.Role}::user_role");
+                        DbManager.AddParameter("ppassword", command.User.Password ?? (object)DBNull.Value);     // пароль может быть пустым
+                        DbManager.AddParameter("prole", command.User.Role);
 
                         await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
 

@@ -13,8 +13,17 @@ export class SysUserDetailComponent implements OnInit {
     * id sysUser
     */
     id: number;
-    operationLabel: string = "Привязать";
-    requireValidation: boolean;
+    bindLabel: string = "Привязать";
+
+    /**
+     * Валидация [login, role]
+     */
+    requireCredentialsValidation: boolean;
+
+    /**
+     * Валидация [password]
+     */
+    requirePasswordValidation: boolean;
 
     @Input("group")
     sysUserForm: FormGroup;
@@ -46,32 +55,40 @@ export class SysUserDetailComponent implements OnInit {
             .valueChanges
             .subscribe(value => {                
                 this.id = value;
-                this.operationLabel = "Отвязать";
+                this.bindLabel = "Отвязать";
+
+                this.requireCredentialsValidation = true;
+                this.enableValidation();
             });
 
-        this.sysUserForm.get("operation")
+        this.sysUserForm.get("bind")
             .valueChanges
             .subscribe(value => {
-                debugger;
-                this.requireValidation = value;
-
-                let loginControl = this.sysUserForm.get("login");
-                if (loginControl) {
-                    loginControl.setValidators(this.requireValidation ? [Validators.required] : null);
-                    loginControl.updateValueAndValidity();
-                }
-
-                let passwdControl = this.sysUserForm.get("password");
-                if (passwdControl) {
-                    passwdControl.setValidators(this.requireValidation ? [Validators.required] : null);
-                    passwdControl.updateValueAndValidity();
-                }
-
-                let roleControl = this.sysUserForm.get("role");
-                if (roleControl) {
-                    roleControl.setValidators(this.requireValidation ? [Validators.required] : null);
-                    roleControl.updateValueAndValidity();
-                }
+                
+                this.requireCredentialsValidation = (this.id !== void 0) || value;
+                this.requirePasswordValidation = (this.id === void 0) && value;
+                this.enableValidation();
             });
-    }    
+    }
+
+    enableValidation() {
+
+        let loginControl = this.sysUserForm.get("login");
+        if (loginControl) {
+            loginControl.setValidators(this.requireCredentialsValidation ? [Validators.required] : null);
+            loginControl.updateValueAndValidity();
+        }
+
+        let passwdControl = this.sysUserForm.get("password");
+        if (passwdControl) {
+            passwdControl.setValidators(this.requirePasswordValidation ? [Validators.required] : null);
+            passwdControl.updateValueAndValidity();
+        }
+
+        let roleControl = this.sysUserForm.get("role");
+        if (roleControl) {
+            roleControl.setValidators(this.requireCredentialsValidation ? [Validators.required] : null);
+            roleControl.updateValueAndValidity();
+        }   
+    }
 }

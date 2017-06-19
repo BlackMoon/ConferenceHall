@@ -37,11 +37,11 @@ export class EmployeeDetailComponent implements OnInit {
             position: [null],
             user: this.fb.group({
                 id: [null],
+                bind: [false],
                 login: [null],
                 locked: [false],
-                operation: [false],
                 role: [UserRole.User],
-                password: [null]
+                password: [null, Validators.required]
             })
         });
 
@@ -78,21 +78,20 @@ export class EmployeeDetailComponent implements OnInit {
 
         employee.contacts = this.contacts;
 
-        let user = employee.user,
-            operation: UserOperation;        
-
         // существующего пользователя можно только отвязать, а нового привязать !
+        let user = employee.user;
         if (user.id)
-            operation = user.operation ? UserOperation.Unbind : UserOperation.None;
+            user.operation = user.bind ? UserOperation.Unbind : UserOperation.Bind;
         else
-            operation = user.operation ? UserOperation.Bind : UserOperation.None;            
+            user.operation = user.bind ? UserOperation.Bind : UserOperation.None;
 
-        user.operation = operation;
+        delete user.bind;
 
         this.employeeService[employee.id ? 'update' : 'add'](employee)
             .subscribe(
                 _ => this.location.back(),
-                error => this.logger.error2(error));
+                error => this.logger.error2(error)
+            );
     }
 }
             
