@@ -5,7 +5,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SelectItem, TreeNode } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
-import { ContactModel, EmployeeModel, UserOperation } from '../../models';
+import { ContactModel, EmployeeModel, UserOperation, UserRole } from '../../models';
 import { EmployeeService } from './employee.service';
 import { OrganizationService } from '../organizations/organization.service';
 
@@ -40,8 +40,8 @@ export class EmployeeDetailComponent implements OnInit {
                 login: [null],
                 locked: [false],
                 operation: [false],
-                role: [null],
-                password: [null],
+                role: [UserRole.User],
+                password: [null]
             })
         });
 

@@ -20,7 +20,7 @@
     </div>
     <div class="ui-g-8 ui-g-nopad">
         <div class="ui-g-4">
-            Роль :
+            Роль <span *ngIf="requireValidation">*</span>:
         </div>
         <div class="ui-g-8">
             <p-dropdown formControlName="role" [options]="roles" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>

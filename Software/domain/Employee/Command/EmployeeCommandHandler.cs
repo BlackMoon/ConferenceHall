@@ -34,12 +34,13 @@ namespace domain.Employee.Command
             // Привязать пользователя
             if (command.User != null && command.User.Operation == SysUser.UserOperation.Bind)
             {
-                DbManager.AddParameter("locked", command.User.Locked);
-                DbManager.AddParameter("login", command.User.Login);
-                DbManager.AddParameter("password", command.User.Password);
-                DbManager.AddParameter("role", $"{command.User.Role}::user_role");
+                DbManager.AddParameter("pemployee_id", newId);
+                DbManager.AddParameter("plocked", command.User.Locked);
+                DbManager.AddParameter("plogin", command.User.Login);
+                DbManager.AddParameter("ppassword", command.User.Password);
+                DbManager.AddParameter("prole", $"{command.User.Role}::user_role");
 
-                await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "P1");
+                await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
             }
 
             // добавить новые контакты
@@ -73,34 +74,30 @@ namespace domain.Employee.Command
 
             bool updated = await DbManager.DbConnection.UpdateAsync(command);
 
-            // удалить пред. контакты
-            DbManager.AddParameter("employeeId", command.Id);
-            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.contacts WHERE employee_id = @employeeId");
+            // удалить пред. контакты (параметр pemployee_id из хранимой процедуры)
+            DbManager.AddParameter("pemployee_id", command.Id);
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.contacts WHERE employee_id = @pemployee_id");
 
             // Привязать/отвязать пользователя
             if (command.User != null)
             {
-                DbManager.ClearParameters();
-
                 switch (command.User.Operation)
                 {
                     case SysUser.UserOperation.Bind:
+                        
+                        DbManager.AddParameter("plocked", command.User.Locked);
+                        DbManager.AddParameter("plogin", command.User.Login);                        
+                        DbManager.AddParameter("ppassword", command.User.Password);
+                        DbManager.AddParameter("prole", $"{command.User.Role}::user_role");
 
-                        DbManager.AddParameter("locked", command.User.Locked);
-                        DbManager.AddParameter("login", command.User.Login);                        
-                        DbManager.AddParameter("password", command.User.Password);
-                        DbManager.AddParameter("role", $"{command.User.Role}::user_role");
-
-                        await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "P1");
+                        await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
 
                         break;
                     
                     // отвязать пользователя
                     case SysUser.UserOperation.Unbind:
-
-                        DbManager.AddParameter("employeeId", command.Id);
-                        await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.users WHERE employee_id = @employeeId");
-
+                        
+                        await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.users WHERE employee_id = @pemployee_id");
                         break;
                 }
 

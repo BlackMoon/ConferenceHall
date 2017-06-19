@@ -52,8 +52,8 @@ export class SysUserDetailComponent implements OnInit {
         this.sysUserForm.get("operation")
             .valueChanges
             .subscribe(value => {
-                
-                this.requireValidation = value && !this.id;
+                debugger;
+                this.requireValidation = value;
 
                 let loginControl = this.sysUserForm.get("login");
                 if (loginControl) {
@@ -65,6 +65,12 @@ export class SysUserDetailComponent implements OnInit {
                 if (passwdControl) {
                     passwdControl.setValidators(this.requireValidation ? [Validators.required] : null);
                     passwdControl.updateValueAndValidity();
+                }
+
+                let roleControl = this.sysUserForm.get("role");
+                if (roleControl) {
+                    roleControl.setValidators(this.requireValidation ? [Validators.required] : null);
+                    roleControl.updateValueAndValidity();
                 }
             });
     }    
