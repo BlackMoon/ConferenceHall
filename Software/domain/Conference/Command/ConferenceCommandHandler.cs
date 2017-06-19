@@ -84,7 +84,7 @@ namespace domain.Conference.Command
 
             DbManager.AddParameter("id", command.Id);
             DbManager.AddParameter("subject", command.Subject);
-            DbManager.AddParameter("description", command.Description);
+            DbManager.AddParameter("description", command.Description ?? (object)DBNull.Value);
             DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);
             DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);
             DbManager.AddParameter("state", command.ConfState.ToString());
