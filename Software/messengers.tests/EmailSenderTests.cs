@@ -20,54 +20,21 @@ namespace Messengers.Tests
         }
 
         [Fact]
-        public void TestEmail()
+        public void TestSend()
         {
-
-            // тест отсылки емаил 
-            SmtpOptions sConnect = new SmtpOptions();
-
-            sConnect.PasswordSender = "Anapa19811981";
-            sConnect.SmtpServer = "smtp.timeweb.ru";
-            sConnect.EmailSender = "fiseyskiysv@aquilon-st.ru";
-            sConnect.NameSender = "Станислав";
-            sConnect.UseSSL = false;
-            sConnect.SmtpPort = 25;
-
-           // пример рассылки по списку
-
             EmailSender es = new EmailSender(_smtpMock.Object);
             String[] listEmail = { "phstas2016@rambler.ru", "phstas2016@yandex.ru" };
-            //es.Recipients = listEmail;
-            
-          //  es.Send("Заголовок письма", "Письмо приглашает на совещание!");
-            Task t = es.SendEmailAsync("Заголовок письма", "Письмо приглашает на совещание!");
-            t.Wait();
-            
-         
+            es.Send("Заголовок письма Sync", "Письмо приглашает на совещание Sync!", listEmail);
         }
 
-        //public void TestEmailAsync()
-        //{
-
-        //    // тест отсылки емаил 
-        //    SmtpOptions sConnect = new SmtpOptions();
-
-        //    sConnect.PasswordSender = "Anapa19811981";
-        //    sConnect.SmtpServer = "smtp.timeweb.ru";
-        //    sConnect.EmailSender = "fiseyskiysv@aquilon-st.ru";
-        //    sConnect.NameSender = "Станислав";
-        //    sConnect.UseSSL = false;
-        //    sConnect.SmtpPort = 25;
-
-        //    // пример рассылки по списку
-
-        //    EmailSender es = new EmailSender();
-        //    String[] listEmail = { "phstas2016@rambler.ru", "phstas2016@yandex.ru" };
-        //    es.Recipients = listEmail;
-        //    es.SmtpSettings = sConnect;
-        //    Task t = es.SendEmailAsync("Заголовок письма", "Письмо приглашает на совещание!");
-
-        //}
+        [Fact]
+        public void TestSendAsync()
+        {
+            EmailSender es = new EmailSender(_smtpMock.Object);
+            String[] listEmail = { "phstas2016@rambler.ru", "phstas2016@yandex.ru" };
+            Task t = es.SendAsync("Заголовок письма Async", "Письмо приглашает на совещание Async!", listEmail);
+            t.Wait();
+        }
 
 
     }

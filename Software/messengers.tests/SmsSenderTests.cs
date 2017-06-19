@@ -21,31 +21,42 @@ namespace Messengers.Tests
 
         [Fact]
 
-        // проверка синхронной рассылки смс
-        //public void TestSendSync()
-        //{
-        //    SmsSender sms = new SmsSender(_smsMock.Object);
-        //    String[] listSmsRecipients = { "79003224426", "79172472533" };
-        //    sms.Send("", "Синхр.метод. Совещание в Татнефти в 10.00 20.06.2017", listSmsRecipients);
-        //}
+        //// проверка синхронной рассылки смс
+        public void TestSendSync()
+        {
+            SmsSender sms = new SmsSender(_smsMock.Object);
+        String[] listSmsRecipients = { "79003224426", "79172472533" };
+        sms.Send("", "Синхр.метод. Совещание в Татнефти в 10.00 20.06.2017", listSmsRecipients);
+        }
 
+    [Fact]
         // проверка асинхронной рассылки смс
         public void TestSendAsync()
         {
             SmsSender sms = new SmsSender(_smsMock.Object);
             String[] listSmsRecipients = { "79003224426", "79172472533" };
-            Task t = sms.SendAsync("", "Асинхр.метод. Совещание в Татнефти в 10.00 17.06.2017", listSmsRecipients);
+            Task t = sms.SendAsync("", "Асинхр.метод. Совещание в Татнефти в 10.00 20.06.2017", listSmsRecipients);
             t.Wait();
         }
 
+        [Fact]
         // асинхронная проверка стоимости сообщений
-        //public void TestCostAsync()
-        //{
-        //SmsSender sms = new SmsSender(_smsMock.Object);
-        //String[] listSmsRecipients = { "79003224426", "79172472533" };
-        //Task t = sms.CostAsync("Асинхр.метод. Совещание в Татнефти в 10.00 17.06.2017", listSmsRecipients);
-        //t.Wait();
-        //}
+        public void TestCostAsync()
+        {
+            SmsSender sms = new SmsSender(_smsMock.Object);
+            String[] listSmsRecipients = { "79003224426", "79172472533" };
+            Task t = sms.CostAsync("Асинхр.метод. Совещание в Татнефти в 10.00 17.06.2017", listSmsRecipients);
+            t.Wait();
+        }
+
+        [Fact]
+        // асинхронная проверка баланса лицевого счета
+        public void TestBalanceAsync()
+        {
+            SmsSender sms = new SmsSender(_smsMock.Object);
+            Task t = sms.BalanceAsync();
+            t.Wait();
+        }
 
     }
 
