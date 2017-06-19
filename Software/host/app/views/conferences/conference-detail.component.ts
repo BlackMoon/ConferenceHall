@@ -72,8 +72,8 @@ export class ConferenceDetailComponent implements OnInit {
             id: [null],
             confState: [null],
             subject: [null, Validators.required],
-            hallId: [-1],
-            schemeId: [-1],
+            hallId: [null],
+            schemeId: [null],
             description: [null],
             startDate: [null],
             endDate: [null]
@@ -99,13 +99,15 @@ export class ConferenceDetailComponent implements OnInit {
             .valueChanges
             .subscribe(value => {
                 
-                this.schemeService
-                    .getAll(value)
-                    .subscribe(
-                        schemes => this.schemes = schemes.map(h => <SelectItem>{ label: h.name, value: h.id }),
-                        error => this.logger.error2(error)
-                    );
-                
+                if (value != null) {
+                    this.schemeService
+                        .getAll(value)
+                        .subscribe(
+                            schemes => this.schemes = schemes.map(h => <SelectItem>{ label: h.name, value: h.id }),
+                            error => this.logger.error2(error)
+                        );
+                }
+
             });
 
         this.hallService
@@ -120,11 +122,12 @@ export class ConferenceDetailComponent implements OnInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 return key ? this.conferenceService.get(key) : Observable.empty();
             })
-            .subscribe(conference => {
+            .subscribe(
+                conference => {
                     
                     // startDate/endDate in string --> create
-                    conference.startDate = new Date(conference.startDate);
-                    conference.endDate = new Date(conference.endDate);
+                    conference.startDate && (conference.startDate = new Date(conference.startDate));
+                    conference.endDate && (conference.endDate = new Date(conference.endDate));
 
                     this.conferenceForm.patchValue(conference);
                 },
@@ -134,8 +137,8 @@ export class ConferenceDetailComponent implements OnInit {
 
     save(event, conference) {
         
-        conference.startDate = this.dateToUtcPipe.transform(conference.startDate);
-        conference.endDate = this.dateToUtcPipe.transform(conference.endDate);
+        conference.startDate && (conference.startDate = this.dateToUtcPipe.transform(conference.startDate));
+        conference.endDate && (conference.endDate = this.dateToUtcPipe.transform(conference.endDate));
         
         this.conferenceService[conference.id ? "update" : "add"](conference)
             .subscribe(

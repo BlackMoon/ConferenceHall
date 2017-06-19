@@ -44,12 +44,12 @@ namespace domain.Conference
         /// <summary>
         /// Дата/время начала
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         /// <summary>
         /// Дата/время окончания
         /// </summary>
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public string Subject { get; set; }
      

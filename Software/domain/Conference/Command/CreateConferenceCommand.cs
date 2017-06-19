@@ -14,7 +14,7 @@ namespace domain.Conference.Command
      
         public int? HallId { get; set; }
      
-        public int? HallSchemeId { get; set; }
+        public int? SchemeId { get; set; }
 
         /// <summary>
         /// Дата начала
