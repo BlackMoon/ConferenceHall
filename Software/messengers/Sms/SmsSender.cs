@@ -3,13 +3,13 @@ using System.Net.Http;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using MailKit.Net.Smtp;
 using MimeKit;
 using Newtonsoft.Json;
 
 namespace messengers.Sms
 {
-    [SenderKind("Sms")]
     public class SmsSender : IMessageSender
     {
         public class CostMessages
@@ -38,6 +38,13 @@ namespace messengers.Sms
         }
 
 
+        public bool PhoneNumberTemplate(string phone)
+        {
+            Regex myReg = new Regex(@"[7]\d{10}"); // создание регулярного выражения состоящего из 11 цифр для мобильного телефона
+            bool result = myReg.IsMatch(phone);
+            return result;
+        }
+
         public async Task CostAsync(string body, params string[] addresses)
         {
             // Проверить стоимость сообщений перед отправкой один текст на несколько номеров:
@@ -56,17 +63,24 @@ namespace messengers.Sms
             {
                 HttpResponseMessage response = await client.GetAsync(messageSms);
                 response.EnsureSuccessStatusCode();
-
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    _errors.Add("Task CostAsync. Result statuscode is not OK. StatusCode=" + response.StatusCode);
                 string responseBody = await response.Content.ReadAsStringAsync();
                 CostMessages ss = JsonConvert.DeserializeObject<CostMessages>(responseBody);
-                _totalCost = double.Parse(ss.Total_Cost, System.Globalization.CultureInfo.InvariantCulture); 
+                try
+                {
+                    _totalCost = double.Parse(ss.Total_Cost, System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch (Exception ex)
+                {
+                    _errors.Add("Не получается получить  стоимость отправки смс: " + ex.Message);
+                }
 
 
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException ex)
             {
-                Console.WriteLine("\nException Caught!");
-                Console.WriteLine("Message :{0} ", e.Message);
+                _errors.Add(ex.Message);
             }
 
             client.Dispose();
@@ -86,15 +100,23 @@ namespace messengers.Sms
             {
                 HttpResponseMessage response = await client.GetAsync(messageRequest);
                 response.EnsureSuccessStatusCode();
-
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    _errors.Add("Task BalanceAsync. Result statuscode is not OK. StatusCode=" + response.StatusCode);
                 string responseBody = await response.Content.ReadAsStringAsync();
                 BalanceAccount ba = JsonConvert.DeserializeObject<BalanceAccount>(responseBody);
-                _balance = double.Parse(ba.Balance, System.Globalization.CultureInfo.InvariantCulture);
+                try
+                {
+                    _balance = double.Parse(ba.Balance, System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch (Exception ex)
+                {
+                    _errors.Add("Не удается запросить баланс на лицевом счете: " + ex.Message);
+                }
 
             }
-            catch (HttpRequestException e)
+            catch (HttpRequestException ex)
             {
-                Errors = new List<string> { e.Message };
+                _errors.Add(ex.Message);
             }
 
             client.Dispose();
@@ -108,6 +130,7 @@ namespace messengers.Sms
             t2.Wait();
             if (_totalCost > _balance)
             {
+                _errors.Add("Денег на лицевом счете, не хватает на отсылку смс");
                 return false;
             }
 
@@ -123,29 +146,45 @@ namespace messengers.Sms
             // Письма необходимо отправлять на ваш уникальный адрес, который содержит в себе ваш секретный ключ api_id:
             // пример 0F7658A1 - 2CA5 - CF06 - 00FA - BFF55984B58D@sms.ru
             // В заголовке необходимо указать номера получателей: пример 79172472533,74993221627
-            string recipients = String.Join(",", addresses);
-            var emailMessage = new MimeMessage();
-
-
-            string email = _smsSettings.SmsRuApilD + _smsSettings.SmsPostDomain;
-            emailMessage.To.Add(new MailboxAddress("", email));
-
-
-            emailMessage.From.Add(new MailboxAddress(_smsSettings.NameSender, _smsSettings.EmailSender));
-            emailMessage.Subject = recipients;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            bool cSend = CheckSendBalance(body, addresses);
+            if (cSend)
             {
-                Text = body
-            };
+                foreach (string phone in addresses)
+                {
+                    if (!PhoneNumberTemplate(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
+                }
 
-            using (var client = new SmtpClient())
-            {
-                client.Connect(_smsSettings.SmtpServer, _smsSettings.SmtpPort, _smsSettings.UseSSL);
-                client.Authenticate(_smsSettings.EmailSender, _smsSettings.PasswordSender);
-                client.Send(emailMessage);
-                client.Disconnect(true);
+                string recipients = String.Join(",", addresses);
+                var emailMessage = new MimeMessage();
+
+
+                string email = _smsSettings.SmsRuApilD + _smsSettings.SmsPostDomain;
+                emailMessage.To.Add(new MailboxAddress("", email));
+
+
+                emailMessage.From.Add(new MailboxAddress(_smsSettings.NameSender, _smsSettings.EmailSender));
+                emailMessage.Subject = recipients;
+                emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                {
+                    Text = body
+                };
+
+                using (var client = new SmtpClient())
+                {
+                    try
+                    {
+                        client.Connect(_smsSettings.SmtpServer, _smsSettings.SmtpPort, _smsSettings.UseSSL);
+                        client.Authenticate(_smsSettings.EmailSender, _smsSettings.PasswordSender);
+                        client.Send(emailMessage);
+                        client.Disconnect(true);
+                    }
+                    catch (Exception ex)
+                    {
+                        _errors.Add(ex.Message);
+                    }
+                }
+
             }
-
         }
 
         public async Task SendAsync(string subject, string body, params string[] addresses)
@@ -157,30 +196,41 @@ namespace messengers.Sms
 
 
             bool cSend = CheckSendBalance(body, addresses);
-            string recipients = String.Join(",", addresses);
-            string bodySmsEncode = System.Net.WebUtility.UrlEncode(body);
-            string messageRequest = _smsSettings.SendUrl + "api_id=" + _smsSettings.SmsRuApilD + "&to=" + recipients +
-                                "&msg=" + bodySmsEncode + "&json=" + _smsSettings.GetJson;
-
-            HttpClient client = new HttpClient();
-
-            try
+            if (cSend)
             {
-                HttpResponseMessage response = await client.GetAsync(messageRequest);
-                response.EnsureSuccessStatusCode();
+                foreach (string phone in addresses)
+                {
+                    if (!PhoneNumberTemplate(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
+                }
+                string recipients = String.Join(",", addresses);
+                string bodySmsEncode = System.Net.WebUtility.UrlEncode(body);
+                string messageRequest = _smsSettings.SendUrl + "api_id=" + _smsSettings.SmsRuApilD + "&to=" + recipients +
+                                        "&msg=" + bodySmsEncode + "&json=" + _smsSettings.GetJson;
 
-                string responseBody = await response.Content.ReadAsStringAsync();
+                HttpClient client = new HttpClient();
 
+                try
+                {
+                    HttpResponseMessage response = await client.GetAsync(messageRequest);
+                    response.EnsureSuccessStatusCode();
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                        _errors.Add("SendAsync response.StatusCode is not OK. StatusCode=" + response.StatusCode);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                }
+                catch (HttpRequestException ex)
+                {
+                    _errors.Add(ex.Message);
+                }
+
+                client.Dispose();
             }
-            catch (HttpRequestException e)
-            {
-                Errors=new List<string> {e.Message};
-            }
-
-            client.Dispose();
         }
 
-        public IEnumerable<string> Errors { get; set; }
+        private IList<string> _errors = new List<string>();
+
+        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
+
     }
 
 
