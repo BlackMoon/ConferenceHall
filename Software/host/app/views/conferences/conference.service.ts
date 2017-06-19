@@ -43,6 +43,13 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
             .catch(handleResponseError);    
     }
 
+    get(key) {
+        return this.http
+            .get(`${this.url}/${key}`)
+            .map((r: Response) => MapUtils.deserialize(ConferenceModel, r.json()))
+            .catch(handleResponseError);
+    }
+
     getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, employeeIds: number[] = null, organizationIds: number[] = null): Observable<any> {
 
         let body: FindConferencesQuery = { startDate: startDate, endDate: endDate, state: state };

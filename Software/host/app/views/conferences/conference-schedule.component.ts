@@ -38,7 +38,7 @@ export class ConferenceScheduleComponent {
     constructor(
         private conferrenceService: ConferenceService,
         private confirmationService: ConfirmationService,
-        public datePipe: DatePipe,
+        private datePipe: DatePipe,
         private logger: Logger,
         private router: Router) {
 

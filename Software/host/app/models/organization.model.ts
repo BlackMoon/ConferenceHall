@@ -27,7 +27,6 @@ export class OrganizationModel extends KeyModel {
     description: string;
     logo: File;
     name: string;
-
     
     constructor() {
 

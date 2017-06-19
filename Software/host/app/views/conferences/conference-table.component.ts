@@ -53,7 +53,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
             .slice(stateKeys.length / 2)
             .map(k => {
                 let state = ConfState[k];
-                return <any>
+                return <SelectItem>
                     {
                         label: ConfState.toName(state),
                         value: state

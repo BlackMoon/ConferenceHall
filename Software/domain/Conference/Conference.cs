@@ -39,7 +39,7 @@ namespace domain.Conference
         public int? HallId { get; set; }
 
         [Column("hall_scheme_id")]
-        public int? HallSchemeId { get; set; }
+        public int? SchemeId { get; set; }
 
         /// <summary>
         /// Дата/время начала

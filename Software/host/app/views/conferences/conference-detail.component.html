@@ -1,6 +1,6 @@
 ﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
             
-    <form [formGroup]="conferenceForm" novalidate (ngSubmit)="save($event, conferenceForm.value)">
+    <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
 
         <div class="ui-widget-header" style="padding: .5em .75em">
             <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid"></button>
@@ -23,15 +23,63 @@
                     </div>
                     <div class="ui-g-8 ui-g-nopad">
                         <div class="ui-g-4">
-                            Описание *:
+                            Описание :
                         </div>
                         <div class="ui-g-8">
                             <textarea pInputTextarea formControlName="description" rows="6"  class="w100p"></textarea>
                         </div>
                     </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Статус :
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown formControlName="confState" [options]="states" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Холл <span *ngIf="requireValidation">*</span>:
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown formControlName="hallId" [options]="halls" placeholder="Выберите холл" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Схема <span *ngIf="requireValidation">*</span>:
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown formControlName="schemeId" [options]="schemes" placeholder="Выберите схему" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
                 </div>
+            </p-accordionTab>
+            
+            <p-accordionTab header="Период">
+                <div class="ui-g">
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            <div class="ui-g-6">
+                                Начало <span *ngIf="requireValidation">*</span>:
+                            </div>
+                            <div class="ui-g-6">
+                                <p-calendar formControlName="startDate" dateFormat="dd.mm.yy" [showTime]="true" [locale]="locale"></p-calendar>    
+                            </div>
+                        </div>
+                        <div class="ui-g-2"></div>
+                        <div class="ui-g-4">
+                            <div class="ui-g-6">
+                                Окончание <span *ngIf="requireValidation">*</span>:
+                            </div>
+                            <div class="ui-g-6">
+                                <p-calendar formControlName="endDate" dateFormat="dd.mm.yy" [showTime]="true" [locale]="locale"></p-calendar>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-accordionTab>
 
-</p-accordionTab>
             <p-accordionTab header="Участники" >
             </p-accordionTab>
             <p-accordionTab header="Схема">
@@ -39,7 +87,7 @@
             <p-accordionTab header="Сообщения">
             </p-accordionTab>
         </p-accordion>
-
+        <!--
             <div class="ui-grid ui-grid-responsive ui-grid-pad">
                 <div class="ui-widget-header" style="padding: .5em .75em">
                     <button pButton type="submit" label="Сохранить" icon="fa-floppy-o"></button>
@@ -149,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 </form>
         
 <!--        <p-tabPanel header="Участники" id="tabMembers" *ngIf="confId && confId > 0" lazy="true" leftIcon="fa fa-users">
