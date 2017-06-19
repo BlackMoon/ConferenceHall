@@ -1,4 +1,4 @@
-﻿import { KeyModel, ISelected } from './index';
+﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
 import { ContactModel } from '../models';
 /**

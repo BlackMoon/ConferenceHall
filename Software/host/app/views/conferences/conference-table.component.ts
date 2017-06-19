@@ -147,15 +147,5 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
         emit && this.conferenceRemoveClick.emit(id);
     }
 
-    selectConference(conference) {
-
-        if (!conference.selected) {
-
-            for (let conf of this.conferences) {
-                conf.selected = (conf.id === conference.id);
-            }
-
-            this.selectedConference = conference;
-        }
-    }
+    selectConference = conference => this.selectedConference = conference;
 }

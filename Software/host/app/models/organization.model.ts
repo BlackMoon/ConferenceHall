@@ -1,4 +1,4 @@
-﻿import { ISelected, KeyModel } from './index';
+﻿import { KeyModel } from './index';
 
 /**
  * Команда мульти-обработки узлов

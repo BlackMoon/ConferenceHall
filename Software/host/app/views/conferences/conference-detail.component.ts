@@ -128,7 +128,7 @@ export class ConferenceDetailComponent implements OnInit {
                     // startDate/endDate in string --> create
                     conference.startDate && (conference.startDate = new Date(conference.startDate));
                     conference.endDate && (conference.endDate = new Date(conference.endDate));
-
+                    debugger;
                     this.conferenceForm.patchValue(conference);
                 },
                 error => this.logger.error2(error));

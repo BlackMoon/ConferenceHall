@@ -68,15 +68,15 @@ export class ConferenceScheduleComponent {
                                 .subscribe(
                                     _ => {
 
-                                        if (this.conferenceTable.selectedState === ConfState.Planned)
-                                        {
+                                        if (this.conferenceTable.selectedState === ConfState.Planned) {
+                                            
                                             let conference: ConferenceModel = 
                                             {
                                                 id: this.selectedEvent.id,
+                                                hallId: this.selectedEvent.hallId,
                                                 subject: this.selectedEvent.title,
                                                 description: this.selectedEvent.description,
-                                                selected: false,
-                                                state: ConfState.Planned
+                                                confState: ConfState.Planned
                                             };
                                             this.conferenceTable.addConferenceToList(conference);
                                         }
@@ -105,6 +105,7 @@ export class ConferenceScheduleComponent {
                         this.events.push(
                             {
                                 id: this.selectedConference.id,
+                                hallId: this.selectedConference.hallId,
                                 title: this.selectedConference.subject,
                                 description: this.selectedConference.description,
                                 start: period.lowerBound,
@@ -225,7 +226,7 @@ export class ConferenceScheduleComponent {
         this.conferrenceService
             .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds, this.selectedOrganizationIds)
             .subscribe(
-                conferences => this.events = conferences.map(c => <any>{ id: c.id, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
+                conferences => this.events = conferences.map(c => <any>{ id: c.id, hallId: c.hallId, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
                 error => this.logger.error2(error));
     }
 
