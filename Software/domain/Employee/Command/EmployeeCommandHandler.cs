@@ -39,7 +39,7 @@ namespace domain.Employee.Command
                 DbManager.AddParameter("plocked", command.User.Locked);
                 DbManager.AddParameter("plogin", command.User.Login);
                 DbManager.AddParameter("ppassword", command.User.Password);
-                DbManager.AddParameter("prole", command.User.Role);
+                DbManager.AddParameter("prole", command.User.UserRole.ToString());
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
             }
@@ -89,7 +89,7 @@ namespace domain.Employee.Command
                         DbManager.AddParameter("plocked", command.User.Locked);
                         DbManager.AddParameter("plogin", command.User.Login);                        
                         DbManager.AddParameter("ppassword", command.User.Password ?? (object)DBNull.Value);     // пароль может быть пустым
-                        DbManager.AddParameter("prole", command.User.Role);
+                        DbManager.AddParameter("prole", command.User.UserRole.ToString());
 
                         await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
 

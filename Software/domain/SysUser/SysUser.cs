@@ -42,14 +42,15 @@ namespace domain.SysUser
         public string Password { get; set; }
 
         [Dapper.Contrib.Extensions.Write(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public UserOperation Operation { get; set; }
 
         [Dapper.Contrib.Extensions.Write(false)]
         public UserRole UserRole { get; set; }
         
+        [JsonIgnore]
         public string Role
         {
-            get { return UserRole.ToString(); }
             set
             {
                 UserRole userRole;

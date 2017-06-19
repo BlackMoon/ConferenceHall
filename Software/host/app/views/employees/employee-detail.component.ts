@@ -40,7 +40,7 @@ export class EmployeeDetailComponent implements OnInit {
                 bind: [false],
                 login: [null],
                 locked: [false],
-                role: [UserRole.User],
+                userRole: [UserRole.User],
                 password: [null, Validators.required]
             })
         });

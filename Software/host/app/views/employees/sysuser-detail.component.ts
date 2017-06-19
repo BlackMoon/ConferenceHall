@@ -85,10 +85,10 @@ export class SysUserDetailComponent implements OnInit {
             passwdControl.updateValueAndValidity();
         }
 
-        let roleControl = this.sysUserForm.get("role");
-        if (roleControl) {
-            roleControl.setValidators(this.requireCredentialsValidation ? [Validators.required] : null);
-            roleControl.updateValueAndValidity();
+        let userRoleControl = this.sysUserForm.get("userRole");
+        if (userRoleControl) {
+            userRoleControl.setValidators(this.requireCredentialsValidation ? [Validators.required] : null);
+            userRoleControl.updateValueAndValidity();
         }   
     }
 }
