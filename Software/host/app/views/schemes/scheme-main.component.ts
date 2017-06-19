@@ -504,6 +504,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             .get(this.schemeId)
             .subscribe((scheme: SchemeModel) => {
 
+                while (this.canvasBox.firstChild)
+                    this.canvasBox.removeChild(this.canvasBox.firstChild);
+
                 this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
                 this.gridInterval = scheme.gridInterval || 0;
                 // размеры в см

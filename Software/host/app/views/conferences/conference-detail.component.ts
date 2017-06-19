@@ -1,9 +1,10 @@
 ﻿import { Location } from '@angular/common';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
-import { InputTextareaModule, InputTextModule, DropdownModule, SelectItem, ButtonModule, DataGridModule, CalendarModule, PanelModule } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
+import { Accordion } from 'primeng/components/accordion/accordion';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
 import { ConferenceModel, ConfState, SchemeModel, TimeRange } from '../../models';
@@ -17,11 +18,13 @@ import { DateToUtcPipe } from "../../common/globals/pipes";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 
 @Component({
-    selector: "conference-detail",
-    templateUrl: "conference-detail.component.html",
-    styleUrls: ['conference-detail.component.css']
+    host: { '(window:resize)': "onResize($event)" },
+    templateUrl: "conference-detail.component.html"
 })
-export class ConferenceDetailComponent implements OnInit {
+export class ConferenceDetailComponent implements AfterViewInit, OnInit {
+
+    id: number;
+    schemeId :number;
 
     conferenceForm: FormGroup;
     locale: any;
@@ -35,6 +38,7 @@ export class ConferenceDetailComponent implements OnInit {
     schemes: any[];
     states: SelectItem[];
 
+    @ViewChild(Accordion) accordion: Accordion;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
 
     constructor(
@@ -66,6 +70,10 @@ export class ConferenceDetailComponent implements OnInit {
             });
     }
 
+    ngAfterViewInit() {
+        this.onResize();
+    }
+
     ngOnInit() {
 
         this.conferenceForm = this.fb.group({
@@ -81,8 +89,9 @@ export class ConferenceDetailComponent implements OnInit {
 
         this.conferenceForm.get("id")
             .valueChanges
-            .subscribe(_ => {
+            .subscribe(value => {
 
+                this.id = value;
                 this.requireValidation = true;
 
                 ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {
@@ -110,6 +119,10 @@ export class ConferenceDetailComponent implements OnInit {
 
             });
 
+        this.conferenceForm.get("schemeId")
+            .valueChanges
+            .subscribe(value => this.schemeId = value);
+
         this.hallService
             .getAll()
             .subscribe(
@@ -119,20 +132,31 @@ export class ConferenceDetailComponent implements OnInit {
         this.route.params
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return key ? this.conferenceService.get(key) : Observable.empty();
+                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                return this.id ? this.conferenceService.get(this.id) : Observable.empty();
             })
             .subscribe(
                 conference => {
-                    
+
                     // startDate/endDate in string --> create
                     conference.startDate && (conference.startDate = new Date(conference.startDate));
                     conference.endDate && (conference.endDate = new Date(conference.endDate));
-                    debugger;
+                    
                     this.conferenceForm.patchValue(conference);
                 },
                 error => this.logger.error2(error));
         
+    }
+
+    onResize() {
+
+        // [Участники, Схема]
+        const computedTabs: number[] = [2, 3];
+
+        let tabs = this.accordion.el.nativeElement.querySelectorAll("div.ui-accordion-content");
+
+        [].forEach.call(tabs,
+            (tab, ix) => (computedTabs.indexOf(ix) !== -1) && (tab.style.height = `${screen.height / 2}px`));
     }
 
     save(event, conference) {

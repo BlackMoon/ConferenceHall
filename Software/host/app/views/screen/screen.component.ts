@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -17,7 +17,7 @@ const tickInterval = 5000;
     styles: [".h40 { height: 40px }"],
     templateUrl: 'screen.component.html'
 })
-export class ScreenComponent implements OnInit {
+export class ScreenComponent implements AfterViewInit, OnInit {
 
     canvas: any;
     canvasBox: any;
@@ -75,6 +75,10 @@ export class ScreenComponent implements OnInit {
         private route: ActivatedRoute,
         private hubService: HubService,
         private screenService: ScreenService) {
+    }
+
+    ngAfterViewInit() {
+        this.onResize();
     }
 
     ngOnInit() {
@@ -148,8 +152,6 @@ export class ScreenComponent implements OnInit {
             this.ticker = this.tickers[ix];
 
         }, tickInterval);
-
-        this.onResize();
     }
     
     onResize() {
