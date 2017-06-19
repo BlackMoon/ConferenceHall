@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Core.Web", "..\..\kit\K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "messengers", "messengers\messengers.csproj", "{4840A8B2-B48C-433F-A84F-47C55BE6400A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "messengers.tests", "messengers.tests\messengers.tests.csproj", "{533E94F9-2990-4962-B594-2F52D38D9AE3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{533E94F9-2990-4962-B594-2F52D38D9AE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{533E94F9-2990-4962-B594-2F52D38D9AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{533E94F9-2990-4962-B594-2F52D38D9AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{533E94F9-2990-4962-B594-2F52D38D9AE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
