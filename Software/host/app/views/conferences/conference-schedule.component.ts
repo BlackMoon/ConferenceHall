@@ -57,36 +57,7 @@ export class ConferenceScheduleComponent {
             {
                 label: "Удалить",
                 icon: "fa-trash",
-                command: () => {
-                    this.confirmationService.confirm({
-                        header: 'Вопрос',
-                        icon: 'fa fa-trash',
-                        message: `Удалить [${this.selectedEvent.title}]?`,
-                        accept: _ => {
-                            return this.conferrenceService
-                                .changeState(this.selectedEvent.id, ConfState.Planned)
-                                .subscribe(
-                                    _ => {
-
-                                        if (this.conferenceTable.selectedState === ConfState.Planned) {
-                                            
-                                            let conference: ConferenceModel = 
-                                            {
-                                                id: this.selectedEvent.id,
-                                                hallId: this.selectedEvent.hallId,
-                                                subject: this.selectedEvent.title,
-                                                description: this.selectedEvent.description,
-                                                confState: ConfState.Planned
-                                            };
-                                            this.conferenceTable.addConferenceToList(conference);
-                                        }
-
-                                        this.removeEventFromList(this.selectedEvent.id);
-                                    },
-                                    error => this.logger.error2(error));
-                        }
-                    });
-                }
+                command: () => this.removeEventFromSchedule(this.selectedEvent)
             }];
         
     }
@@ -123,10 +94,10 @@ export class ConferenceScheduleComponent {
         }
     }
     
-    drop(event, element) {
+    drop(e, element) {
         
-        let mouseX = event.pageX,
-            mouseY = event.pageY;
+        let mouseX = e.pageX,
+            mouseY = e.pageY;
         
         let day;
         let days = $("#calendar .fc-day");
@@ -147,9 +118,24 @@ export class ConferenceScheduleComponent {
         if (day) {
             let data = day.data("date");
             if (data) {
-                let conference: ConferenceModel = JSON.parse(event.dataTransfer.getData(confDragType));
+                let conference: ConferenceModel = JSON.parse(e.dataTransfer.getData(confDragType));
                 this.makeAppointment(conference, new Date(data));
             }
+        }
+    }
+
+    eventDragStop(e) {
+
+        let mouseX = e.jsEvent.pageX,
+            mouseY = e.jsEvent.pageY;
+
+        let $schedule = $("#calendar"),
+            offset = $schedule.offset(),
+            width = $schedule.width(),
+            height = $schedule.height();
+
+        if (mouseX < offset.left || mouseX > offset.left + width || mouseY < offset.top || mouseY > offset.top + height) {
+            this.removeEventFromSchedule(e.event);
         }
     }
 
@@ -223,6 +209,7 @@ export class ConferenceScheduleComponent {
     }
 
     loadEvents() {
+
         this.conferrenceService
             .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds, this.selectedOrganizationIds)
             .subscribe(
@@ -230,11 +217,38 @@ export class ConferenceScheduleComponent {
                 error => this.logger.error2(error));
     }
 
-    removeEventFromList(id) {
-        let ix = this.events.findIndex(c => c.id === id);
-        this.events.splice(ix, 1); 
+    removeEventFromSchedule(event) {
 
-        this.selectedEvent = null;
+        this.confirmationService.confirm({
+            header: 'Вопрос',
+            icon: 'fa fa-trash',
+            message: `Удалить [${event.title}]?`,
+            accept: _ => {
+
+                return this.conferrenceService
+                    .changeState(event.id, ConfState.Planned)
+                    .subscribe(
+                    _ => {
+
+                        if (this.conferenceTable.selectedState === ConfState.Planned) {
+
+                            let conference: ConferenceModel =
+                                {
+                                    id: event.id,
+                                    hallId: event.hallId,
+                                    subject: event.title,
+                                    description: event.description,
+                                    confState: ConfState.Planned
+                                };
+                            this.conferenceTable.addConferenceToList(conference);
+                        }
+
+                        let ix = this.events.findIndex(c => c.id === event.id);
+                        this.events.splice(ix, 1);
+                    },
+                    error => this.logger.error2(error));
+            }
+        });    
     }
 
     viewRender(event) {
