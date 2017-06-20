@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 using Kit.Core.CQRS.Command;
@@ -67,5 +68,8 @@ namespace domain.Conference
                 ConfState = confState;
             }
         }
+
+        [Dapper.Contrib.Extensions.Write(false)]
+        public IList<Member.Member> Members { get; set; }
     }
 }

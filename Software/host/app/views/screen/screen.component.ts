@@ -78,7 +78,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     }
 
     ngAfterViewInit() {
-        this.onResize();
+       
     }
 
     ngOnInit() {
@@ -152,6 +152,8 @@ export class ScreenComponent implements AfterViewInit, OnInit {
             this.ticker = this.tickers[ix];
 
         }, tickInterval);
+
+        this.onResize();
     }
     
     onResize() {

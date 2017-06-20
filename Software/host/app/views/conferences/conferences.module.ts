@@ -20,27 +20,24 @@ import {
 } from 'primeng/primeng';
 
 import { HubService } from "../../common/hub-service";
-
 import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { DateToUtcPipe } from "../../common/globals/pipes";
-import { ConferenceRoutingModule } from './conferences-routing.module';
-import { ConferenceDetailComponent } from './conference-detail.component';
+
+import { ConferenceMainComponent } from './conference-main.component';
 import { ConferenceTableComponent } from './conference-table.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
+import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceService } from './conference.service';
 
 import { HallsModule } from '../halls/halls.module';
 import { MembersModule } from '../members/members.module';
 import { OrganizationsModule } from '../organizations/organizations.module';
 import { SchemesModule } from '../schemes/schemes.module';
-//import { EmployeesModule } from '../employees/employees.module';
 
 
 @NgModule({
-    declarations: [AppointmentDialogComponent, ConferenceDetailComponent, ConferenceTableComponent, ConferenceScheduleComponent],
+    declarations: [AppointmentDialogComponent, ConferenceMainComponent, ConferenceTableComponent, ConferenceScheduleComponent],
     imports: [
-        
-  //      EmployeesModule,
         SchemesModule,
         AccordionModule,
         ButtonModule,

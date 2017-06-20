@@ -16,14 +16,15 @@ export class MemberTableComponent {
     // ReSharper disable once InconsistentNaming
     public MemberState = MemberState;
    
-    members: MemberModel[];
-
     /**
      * Доступные места
      */
     @Input()
     availableSeats: SelectItem[] = [{ label: '1', value: '1' }, { label: '5', value: '5' }];
-    
+
+    @Input()
+    members: MemberModel[];
+
     // ReSharper disable InconsistentNaming
     private _conferenceId: number;
 

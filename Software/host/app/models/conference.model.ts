@@ -1,4 +1,4 @@
-﻿import { KeyModel, TimeRange } from './index';
+﻿import { KeyModel, MemberModel, TimeRange } from './index';
 import { JsonProperty } from '../common/map-utils';
 
 export const confDragType = "conference";
@@ -63,6 +63,9 @@ export class ConferenceModel extends KeyModel {
    
     subject: string;
 
+    @JsonProperty({ clazz: MemberModel })
+    members?: MemberModel[];
+
     constructor() {
         super();
 
@@ -73,6 +76,8 @@ export class ConferenceModel extends KeyModel {
         this.endDate = null;
         this.subject = null;
         this.schemeId = null;
+
+        this.members = undefined;
     }
 }
 

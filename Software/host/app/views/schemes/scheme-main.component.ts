@@ -44,7 +44,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     @Input()
     set schemeId(value: number) {
         this._schemeId = value;
-        value && this.loadScheme();
+        value ? this.loadScheme() : this.clearCanvas();
     }
 
 // ReSharper disable once InconsistentNaming
@@ -343,6 +343,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.zoomCoef = 1;
     };
 
+    clearCanvas() {
+
+        if (this.canvasBox) {
+            while (this.canvasBox.firstChild)
+                this.canvasBox.removeChild(this.canvasBox.firstChild);
+        }
+    }
+
     private createPattern(id, h:number, w:number) {
         
         let pattern = this.canvas.querySelector(`#_${id}`);
@@ -504,8 +512,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             .get(this.schemeId)
             .subscribe((scheme: SchemeModel) => {
 
-                while (this.canvasBox.firstChild)
-                    this.canvasBox.removeChild(this.canvasBox.firstChild);
+                this.clearCanvas();
 
                 this.canvasBox.insertAdjacentHTML("beforeend", scheme.plan);
                 this.gridInterval = scheme.gridInterval || 0;

@@ -12,23 +12,23 @@ import { ConferenceModel, ConfState, SchemeModel, TimeRange } from '../../models
 import { ConferenceService } from './conference.service';
 import { HallService } from '../halls/hall.service';
 import { SchemeService } from "../schemes/scheme.service";
-import { MemberService } from "../members/member.service";
 
 import { DateToUtcPipe } from "../../common/globals/pipes";
+import { MemberTableComponent } from "../members/member-table.component";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 
 @Component({
     host: { '(window:resize)': "onResize($event)" },
-    templateUrl: "conference-detail.component.html"
+    templateUrl: "conference-main.component.html"
 })
-export class ConferenceDetailComponent implements AfterViewInit, OnInit {
-
-    id: number;
-    schemeId :number;
-
+export class ConferenceMainComponent implements AfterViewInit, OnInit {
+    
     conferenceForm: FormGroup;
     locale: any;
 
+    id: number;
+    schemeId: number;
+    members: any[];
     /**
      * Валидация
      */
@@ -47,7 +47,6 @@ export class ConferenceDetailComponent implements AfterViewInit, OnInit {
         private conferenceService: ConferenceService,
         private hallService: HallService,
         private schemeService: SchemeService,
-        private memberService: MemberService,
         private location: Location,
         private logger: Logger,
         private route: ActivatedRoute) {
@@ -69,9 +68,10 @@ export class ConferenceDetailComponent implements AfterViewInit, OnInit {
                     }
             });
     }
+    
 
     ngAfterViewInit() {
-        this.onResize();
+        this.onResize();    
     }
 
     ngOnInit() {
@@ -80,48 +80,12 @@ export class ConferenceDetailComponent implements AfterViewInit, OnInit {
             id: [null],
             confState: [null],
             subject: [null, Validators.required],
+            description: [null],
             hallId: [null],
             schemeId: [null],
-            description: [null],
             startDate: [null],
             endDate: [null]
         });
-
-        this.conferenceForm.get("id")
-            .valueChanges
-            .subscribe(value => {
-
-                this.id = value;
-                this.requireValidation = true;
-
-                ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {
-                    
-                    let control = this.conferenceForm.get(c);
-                    if (control) {
-                        control.setValidators([Validators.required]);
-                        control.updateValueAndValidity();
-                    }
-                });
-            });
-
-        this.conferenceForm.get("hallId")
-            .valueChanges
-            .subscribe(value => {
-                
-                if (value != null) {
-                    this.schemeService
-                        .getAll(value)
-                        .subscribe(
-                            schemes => this.schemes = schemes.map(h => <SelectItem>{ label: h.name, value: h.id }),
-                            error => this.logger.error2(error)
-                        );
-                }
-
-            });
-
-        this.conferenceForm.get("schemeId")
-            .valueChanges
-            .subscribe(value => this.schemeId = value);
 
         this.hallService
             .getAll()
@@ -138,6 +102,7 @@ export class ConferenceDetailComponent implements AfterViewInit, OnInit {
             .subscribe(
                 conference => {
 
+                    this.members = conference.memebers;
                     // startDate/endDate in string --> create
                     conference.startDate && (conference.startDate = new Date(conference.startDate));
                     conference.endDate && (conference.endDate = new Date(conference.endDate));
@@ -148,15 +113,43 @@ export class ConferenceDetailComponent implements AfterViewInit, OnInit {
         
     }
 
-    onResize() {
+    hallChange(value) {
 
+        this.schemeService
+            .getAll(value)
+            .subscribe(
+                schemes => this.schemes = schemes.map(h => <SelectItem>{ label: h.name, value: h.id }),
+                error => this.logger.error2(error)
+            );
+
+        this.schemeId = null;
+    }
+
+    idChange(value) {
+        
+        this.requireValidation = true;
+
+        ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {
+
+            let control = this.conferenceForm.get(c);
+            if (control) {
+                control.setValidators([Validators.required]);
+                control.updateValueAndValidity();
+            }
+        });    
+    }
+
+    onResize() {
+        
         // [Участники, Схема]
         const computedTabs: number[] = [2, 3];
-
+      
         let tabs = this.accordion.el.nativeElement.querySelectorAll("div.ui-accordion-content");
-
+        
         [].forEach.call(tabs,
-            (tab, ix) => (computedTabs.indexOf(ix) !== -1) && (tab.style.height = `${screen.height / 2}px`));
+            (tab, ix) => (computedTabs.indexOf(ix) !== -1) && (tab.style.height = `${document.documentElement.clientHeight * 0.75}px`));
+
+        this.schemeMain.onResize();
     }
 
     save(event, conference) {
@@ -168,5 +161,9 @@ export class ConferenceDetailComponent implements AfterViewInit, OnInit {
             .subscribe(
                 _ => this.location.back(),
                 error => this.logger.error2(error));
+    }
+
+    schemeChange(value) {
+        this.schemeId = value;
     }
 }

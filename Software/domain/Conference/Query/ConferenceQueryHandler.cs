@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Query;
+using domain.Employee;
 using Kit.Dal.DbManager;
 using Dapper;
 using Kit.Core.CQRS.Query;
@@ -32,8 +35,8 @@ namespace domain.Conference.Query
                 .Column("c.hall_scheme_id schemeId")
                 .Column("lower(c.period) startDate")
                 .Column("upper(c.period) endDate")
-                .OrderBy("lower(c.subject)")
-                .Where("id = @id");
+                .Where("id = @id")
+                .OrderBy("lower(c.subject)");
             
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QuerySingleOrDefaultAsync<Conference>(sqlBuilder.ToString(), new { id = query.Id });
