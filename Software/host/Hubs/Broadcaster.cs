@@ -14,6 +14,13 @@ namespace host.Hubs
         Task ConfirmMember(Member member);
 
         /// <summary>
+        /// Удаление участника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task DeleteMember(int id);
+
+        /// <summary>
         /// Отправить сообщения в бегущую строку
         /// </summary>
         /// <param name="tickers"></param>

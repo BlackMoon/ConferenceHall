@@ -163,7 +163,7 @@ export class OrganizationTreeComponent implements OnInit {
                 .subscribe(
                     nodes => {
                         e.node.children = nodes;
-
+                       
                         // node selected ?
                         let ix = this.selectedNodes.findIndex(n => n.data["id"] === id);                
                         (ix !== -1) && (this.selectedNodes = this.selectedNodes.concat(nodes));

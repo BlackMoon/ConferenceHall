@@ -25,6 +25,8 @@ export class MemberTableComponent {
     @Input()
     members: MemberModel[];
 
+    selectedMembers: MemberModel[] = [];
+
     // ReSharper disable InconsistentNaming
     private _conferenceId: number;
 
@@ -41,8 +43,13 @@ export class MemberTableComponent {
     @Input()
     editable: boolean = true;
 
+    @Input()
+    selectionMode: string;
+
     @Output()
     membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();
+
+    @Output() selectionChanged = new EventEmitter<MemberModel[]>();
 
     constructor(
         private memberService: MemberService,
@@ -67,5 +74,13 @@ export class MemberTableComponent {
                     this.membersLoaded.emit(members);
                 },
                 error => this.logger.error2(error));    
+    }
+
+    selectRow(e) {
+       this.selectionChanged.emit(this.selectedMembers);
+    }
+
+    unSelectRow(e) {
+        this.selectionChanged.emit(this.selectedMembers);
     }
 }

@@ -168,12 +168,20 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             );
     }
 
+    memberTableChahged(members) {
+        this.selectedMembers = members;
+    }
+
     moveAllToSource() {
         this.members = [];
     }
 
     moveToSource() {
-        
+
+        this.selectedMembers.forEach(member => {
+            let ix = this.members.findIndex(m => m.id === member.id);
+            this.members.splice(ix, 1);
+        });    
     }
 
     moveToTarget() {
