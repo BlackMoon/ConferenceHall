@@ -42,6 +42,11 @@ export class EmployeeModel extends KeyModel {
     orgId: number;
 
     /**
+     * Наименование организации
+     */
+    job: string;
+
+    /**
      * Должность
      */
     position: string;    

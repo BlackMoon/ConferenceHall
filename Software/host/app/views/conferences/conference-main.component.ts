@@ -7,7 +7,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Accordion } from 'primeng/components/accordion/accordion';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, NodeGroupCommand, SchemeModel, TimeRange } from '../../models';
+import { ConferenceModel, ConfState, EmployeeModel, MemberModel, TimeRange } from '../../models';
 
 import { ConferenceService } from './conference.service';
 import { EmployeeService } from '../employees/employee.service';
@@ -42,8 +42,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     schemes: any[];
     states: SelectItem[];
 
-    selectedEmployeeIds: number[] = [];
-    selectedOrganizationIds: number[] = [];
+    selectedEmployees: EmployeeModel[] = [];
+    selectedMembers: MemberModel[] = [];
 
     @ViewChild(Accordion) accordion: Accordion;
     @ViewChild(OrganizationTreeComponent) organizationTree: OrganizationTreeComponent;
@@ -117,8 +117,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             })
             .subscribe(
                 conference => {
-
-                    this.members = conference.memebers;
+                    
                     // startDate/endDate in string --> create
                     conference.startDate && (conference.startDate = new Date(conference.startDate));
                     conference.endDate && (conference.endDate = new Date(conference.endDate));
@@ -129,10 +128,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         
     }
 
-    employeeTreeChanged(c: NodeGroupCommand) {
-
-        this.selectedEmployeeIds = c.employeeIds;
-        this.selectedOrganizationIds = c.organizationIds;
+    employeeTreeChanged() {
+        this.selectedEmployees = this.organizationTree.getEmployees();
     }
 
     hallChange(value) {
@@ -172,21 +169,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     moveAllToSource() {
-        
-    }
-
-    moveAllToTarget() {
-        debugger;
-
-        this.employeeService
-            .getAll()
-            .subscribe(
-                employees => {
-                     debugger;
-                },
-                error => this.logger.error2(error)
-            );
-
+        this.members = [];
     }
 
     moveToSource() {
@@ -195,6 +178,13 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     moveToTarget() {
         
+        // employee --> member
+        let members = this.selectedEmployees.map(e => <any>{ id: e.id, name: e.name, job: e.job, position: e.position });
+
+        members.forEach(member => {
+            let ix = this.members.findIndex(m => m.id === member.id);
+            (ix === -1) && this.members.push(member);
+        });
     }
 
     onResize() {
@@ -214,6 +204,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         
         conference.startDate && (conference.startDate = this.dateToUtcPipe.transform(conference.startDate));
         conference.endDate && (conference.endDate = this.dateToUtcPipe.transform(conference.endDate));
+        conference.members = this.members;
         
         this.conferenceService[conference.id ? "update" : "add"](conference)
             .subscribe(

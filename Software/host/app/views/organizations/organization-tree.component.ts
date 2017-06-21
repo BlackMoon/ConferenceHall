@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { ConfirmationService, SelectItem, TreeNode } from 'primeng/primeng';
-import { MemberModel, OrganizationNode, NodeGroupCommand } from "../../models";
+import { EmployeeModel, OrganizationNode, NodeGroupCommand } from "../../models";
 import { OrganizationService } from "./organization.service";
 
 const minChars = 3;
@@ -20,17 +20,23 @@ export class OrganizationTreeComponent implements OnInit {
     filter: string;
 
     /**
+     * Поиск по сотрудникам/организациям
+     */
+    emplSearch: boolean;
+
+    /**
      * Режим чтения (для вставки в другой компонент)
      */
     @Input()
     readOnly: boolean;
 
     /**
-     * Поиск по сотрудникам/организациям
+     * Выводить id узлов при selectionChanged ?
      */
-    emplSearch: boolean;
+    @Input()
+    emitData: boolean = true;
 
-    @Output() selectionChanged = new EventEmitter<NodeGroupCommand>();
+    @Output() selectionChanged = new EventEmitter<any>();
 
     nodes: TreeNode[] = [];
     selectedNodes: TreeNode[] = [];
@@ -51,10 +57,6 @@ export class OrganizationTreeComponent implements OnInit {
         e.stopPropagation();
         this.router.navigate(["/employees/new", orgid]);
     };
-
-    addMembers(members) {
-        
-    }
 
     changeEditMode() {
         this.editMode = !this.editMode;
@@ -104,6 +106,9 @@ export class OrganizationTreeComponent implements OnInit {
         (event.keyCode === 13) && this.filterChange(event.target.value);
     }
 
+    /**
+     * id выбранных узлов (если выделены все дочерние узлы, то в результат попадает только корневой)
+     */
     getNodeGroupCommand(): NodeGroupCommand {
 
         let employees: number[] = [],
@@ -126,21 +131,26 @@ export class OrganizationTreeComponent implements OnInit {
 
     }
 
-    getOrganizations = () => this.nodes.map(n => n.data["id"]);
+    /**
+     * Выбранные сотрудники (employees --> узлы 2го уровня)     
+     */
+    getEmployees(): EmployeeModel[] {
 
-    getMembers() {
+        let employees: EmployeeModel[] = [];
+        
+        this.selectedNodes.forEach(n => {
 
-        for (let i = 0; i < this.nodes.length; i++) {
-            let n = this.nodes[i];
+            if (n.leaf) {
 
-            /*if (m.id === member.id) {
-                m.memberState = member.memberState;
-                m.seat = member.seat;
-                break;
-            }*/
-        }
+                // organization == n.parent
+                let parent = n.parent,
+                    employee = <any>{ id: n.data["id"], name: n.data["name"], position: n.data["description"], job: parent.data["name"] };  
+                
+                employees.push(employee);
+            }
+        });
 
-        this.nodes.map(n => n.data["id"]);  
+        return employees;
     } 
 
     loadNode(e) {
@@ -233,7 +243,7 @@ export class OrganizationTreeComponent implements OnInit {
             }   
 
             if (this.readOnly) {
-                let c = this.getNodeGroupCommand();
+                let c = this.emitData ? this.getNodeGroupCommand() : undefined;
                 this.selectionChanged.emit(c);
             }
         }
@@ -241,40 +251,14 @@ export class OrganizationTreeComponent implements OnInit {
             id = e.node.data["id"];
             this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);    
         }
-
-
-        /*
-        if (this.editMode) {
-            
-            if (e.node.parent) {
-
-                let parent = e.node.parent;
-                id = parent.data["id"];
-                
-                // поиск только среди корневых
-                let ix = this.selectedNodes.findIndex(n => !n.leaf && n.data["id"] === id);
-                (ix !== -1) && this.selectedNodes.splice(ix, 1);
-                delete parent["partialSelected"];
-            }
-        }
-        else {
-
-            if (this.readOnly) {
-                let c = this.getNodeGroupCommand();
-                this.selectionChanged.emit(c);
-            }
-            else
-            {
-                id = e.node.data["id"];
-                this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
-            }
-        }*/
+       
     }
 
     unSelectNode() {
 
         if (this.readOnly) {
-            let c = this.getNodeGroupCommand();
+
+            let c = this.emitData ? this.getNodeGroupCommand() : undefined;
             this.selectionChanged.emit(c);
         }
     }

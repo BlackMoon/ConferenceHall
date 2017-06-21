@@ -21,7 +21,7 @@ namespace domain.Employee.Command
 
         public int Execute(CreateEmployeeCommand command)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public async Task<int> ExecuteAsync(CreateEmployeeCommand command)

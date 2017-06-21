@@ -9,6 +9,8 @@ using Mapster;
 using Microsoft.Extensions.Logging;
 using TimeRange = domain.Common.Range<System.DateTime>;
 using System.Collections.Generic;
+using System.Linq;
+using domain.Employee;
 
 namespace domain.Conference.Command
 {
@@ -101,8 +103,36 @@ namespace domain.Conference.Command
                 DbManager.AddParameter("schemeId", command.SchemeId);
             }
 
+            await DbManager.OpenAsync();
+            DbManager.BeginTransaction();
+
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
+            
+            // удалить пред. участников (параметр id из хранимой процедуры)
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_members WHERE conf_id = @id");
+            
+            // добавить новых участников
+            if (command.Members.Any())
+            {
+                string[] values = new string[command.Members.Count];
+
+                DbManager.ClearParameters();
+                for (int i = 0; i < command.Members.Count; i++)
+                {
+                    Member.Member m = command.Members[i];
+
+                    DbManager.AddParameter($"confId{i}", command.Id);
+                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
+                    DbManager.AddParameter($"employeeId{i}", m.Id);
+
+                    values[i] = $"(@confId{i}, @seat{i}, @employeeId{i})";
+                }
+
+                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, seat, employee_id) VALUES {string.Join(", ", values)}");
+            }
+
+            DbManager.CommitTransaction();
             return updated > 0;
         }
 
