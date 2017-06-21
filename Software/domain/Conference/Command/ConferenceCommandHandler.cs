@@ -77,6 +77,7 @@ namespace domain.Conference.Command
             // добавить новых участников
             if (command.Members.Any())
             {
+                values.Clear();
                 values.Capacity = command.Members.Count;
 
                 DbManager.ClearParameters();
@@ -88,7 +89,7 @@ namespace domain.Conference.Command
                     DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
                     DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
 
-                    values[i] = $"(@confId{i}, @seat{i}, @employeeId{i})";
+                    values.Add($"(@confId{i}, @seat{i}, @employeeId{i})");
                 }
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, seat, employee_id) VALUES {string.Join(", ", values)}");

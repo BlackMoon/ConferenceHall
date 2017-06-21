@@ -13,7 +13,7 @@
         <div class="ui-g-4">
             <p-tabView styleClass="h100p p0501">
                 <p-tabPanel header="Совещания">
-                    <conference-table [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)" (conferenceRemoveClick)="removeEventFromList($event, false)"></conference-table>
+                    <conference-table [startDate]="startDate" [endDate]="endDate" (appointmentButtonClick)="makeAppointment($event)" (conferenceRemoveClick)="removeEventFromList($event)"></conference-table>
                 </p-tabPanel>
                 <p-tabPanel header="Холлы">
                     <hall-table [readOnly]="true" (selectionChanged)="hallTableChanged($event)"></hall-table>

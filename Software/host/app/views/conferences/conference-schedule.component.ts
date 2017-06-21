@@ -243,12 +243,22 @@ export class ConferenceScheduleComponent {
                             this.conferenceTable.addConferenceToList(conference);
                         }
 
-                        let ix = this.events.findIndex(c => c.id === event.id);
-                        this.events.splice(ix, 1);
+                        this.removeEventFromList(event.id);
                     },
                     error => this.logger.error2(error));
             }
         });    
+    }
+
+    /**
+     * Удалить событие
+     * @param id
+     */
+    removeEventFromList(id) {
+        let ix = this.events.findIndex(c => c.id === id);
+        this.events.splice(ix, 1);
+
+        this.selectedEvent = null;
     }
 
     viewRender(event) {
