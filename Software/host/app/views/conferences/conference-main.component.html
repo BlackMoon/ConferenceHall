@@ -83,7 +83,7 @@
                 </div>
             </p-accordionTab>
 
-            <p-accordionTab header="Участники" [selected]="true">
+            <p-accordionTab header="Участники">
                 <div class="ui-g-12 ui-g-nopad h100p">
                     <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad h100p">
                         <member-table [members]="members" readOnly="true" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
@@ -100,16 +100,17 @@
                     </div>
                 </div>
             </p-accordionTab>
+
             <p-accordionTab header="Схема">
-                <div class="ui-g-12 ui-g-nopad h100p" >
-                    <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad h100p">
-                        <member-table [availableSeats]="seats" [members]="members"></member-table>
-                    </div>                    
-                    <div class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad h100p">
-                        <scheme-main [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
-                    </div>
+                <div class="ui-toolbar-group-right">
+                    <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
+                </div>
+                <div class="ui-g-12 h100p">
+                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [members]="members"></member-table>
+                    <scheme-main [ngClass]="{'ui-helper-hidden': !conferenceForm.value.showScheme}" [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
                 </div>
             </p-accordionTab>
+            
             <p-accordionTab header="Сообщения">
             </p-accordionTab>
         </p-accordion>

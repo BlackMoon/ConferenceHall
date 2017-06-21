@@ -32,7 +32,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     locale: any;
    
     schemeId: number;
-    members: any[];
+    members: any[] = [];
+
     /**
      * Валидация
      */
@@ -95,7 +96,9 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             hallId: [null],
             schemeId: [null],
             startDate: [null],
-            endDate: [null]
+            endDate: [null],
+            // Показывать схему/список
+            showScheme: [false]
         });
 
         this.hallService
@@ -205,8 +208,6 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         
         [].forEach.call(tabs,
             (tab, ix) => (computedTabs.indexOf(ix) !== -1) && (tab.style.height = `${document.documentElement.clientHeight * 0.75}px`));
-
-        this.schemeMain.onResize();
     }
 
     save(event, conference) {
@@ -214,6 +215,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         conference.startDate && (conference.startDate = this.dateToUtcPipe.transform(conference.startDate));
         conference.endDate && (conference.endDate = this.dateToUtcPipe.transform(conference.endDate));
         conference.members = this.members;
+
+        delete conference["showScheme"];
         
         this.conferenceService[conference.id ? "update" : "add"](conference)
             .subscribe(
@@ -230,5 +233,10 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         [].forEach.call(this.members, m => this.schemeMain.toggleMark(m.seat));
 
         this.seats = this.schemeMain.getMarkCodes().map(c => <SelectItem>{ label: c, value: c });
+    }
+
+    showSchemeChange(value) {
+        
+        setTimeout(() => this.schemeMain.onResize(), 0);
     }
 }
