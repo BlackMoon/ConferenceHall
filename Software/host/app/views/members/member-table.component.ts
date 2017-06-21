@@ -22,6 +22,12 @@ export class MemberTableComponent {
     @Input()
     availableSeats: SelectItem[] = [{ label: '1', value: '1' }, { label: '5', value: '5' }];
 
+    /**
+     * Режим чтения (для вставки в другой компонент)
+     */
+    @Input()
+    readOnly: boolean;
+
     @Input()
     members: MemberModel[];
 

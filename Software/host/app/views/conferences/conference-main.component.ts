@@ -40,6 +40,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     halls: any[];
     schemes: any[];
+    seats: SelectItem[];
     states: SelectItem[];
 
     selectedEmployees: EmployeeModel[] = [];
@@ -220,7 +221,14 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 error => this.logger.error2(error));
     }
 
-    schemeChange(value) {
+    schemeIdChange(value) {
         this.schemeId = value;
+    }
+
+    schemeLoaded() {
+
+        [].forEach.call(this.members, m => this.schemeMain.toggleMark(m.seat));
+
+        this.seats = this.schemeMain.getMarkCodes().map(c => <SelectItem>{ label: c, value: c });
     }
 }

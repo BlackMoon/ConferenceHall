@@ -189,6 +189,18 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         this.svgElement = g;
     }
 
+    getMarkCodes() {
+        
+        let codes: string[] = [],
+            marks = this.canvas.querySelectorAll(`g.${markClass}`);
+
+        if (marks) {
+            [].forEach.call(marks, m => codes.push(m.getAttribute("data-code")));    
+        }
+
+        return codes.sort();
+    }
+
     toggleMark(code) {
         let mark = this.canvas.querySelector(`g.${markClass}[data-code="${code}"`);
         if (mark != null)

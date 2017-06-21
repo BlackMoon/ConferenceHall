@@ -12,7 +12,7 @@
 
         <input type="hidden" formControlName="id" (ngModelChange)="idChange($event)" />
         
-        <p-accordion [multiple]="true">
+        <p-accordion>
             <p-accordionTab header="Конференция" [selected]="true">
                 
                 <div class="ui-g">
@@ -53,7 +53,7 @@
                             Схема <span *ngIf="requireValidation">*</span>:
                         </div>
                         <div class="ui-g-8">
-                            <p-dropdown formControlName="schemeId" [options]="schemes" placeholder="Выберите схему" (ngModelChange)="schemeChange($event)" [style]="{'width':'100%'}"></p-dropdown>
+                            <p-dropdown formControlName="schemeId" [options]="schemes" placeholder="Выберите схему" (ngModelChange)="schemeIdChange($event)" [style]="{'width':'100%'}"></p-dropdown>
                         </div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
             <p-accordionTab header="Участники" [selected]="true">
                 <div class="ui-g-12 ui-g-nopad h100p">
                     <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad h100p">
-                        <member-table [members]="members" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
+                        <member-table [members]="members" readOnly="true" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
                     </div>
                     <div class="ui-g-1 ui-md-1 h100p" style="display: table">  
                         <div class="ui-picklist-buttons">
@@ -103,10 +103,10 @@
             <p-accordionTab header="Схема">
                 <div class="ui-g-12 ui-g-nopad h100p" >
                     <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad h100p">
-                        <member-table [members]="members"></member-table>
+                        <member-table [availableSeats]="seats" [members]="members"></member-table>
                     </div>                    
                     <div class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad h100p">
-                        <scheme-main [schemeId]="schemeId"></scheme-main>
+                        <scheme-main [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
                     </div>
                 </div>
             </p-accordionTab>

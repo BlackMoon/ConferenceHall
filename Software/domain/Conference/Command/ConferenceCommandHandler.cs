@@ -109,7 +109,7 @@ namespace domain.Conference.Command
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
             
-            // удалить пред. участников (параметр id из хранимой процедуры)
+            // удалить пред. участников
             await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_members WHERE conf_id = @id");
             
             // добавить новых участников
