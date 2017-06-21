@@ -106,16 +106,15 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                                     this.schemeMain.toggleMark(member.oldSeat);
                                     this.schemeMain.toggleMark(member.seat);
 
-                                    this.memberTable.members.every(
-                                        m => {
+                                    for (let i = 0; i < this.members.length; i++) {
+                                        let m = this.members[i];
 
-                                            if (m.id === member.id) {
-                                                m.memberState = member.memberState;
-                                                m.seat = member.seat;
-                                                return false;
-                                            }
-                                            return true;
-                                        });
+                                        if (m.id === member.id) {
+                                            m.memberState = member.memberState;
+                                            m.seat = member.seat;
+                                            break;
+                                        }
+                                    }
                                 });
                         });
 

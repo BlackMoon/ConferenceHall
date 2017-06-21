@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { MemberModel } from '../../models';
+import { FindMembersQuery, MemberModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -28,10 +28,14 @@ export class MemberService extends HttpDataService<MemberModel> {
     }
 
 
-    getAll(confid: number): Observable<any> {
+    getAll(confid?: number, organizationIds: number[] = null): Observable<any> {
+
+        let body: FindMembersQuery = {};
+        confid && (body.conferenceId = confid);
+        organizationIds && organizationIds.length > 0 && (body.organizationIds = organizationIds);
 
         return this.http
-            .get(`${this.url}/${confid}`)
+            .post(`${this.url}/search`, body)
             .map((r: Response) => r.json())
             .catch(handleResponseError);
     }

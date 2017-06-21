@@ -88,10 +88,16 @@
                     <div class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad h100p">
                         <member-table [members]="members"></member-table>
                     </div>
-                    <div class="ui-g-1 ui-md-1">                        
+                    <div class="ui-g-1 ui-md-1 h100p" style="display: table">  
+                        <div class="ui-picklist-buttons">
+                            <button pButton type="button" icon="fa-angle-left" class="w100p" (click)="moveToTarget()" [disabled]="selectedOrganizationIds.length === 0 && selectedEmployeeIds.length === 0"></button>
+                            <button pButton type="button" icon="fa-angle-double-left" class="w100p" (click)="moveAllToTarget()" ></button>
+                            <button pButton type="button" icon="fa-angle-right" class="w100p" (click)="moveToSource()"></button>
+                            <button pButton type="button" icon="fa-angle-double-right" class="w100p" (click)="moveAllToSource()"></button>
+                        </div>
                     </div>
                     <div class="ui-g-7 ui-md-7 ui-widget-content ui-g-nopad h100p">
-                        <organization-tree [readOnly]="true"></organization-tree>
+                        <organization-tree [emplSearch]="true" [readOnly]="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>
                     </div>
                 </div>
             </p-accordionTab>

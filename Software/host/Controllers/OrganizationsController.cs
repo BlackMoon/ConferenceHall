@@ -114,7 +114,7 @@ namespace host.Controllers
         [HttpPost("/api/[controller]/delete")]
         public Task DeleteNodes([FromBody]DeleteNodesCommand value)
         {
-            return CommandDispatcher.DispatchAsync<DeleteNodesCommand>(value);
+            return CommandDispatcher.DispatchAsync(value);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace domain.Member.Query
 {
     public class EmployeeQueryHandler : 
         KeyObjectQueryHandler<FindMemberByIdQuery, Member>,
+        IQueryHandler<FindMembersQuery, IEnumerable<Member>>,
         IQueryHandler<FindConferenceMembersQuery, IEnumerable<Member>>,
         IQueryHandler<FindMemberSeatQuery, Member>
     {
@@ -39,6 +40,42 @@ namespace domain.Member.Query
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Member>(sqlBuilder.ToString(), new { confid = query.ConferenceId });
+        }
+
+        public IEnumerable<Member> Execute(FindMembersQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Member>> ExecuteAsync(FindMembersQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conf_members m")
+                .Column("m.id")
+                .Column("e.name")
+                .Column("e.position")
+                .Column("o.name job")
+                .Join("conf_hall.employees e ON e.id = m.employee_id")
+                .Join("conf_hall.organizations o ON o.id = e.org_id")
+                .OrderBy("lower(e.name)");
+
+            DynamicParameters param = new DynamicParameters();
+
+            // фильтр по конференции
+            if (query.ConferenceId.HasValue)
+            {
+                sqlBuilder.Where("m.conf_id = @conferenceId");
+                param.Add("conferenceId", query.ConferenceId);
+            }
+
+            // фильтр по организациям
+            if (query.OrganizationIds != null)
+            {
+                sqlBuilder.Where("e.org_id = ANY(@orgIds)");
+                param.Add("orgIds", query.OrganizationIds);
+            }
+
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryAsync<Member>(sqlBuilder.ToString(), param);
         }
 
         public Member Execute(FindMemberSeatQuery query)

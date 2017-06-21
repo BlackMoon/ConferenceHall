@@ -7,26 +7,30 @@ import { SelectItem } from 'primeng/primeng';
 import { Accordion } from 'primeng/components/accordion/accordion';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, SchemeModel, TimeRange } from '../../models';
+import { ConferenceModel, ConfState, NodeGroupCommand, SchemeModel, TimeRange } from '../../models';
 
 import { ConferenceService } from './conference.service';
+import { EmployeeService } from '../employees/employee.service';
 import { HallService } from '../halls/hall.service';
+import { MemberService } from '../members/member.service';
 import { SchemeService } from "../schemes/scheme.service";
 
 import { DateToUtcPipe } from "../../common/globals/pipes";
 import { MemberTableComponent } from "../members/member-table.component";
+import { OrganizationTreeComponent } from "../organizations/organization-tree.component";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 
 @Component({
     host: { '(window:resize)': "onResize($event)" },
+    styles: [".ui-picklist-buttons { display: table-cell; vertical-align: middle }",
+             ".ui-picklist-buttons button { margin-bottom: 0.25em }"],
     templateUrl: "conference-main.component.html"
 })
 export class ConferenceMainComponent implements AfterViewInit, OnInit {
     
     conferenceForm: FormGroup;
     locale: any;
-
-    id: number;
+   
     schemeId: number;
     members: any[];
     /**
@@ -38,14 +42,20 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     schemes: any[];
     states: SelectItem[];
 
+    selectedEmployeeIds: number[] = [];
+    selectedOrganizationIds: number[] = [];
+
     @ViewChild(Accordion) accordion: Accordion;
+    @ViewChild(OrganizationTreeComponent) organizationTree: OrganizationTreeComponent;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
 
     constructor(
         private dateToUtcPipe: DateToUtcPipe,
         private fb: FormBuilder,
         private conferenceService: ConferenceService,
+        private employeeService: EmployeeService,
         private hallService: HallService,
+        private memberService: MemberService,
         private schemeService: SchemeService,
         private location: Location,
         private logger: Logger,
@@ -96,8 +106,14 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         this.route.params
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
-                return this.id ? this.conferenceService.get(this.id) : Observable.empty();
+                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                
+                if (key) {
+                    this.loadMembers(key);
+                    return this.conferenceService.get(key);
+                }
+
+                return Observable.empty();
             })
             .subscribe(
                 conference => {
@@ -111,6 +127,12 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 },
                 error => this.logger.error2(error));
         
+    }
+
+    employeeTreeChanged(c: NodeGroupCommand) {
+
+        this.selectedEmployeeIds = c.employeeIds;
+        this.selectedOrganizationIds = c.organizationIds;
     }
 
     hallChange(value) {
@@ -137,6 +159,42 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 control.updateValueAndValidity();
             }
         });    
+    }
+
+    loadMembers(confid) {
+
+        this.memberService
+            .getAll(confid)
+            .subscribe(
+                members => this.members = members,
+                error => this.logger.error2(error)
+            );
+    }
+
+    moveAllToSource() {
+        
+    }
+
+    moveAllToTarget() {
+        debugger;
+
+        this.employeeService
+            .getAll()
+            .subscribe(
+                employees => {
+                     debugger;
+                },
+                error => this.logger.error2(error)
+            );
+
+    }
+
+    moveToSource() {
+        
+    }
+
+    moveToTarget() {
+        
     }
 
     onResize() {

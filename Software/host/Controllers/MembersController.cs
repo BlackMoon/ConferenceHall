@@ -18,12 +18,6 @@ namespace host.Controllers
         {
         }
 
-        [HttpGet("{confid}")]
-        public Task<IEnumerable<Member>> Get(int confId)
-        {
-            return QueryDispatcher.DispatchAsync<FindConferenceMembersQuery, IEnumerable<Member>>(new FindConferenceMembersQuery() { ConferenceId = confId });
-        }
-
         [HttpPatch("{id}")]
         public Task Patch(int id, [FromBody]JsonPatchDocument patch)
         {
@@ -35,6 +29,12 @@ namespace host.Controllers
             patch.ApplyTo(value);
 
             return CommandDispatcher.DispatchAsync<PartialUpdateCommand, bool>(value);
+        }
+
+        [HttpPost("/api/[controller]/search")]
+        public Task<IEnumerable<Member>> Search([FromBody]FindMembersQuery value)
+        {
+            return QueryDispatcher.DispatchAsync<FindMembersQuery, IEnumerable<Member>>(value);
         }
     }
 }

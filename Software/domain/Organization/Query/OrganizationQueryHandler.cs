@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Dapper;
 using domain.Common.Query;
-using Dapper;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 using Mapster;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace domain.Organization.Query
 {
@@ -21,7 +21,7 @@ namespace domain.Organization.Query
 
         public IEnumerable<OrganizationNode> Execute(FindOrganizationsQuery query)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<OrganizationNode>> ExecuteAsync(FindOrganizationsQuery query)
@@ -101,7 +101,7 @@ namespace domain.Organization.Query
 
         public byte[] Execute(FindOrganizationLogoQuery query)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public async Task<byte[]> ExecuteAsync(FindOrganizationLogoQuery query)

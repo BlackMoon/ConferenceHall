@@ -1,10 +1,20 @@
 ﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
 import { ContactModel } from '../models';
+
 /**
  * Состояние участника
  */
 export enum MemberState { Invited, Registered, Confirmed };
+
+/**
+ * Запрос. Поиск учстников
+ */
+export class FindMembersQuery {
+    conferenceId?: number;
+    organizationIds?: number[];
+}
+
 
 /**
  * Модель. Участник

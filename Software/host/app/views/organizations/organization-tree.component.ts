@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { ConfirmationService, SelectItem, TreeNode } from 'primeng/primeng';
-import { OrganizationNode, NodeGroupCommand } from "../../models";
+import { MemberModel, OrganizationNode, NodeGroupCommand } from "../../models";
 import { OrganizationService } from "./organization.service";
 
 const minChars = 3;
@@ -52,6 +52,10 @@ export class OrganizationTreeComponent implements OnInit {
         e.stopPropagation();
         this.router.navigate(["/employees/new", orgid]);
     };
+
+    addMembers(members) {
+        
+    }
 
     changeEditMode() {
         this.editMode = !this.editMode;
@@ -122,6 +126,23 @@ export class OrganizationTreeComponent implements OnInit {
         return { organizationIds: orgs, employeeIds: employees };
 
     }
+
+    getOrganizations = () => this.nodes.map(n => n.data["id"]);
+
+    getMembers() {
+
+        for (let i = 0; i < this.nodes.length; i++) {
+            let n = this.nodes[i];
+
+            /*if (m.id === member.id) {
+                m.memberState = member.memberState;
+                m.seat = member.seat;
+                break;
+            }*/
+        }
+
+        this.nodes.map(n => n.data["id"]);  
+    } 
 
     loadNode(e) {
         

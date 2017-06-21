@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using domain.Common.Query;
 using Dapper;
-
 using Kit.Dal.DbManager;
 
 namespace domain.Employee.Query
