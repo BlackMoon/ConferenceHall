@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="package-lock.json" />
     <Content Remove="package.json" />
     <Content Remove="tsconfig.json" />
     <Content Remove="tslint.json" />
@@ -40,6 +41,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="package-lock.json" />
     <None Include="package.json" />
     <None Include="tsconfig.json" />
     <None Include="tslint.json" />
