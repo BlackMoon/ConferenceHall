@@ -20,7 +20,7 @@ export class MemberTableComponent {
      * Доступные места
      */
     @Input()
-    availableSeats: SelectItem[] = [{ label: '1', value: '1' }, { label: '5', value: '5' }];
+    availableSeats: SelectItem[];
 
     /**
      * Режим чтения (для вставки в другой компонент)

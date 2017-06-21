@@ -1,5 +1,6 @@
 ﻿using Kit.Core.CQRS.Command;
 using System;
+using System.Collections.Generic;
 
 namespace domain.Conference.Command
 {
@@ -25,6 +26,8 @@ namespace domain.Conference.Command
         /// Дата окончания
         /// </summary>
         public DateTime? EndDate { get; set; }
+
+        public IList<Member.Member> Members { get; set; }
 
     }
 }

@@ -22,6 +22,11 @@ export class FindMembersQuery {
 export class MemberModel extends KeyModel {
 
     /**
+     * id сотрудника
+     */
+    employeeId: number;
+
+    /**
      * ФИО
      */
     name: string;
@@ -56,6 +61,7 @@ export class MemberModel extends KeyModel {
 
         super();
         this.id = undefined;
+        this.employeeId = undefined;
         this.name = undefined;
         this.job = undefined;      
         this.memberState = MemberState.Invited;

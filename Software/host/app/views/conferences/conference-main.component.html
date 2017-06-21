@@ -3,9 +3,10 @@
     <form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
 
         <div class="ui-widget-header" style="padding: .5em .75em">
-            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid"></button>
+            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
             <div class="ui-toolbar-group-right">
-                <button pButton type="button" label="Отправить уведомление" icon="fa-envelope-o"></button>
+                <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0"></button>
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid"></button>
             </div>
         </div>
         <hr class="ui-widget-content" style="border-top: 0">
@@ -106,7 +107,7 @@
                     <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
                 </div>
                 <div class="ui-g-12 h100p">
-                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [members]="members"></member-table>
+                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members"></member-table>
                     <scheme-main [ngClass]="{'ui-helper-hidden': !conferenceForm.value.showScheme}" [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
                 </div>
             </p-accordionTab>

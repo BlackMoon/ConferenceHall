@@ -191,10 +191,10 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     moveToTarget() {
         
         // employee --> member
-        let members = this.selectedEmployees.map(e => <any>{ id: e.id, name: e.name, job: e.job, position: e.position });
+        let members = this.selectedEmployees.map(e => <any>{ employeeId: e.id, name: e.name, job: e.job, position: e.position });
 
         members.forEach(member => {
-            let ix = this.members.findIndex(m => m.id === member.id);
+            let ix = this.members.findIndex(m => m.employeeId === member.employeeId);
             (ix === -1) && this.members.push(member);
         });
     }
@@ -220,7 +220,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         
         this.conferenceService[conference.id ? "update" : "add"](conference)
             .subscribe(
-                _ => this.location.back(),
+                _ => this.logger.info("Ok"),
                 error => this.logger.error2(error));
     }
 
@@ -231,12 +231,11 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     schemeLoaded() {
 
         [].forEach.call(this.members, m => this.schemeMain.toggleMark(m.seat));
-
         this.seats = this.schemeMain.getMarkCodes().map(c => <SelectItem>{ label: c, value: c });
     }
 
     showSchemeChange(value) {
-        
-        setTimeout(() => this.schemeMain.onResize(), 0);
+
+        value && setTimeout(() => this.schemeMain.onResize(), 0);
     }
 }

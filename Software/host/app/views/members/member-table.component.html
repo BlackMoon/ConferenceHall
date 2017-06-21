@@ -12,4 +12,9 @@
             <p-dropdown [(ngModel)]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" required="true" (onChange)="changeSeat(member)"></p-dropdown>
         </ng-template>
     </p-column>
+    <p-column field="state" *ngIf="!readOnly">
+        <ng-template let-member="rowData" pTemplate="body">
+            <p-inputSwitch></p-inputSwitch>
+        </ng-template>
+    </p-column>
 </p-dataTable>

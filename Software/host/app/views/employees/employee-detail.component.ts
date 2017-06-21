@@ -41,7 +41,7 @@ export class EmployeeDetailComponent implements OnInit {
                 login: [null],
                 locked: [false],
                 userRole: [UserRole.User],
-                password: [null, Validators.required]
+                password: [null]
             })
         });
 

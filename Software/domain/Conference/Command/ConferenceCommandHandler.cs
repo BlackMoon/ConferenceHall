@@ -69,9 +69,32 @@ namespace domain.Conference.Command
                 DbManager.AddParameter("schemeId", command.SchemeId);
             }
 
-            int inserted = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) values({string.Join(",", values)})");
-            Logger.LogInformation($"Inserted {inserted} conference");
-            return inserted;
+            await DbManager.OpenAsync();
+            DbManager.BeginTransaction();
+
+            int newId = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) values({string.Join(",", values)}) RETURNING id");
+
+            // добавить новых участников
+            if (command.Members.Any())
+            {
+                values.Capacity = command.Members.Count;
+
+                DbManager.ClearParameters();
+                for (int i = 0; i < command.Members.Count; i++)
+                {
+                    Member.Member m = command.Members[i];
+
+                    DbManager.AddParameter($"confId{i}", newId);
+                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
+                    DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
+
+                    values[i] = $"(@confId{i}, @seat{i}, @employeeId{i})";
+                }
+
+                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, seat, employee_id) VALUES {string.Join(", ", values)}");
+            }
+            
+            return newId;
         }
 
         public override async Task<bool> ExecuteAsync(Conference command)
@@ -124,7 +147,7 @@ namespace domain.Conference.Command
 
                     DbManager.AddParameter($"confId{i}", command.Id);
                     DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
-                    DbManager.AddParameter($"employeeId{i}", m.Id);
+                    DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
 
                     values[i] = $"(@confId{i}, @seat{i}, @employeeId{i})";
                 }
