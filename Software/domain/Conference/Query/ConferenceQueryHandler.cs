@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Dapper;
+using domain.Common.Query;
+using Kit.Core.CQRS.Query;
+using Kit.Dal.DbManager;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
-using domain.Common.Query;
-using domain.Employee;
-using Kit.Dal.DbManager;
-using Dapper;
-using Kit.Core.CQRS.Query;
 
 namespace domain.Conference.Query
 {
@@ -92,7 +89,7 @@ namespace domain.Conference.Query
             if (query.OrganizationIds != null)
             {
                 if (query.EmployeeIds != null)
-                    expr += " OR";
+                    expr += " OR ";
 
                 expr += "c.id in (SELECT m.conf_id FROM conf_hall.conf_members m JOIN conf_hall.employees e ON e.id = m.employee_id WHERE e.org_id = ANY(@orgIds))";
                 param.Add("orgIds", query.OrganizationIds);

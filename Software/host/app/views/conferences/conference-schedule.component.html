@@ -19,7 +19,7 @@
                     <hall-table [readOnly]="true" (selectionChanged)="hallTableChanged($event)"></hall-table>
                 </p-tabPanel>
                 <p-tabPanel header="Участники">
-                    <organization-tree [emplSearch]="true" [readOnly]="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>
+                    <organization-tree [readOnly]="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>
                 </p-tabPanel>
             </p-tabView>
         </div>

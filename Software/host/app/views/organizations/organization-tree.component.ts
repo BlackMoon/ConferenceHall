@@ -28,7 +28,6 @@ export class OrganizationTreeComponent implements OnInit {
     /**
      * Поиск по сотрудникам/организациям
      */
-    @Input()
     emplSearch: boolean;
 
     @Output() selectionChanged = new EventEmitter<NodeGroupCommand>();
@@ -219,6 +218,32 @@ export class OrganizationTreeComponent implements OnInit {
     selectNode(e) {
         
         let id;
+
+        if (this.editMode || this.readOnly) {
+
+            if (e.node.parent) {
+
+                let parent = e.node.parent;
+                id = parent.data["id"];
+
+                // поиск только среди корневых
+                let ix = this.selectedNodes.findIndex(n => !n.leaf && n.data["id"] === id);
+                (ix !== -1) && this.selectedNodes.splice(ix, 1);
+                delete parent["partialSelected"];
+            }   
+
+            if (this.readOnly) {
+                let c = this.getNodeGroupCommand();
+                this.selectionChanged.emit(c);
+            }
+        }
+        else {
+            id = e.node.data["id"];
+            this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);    
+        }
+
+
+        /*
         if (this.editMode) {
             
             if (e.node.parent) {
@@ -243,7 +268,7 @@ export class OrganizationTreeComponent implements OnInit {
                 id = e.node.data["id"];
                 this.router.navigate([e.node.leaf ? `/employees/${id}` : `/orgs/${id}`]);
             }
-        }
+        }*/
     }
 
     unSelectNode() {
