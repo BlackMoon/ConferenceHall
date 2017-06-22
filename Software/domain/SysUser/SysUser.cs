@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace domain.SysUser
 {
     /// <summary>
-    /// Действия. (Привязать, отвязать) пользователя к сотруднику
+    /// Действия. (Привязать, отвязать) пользователя к сотруднику. pgSql enumeration [user_role]
     /// </summary>
     public enum UserOperation
     {
@@ -51,6 +51,7 @@ namespace domain.SysUser
         [JsonIgnore]
         public string Role
         {
+            get { return UserRole.ToString(); }
             set
             {
                 UserRole userRole;

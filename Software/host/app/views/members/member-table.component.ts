@@ -52,8 +52,11 @@ export class MemberTableComponent {
     @Input()
     selectionMode: string;
 
-    @Output()
-    membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();
+    @Output() seatChanged: EventEmitter<MemberModel> = new EventEmitter<MemberModel>();
+
+    @Output() stateChanged: EventEmitter<MemberModel> = new EventEmitter<MemberModel>();
+
+    @Output() membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();
 
     @Output() selectionChanged = new EventEmitter<MemberModel[]>();
 
@@ -61,13 +64,16 @@ export class MemberTableComponent {
         private memberService: MemberService,
         private logger: Logger) { }
 
-    changeSeat(member) {
+    changeSeat(member: MemberModel) {
         
-        this.memberService
-            .changeSeat(member.id, member.seat)
-            .subscribe(
-                _ => {},
-                error => this.logger.error2(error));
+        this.seatChanged.emit(member);
+        member.oldSeat = member.seat;
+    } 
+
+    changeState(checked, member: MemberModel) {
+        debugger;
+        member.memberState = checked ? MemberState.Confirmed : MemberState.Registered;
+        this.stateChanged.emit(member);     
     }
 
     loadMembers() {

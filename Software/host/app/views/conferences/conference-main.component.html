@@ -9,7 +9,6 @@
                 <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid"></button>
             </div>
         </div>
-        <hr class="ui-widget-content" style="border-top: 0">
 
         <input type="hidden" formControlName="id" (ngModelChange)="idChange($event)" />
         
@@ -107,8 +106,12 @@
                     <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
                 </div>
                 <div class="ui-g-12 h100p">
-                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members"></member-table>
+                    
+                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" 
+                                  (seatChanged)="memberSeatChanged($event)" (stateChanged)="memberStateChanged($event)"></member-table>
+
                     <scheme-main [ngClass]="{'ui-helper-hidden': !conferenceForm.value.showScheme}" [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
+
                 </div>
             </p-accordionTab>
             

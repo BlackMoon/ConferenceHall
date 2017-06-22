@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace domain.Member
 {
+    /// <summary>
+    /// pgSql enumeration [Conf_member_state]
+    /// </summary>
     public enum MemberState
     {
         /// <summary>
@@ -59,6 +62,7 @@ namespace domain.Member
         [JsonIgnore]
         public string State
         {
+            get { return MemberState.ToString().ToLower(); }
             set
             {
                 MemberState memberState;

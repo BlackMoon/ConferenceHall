@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace domain.Conference
 {
     /// <summary>
-    /// Состояние конференции
+    /// Состояние конференции. pgSql enumeration [conf_state]
     /// </summary>
     public enum ConfState
     {
@@ -61,6 +61,8 @@ namespace domain.Conference
         [JsonIgnore]
         public string State
         {
+            // pgSql::conf_state --> lowerCase
+            get { return ConfState.ToString().ToLower(); }
             set
             {
                 ConfState confState;

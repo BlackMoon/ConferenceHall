@@ -32,7 +32,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     locale: any;
    
     schemeId: number;
-    members: any[] = [];
+    members: MemberModel[] = [];
 
     /**
      * Валидация
@@ -167,9 +167,22 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         this.memberService
             .getAll(confid)
             .subscribe(
-                members => this.members = members,
+                members => {
+                    members.forEach(m => m.oldSeat = m.seat);
+                    this.members = members;
+                },
                 error => this.logger.error2(error)
             );
+    }
+    
+    memberSeatChanged(member) {
+        this.schemeMain.toggleMark(member.oldSeat);
+
+        this.memberStateChanged(member);
+    }
+
+    memberStateChanged(member) {
+        this.schemeMain.toggleMark(member.seat);
     }
 
     memberTableChahged(members) {
@@ -211,7 +224,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     save(event, conference) {
-        
+       
         conference.startDate && (conference.startDate = this.dateToUtcPipe.transform(conference.startDate));
         conference.endDate && (conference.endDate = this.dateToUtcPipe.transform(conference.endDate));
         conference.members = this.members;

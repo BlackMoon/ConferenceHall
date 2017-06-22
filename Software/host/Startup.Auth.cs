@@ -61,7 +61,7 @@ namespace host
                     SysUser sysUser = await queryDispatcher.DispatchAsync<FindSysUserByLoginQuery, SysUser>(new FindSysUserByLoginQuery { Login = u});
 
                     Claim[] claims = (sysUser != null) ?
-                        new[] { new Claim("role", sysUser.UserRole.ToString()) } :
+                        new[] { new Claim("role", sysUser.Role) } :
                         null;
 
                     identity = new ClaimsIdentity(new GenericIdentity(u, "Token"), claims);

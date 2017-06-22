@@ -12,10 +12,6 @@ namespace domain.Scheme
     [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.hall_scheme")]
     public class Scheme : KeyObject, ICommand
     {
-        [Column("hall_id")]
-        [JsonIgnore]
-        public int HallId { get; set; }
-
         /// <summary>
         /// Шаг сетки (0 - сетка не рисуется)
         /// </summary>

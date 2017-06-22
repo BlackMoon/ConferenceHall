@@ -43,7 +43,8 @@ namespace domain.Group
 
         [Column("type")]
         [JsonIgnore]
-        public string Type {
+        public string Type
+        {
             set
             {
                 GroupType groupType;

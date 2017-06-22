@@ -12,7 +12,6 @@ export class CopyCommand extends KeyModel {
  */
 export class SchemeModel extends KeyModel {
 
-    hallId: number;
     gridInterval: number;
     height: number;
     width: number;

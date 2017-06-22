@@ -86,8 +86,9 @@ namespace domain.Conference.Command
                     Member.Member m = command.Members[i];
 
                     DbManager.AddParameter($"confId{i}", newId);
-                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
                     DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
+                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
+                    DbManager.AddParameter($"state{i}::conf_member_state", m.State);
 
                     values.Add($"(@confId{i}, @seat{i}, @employeeId{i})");
                 }
@@ -113,7 +114,7 @@ namespace domain.Conference.Command
             DbManager.AddParameter("description", command.Description ?? (object)DBNull.Value);
             DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);
             DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);
-            DbManager.AddParameter("state", command.ConfState.ToString());
+            DbManager.AddParameter("state", command.State);
 
             if (command.HallId.HasValue)
             {
@@ -147,13 +148,14 @@ namespace domain.Conference.Command
                     Member.Member m = command.Members[i];
 
                     DbManager.AddParameter($"confId{i}", command.Id);
-                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
                     DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
+                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
+                    DbManager.AddParameter($"state{i}", m.State);
 
-                    values[i] = $"(@confId{i}, @seat{i}, @employeeId{i})";
+                    values[i] = $"(@confId{i}, @employeeId{i}, @seat{i}, @state{i}::conf_member_state)";
                 }
 
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, seat, employee_id) VALUES {string.Join(", ", values)}");
+                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, employee_id, seat, state) VALUES {string.Join(", ", values)}");
             }
 
             DbManager.CommitTransaction();
