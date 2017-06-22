@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="1.16.1" />
+    <PackageReference Include="MatriX.NetCore" Version="2.0.0.22-beta4" />
     <PackageReference Include="TLSharpCore" Version="1.0.0" />
   </ItemGroup>
 
