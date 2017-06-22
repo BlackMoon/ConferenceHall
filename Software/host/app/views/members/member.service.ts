@@ -36,7 +36,10 @@ export class MemberService extends HttpDataService<MemberModel> {
 
         return this.http
             .post(`${this.url}/search`, body)
-            .map((r: Response) => r.json())
+            .map((r: Response) => r
+                .json()
+                .map(m => MapUtils.deserialize(MemberModel, m))
+            )
             .catch(handleResponseError);
     }
 }

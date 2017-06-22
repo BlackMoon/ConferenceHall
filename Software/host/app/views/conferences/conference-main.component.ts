@@ -224,14 +224,15 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     save(event, conference) {
-       
-        conference.startDate && (conference.startDate = this.dateToUtcPipe.transform(conference.startDate));
-        conference.endDate && (conference.endDate = this.dateToUtcPipe.transform(conference.endDate));
-        conference.members = this.members;
 
-        delete conference["showScheme"];
+        let conf:ConferenceModel = Object.assign({}, conference);
+        conference.startDate && (conf.startDate = this.dateToUtcPipe.transform(conference.startDate));
+        conference.endDate && (conf.endDate = this.dateToUtcPipe.transform(conference.endDate));
+        conf.members = this.members;
+
+        delete conf["showScheme"];
         
-        this.conferenceService[conference.id ? "update" : "add"](conference)
+        this.conferenceService[conference.id ? "update" : "add"](conf)
             .subscribe(
                 _ => this.logger.info("Ok"),
                 error => this.logger.error2(error));

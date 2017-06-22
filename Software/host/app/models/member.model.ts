@@ -57,13 +57,6 @@ export class MemberModel extends KeyModel {
      */
     oldSeat: string;
 
-    /**
-     * Confirmed property form inputs     
-     */
-    get confirmed(): boolean {
-        return this.memberState === MemberState.Confirmed;
-    }
-
     constructor() {
 
         super();

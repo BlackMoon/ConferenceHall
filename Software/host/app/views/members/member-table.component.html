@@ -14,7 +14,7 @@
     </p-column>
     <p-column header="В помещении" *ngIf="!readOnly" [style]="{'text-align': 'center', 'width': '15%'}">
         <ng-template let-member="rowData" pTemplate="body">
-            <p-inputSwitch onLabel="Да" offLabel="Нет" [ngModel]="member.confirmed" (onChange)="changeState($event.checked, member)"></p-inputSwitch>
+            <p-inputSwitch onLabel="Да" offLabel="Нет" [ngModel]="member.memberState === MemberState.Confirmed" (onChange)="changeState($event.checked, member)"></p-inputSwitch>
         </ng-template>
     </p-column>
 </p-dataTable>

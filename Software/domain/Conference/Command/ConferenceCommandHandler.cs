@@ -21,7 +21,6 @@ namespace domain.Conference.Command
         ICommandHandlerWithResult<MakeAppointmentCommand, TimeRange>,
         ICommandHandlerWithResult<PartialUpdateCommand, bool>
     {
-
         public ConferenceCommandHandler(IDbManager dbManager, ILogger<ConferenceCommandHandler> logger) : base(dbManager, logger)
         {
         }
