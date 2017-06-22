@@ -73,5 +73,8 @@ namespace domain.Conference
 
         [Dapper.Contrib.Extensions.Write(false)]
         public IList<Member.Member> Members { get; set; }
+
+        [Dapper.Contrib.Extensions.Write(false)]
+        public IList<Message.Message> Messages { get; set; }
     }
 }

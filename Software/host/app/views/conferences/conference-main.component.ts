@@ -7,7 +7,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Accordion } from 'primeng/components/accordion/accordion';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, EmployeeModel, MemberModel, MemberState } from '../../models';
+import { ConferenceModel, ConfState, EmployeeModel, MemberModel, MemberState, MessageModel } from '../../models';
 
 import { ConferenceService } from './conference.service';
 import { EmployeeService } from '../employees/employee.service';
@@ -172,6 +172,19 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                     this.members = members;
                 },
                 error => this.logger.error2(error)
+            );
+    }
+
+    loadMessages(confid) {
+
+        this.memberService
+            .getAll(confid)
+            .subscribe(
+            members => {
+                members.forEach(m => m.oldSeat = m.seat);
+                this.members = members;
+            },
+            error => this.logger.error2(error)
             );
     }
     

@@ -6,15 +6,28 @@ using System.Threading.Tasks;
 
 namespace domain.Common.Query
 {
-    public abstract class KeyObjectQueryHandler<TQuery, TResult> : IQueryHandler<TQuery, TResult>, IQueryHandler<GetAllQuery, IEnumerable<TResult>>
-        where TQuery : FindObjectByIdQuery 
-        where TResult : class
+    /// <summary>
+    /// Базовый queryHandler
+    /// </summary>
+    public abstract class KeyObjectQueryHandler
     {
         protected readonly IDbManager DbManager;
 
         protected KeyObjectQueryHandler(IDbManager dbManager)
         {
             DbManager = dbManager;
+        }
+    }
+
+    /// <summary>
+    /// Базовый generic queryHandler
+    /// </summary>
+    public abstract class KeyObjectQueryHandler<TQuery, TResult> : KeyObjectQueryHandler, 
+        IQueryHandler<TQuery, TResult>, IQueryHandler<GetAllQuery, IEnumerable<TResult>> where TQuery : FindObjectByIdQuery  where TResult : class
+    {
+        protected KeyObjectQueryHandler(IDbManager dbManager) : base(dbManager)
+        {
+            
         }       
 
         public virtual TResult Execute(TQuery query)
