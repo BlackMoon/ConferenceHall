@@ -55,13 +55,15 @@ namespace domain.Common.Job
 
             // Organization --> OrgDtoDto
             TypeAdapterConfig<Organization.Organization, OrgEmployeeDto>
-                .ForType();
+                .ForType()
+                .Map(dest => dest.Name, src => src.Code)
+                .Map(dest => dest.Description, src => src.Name);
 
             // Employee --> OrgDto
             TypeAdapterConfig<Employee.Employee, OrgEmployeeDto>
                 .ForType()
                 .Map(dest => dest.Description, src => src.Position)
-                .Map(dest => dest.Locked, src => src.User != null ? src.User.Locked : false );
+                .Map(dest => dest.Locked, src => src.User != null && src.User.Locked );
 
             #endregion
 

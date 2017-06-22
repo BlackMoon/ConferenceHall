@@ -66,10 +66,10 @@ namespace domain.Organization.Query
             
             sqlBuilder
                 .Column("o.id")
+                .Column("o.code")
                 .Column("o.name")
-                .Column("o.description")
                 .From("conf_hall.organizations o")
-                .OrderBy("lower(o.name)");
+                .OrderBy("lower(o.code)");
 
             // может задаваться фильтр
             if (!string.IsNullOrEmpty(query.Filter))
@@ -83,7 +83,7 @@ namespace domain.Organization.Query
                 }
                 else
                 {
-                    expr = "lower(o.name) LIKE lower(@filter)";
+                    expr = "lower(o.code) LIKE lower(@filter) OR lower(o.name) LIKE lower(@filter)";
                     param.Add("filter", $"%{query.Filter}%");
                 }
 
