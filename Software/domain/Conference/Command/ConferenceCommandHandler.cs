@@ -156,7 +156,10 @@ namespace domain.Conference.Command
             
             // удалить пред. участников
             await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_members WHERE conf_id = @id");
-            
+
+            // удалить пред. сообщения
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_messages WHERE conf_id = @id");
+
             // добавить новых участников
             if (command.Members.Any())
             {
@@ -177,10 +180,7 @@ namespace domain.Conference.Command
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, employee_id, seat, state) VALUES {string.Join(", ", values)}");
             }
-
-            // удалить пред. сообщения
-            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_messages WHERE conf_id = @id");
-
+            
             // добавить новые сообщения
             if (command.Messages.Any())
             {

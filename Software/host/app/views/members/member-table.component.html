@@ -12,7 +12,7 @@
             <p-dropdown [(ngModel)]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" required="true" (onChange)="changeSeat(member)"></p-dropdown>
         </ng-template>
     </p-column>
-    <p-column header="В помещении" *ngIf="!readOnly" [style]="{'text-align': 'center', 'width': '15%'}">
+    <p-column header="В помещении" *ngIf="editable" [style]="{'text-align': 'center', 'width': '15%'}">
         <ng-template let-member="rowData" pTemplate="body">
             <p-inputSwitch onLabel="Да" offLabel="Нет" [ngModel]="member.memberState === MemberState.Confirmed" (onChange)="changeState($event.checked, member)"></p-inputSwitch>
         </ng-template>

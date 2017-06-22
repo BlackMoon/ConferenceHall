@@ -107,7 +107,7 @@
                 </div>
                 <div class="ui-g-12 h100p">
                     
-                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" 
+                    <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" editable="true"
                                   (seatChanged)="memberSeatChanged($event)" (stateChanged)="memberStateChanged($event)"></member-table>
 
                     <scheme-main [ngClass]="{'ui-helper-hidden': !conferenceForm.value.showScheme}" [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>

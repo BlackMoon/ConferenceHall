@@ -47,7 +47,7 @@ export class MemberTableComponent {
     }
 
     @Input()
-    editable: boolean = true;
+    editable: boolean;
 
     @Input()
     selectionMode: string;

@@ -50,6 +50,7 @@ namespace host
                     switch (eventArgs.Condition.ToLower())
                     {
                         case "conf_members_change":
+                        case "conf_members_new":
 
                             NameValueCollection nvc = new NameValueCollection();
 
@@ -65,7 +66,7 @@ namespace host
                         
                             int memberId;
                             info = nvc["confid"];
-                            if (int.TryParse(info, out confId) && int.TryParse(nvc["id"], out memberId))
+                            if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0 && int.TryParse(nvc["id"], out memberId))
                             {
                                 var member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
                                 member.OldSeat = nvc["oldseat"];
@@ -75,9 +76,12 @@ namespace host
 
                             break;
 
+                        case "conf_members_del":
+                            break;
+
                         case "conf_messages_change":
                         
-                            if (int.TryParse(info, out confId))
+                            if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0)
                             {
                                 var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() {Id = confId});
                                 // отправить уведомления signalR клиенту(ам)
