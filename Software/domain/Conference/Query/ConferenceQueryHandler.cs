@@ -55,10 +55,11 @@ namespace domain.Conference.Query
             if (query.State.HasValue)
             {
                 sqlBuilder.Where("c.state = @state::conf_state");
-                param.Add("state", query.State.ToString());
+                // pgSql::conf_state --> lowerCase
+                param.Add("state", query.State.ToString().ToLower());
             }
             else
-                sqlBuilder.Where("c.state != 'Planned'::conf_state");
+                sqlBuilder.Where("c.state != 'planned'::conf_state");
 
             // [активные, на подготовке, завершенные] совещания фильтруются по дате
             if (query.State != ConfState.Planned)

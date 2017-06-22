@@ -11,6 +11,7 @@ using TimeRange = domain.Common.Range<System.DateTime>;
 using System.Collections.Generic;
 using System.Linq;
 using domain.Employee;
+using Dapper;
 
 namespace domain.Conference.Command
 {
@@ -70,8 +71,8 @@ namespace domain.Conference.Command
 
             await DbManager.OpenAsync();
             DbManager.BeginTransaction();
-
-            int newId = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) values({string.Join(",", values)}) RETURNING id");
+            
+            int newId = await DbManager.ExecuteScalarAsync<int>(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) values({string.Join(",", values)}) RETURNING id");
 
             // добавить новых участников
             if (command.Members.Any())

@@ -7,7 +7,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Accordion } from 'primeng/components/accordion/accordion';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, EmployeeModel, MemberModel, TimeRange } from '../../models';
+import { ConferenceModel, ConfState, EmployeeModel, MemberModel, MemberState } from '../../models';
 
 import { ConferenceService } from './conference.service';
 import { EmployeeService } from '../employees/employee.service';
@@ -244,7 +244,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     schemeLoaded() {
 
-        [].forEach.call(this.members, m => this.schemeMain.toggleMark(m.seat));
+        [].forEach.call(this.members, m => (m.memberState === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
         this.seats = this.schemeMain.getMarkCodes().map(c => <SelectItem>{ label: c, value: c });
     }
 
