@@ -29,5 +29,7 @@ namespace domain.Conference.Command
 
         public IList<Member.Member> Members { get; set; }
 
+        public IList<Message.Message> Messages { get; set; }
+
     }
 }

@@ -32,9 +32,9 @@ import { ConferenceService } from './conference.service';
 
 import { HallsModule } from '../halls/halls.module';
 import { MembersModule } from '../members/members.module';
+import { MessagesModule } from '../messages/messages.module';
 import { OrganizationsModule } from '../organizations/organizations.module';
 import { SchemesModule } from '../schemes/schemes.module';
-
 
 @NgModule({
     declarations: [AppointmentDialogComponent, ConferenceMainComponent, ConferenceTableComponent, ConferenceScheduleComponent],
@@ -55,6 +55,7 @@ import { SchemesModule } from '../schemes/schemes.module';
         InputSwitchModule,
         MembersModule,
         MenuModule,
+        MessagesModule,
         OrganizationsModule,
         ReactiveFormsModule,
         ScheduleModule,

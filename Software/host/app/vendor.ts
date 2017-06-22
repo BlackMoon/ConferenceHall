@@ -12,6 +12,9 @@ import 'angular2-jwt';
 // CryptoJS
 import 'crypto-js';
 
+//font-awesome
+import 'font-awesome/css/font-awesome.min.css';
+
 // FullCalendar
 import 'fullcalendar/dist/fullcalendar.js';
 import 'fullcalendar/dist/fullcalendar.min.css';
@@ -20,9 +23,6 @@ import 'fullcalendar/dist/locale/ru.js';
 // PrimeNG
 import 'primeng/resources/primeng.min.css';
 import 'primeng/primeng.js';
-
-//font-awesome
-import 'font-awesome/css/font-awesome.min.css';
 
 // RxJS
 import 'rxjs';

@@ -9,16 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace host.Controllers
 {
     [Route("api/[controller]")]
-    public class ConfMessageController : CqrsController
+    public class MessagesController : CqrsController
     {
-        public ConfMessageController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        public MessagesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
         }
 
         [HttpGet("{confId}")]
         public Task<IEnumerable<Message>> Get(int confId)
         {
-            return QueryDispatcher.DispatchAsync<FindMessagesQuery, IEnumerable<Message>>(new FindMessagesQuery(){ ConferenceId = confId }));
+            return QueryDispatcher.DispatchAsync<FindMessagesQuery, IEnumerable<Message>>(new FindMessagesQuery(){ ConferenceId = confId });
         }
     }
 }

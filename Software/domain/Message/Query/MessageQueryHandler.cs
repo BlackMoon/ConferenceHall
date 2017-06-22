@@ -25,7 +25,7 @@ namespace domain.Message.Query
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conf_messages m")
                 .Column("m.id")
                 .Column("m.active")
-                .Column("m.message")
+                .Column("m.content")
                 .Where("m.conf_id = @confId");
 
             await DbManager.OpenAsync();

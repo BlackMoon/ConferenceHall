@@ -11,6 +11,6 @@ namespace domain.Message
     {
         public bool Active { get; set; }
 
-        public string Detail { get; set; }
+        public string Content { get; set; }
     }
 }

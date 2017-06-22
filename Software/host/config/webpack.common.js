@@ -1,8 +1,10 @@
-﻿var webpack = require('webpack');
-var ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+﻿var ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+// ReSharper disable InconsistentNaming
 var helpers = require('./helpers');
+var webpack = require('webpack');
 
 module.exports = {
     context: helpers.root('./app'),

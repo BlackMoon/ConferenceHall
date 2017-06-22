@@ -10,8 +10,6 @@ using Microsoft.Extensions.Logging;
 using TimeRange = domain.Common.Range<System.DateTime>;
 using System.Collections.Generic;
 using System.Linq;
-using domain.Employee;
-using Dapper;
 
 namespace domain.Conference.Command
 {
@@ -95,7 +93,29 @@ namespace domain.Conference.Command
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, seat, employee_id) VALUES {string.Join(", ", values)}");
             }
-            
+
+            // добавить новые сообщения
+            if (command.Messages.Any())
+            {
+                values.Clear();
+                values.Capacity = command.Messages.Count;
+
+                DbManager.ClearParameters();
+                for (int i = 0; i < command.Messages.Count; i++)
+                {
+                    Message.Message m = command.Messages[i];
+
+                    DbManager.AddParameter($"confId{i}", newId);
+                    DbManager.AddParameter($"active{i}", m.Active);
+                    DbManager.AddParameter($"content{i}", m.Content);
+
+                    values.Add($"(@confId{i}, @active{i}, @content{i})");
+                }
+
+                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, active, content) VALUES {string.Join(", ", values)}");
+            }
+
+            DbManager.CommitTransaction();
             return newId;
         }
 
@@ -156,6 +176,29 @@ namespace domain.Conference.Command
                 }
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, employee_id, seat, state) VALUES {string.Join(", ", values)}");
+            }
+
+            // удалить пред. сообщения
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_messages WHERE conf_id = @id");
+
+            // добавить новые сообщения
+            if (command.Messages.Any())
+            {
+                string[] values = new string[command.Messages.Count];
+
+                DbManager.ClearParameters();
+                for (int i = 0; i < command.Messages.Count; i++)
+                {
+                    Message.Message m = command.Messages[i];
+
+                    DbManager.AddParameter($"confId{i}", command.Id);
+                    DbManager.AddParameter($"active{i}", m.Active);
+                    DbManager.AddParameter($"content{i}", m.Content);
+
+                    values[i] = $"(@confId{i}, @active{i}, @content{i})";
+                }
+
+                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_messages(conf_id, active, content) VALUES {string.Join(", ", values)}");
             }
 
             DbManager.CommitTransaction();

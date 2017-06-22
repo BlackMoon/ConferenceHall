@@ -16,7 +16,7 @@ import { MemberService } from '../members/member.service';
 import { SchemeService } from "../schemes/scheme.service";
 
 import { DateToUtcPipe } from "../../common/globals/pipes";
-import { MemberTableComponent } from "../members/member-table.component";
+import { MessageTableComponent } from "../messages/message-table.component";
 import { OrganizationTreeComponent } from "../organizations/organization-tree.component";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 
@@ -48,6 +48,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     selectedMembers: MemberModel[] = [];
 
     @ViewChild(Accordion) accordion: Accordion;
+    @ViewChild(MessageTableComponent) messageTable: MessageTableComponent;
     @ViewChild(OrganizationTreeComponent) organizationTree: OrganizationTreeComponent;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
 
@@ -114,6 +115,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 
                 if (key) {
                     this.loadMembers(key);
+                    this.messageTable.conferenceId = key;
                     return this.conferenceService.get(key);
                 }
 
@@ -174,19 +176,6 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 error => this.logger.error2(error)
             );
     }
-
-    loadMessages(confid) {
-
-        this.memberService
-            .getAll(confid)
-            .subscribe(
-            members => {
-                members.forEach(m => m.oldSeat = m.seat);
-                this.members = members;
-            },
-            error => this.logger.error2(error)
-            );
-    }
     
     memberSeatChanged(member) {
         this.schemeMain.toggleMark(member.oldSeat);
@@ -241,7 +230,9 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         let conf:ConferenceModel = Object.assign({}, conference);
         conference.startDate && (conf.startDate = this.dateToUtcPipe.transform(conference.startDate));
         conference.endDate && (conf.endDate = this.dateToUtcPipe.transform(conference.endDate));
+
         conf.members = this.members;
+        conf.messages = this.messageTable.messages;
 
         delete conf["showScheme"];
         

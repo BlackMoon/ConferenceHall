@@ -13,7 +13,7 @@ const defaultKind = 'email';
 export class ContactTableComponent implements OnInit {
     
     editMode: boolean;
-    contactform: FormGroup;
+    contactForm: FormGroup;
     kinds: SelectItem[] = [{label: 'email', value: 'email'}, {label:'sms', value: 'sms'}];
 
     @Input()
@@ -25,7 +25,7 @@ export class ContactTableComponent implements OnInit {
         private fb: FormBuilder) { }
 
     ngOnInit() {
-        this.contactform = this.fb.group({
+        this.contactForm = this.fb.group({
             address: [null, Validators.required],
             kind: [defaultKind, Validators.required]
         });    
@@ -42,7 +42,7 @@ export class ContactTableComponent implements OnInit {
         contact.active = true;
         
         this.contacts.push(contact);
-        this.contactform.reset({ kind: defaultKind });
+        this.contactForm.reset({ kind: defaultKind });
     }
 
     changeEditMode() {
