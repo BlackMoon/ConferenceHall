@@ -181,13 +181,28 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
     
     memberSeatChanged(member) {
-        this.schemeMain.toggleMark(member.oldSeat);
 
-        this.memberStateChanged(member);
+        // необходимо сохранить (во время асинхронного запроса может поменяться)
+        let oldSeat = member.oldSeat;
+
+        this.memberService
+            .changeSeat(member.id, member.seat)
+            .subscribe(
+                _ => {
+                    this.schemeMain.toggleMark(oldSeat, false);
+                    this.schemeMain.toggleMark(member.seat, true);
+                },
+                error => this.logger.error2(error));
     }
 
     memberStateChanged(member) {
-        this.schemeMain.toggleMark(member.seat);
+
+        this.memberService
+            .changeState(member.id, member.state)
+            .subscribe(
+                _ => this.schemeMain.toggleMark(member.seat, member.state === MemberState.Confirmed),
+                error => this.logger.error2(error));
+        
     }
 
     memberTableChahged(members) {
