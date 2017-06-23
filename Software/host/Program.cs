@@ -17,7 +17,7 @@ namespace host
 {
     public class Program
     {
-        private static readonly string[] Channels = { "conf_members_change", "conf_messages_change" };
+        private static readonly string[] Channels = { "conf_members_change", "conf_members_new", "conf_members_del", "conf_messages_change" };
 
         public static void Main(string[] args)
         {
@@ -44,17 +44,19 @@ namespace host
 
                 if (eventArgs != null)
                 {
-                    string info = eventArgs.AdditionalInformation;
-                    int confId;
+                    NameValueCollection nvc;
 
+                    string info = eventArgs.AdditionalInformation;
+                    int confId, memberId;
+                    
                     switch (eventArgs.Condition.ToLower())
                     {
                         case "conf_members_change":
                         case "conf_members_new":
 
-                            NameValueCollection nvc = new NameValueCollection();
+                            nvc = new NameValueCollection();
 
-                            // строка вида [confid=..&memberid=...&oldseat=...]
+                            // строка вида [confid=..&id=...&oldseat=...]
                             foreach (string s in Regex.Split(info, "&"))
                             {
                                 string[] pair = Regex.Split(s, "=");
@@ -63,8 +65,7 @@ namespace host
                                     nvc.Add(pair[0], pair[1]);
                                 }
                             }
-                        
-                            int memberId;
+
                             info = nvc["confid"];
                             if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0 && int.TryParse(nvc["id"], out memberId))
                             {
@@ -77,6 +78,26 @@ namespace host
                             break;
 
                         case "conf_members_del":
+
+                            nvc = new NameValueCollection();
+
+                            // строка вида [confid=..&id=]
+                            foreach (string s in Regex.Split(info, "&"))
+                            {
+                                string[] pair = Regex.Split(s, "=");
+                                if (pair.Length == 2)
+                                {
+                                    nvc.Add(pair[0], pair[1]);
+                                }
+                            }
+
+                            info = nvc["confid"];
+                            if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0 && int.TryParse(nvc["id"], out memberId))
+                            {   
+                                // отправить уведомления signalR клиенту(ам)
+                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).DeleteMember(memberId);
+                            }
+
                             break;
 
                         case "conf_messages_change":

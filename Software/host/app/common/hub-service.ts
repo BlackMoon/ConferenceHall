@@ -15,7 +15,8 @@ enum SignalRConnectionStatus {
  * Интерфейс broadcast hub'а
  */
 interface IHubClient {
-    confirmMember(memberId: number);
+    confirmMember(member);
+    deleteMember(id);
     sendTickers(tickers: string[]);
 }
 
@@ -28,11 +29,13 @@ export class HubService {
     connectionState: Observable<SignalRConnectionStatus>;
 
     confirmMember: Observable<MemberModel>;
+    deleteMember: Observable<number>;
     sendTickers: Observable<string[]>;
 
     private connectionStateSubject = new Subject<SignalRConnectionStatus>();
 
     private confirmMemberSubject = new Subject<MemberModel>();
+    private deleteMemberSubject = new Subject<number>();
     private sendTickersSubject = new Subject<string[]>();
 
     constructor() {
@@ -40,6 +43,7 @@ export class HubService {
         this.connectionState = this.connectionStateSubject.asObservable();
 
         this.confirmMember = this.confirmMemberSubject.asObservable();
+        this.deleteMember = this.deleteMemberSubject.asObservable();
         this.sendTickers = this.sendTickersSubject.asObservable();
     }
 
@@ -53,10 +57,18 @@ export class HubService {
 
     /**
      * server's confirmMember method
-     * @param id
+     * @param member
      */
     private onConfirmMember(member) {
         this.confirmMemberSubject.next(member);
+    }
+
+    /**
+     * server's deleteMember method
+     * @param id
+     */
+    private onDeleteMember(id) {
+        this.deleteMemberSubject.next(id);
     }
 
     /**
@@ -78,6 +90,7 @@ export class HubService {
             let client = <IHubClient>proxy.client;
            
             client.confirmMember = member => this.onConfirmMember(member);
+            client.deleteMember = id => this.onDeleteMember(id);
             client.sendTickers = tickers => this.onSendTickers(tickers);
 
             // start the connection

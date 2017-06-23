@@ -96,15 +96,13 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                         .subscribe(_ => {
 
                             this.hubService
-                                .sendTickers
-                                .subscribe(tickers => this.tickers = tickers);
-
-                            this.hubService
                                 .confirmMember
                                 .subscribe(member => {
 
-                                    this.schemeMain.toggleMark(member.oldSeat);
-                                    this.schemeMain.toggleMark(member.seat);
+                                    this.schemeMain.toggleMark(member.oldSeat, false);
+                                    this.schemeMain.toggleMark(member.seat, true);
+
+                                    let found = false;
 
                                     for (let i = 0; i < this.members.length; i++) {
                                         let m = this.members[i];
@@ -112,10 +110,34 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                                         if (m.id === member.id) {
                                             m.state = member.state;
                                             m.seat = member.seat;
+                                            found = true;
+                                        }
+                                    }
+
+                                    !found && this.members.push(member);
+                                });
+
+                            this.hubService
+                                .deleteMember
+                                .subscribe(id => {
+
+                                    let ix;
+                                    for (let i = 0; i < this.members.length; i++) {
+                                        let m = this.members[i];
+
+                                        if (m.id === id) {
+                                            ix = i;
+                                            this.schemeMain.toggleMark(m.seat, false);    
                                             break;
                                         }
                                     }
+
+                                    this.members.splice(ix, 1);
                                 });
+
+                            this.hubService
+                                .sendTickers
+                                .subscribe(tickers => this.tickers = tickers);
                         });
 
                     return this.screenService.get(this.id);

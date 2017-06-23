@@ -307,7 +307,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     schemeLoaded() {
 
-        [].forEach.call(this.members, m => (m.state === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
+        [].forEach.call(this.members, m => (m.state === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat, true));
 
         this.seats = this.schemeMain
             .getMarkCodes()
