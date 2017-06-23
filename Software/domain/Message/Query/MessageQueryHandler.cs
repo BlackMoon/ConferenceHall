@@ -26,7 +26,8 @@ namespace domain.Message.Query
                 .Column("m.id")
                 .Column("m.active")
                 .Column("m.content")
-                .Where("m.conf_id = @confId");
+                .Where("m.conf_id = @confId")
+                .OrderBy("m.id");
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Message>(sqlBuilder.ToString(), new { confId = query.ConferenceId });
