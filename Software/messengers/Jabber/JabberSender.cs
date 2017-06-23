@@ -9,6 +9,7 @@ using Matrix.Xmpp.Client;
 using System.Threading;
 
 namespace messengers.Jabber
+    [SenderKind("Jabber")]
 {
     public class JabberSender : IMessageSender
     {
