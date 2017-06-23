@@ -13,6 +13,7 @@ import { HallService } from './hall.service';
 export class HallTableComponent implements OnInit {
 
     editMode: boolean;
+    loading: boolean = true;
 
     halls: HallModel[];
     selectedHalls: HallModel[] = [];
@@ -36,8 +37,14 @@ export class HallTableComponent implements OnInit {
         this.hallService
             .getAll()
             .subscribe(
-                halls => this.halls = halls,
-                error => this.logger.error2(error));
+                halls => {
+                    this.halls = halls;
+                    this.loading = false;
+                },
+                error => {
+                    this.logger.error2(error);
+                    this.loading = false;
+                });
     }
 
     changeEditMode() {

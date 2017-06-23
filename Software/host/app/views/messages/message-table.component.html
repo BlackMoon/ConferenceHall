@@ -30,13 +30,13 @@
     </p-footer>
     <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
     <p-column field="content" [editable]="true">
-        <ng-template let-col let-contact="rowData" pTemplate="editor">
-            <textarea pInputTextarea [(ngModel)]="contact[col.field]" rows="3" class="w100p"></textarea>
+        <ng-template let-message="rowData" pTemplate="editor">
+            <textarea pInputTextarea [ngModel]="message.content" rows="3" class="w100p" (blur)="contentChange($event, message)"></textarea>
         </ng-template>
     </p-column>
     <p-column field="active" [style]="{'text-align': 'center', 'width': '15%'}">
         <ng-template let-message="rowData" pTemplate="body">
-            <p-inputSwitch onLabel="Вкл" offLabel="Откл" [(ngModel)]="message.active" (onChange)="$event.originalEvent.stopPropagation()"></p-inputSwitch>
+            <p-inputSwitch onLabel="Вкл" offLabel="Откл" [ngModel]="message.active" (onChange)="activeChange($event, message)"></p-inputSwitch>
         </ng-template>
     </p-column>
 </p-dataTable>

@@ -1,8 +1,4 @@
-﻿.middle {
-    text-align: center
-}
-
-.circle {
+﻿.circle {
     -ms-border-radius: 50%;
     border: 1px solid blue;
     border-radius: 50%;

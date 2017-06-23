@@ -7,7 +7,9 @@ namespace domain.Message.Command
     /// </summary>
     public class PartialUpdateCommand : ICommand
     {
-        public bool Active { get; set; }
+        public int MessageId { get; set; }
+
+        public bool? Active { get; set; }
 
         public string Content { get; set; }
     }

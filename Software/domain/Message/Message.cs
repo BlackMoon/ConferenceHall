@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using domain.Common;
 using Kit.Core.CQRS.Command;
+using Newtonsoft.Json;
 
 namespace domain.Message
 {
@@ -11,6 +12,7 @@ namespace domain.Message
     public class Message : KeyObject, ICommand
     {
         [Column("conf_id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int ConferenceId { get; set; }
 
         public bool Active { get; set; }

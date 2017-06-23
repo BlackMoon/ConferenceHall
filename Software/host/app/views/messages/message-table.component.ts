@@ -43,6 +43,17 @@ export class MessageTableComponent {
         });
     }
 
+    activeChange(e, message) {
+        
+        e.originalEvent.stopPropagation();
+
+        this.messageService
+            .changeActive(message.id, e.checked)
+            .subscribe(
+                _ => message.active = e.checked,
+                error => this.logger.error2(error));
+    }
+
     addMessage(message) {
 
         message.active = true;
@@ -62,6 +73,20 @@ export class MessageTableComponent {
     changeEditMode() {
         this.editMode = !this.editMode;
         this.selectedMessages.length = 0;
+    }
+
+    contentChange(e, message) {
+       
+        let content = e.currentTarget.value;
+
+        if (content !== message.content)
+        {
+            this.messageService
+                .changeContent(message.id, content)
+                .subscribe(
+                    _ => message.content = content,
+                    error => this.logger.error2(error));
+        }
     }
 
     loadMessages() {
@@ -100,5 +125,4 @@ export class MessageTableComponent {
             }
         });    
     }
-
 }
