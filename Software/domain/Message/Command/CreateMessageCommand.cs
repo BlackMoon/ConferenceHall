@@ -7,6 +7,8 @@ namespace domain.Message.Command
     /// </summary>
     public class CreateMessageCommand : ICommand
     {
+        public bool Active { get; set; }
+
         public int ConferenceId { get; set; }
 
         public string Content { get; set; }

@@ -189,8 +189,12 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .changeSeat(member.id, member.seat)
             .subscribe(
                 _ => {
-                    this.schemeMain.toggleMark(oldSeat, false);
-                    this.schemeMain.toggleMark(member.seat, true);
+                    
+                    if (member.state === MemberState.Confirmed) {
+
+                        (member.seat !== oldSeat) && this.schemeMain.toggleMark(oldSeat, false);
+                        this.schemeMain.toggleMark(member.seat, true);
+                    }
                 },
                 error => this.logger.error2(error));
     }

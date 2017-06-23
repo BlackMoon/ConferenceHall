@@ -23,7 +23,7 @@ namespace domain.Message.Command
 
         public int Execute(CreateMessageCommand command)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public async Task<int> ExecuteAsync(CreateMessageCommand command)

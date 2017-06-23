@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -17,7 +17,7 @@ const tickInterval = 5000;
     styles: [".h40 { height: 40px }"],
     templateUrl: 'screen.component.html'
 })
-export class ScreenComponent implements AfterViewInit, OnInit {
+export class ScreenComponent implements OnInit {
 
     canvas: any;
     canvasBox: any;
@@ -40,12 +40,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
         
         this.ticker = (tickers.length > 0) ? tickers[0] : "";
         this._tickers = tickers;
-    }
-
-    /**
-     * id конференции
-     */
-    id: number;
+    }    
     
     activeScreen: ScreenModel;
 
@@ -71,11 +66,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
         private route: ActivatedRoute,
         private hubService: HubService,
         private screenService: ScreenService) {
-    }
-
-    ngAfterViewInit() {
-       
-    }
+    }   
 
     ngOnInit() {
         
@@ -83,20 +74,26 @@ export class ScreenComponent implements AfterViewInit, OnInit {
 
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
 
-                if (this.id) {
+                if (key) {
+
+                    this.memberTable.conferenceId = key;
+
                     // служба signalR может отсутствовать
                     this.hubService
-                        .start(this.id)
+                        .start(key)
                         .subscribe(_ => {
 
                             this.hubService
                                 .confirmMember
                                 .subscribe(member => {
-                                   
-                                    this.schemeMain.toggleMark(member.oldSeat, false);
-                                    this.schemeMain.toggleMark(member.seat, true);
+                                    
+                                    if (member.seat !== member.oldSeat)
+                                        this.schemeMain.toggleMark(member.oldSeat, false);
+
+                                    this.schemeMain.toggleMark(member.seat, member.state === MemberState.Confirmed);
+                                    
                                     this.memberTable.confirmMember(member);
                                 });
 
@@ -116,7 +113,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                                 .subscribe(tickers => this.tickers = tickers);
                         });
 
-                    return this.screenService.get(this.id);
+                    return this.screenService.get(key);
                 }
 
                 return Observable.empty();

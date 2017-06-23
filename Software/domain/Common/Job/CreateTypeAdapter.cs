@@ -48,7 +48,7 @@ namespace domain.Common.Job
 
             #endregion
 
-            #region
+            #region Message
             // CreateMessageCommand --> Message
             TypeAdapterConfig<CreateMessageCommand, Message.Message>
                 .ForType();
