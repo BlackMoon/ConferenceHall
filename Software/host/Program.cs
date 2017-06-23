@@ -59,8 +59,9 @@ namespace host
                         }
                     }
 
-                    string group = nvc["confid"];
                     int confId, memberId;
+                    string group = nvc["confid"];
+                    
                     if (int.TryParse(group, out confId) && Broadcaster.GetVolume(group) > 0)
                     {
                         switch (eventArgs.Condition.ToLower())
@@ -69,10 +70,10 @@ namespace host
 
                                 if (int.TryParse(nvc["id"], out memberId))
                                 {
-                                    var member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
+                                    var member = queryDispatcher.Dispatch<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = memberId });
                                     member.OldSeat = nvc["oldseat"];
                                     // отправить уведомления signalR клиенту(ам)
-                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).ConfirmMember(member);
                                 }
 
                                 break;
@@ -81,9 +82,9 @@ namespace host
 
                                 if (int.TryParse(nvc["id"], out memberId))
                                 {
-                                    var member = queryDispatcher.Dispatch<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = memberId });
+                                    var member = queryDispatcher.Dispatch<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = memberId, FullInfo = true });
                                     // отправить уведомления signalR клиенту(ам)
-                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).ConfirmMember(member);
                                 }
 
                                 break;
@@ -91,7 +92,7 @@ namespace host
                             case "conf_members_del":
 
                                 if (int.TryParse(nvc["id"], out memberId))
-                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).DeleteMember(memberId);
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).DeleteMember(memberId);
 
                                 break;
 
@@ -99,7 +100,7 @@ namespace host
 
                                 var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() { Id = confId });
                                 // отправить уведомления signalR клиенту(ам)
-                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).SendTickers(tickers);
+                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).SendTickers(tickers);
 
                                 break;
                         }
