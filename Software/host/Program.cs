@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using domain.Member;
 using domain.Member.Query;
@@ -67,10 +68,18 @@ namespace host
                             }
 
                             info = nvc["confid"];
-                            if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0 && int.TryParse(nvc["id"], out memberId))
+                            if (int.TryParse(info, out confId) && Broadcaster.GetVolume(info) > 0 && int.TryParse(nvc["id"], out memberId))
                             {
-                                var member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
-                                member.OldSeat = nvc["oldseat"];
+                                Member member;
+                                if (nvc.AllKeys.Contains("oldseat"))
+                                {
+                                    member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() {Id = confId, MemberId = memberId});
+                                    member.OldSeat = nvc["oldseat"];
+                                }
+                                else
+                                {
+                                    member = queryDispatcher.Dispatch<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = memberId });
+                                }
                                 // отправить уведомления signalR клиенту(ам)
                                 connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
                             }
@@ -92,7 +101,7 @@ namespace host
                             }
 
                             info = nvc["confid"];
-                            if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0 && int.TryParse(nvc["id"], out memberId))
+                            if (int.TryParse(info, out confId) && Broadcaster.GetVolume(info) > 0 && int.TryParse(nvc["id"], out memberId))
                             {   
                                 // отправить уведомления signalR клиенту(ам)
                                 connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).DeleteMember(memberId);
@@ -102,7 +111,7 @@ namespace host
 
                         case "conf_messages_change":
                         
-                            if (int.TryParse(info, out confId) && Broadcaster.GroupCount(info) > 0)
+                            if (int.TryParse(info, out confId) && Broadcaster.GetVolume(info) > 0)
                             {
                                 var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() {Id = confId});
                                 // отправить уведомления signalR клиенту(ам)

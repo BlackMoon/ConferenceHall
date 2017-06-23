@@ -94,7 +94,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                             this.hubService
                                 .confirmMember
                                 .subscribe(member => {
-                                    
+                                   
                                     this.schemeMain.toggleMark(member.oldSeat, false);
                                     this.schemeMain.toggleMark(member.seat, true);
                                     this.memberTable.confirmMember(member);

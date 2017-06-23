@@ -9,7 +9,6 @@ using Matrix.Xmpp.Client;
 using System.Threading;
 
 namespace messengers.Jabber
-
 {
     [SenderKind("Jabber")]
     public class JabberSender : IMessageSender
@@ -55,10 +54,10 @@ namespace messengers.Jabber
             xmppClient.Compression = true;
             xmppClient.SetXmppDomain(jid.Server);
             xmppClient.StartTls = true;
-            xmppClient.OnAuthError += new EventHandler<Matrix.Xmpp.Sasl.SaslEventArgs>(xmppClient_OnAuthError);
-            xmppClient.OnError += new EventHandler<ExceptionEventArgs>(xmppClient_OnError);
+            xmppClient.OnAuthError += xmppClient_OnAuthError;
+            xmppClient.OnError += xmppClient_OnError;
             xmppClient.Open();
-            xmppClient.OnLogin += new EventHandler<Matrix.EventArgs>(XmppClientOnLogin);
+            xmppClient.OnLogin += XmppClientOnLogin;
             Wait = true;
             Thread.Sleep(500);
             xmppClient.SendPresence(Show.Chat, "Online");

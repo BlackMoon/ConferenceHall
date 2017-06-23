@@ -37,30 +37,40 @@ namespace host.Hubs
     {
         private const string QueryKey = "id";
 
-        private static readonly ConcurrentDictionary<string, int> GroupVolume = new ConcurrentDictionary<string, int>();
+        private static readonly ConcurrentDictionary<string, int> GroupVolumes = new ConcurrentDictionary<string, int>();
 
         /// <summary>
         /// Возвращает кол-во подключенных клиентов группы
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
-        public static int GroupCount(string group)
+        public static int GetVolume(string group)
         {
             int cnt;
-            GroupVolume.TryGetValue(group, out cnt);
+            GroupVolumes.TryGetValue(group, out cnt);
             return cnt;
-        } 
+        }
 
-        public override Task OnConnected()
+        private void GroupAdd()
         {
             string confId = Context.QueryString[QueryKey];
             if (!string.IsNullOrEmpty(confId))
             {
                 Groups.Add(Context.ConnectionId, confId);
-                GroupVolume.AddOrUpdate(confId, 1, (k, v) => v + 1);
+                GroupVolumes.AddOrUpdate(confId, 1, (k, v) => v + 1);
             }
+        }
 
+        public override Task OnConnected()
+        {
+            GroupAdd();
             return base.OnConnected();
+        }
+
+        public override Task OnReconnected()
+        {
+            GroupAdd();
+            return base.OnReconnected();
         }
 
         public override Task OnDisconnected(bool stopCalled)
@@ -71,14 +81,14 @@ namespace host.Hubs
                 Groups.Remove(Context.ConnectionId, confId);
 
                 int cnt;
-                GroupVolume.TryGetValue(confId, out cnt);
+                GroupVolumes.TryGetValue(confId, out cnt);
 
                 if (cnt == 1)
                     // last client
-                    GroupVolume.TryRemove(confId, out cnt);
+                    GroupVolumes.TryRemove(confId, out cnt);
                 else
                     // descrease count
-                    GroupVolume.TryUpdate(confId, cnt - 1, cnt);
+                    GroupVolumes.TryUpdate(confId, cnt - 1, cnt);
             }
 
             return base.OnDisconnected(stopCalled);

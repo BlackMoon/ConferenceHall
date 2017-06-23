@@ -57,6 +57,23 @@ namespace domain.Member.Query
             return await DbManager.DbConnection.QueryAsync<Member>(sqlBuilder.ToString(), param);
         }
 
+        public override Member Execute(FindMemberByIdQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conf_members m")
+                .Column("m.id")
+                .Column("m.seat")
+                .Column("m.state")
+                .Column("e.name")
+                .Column("e.position")
+                .Column("o.name job")
+                .Join("conf_hall.employees e ON e.id = m.employee_id")
+                .Join("conf_hall.organizations o ON o.id = e.org_id")
+                .Where("m.id = @id");
+
+            DbManager.Open();
+            return DbManager.DbConnection.QueryFirstOrDefault<Member>(sqlBuilder.ToString(), new { id = query.Id });
+        }
+
         public Member Execute(FindMemberSeatQuery query)
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conf_members m")
