@@ -114,7 +114,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 
                 if (key) {
-                    //this.loadMembers(key);
+                    this.loadMembers(key);
                     this.messageTable.conferenceId = key;
                     return this.conferenceService.get(key);
                 }
@@ -192,15 +192,37 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     moveAllToSource() {
-        this.members = [];
+
+        let c = { ids: this.members.map(s => s.id) };
+
+        this.memberService
+            .delete(c)
+            .subscribe(
+            _ => {
+                this.members.length = 0;        
+                this.selectedMembers.length = 0;        
+            },
+            error => this.logger.error2(error));
     }
 
     moveToSource() {
 
-        this.selectedMembers.forEach(member => {
-            let ix = this.members.findIndex(m => m.id === member.id);
-            this.members.splice(ix, 1);
-        });    
+        let c = { ids: this.selectedMembers.map(s => s.id) };
+
+        this.memberService
+            .delete(c)
+            .subscribe(
+            _ => {
+
+                this.selectedMembers.forEach(member => {
+                    let ix = this.members.findIndex(m => m.id === member.id);
+                    this.members.splice(ix, 1);
+                });
+
+                this.selectedMembers.length = 0;
+            },
+            error => this.logger.error2(error));
+       
     }
 
     moveToTarget() {
@@ -252,7 +274,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     schemeLoaded() {
 
-        [].forEach.call(this.members, m => (m.memberState === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
+        [].forEach.call(this.members, m => (m.state === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
         this.seats = this.schemeMain.getMarkCodes().map(c => <SelectItem>{ label: c, value: c });
     }
 

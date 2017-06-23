@@ -31,6 +31,12 @@ namespace host.Controllers
             return CommandDispatcher.DispatchAsync<PartialUpdateCommand, bool>(value);
         }
 
+        [HttpPost("/api/[controller]/delete")]
+        public Task DeleteSchemes([FromBody]DeleteMembersCommand value)
+        {
+            return CommandDispatcher.DispatchAsync(value);
+        }
+
         [HttpPost("/api/[controller]/search")]
         public Task<IEnumerable<Member>> Search([FromBody]FindMembersQuery value)
         {

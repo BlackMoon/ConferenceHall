@@ -105,7 +105,7 @@
                 <div class="ui-toolbar-group-right">
                     <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
                 </div>
-                <div class="ui-g-12 h100p">
+                <div class="ui-g-12 ui-g-nopad h100p">
                     
                     <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" editable="true"
                                   (seatChanged)="memberSeatChanged($event)" (stateChanged)="memberStateChanged($event)"></member-table>

@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { FindMembersQuery, MemberModel } from '../../models';
+import { FindMembersQuery, GroupCommand, MemberModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -27,6 +27,29 @@ export class MemberService extends HttpDataService<MemberModel> {
             .catch(handleResponseError);
     }
 
+    /**
+     * Поменять место
+     * @param memberid     
+     */
+    changeState(memberid: number, state): Observable<any> {
+
+        let body = [{ op: 'replace', path: '/state', value: state }];
+
+        return this.http
+            .patch(`${this.url}/${memberid}`, body)
+            .catch(handleResponseError);
+    }
+
+    /**
+     * Удаляет участников
+     * @param c
+     */
+    delete(c: GroupCommand): Observable<any> {
+        
+        return this.http
+            .post(`${this.url}/delete`, c)
+            .catch(handleResponseError);
+    }
 
     getAll(confid?: number, organizationIds: number[] = null): Observable<any> {
 

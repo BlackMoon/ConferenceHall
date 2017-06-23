@@ -10,10 +10,24 @@ using Microsoft.Extensions.Logging;
 namespace domain.Member.Command
 {
     public class MemberCommandHandler : KeyObjectCommandHandler,
+        ICommandHandler<DeleteMembersCommand>,
         ICommandHandlerWithResult<PartialUpdateCommand, bool>
     {
         public MemberCommandHandler(IDbManager dbManager, ILogger<MemberCommandHandler> logger) : base(dbManager, logger)
         {
+        }
+
+        public void Execute(DeleteMembersCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task ExecuteAsync(DeleteMembersCommand command)
+        {
+            DbManager.AddParameter("Ids", command.Ids);
+
+            await DbManager.OpenAsync();
+            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_members WHERE id = ANY(@Ids)");
         }
 
         public bool Execute(PartialUpdateCommand command)

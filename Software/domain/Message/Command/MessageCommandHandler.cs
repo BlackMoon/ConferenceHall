@@ -15,7 +15,7 @@ namespace domain.Message.Command
         KeyObjectCommandHandler<Message>,
         ICommandHandler<DeleteMessagesCommand>,
         ICommandHandlerWithResult<CreateMessageCommand, int>,
-         ICommandHandlerWithResult<PartialUpdateCommand, bool>
+        ICommandHandlerWithResult<PartialUpdateCommand, bool>
     {
         public MessageCommandHandler(IDbManager dbManager, ILogger<MessageCommandHandler> logger) : base(dbManager, logger)
         {

@@ -135,7 +135,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
             .subscribe((a: Array<any>) => {
                 // занятые места
                 let members: MemberModel[] = a[1] || [];
-                [].forEach.call(members, m => (m.memberState === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
+                [].forEach.call(members, m => (m.state === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
             });
 
         // clock

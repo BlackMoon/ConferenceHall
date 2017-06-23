@@ -43,7 +43,23 @@ export class MessageTableComponent {
         });
     }
 
-    activeChange(e, message) {
+    addMessage(message) {
+
+        message.active = true;
+        message.conferenceId = this.conferenceId;
+
+        this.messageService
+            .add(message)
+            .subscribe(
+            key => {
+                message.id = key;
+                this.messages.push(message);
+                this.messageForm.reset();
+            },
+            error => this.logger.error2(error));
+    }
+
+    changeActive(e, message) {
         
         e.originalEvent.stopPropagation();
 
@@ -54,40 +70,24 @@ export class MessageTableComponent {
                 error => this.logger.error2(error));
     }
 
-    addMessage(message) {
+    changeContent(e, message) {
 
-        message.active = true;
-        message.conferenceId = this.conferenceId;
+        let content = e.currentTarget.value;
 
-        this.messageService
-            .add(message)
-            .subscribe(
-                key => {
-                    message.id = key;
-                    this.messages.push(message);
-                    this.messageForm.reset();
-                },
-            error => this.logger.error2(error));
+        if (content !== message.content) {
+            this.messageService
+                .changeContent(message.id, content)
+                .subscribe(
+                _ => message.content = content,
+                error => this.logger.error2(error));
+        }
     }
 
     changeEditMode() {
         this.editMode = !this.editMode;
         this.selectedMessages.length = 0;
     }
-
-    contentChange(e, message) {
-       
-        let content = e.currentTarget.value;
-
-        if (content !== message.content)
-        {
-            this.messageService
-                .changeContent(message.id, content)
-                .subscribe(
-                    _ => message.content = content,
-                    error => this.logger.error2(error));
-        }
-    }
+    
 
     loadMessages() {
 
