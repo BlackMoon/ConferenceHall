@@ -9,7 +9,7 @@
             </span>
         </ng-template>
         <ng-template let-col let-member="rowData" pTemplate="editor">
-            <p-dropdown [(ngModel)]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" required="true" (onChange)="changeSeat(member)"></p-dropdown>
+            <p-dropdown [ngModel]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" required="true" (onChange)="changeSeat($event.value, member)"></p-dropdown>
         </ng-template>
     </p-column>
     <p-column header="В помещении" *ngIf="editable" [style]="{'text-align': 'center', 'width': '15%'}">

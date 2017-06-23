@@ -201,10 +201,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         return codes.sort();
     }
 
-    toggleMark(code) {
+    toggleMark(code, force?: boolean) {
         let mark = this.canvas.querySelector(`g.${markClass}[data-code="${code}"`);
         if (mark != null)
-            mark.classList.toggle("on");
+            mark.classList.toggle("on", force);
     }
 
     canvasMouseDown(event) {

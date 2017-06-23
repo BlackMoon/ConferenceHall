@@ -64,8 +64,9 @@ export class MemberTableComponent {
         private memberService: MemberService,
         private logger: Logger) { }
 
-    changeSeat(member: MemberModel) {
+    changeSeat(seat, member: MemberModel) {
         
+        member.seat = seat;
         this.seatChanged.emit(member);
         member.oldSeat = member.seat;
     } 
