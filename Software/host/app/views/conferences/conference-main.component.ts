@@ -114,7 +114,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 
                 if (key) {
-                    this.loadMembers(key);
+                    //this.loadMembers(key);
                     this.messageTable.conferenceId = key;
                     return this.conferenceService.get(key);
                 }
@@ -151,7 +151,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     idChange(value) {
-        debugger;
+        
         this.requireValidation = true;
 
         ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {

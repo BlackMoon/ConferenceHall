@@ -9,7 +9,7 @@
         </div>
     </p-header>
     <p-footer>
-        <form [formGroup]="schemeform" (ngSubmit)="addScheme(schemeform.value)">
+        <form [formGroup]="schemeForm" (ngSubmit)="addScheme(schemeForm.value)">
             <div class="ui-g">
                 <div class="ui-g-2 ui-g-nopad">
                     <div class="ui-toolbar-group-left">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="ui-g-2 ui-g-nopad">
                     <div class="ui-toolbar-group-right">
-                        <button type="submit" pButton icon="fa-plus" title="Добавить cхему" [disabled]="!schemeform.valid"></button>
+                        <button type="submit" pButton icon="fa-plus" title="Добавить cхему" [disabled]="!schemeForm.valid"></button>
                     </div>
                 </div>
             </div>

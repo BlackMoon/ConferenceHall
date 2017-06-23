@@ -9,7 +9,6 @@ using Mapster;
 using Microsoft.Extensions.Logging;
 using TimeRange = domain.Common.Range<System.DateTime>;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace domain.Conference.Command
 {

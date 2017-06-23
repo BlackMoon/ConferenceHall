@@ -563,7 +563,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     saveScheme(scheme) {
 
         let svg = this.canvas.cloneNode(true);
-
+        
         // сохраняется начальный план (без трансформации)
         while (svg.attributes.length > 0)
             svg.removeAttribute(svg.attributes[0].name);

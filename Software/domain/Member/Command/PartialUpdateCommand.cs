@@ -10,6 +10,11 @@ namespace domain.Member.Command
         public int MemberId { get; set; }
 
         /// <summary>
+        /// Статус участника
+        /// </summary>
+        public MemberState? State { get; set; }
+
+        /// <summary>
         /// Место
         /// </summary>
         public string Seat { get; set; }

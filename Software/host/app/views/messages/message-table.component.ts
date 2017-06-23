@@ -45,16 +45,18 @@ export class MessageTableComponent {
 
     addMessage(message) {
 
-        let min = this.messages.length + 1,
-            max = 1e6,
-            rand = min + Math.random() * (max + 1 - min);
-
-        // random id for dataKey
-        message.id = Math.floor(rand);
         message.active = true;
+        message.conferenceId = this.conferenceId;
 
-        this.messages.push(message);
-        this.messageForm.reset();
+        this.messageService
+            .add(message)
+            .subscribe(
+                key => {
+                    message.id = key;
+                    this.messages.push(message);
+                    this.messageForm.reset();
+                },
+            error => this.logger.error2(error));
     }
 
     changeEditMode() {
@@ -80,12 +82,21 @@ export class MessageTableComponent {
             message: `Удалить выбранные записи?`,
             accept: _ => {
 
-                this.selectedMessages.forEach(h => {
-                    let ix = this.messages.findIndex(n => n.id === h.id);
-                    this.messages.splice(ix, 1);
-                });
+                let c = { ids: this.selectedMessages.map(s => s.id) };
 
-                this.selectedMessages.length = 0;
+                this.messageService
+                    .delete(c)
+                    .subscribe(
+                    _ => {
+
+                        this.selectedMessages.forEach(h => {
+                            let ix = this.messages.findIndex(n => n.id === h.id);
+                            this.messages.splice(ix, 1);
+                        });
+
+                        this.selectedMessages.length = 0;
+                    },
+                    error => this.logger.error2(error));
             }
         });    
     }

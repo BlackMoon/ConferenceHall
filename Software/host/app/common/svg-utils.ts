@@ -5,7 +5,7 @@ export const markClass = "mark";
 export const shapeClass = "shape";
 
 /**
- * Point 2D (SVGPoint не подходит из-за метода )
+ * Point 2D (интерфейс SVGPoint не подходит из-за наличия метода matrixTransform)
  */
 export class Point {
     x: number;

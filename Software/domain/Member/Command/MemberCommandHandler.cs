@@ -30,7 +30,13 @@ namespace domain.Member.Command
             if (command.Seat != null)
             {
                 DbManager.AddParameter("seat", command.Seat);
-                columns.Add("seat=@seat");
+                columns.Add("seat = @seat");
+            }
+
+            if (command.State.HasValue)
+            {
+                DbManager.AddParameter("state", command.State);
+                columns.Add("state = @state");
             }
 
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conf_members SET {string.Join(",", columns)} WHERE id = @id");

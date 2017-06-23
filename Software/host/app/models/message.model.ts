@@ -8,6 +8,7 @@ export class MessageModel extends KeyModel {
 
     active: boolean;
     content: string;
+    conferenceId: number;
 
     constructor() {
 

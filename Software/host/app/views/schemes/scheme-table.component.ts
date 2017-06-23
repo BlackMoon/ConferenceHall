@@ -15,7 +15,7 @@ export class SchemeTableComponent implements OnInit {
 
     editMode: boolean;
     
-    schemeform: FormGroup;
+    schemeForm: FormGroup;
 
     @Input()
     hallId: number;
@@ -34,7 +34,7 @@ export class SchemeTableComponent implements OnInit {
 
     ngOnInit() {
 
-        this.schemeform = this.fb.group({
+        this.schemeForm = this.fb.group({
             name: [null, Validators.required]
         });
     }
@@ -48,7 +48,7 @@ export class SchemeTableComponent implements OnInit {
                 key => {
                     scheme.id = key;
                     this.schemes.push(scheme);
-                    this.schemeform.reset();
+                    this.schemeForm.reset();
                 },
                 error => this.logger.error2(error));
     }

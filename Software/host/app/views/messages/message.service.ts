@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { MessageModel } from '../../models';
+import { GroupCommand, MessageModel } from '../../models';
 
 @Injectable()
 export class MessageService extends HttpDataService<MessageModel> {
@@ -17,6 +17,17 @@ export class MessageService extends HttpDataService<MessageModel> {
         return this.http
             .get(`${this.url}/${confid}`)
             .map((r: Response) => r.json())
+            .catch(handleResponseError);
+    }
+
+    /**
+     * Удаляет сообщения
+     * @param c
+     */
+    delete(c: GroupCommand): Observable<any> {
+
+        return this.http
+            .post(`${this.url}/delete`, c)
             .catch(handleResponseError);
     }
 }

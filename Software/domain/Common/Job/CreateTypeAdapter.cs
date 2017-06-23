@@ -4,6 +4,7 @@ using domain.Conference.Command;
 using domain.Element.Command;
 using domain.Employee.Command;
 using domain.Hall.Command;
+using domain.Message.Command;
 using domain.Organization;
 using domain.Organization.Command;
 using domain.Scheme.Command;
@@ -44,7 +45,13 @@ namespace domain.Common.Job
             // CreateHallCommand --> Hall
             TypeAdapterConfig<CreateHallCommand, Hall.Hall>
                 .ForType();
-            
+
+            #endregion
+
+            #region
+            // CreateMessageCommand --> Message
+            TypeAdapterConfig<CreateMessageCommand, Message.Message>
+                .ForType();
             #endregion
 
             #region Organization
