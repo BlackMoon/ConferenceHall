@@ -1,0 +1,42 @@
+﻿<p-dataTable dataKey="id" [value]="messages" [rows]="10" [editable]="true" selectionMode="{{this.editMode ? 'multiple' : ''}}" [(selection)]="selectedMessages" styleClass="no-header">
+    <p-header *ngIf="!readOnly">
+        <div class="ui-g">
+            <div class="ui-g-12 ui-g-nopad">
+                <div class="ui-toolbar-group-right">
+                    <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
+                </div>
+            </div>
+        </div>
+    </p-header>
+    <p-footer>
+        
+        <form [formGroup]="messageForm" (ngSubmit)="addMessage(messageForm.value)">
+            <div class="ui-g">
+                <div class="ui-g-2 ui-g-nopad">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedMessages.length === 0" *ngIf="editMode" (click)="removeRows()"></button>
+                    </div>
+                </div>
+                <div class="ui-g-8 ui-g-nopad">
+                    <textarea pInputTextarea formControlName="content" rows="3" class="w100p"></textarea>
+                </div>
+                <div class="ui-g-2 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">
+                        <button type="submit" pButton icon="fa-plus" title="Добавить контакт" [disabled]="!messageForm.valid"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-footer>
+    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
+    <p-column field="content" [editable]="true">
+        <ng-template let-col let-contact="rowData" pTemplate="editor">
+            <textarea pInputTextarea [(ngModel)]="contact[col.field]" rows="3" class="w100p"></textarea>
+        </ng-template>
+    </p-column>
+    <p-column field="active" [style]="{'text-align': 'center', 'width': '15%'}">
+        <ng-template let-message="rowData" pTemplate="body">
+            <p-inputSwitch onLabel="Вкл" offLabel="Откл" [(ngModel)]="message.active" (onChange)="$event.originalEvent.stopPropagation()"></p-inputSwitch>
+        </ng-template>
+    </p-column>
+</p-dataTable>
