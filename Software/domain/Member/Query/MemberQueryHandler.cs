@@ -10,8 +10,7 @@ namespace domain.Member.Query
 {
     public class EmployeeQueryHandler : 
         KeyObjectQueryHandler<FindMemberByIdQuery, Member>,
-        IQueryHandler<FindMembersQuery, IEnumerable<Member>>,
-        IQueryHandler<FindMemberSeatQuery, Member>
+        IQueryHandler<FindMembersQuery, IEnumerable<Member>>       
     {
 
         public EmployeeQueryHandler(IDbManager dbManager) : base(dbManager)
@@ -63,33 +62,20 @@ namespace domain.Member.Query
                 .Column("m.id")
                 .Column("m.seat")
                 .Column("m.state")
-                .Column("e.name")
-                .Column("e.position")
-                .Column("o.name job")
-                .Join("conf_hall.employees e ON e.id = m.employee_id")
-                .Join("conf_hall.organizations o ON o.id = e.org_id")
-                .Where("m.id = @id");
+                .Where("m.id = @id"); 
+            
+            if (query.FullInfo)
+            {
+                sqlBuilder
+                    .Column("e.name")
+                    .Column("e.position")
+                    .Column("o.name job")
+                    .Join("conf_hall.employees e ON e.id = m.employee_id")
+                    .Join("conf_hall.organizations o ON o.id = e.org_id");
+            }   
 
             DbManager.Open();
             return DbManager.DbConnection.QueryFirstOrDefault<Member>(sqlBuilder.ToString(), new { id = query.Id });
-        }
-
-        public Member Execute(FindMemberSeatQuery query)
-        {
-            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conf_members m")
-                .Column("m.id")
-                .Column("m.seat")
-                .Column("m.state")
-                .Where("m.id = @memberId")
-                .Where("m.conf_id = @id");
-
-            DbManager.Open();
-            return DbManager.DbConnection.QueryFirstOrDefault<Member>(sqlBuilder.ToString(), new { id = query.Id, memberId = query.MemberId });
-        }
-
-        public Task<Member> ExecuteAsync(FindMemberSeatQuery query)
-        {
-            throw new NotImplementedException();
-        }
+        }             
     }
 }
