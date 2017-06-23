@@ -3,7 +3,7 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { GroupCommand, SchemeModel } from '../../models';
+import { SchemeModel } from '../../models';
 import MapUtils from '../../common/map-utils';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class SchemeService extends HttpDataService<SchemeModel> {
     constructor(http: Http) { super(http); }
 
     /**
-     * Добавить/убрать из избранного
+     * Копировать схему
      */
     copy(key): Observable<any> {
 
@@ -42,7 +42,9 @@ export class SchemeService extends HttpDataService<SchemeModel> {
      * Удаляет схемы
      * @param c
      */
-    delete(c: GroupCommand): Observable<any> {
+    delete(ids: number[]): Observable<any> {
+
+        let c = { ids: ids };
 
         return this.http
             .post(`${this.url}/delete`, c)

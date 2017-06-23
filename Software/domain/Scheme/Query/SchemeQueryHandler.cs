@@ -43,7 +43,8 @@ namespace domain.Scheme.Query
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.hall_scheme s")
                 .Column("s.id")
                 .Column("s.name")                
-                .Where("s.hall_id = @hallid");            
+                .Where("s.hall_id = @hallid")
+                .OrderBy("s.id");            
            
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Scheme>(sqlBuilder.ToString(), new { hallid = query.HallId });

@@ -19,8 +19,7 @@ import { GroupListComponent } from "./group-list.component";
 import { GroupService } from "./group.service";
 
 @NgModule({
-    declarations: [GroupListComponent],
-    exports: [],
+    declarations: [GroupListComponent],   
     imports: [
         ButtonModule,
         CommonModule,

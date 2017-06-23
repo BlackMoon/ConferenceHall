@@ -11,8 +11,6 @@ namespace domain.Employee.Command
 
         public string Position { get; set; }
        
-        public SysUser.SysUser User { get; set; }
-
-        public IList<Contact> Contacts { get; set; }
+        public SysUser.SysUser User { get; set; }        
     }
 }

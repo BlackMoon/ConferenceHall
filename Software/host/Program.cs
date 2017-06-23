@@ -45,81 +45,66 @@ namespace host
 
                 if (eventArgs != null)
                 {
-                    NameValueCollection nvc;
-
                     string info = eventArgs.AdditionalInformation;
-                    int confId, memberId;
-                    
-                    switch (eventArgs.Condition.ToLower())
+
+                    NameValueCollection nvc = nvc = new NameValueCollection();
+
+                    // строка вида [confid=..&id=...&oldseat=...]
+                    foreach (string s in Regex.Split(info, "&"))
                     {
-                        case "conf_members_change":
-                        case "conf_members_new":
+                        string[] pair = Regex.Split(s, "=");
+                        if (pair.Length == 2)
+                        {
+                            nvc.Add(pair[0], pair[1]);
+                        }
+                    }
 
-                            nvc = new NameValueCollection();
+                    string group = nvc["confid"];
+                    int confId, memberId;
+                    if (int.TryParse(group, out confId) && Broadcaster.GetVolume(group) > 0)
+                    {
+                        switch (eventArgs.Condition.ToLower())
+                        {
+                            case "conf_members_change":
 
-                            // строка вида [confid=..&id=...&oldseat=...]
-                            foreach (string s in Regex.Split(info, "&"))
-                            {
-                                string[] pair = Regex.Split(s, "=");
-                                if (pair.Length == 2)
+                                if (int.TryParse(nvc["id"], out memberId))
                                 {
-                                    nvc.Add(pair[0], pair[1]);
-                                }
-                            }
-
-                            info = nvc["confid"];
-                            if (int.TryParse(info, out confId) && Broadcaster.GetVolume(info) > 0 && int.TryParse(nvc["id"], out memberId))
-                            {
-                                Member member;
-                                if (nvc.AllKeys.Contains("oldseat"))
-                                {
-                                    member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() {Id = confId, MemberId = memberId});
+                                    var member = queryDispatcher.Dispatch<FindMemberSeatQuery, Member>(new FindMemberSeatQuery() { Id = confId, MemberId = memberId });
                                     member.OldSeat = nvc["oldseat"];
+                                    // отправить уведомления signalR клиенту(ам)
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
                                 }
-                                else
+
+                                break;
+
+                            case "conf_members_new":
+
+                                if (int.TryParse(nvc["id"], out memberId))
                                 {
-                                    member = queryDispatcher.Dispatch<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = memberId });
+                                    var member = queryDispatcher.Dispatch<FindMemberByIdQuery, Member>(new FindMemberByIdQuery() { Id = memberId });
+                                    // отправить уведомления signalR клиенту(ам)
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
                                 }
-                                // отправить уведомления signalR клиенту(ам)
-                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).ConfirmMember(member);
-                            }
 
-                            break;
+                                break;
 
-                        case "conf_members_del":
+                            case "conf_members_del":
 
-                            nvc = new NameValueCollection();
+                                if (int.TryParse(nvc["id"], out memberId))
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).DeleteMember(memberId);
 
-                            // строка вида [confid=..&id=]
-                            foreach (string s in Regex.Split(info, "&"))
-                            {
-                                string[] pair = Regex.Split(s, "=");
-                                if (pair.Length == 2)
-                                {
-                                    nvc.Add(pair[0], pair[1]);
-                                }
-                            }
+                                break;
 
-                            info = nvc["confid"];
-                            if (int.TryParse(info, out confId) && Broadcaster.GetVolume(info) > 0 && int.TryParse(nvc["id"], out memberId))
-                            {   
-                                // отправить уведомления signalR клиенту(ам)
-                                connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).DeleteMember(memberId);
-                            }
+                            case "conf_messages_change":
 
-                            break;
-
-                        case "conf_messages_change":
-                        
-                            if (int.TryParse(info, out confId) && Broadcaster.GetVolume(info) > 0)
-                            {
-                                var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() {Id = confId});
+                                var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() { Id = confId });
                                 // отправить уведомления signalR клиенту(ам)
                                 connectionManager.GetHubContext<Broadcaster>().Clients.Group(info).SendTickers(tickers);
-                            }
 
-                            break;
+                                break;
+                        }
                     }
+                    
                 }
             };
             listener.Start(true);

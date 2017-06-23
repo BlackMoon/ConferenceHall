@@ -13,8 +13,7 @@ import { SchemeService } from './scheme.service';
 })
 export class SchemeTableComponent implements OnInit {
 
-    editMode: boolean;
-    
+    editMode: boolean;    
     schemeForm: FormGroup;
 
     @Input()
@@ -54,8 +53,9 @@ export class SchemeTableComponent implements OnInit {
     }
 
     copyScheme(e, id: number) {
-
+        
         e.stopPropagation();
+
         this.schemeService
             .copy({ id: id })
             .subscribe(scheme => this.schemes.push(scheme));
@@ -72,12 +72,10 @@ export class SchemeTableComponent implements OnInit {
             header: 'Вопрос',
             icon: 'fa fa-trash',
             message: `Удалить выбранные записи?`,
-            accept: _ => {
-
-                let c = { ids: this.selectedSchemes.map(s => s.id) };
+            accept: _ => {                
 
                 this.schemeService
-                    .delete(c)
+                    .delete(this.selectedSchemes.map(s => s.id))
                     .subscribe(
                     _ => {
 

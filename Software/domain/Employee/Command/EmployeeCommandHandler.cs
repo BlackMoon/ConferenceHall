@@ -1,13 +1,12 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Dapper.Contrib.Extensions;
 using domain.Common.Command;
-using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace domain.Employee.Command
 {
@@ -43,26 +42,7 @@ namespace domain.Employee.Command
 
                 await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "user_save");
             }
-
-            // добавить новые контакты
-            if (command.Contacts.Any())
-            {
-                string[] values = new string[command.Contacts.Count];
-
-                for (int i = 0; i < command.Contacts.Count; i++)
-                {
-                    Contact c = command.Contacts[i];
-
-                    DbManager.AddParameter($"active{i}", c.Active);
-                    DbManager.AddParameter($"address{i}", c.Address);
-                    DbManager.AddParameter($"kind{i}", c.Kind);
-                    DbManager.AddParameter($"employeeId{i}", newId);
-
-                    values[i] = $"(@active{i}, @address{i}, @kind{i}, @employeeId{i})";
-                }
-
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.contacts(active, address, kind, employee_id) VALUES {string.Join(", ", values)}");
-            }
+            
             DbManager.CommitTransaction();
 
             return newId;
@@ -73,11 +53,7 @@ namespace domain.Employee.Command
             await DbManager.OpenAsync();
             DbManager.BeginTransaction();
             
-            bool updated = await DbManager.DbConnection.UpdateAsync(command);
-
-            // удалить пред. контакты (параметр pemployee_id из хранимой процедуры)
-            DbManager.AddParameter("pemployee_id", command.Id);
-            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.contacts WHERE employee_id = @pemployee_id");
+            bool updated = await DbManager.DbConnection.UpdateAsync(command);            
 
             // Привязать/отвязать пользователя
             if (command.User != null)
@@ -102,28 +78,7 @@ namespace domain.Employee.Command
                         break;
                 }
 
-            }
-
-            // добавить новые контакты
-            if (command.Contacts.Any())
-            {
-                string[] values = new string[command.Contacts.Count];
-
-                DbManager.ClearParameters();
-                for (int i = 0; i < command.Contacts.Count; i++)
-                {
-                    Contact c = command.Contacts[i];
-
-                    DbManager.AddParameter($"active{i}", c.Active);
-                    DbManager.AddParameter($"address{i}", c.Address);
-                    DbManager.AddParameter($"kind{i}", c.Kind);
-                    DbManager.AddParameter($"employeeId{i}", command.Id);
-
-                    values[i] = $"(@active{i}, @address{i}, @kind{i}, @employeeId{i})";
-                }
-
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.contacts(active, address, kind, employee_id) VALUES {string.Join(", ", values)}");
-            }
+            }           
 
             DbManager.CommitTransaction();
             return updated;

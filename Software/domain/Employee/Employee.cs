@@ -17,13 +17,12 @@ namespace domain.Employee
         /// <summary>
         /// Должность
         /// </summary>
-        public string Position { get; set; }
-        
+        public string Position { get; set; }        
 
         [Write(false)]
         public SysUser.SysUser User { get; set; }
 
         [Write(false)]
-        public IList<Contact> Contacts { get; set; }
+        public IList<Contact.Contact> Contacts { get; set; }
     }
 }

@@ -58,12 +58,10 @@ export class HallTableComponent implements OnInit {
             header: 'Вопрос',
             icon: 'fa fa-trash',
             message: `Удалить выбранные записи?`,
-            accept: _ => {
-
-                let c = { ids: this.selectedHalls.map(h => h.id) };
+            accept: _ => {                
 
                 this.hallService
-                    .delete(c)
+                    .delete(this.selectedHalls.map(h => h.id))
                     .subscribe(
                     _ => {
 

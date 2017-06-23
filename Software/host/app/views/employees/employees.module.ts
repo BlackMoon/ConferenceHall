@@ -13,19 +13,20 @@ import {
     ToggleButtonModule
 } from 'primeng/primeng';
 
-import { ContactTableComponent } from './contact-table.component';
+import { ContactsModule } from '../contacts/contacts.module';
 import { EmployeeDetailComponent } from './employee-detail.component';
 import { SysUserDetailComponent } from './sysuser-detail.component';
 import { EmployeeRoutingModule } from './employee-routing.module';
 import { EmployeeService } from './employee.service';
 
 @NgModule({
-    declarations: [ContactTableComponent, EmployeeDetailComponent, SysUserDetailComponent],
+    declarations: [ EmployeeDetailComponent, SysUserDetailComponent],
     imports: [
         AccordionModule,
         ButtonModule,
         CheckboxModule,
         CommonModule,
+        ContactsModule,
         DataTableModule,
         DropdownModule,   
         FormsModule,      

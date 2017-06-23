@@ -19,6 +19,10 @@ namespace domain.Scheme
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public float GridInterval { get; set; }
 
+        [Column("hall_id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int HallId { get; set; }
+
         public string Name { get; set; }
         
         public string Plan { get; set; }

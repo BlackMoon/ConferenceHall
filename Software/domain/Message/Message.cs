@@ -10,7 +10,7 @@ namespace domain.Message
     /// </summary>
     [Table("conf_hall.conf_messages")]
     public class Message : KeyObject, ICommand
-    {
+    {        
         [Column("conf_id")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int ConferenceId { get; set; }

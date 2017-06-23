@@ -34,11 +34,8 @@ namespace domain.Scheme.Command
         {
             DbManager.AddParameter("phall_scheme_source_id", command.Id);
 
-            IDataParameter pId = DbManager.AddParameter("phall_scheme_new_id");
-            pId.Direction = ParameterDirection.Output;
-
-            IDataParameter pName = DbManager.AddParameter("phall_scheme_new_name");
-            pName.Direction = ParameterDirection.Output;
+            IDataParameter pId = DbManager.AddParameter("phall_scheme_new_id", DbType.Int32, ParameterDirection.Output);
+            IDataParameter pName = DbManager.AddParameter("phall_scheme_new_name", DbType.String, ParameterDirection.Output);            
             
             int returnValue = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "hall_scheme_copy");
             Logger.LogInformation($"Modified {returnValue} records");

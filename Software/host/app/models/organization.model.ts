@@ -4,8 +4,8 @@
  * Команда мульти-обработки узлов
  */
 export class NodeGroupCommand {
-    organizationIds: number[];
     employeeIds: number[];
+    organizationIds: number[];    
 }
 
 /**

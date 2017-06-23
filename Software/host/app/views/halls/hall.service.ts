@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { HallModel, GroupCommand } from '../../models/index';
+import { HallModel } from '../../models/index';
 
 import MapUtils from '../../common/map-utils';
 
@@ -24,9 +24,11 @@ export class HallService extends HttpDataService<HallModel> {
 
     /**
      * Удаляет схемы
-     * @param c
+     * @param ids
      */
-    delete(c: GroupCommand): Observable<any> {
+    delete(ids: number[]): Observable<any> {
+
+        let c = { ids: ids };
 
         return this.http
             .post(`${this.url}/delete`, c)

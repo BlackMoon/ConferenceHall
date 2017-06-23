@@ -16,30 +16,30 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
 
     /**
      * Изменить период
-     * @param confid
+     * @param id
      * @param start
      * @param end
      */
-    changePeriod(confid: number, start, end): Observable<any> {
+    changePeriod(id: number, start, end): Observable<any> {
 
         let body = [{ op: 'replace', path: '/startdate', value: start }, { op: 'replace', path: '/enddate', value: end }];
 
         return this.http
-            .patch(`${this.url}/${confid}`, body)
+            .patch(`${this.url}/${id}`, body)
             .catch(handleResponseError);
     }
 
     /**
      * Изменить состояние
-     * @param confid
+     * @param id
      * @param state
      */
-    changeState(confid: number, state: ConfState): Observable<any> {
+    changeState(id: number, state: ConfState): Observable<any> {
 
         let body = [{op: 'replace', path: '/state', value: state }];
 
         return this.http
-            .patch(`${this.url}/${confid}`, body)
+            .patch(`${this.url}/${id}`, body)
             .catch(handleResponseError);    
     }
 

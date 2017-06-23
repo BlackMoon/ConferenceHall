@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Dapper;
+using domain.Common.Query;
+using Kit.Dal.DbManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using domain.Common.Query;
-using Dapper;
-using Kit.Dal.DbManager;
 
 namespace domain.Employee.Query
 {
@@ -33,7 +33,7 @@ namespace domain.Employee.Query
                 .Where("e.id = @id");
 
             Employee prev = null;
-            Func<Employee, Contact, SysUser.SysUser, Employee> map = (e, c, u) =>
+            Func<Employee, Contact.Contact, SysUser.SysUser, Employee> map = (e, c, u) =>
             {
                 if (prev != null && prev.Id == e.Id)
                 {
@@ -46,7 +46,7 @@ namespace domain.Employee.Query
                 e.User = u;                
 
                 prev = e;
-                prev.Contacts = new List<Contact>();
+                prev.Contacts = new List<Contact.Contact>();
 
                 if (c != null)
                     prev.Contacts.Add(c);

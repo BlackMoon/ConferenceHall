@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angul
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { FindMembersQuery, GroupCommand, MemberModel } from '../../models';
+import { FindMembersQuery, MemberModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';
 
@@ -61,8 +61,10 @@ export class MemberService extends HttpDataService<MemberModel> {
      * Удаляет участников
      * @param c
      */
-    delete(c: GroupCommand): Observable<any> {
-        
+    delete(ids: number[]): Observable<any> {
+
+        let c = { ids: ids };
+
         return this.http
             .post(`${this.url}/delete`, c)
             .catch(handleResponseError);

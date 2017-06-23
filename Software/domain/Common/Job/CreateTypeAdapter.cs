@@ -1,6 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using domain.Conference.Command;
+﻿using domain.Conference.Command;
+using domain.Contact.Command;
 using domain.Element.Command;
 using domain.Employee.Command;
 using domain.Hall.Command;
@@ -10,6 +9,8 @@ using domain.Organization.Command;
 using domain.Scheme.Command;
 using Kit.Core.CQRS.Job;
 using Mapster;
+using System;
+using System.Threading.Tasks;
 
 namespace domain.Common.Job
 {
@@ -17,6 +18,12 @@ namespace domain.Common.Job
     {
         public void Run()
         {
+            #region Contact
+            // CreateContactCommand --> Contact
+            TypeAdapterConfig<CreateContactCommand, Contact.Contact>
+                .ForType();
+            #endregion
+
             #region Conference
             // CreateConferenceCommand --> Conference
             TypeAdapterConfig<CreateConferenceCommand, Conference.Conference>

@@ -214,11 +214,9 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     moveAllToSource() {
-
-        let c = { ids: this.members.map(s => s.id) };
-
+        
         this.memberService
-            .delete(c)
+            .delete(this.members.map(s => s.id))
             .subscribe(
             _ => {
                 this.members.length = 0;        
@@ -228,11 +226,9 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     moveToSource() {
-
-        let c = { ids: this.selectedMembers.map(s => s.id) };
-
+        
         this.memberService
-            .delete(c)
+            .delete(this.selectedMembers.map(s => s.id))
             .subscribe(
             _ => {
                

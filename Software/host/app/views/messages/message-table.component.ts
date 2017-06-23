@@ -51,12 +51,12 @@ export class MessageTableComponent {
         this.messageService
             .add(message)
             .subscribe(
-            key => {
-                message.id = key;
-                this.messages.push(message);
-                this.messageForm.reset();
-            },
-            error => this.logger.error2(error));
+                key => {
+                    message.id = key;
+                    this.messages.push(message);
+                    this.messageForm.reset();
+                },
+                error => this.logger.error2(error));
     }
 
     changeActive(e, message) {
@@ -78,8 +78,8 @@ export class MessageTableComponent {
             this.messageService
                 .changeContent(message.id, content)
                 .subscribe(
-                _ => message.content = content,
-                error => this.logger.error2(error));
+                    _ => message.content = content,
+                    error => this.logger.error2(error));
         }
     }
 

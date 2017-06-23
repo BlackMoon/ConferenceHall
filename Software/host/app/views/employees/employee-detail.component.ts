@@ -74,9 +74,7 @@ export class EmployeeDetailComponent implements OnInit {
 
     save(event, employee) {
         
-        event.preventDefault();
-
-        employee.contacts = this.contacts;
+        event.preventDefault();        
 
         // существующего пользователя можно только отвязать, а нового привязать !
         let user = employee.user;
