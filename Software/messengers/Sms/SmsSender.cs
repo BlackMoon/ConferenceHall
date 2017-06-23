@@ -9,8 +9,9 @@ using MimeKit;
 using Newtonsoft.Json;
 
 namespace messengers.Sms
-    [SenderKind("Sms")]
+    
 {
+    [SenderKind("Sms")]
     public class SmsSender : IMessageSender
     {
         public class CostMessages
