@@ -15,6 +15,23 @@ export class MemberService extends HttpDataService<MemberModel> {
     constructor(http: Http) { super(http); }
 
     /**
+     * Добавить участников (список) в конференцию
+     * @param confId
+     * @param members
+     * возвращает созданных участников (с id)
+     */
+    addMembers(confId, members: MemberModel[]): Observable<any> {
+
+        let body = { conferenceId: confId, members: members };
+
+        return this.http
+            .post(`${this.url}`, body)
+            .map((r: Response) => r.json())
+            .catch(handleResponseError);
+    }
+
+
+    /**
      * Поменять место
      * @param memberid     
      */

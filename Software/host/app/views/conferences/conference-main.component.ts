@@ -30,7 +30,10 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     
     conferenceForm: FormGroup;
     locale: any;
-   
+
+    // id нужен для добавления новых участников
+    id: number;             
+
     schemeId: number;
     members: MemberModel[] = [];
 
@@ -111,12 +114,12 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         this.route.params
             .switchMap((params: Params) => {
                 // (+) converts string 'id' to a number
-                let key = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
                 
-                if (key) {
-                    this.loadMembers(key);
-                    this.messageTable.conferenceId = key;
-                    return this.conferenceService.get(key);
+                if (this.id) {
+                    this.loadMembers(this.id);
+                    this.messageTable.conferenceId = this.id;
+                    return this.conferenceService.get(this.id);
                 }
 
                 return Observable.empty();
@@ -213,7 +216,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .delete(c)
             .subscribe(
             _ => {
-
+               
                 this.selectedMembers.forEach(member => {
                     let ix = this.members.findIndex(m => m.id === member.id);
                     this.members.splice(ix, 1);
@@ -229,11 +232,26 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         
         // employee --> member
         let members = this.selectedEmployees.map(e => <any>{ employeeId: e.id, name: e.name, job: e.job, position: e.position });
+       
+        this.memberService
+            .addMembers(this.id, members)
+            .subscribe(
+                // only new members <id, employeeId>
+                nmembers => {
+                   
+                    nmembers.forEach(nm => {
+                        let member:MemberModel = members.find(m => m.employeeId === nm.employeeId);
+                       
+                        if (member) {
+                            member.id = nm.id;
+                            this.members.push(member);
+                        }
+                    });
 
-        members.forEach(member => {
-            let ix = this.members.findIndex(m => m.employeeId === member.employeeId);
-            (ix === -1) && this.members.push(member);
-        });
+                    this.selectedMembers.length = 0;
+                },
+                error => this.logger.error2(error));
+       
     }
 
     onResize() {
@@ -261,7 +279,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 id => {
 
                     if (method === "add")
-                        this.conferenceForm.patchValue({ id: id });
+                        this.id = id;
 
                     this.logger.info("Ok");
                 },
@@ -275,7 +293,10 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     schemeLoaded() {
 
         [].forEach.call(this.members, m => (m.state === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
-        this.seats = this.schemeMain.getMarkCodes().map(c => <SelectItem>{ label: c, value: c });
+
+        this.seats = this.schemeMain
+            .getMarkCodes()
+            .map(c => <SelectItem>{ label: c, value: c });
     }
 
     showSchemeChange(value) {
