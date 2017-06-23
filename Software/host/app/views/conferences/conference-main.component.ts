@@ -91,7 +91,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
         this.conferenceForm = this.fb.group({
             id: [null],
-            confState: [null],
+            state: [null],
             subject: [null, Validators.required],
             description: [null],
             hallId: [null],
@@ -151,7 +151,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     idChange(value) {
-        
+        debugger;
         this.requireValidation = true;
 
         ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {
@@ -216,7 +216,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     onResize() {
         
-        // [Участники, Схема]
+        // Вкладки [Участники, Схема]
         const computedTabs: number[] = [2, 3];
       
         let tabs = this.accordion.el.nativeElement.querySelectorAll("div.ui-accordion-content");
@@ -231,14 +231,18 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         conference.startDate && (conf.startDate = this.dateToUtcPipe.transform(conference.startDate));
         conference.endDate && (conf.endDate = this.dateToUtcPipe.transform(conference.endDate));
 
-        conf.members = this.members;
-        conf.messages = this.messageTable.messages;
-
         delete conf["showScheme"];
-        
-        this.conferenceService[conference.id ? "update" : "add"](conf)
+
+        let method = conf.id ? "update" : "add";
+        this.conferenceService[method](conf)
             .subscribe(
-                _ => this.logger.info("Ok"),
+                id => {
+
+                    if (method === "add")
+                        this.conferenceForm.patchValue({ id: id });
+
+                    this.logger.info("Ok");
+                },
                 error => this.logger.error2(error));
     }
 

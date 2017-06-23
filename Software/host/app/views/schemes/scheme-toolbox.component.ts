@@ -55,7 +55,7 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
                     this.header = g.name;
                     this.gridButtonsVisible = true;
                     this.groupId = g.id;
-                    this.groupType = g.groupType;
+                    this.groupType = g.type;
                 })
         );
 

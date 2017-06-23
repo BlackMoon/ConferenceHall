@@ -238,7 +238,7 @@ export class ConferenceScheduleComponent {
                                     hallId: event.hallId,
                                     subject: event.title,
                                     description: event.description,
-                                    confState: ConfState.Planned
+                                    state: ConfState.Planned
                                 };
                             this.conferenceTable.addConferenceToList(conference);
                         }

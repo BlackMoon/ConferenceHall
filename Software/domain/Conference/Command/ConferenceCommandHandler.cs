@@ -68,55 +68,7 @@ namespace domain.Conference.Command
             }
 
             await DbManager.OpenAsync();
-            DbManager.BeginTransaction();
-            
-            int newId = await DbManager.ExecuteScalarAsync<int>(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) values({string.Join(",", values)}) RETURNING id");
-
-            // добавить новых участников
-            if (command.Members.Any())
-            {
-                values.Clear();
-                values.Capacity = command.Members.Count;
-
-                DbManager.ClearParameters();
-                for (int i = 0; i < command.Members.Count; i++)
-                {
-                    Member.Member m = command.Members[i];
-
-                    DbManager.AddParameter($"confId{i}", newId);
-                    DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
-                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
-                    DbManager.AddParameter($"state{i}::conf_member_state", m.State);
-
-                    values.Add($"(@confId{i}, @seat{i}, @employeeId{i})");
-                }
-
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, seat, employee_id) VALUES {string.Join(", ", values)}");
-            }
-
-            // добавить новые сообщения
-            if (command.Messages.Any())
-            {
-                values.Clear();
-                values.Capacity = command.Messages.Count;
-
-                DbManager.ClearParameters();
-                for (int i = 0; i < command.Messages.Count; i++)
-                {
-                    Message.Message m = command.Messages[i];
-
-                    DbManager.AddParameter($"confId{i}", newId);
-                    DbManager.AddParameter($"active{i}", m.Active);
-                    DbManager.AddParameter($"content{i}", m.Content);
-
-                    values.Add($"(@confId{i}, @active{i}, @content{i})");
-                }
-
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, active, content) VALUES {string.Join(", ", values)}");
-            }
-
-            DbManager.CommitTransaction();
-            return newId;
+            return await DbManager.ExecuteScalarAsync<int>(CommandType.Text, $"INSERT INTO conf_hall.conferences({string.Join(",", columns)}) values({string.Join(",", values)}) RETURNING id");
         }
 
         public override async Task<bool> ExecuteAsync(Conference command)
@@ -126,7 +78,7 @@ namespace domain.Conference.Command
                 "subject = @subject",
                 "description = @description",
                 "period = tsrange(@startDate, @endDate)",
-                "state = @state::conf_state"
+                "state = @state"
             };
 
             DbManager.AddParameter("id", command.Id);
@@ -149,59 +101,10 @@ namespace domain.Conference.Command
             }
 
             await DbManager.OpenAsync();
-            DbManager.BeginTransaction();
 
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");
             Logger.LogInformation($"Modified {updated} records");
-            
-            // удалить пред. участников
-            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_members WHERE conf_id = @id");
 
-            // удалить пред. сообщения
-            await DbManager.ExecuteNonQueryAsync(CommandType.Text, "DELETE FROM conf_hall.conf_messages WHERE conf_id = @id");
-
-            // добавить новых участников
-            if (command.Members.Any())
-            {
-                string[] values = new string[command.Members.Count];
-
-                DbManager.ClearParameters();
-                for (int i = 0; i < command.Members.Count; i++)
-                {
-                    Member.Member m = command.Members[i];
-
-                    DbManager.AddParameter($"confId{i}", command.Id);
-                    DbManager.AddParameter($"employeeId{i}", m.EmployeeId);
-                    DbManager.AddParameter($"seat{i}", m.Seat ?? (object)DBNull.Value);
-                    DbManager.AddParameter($"state{i}", m.State);
-
-                    values[i] = $"(@confId{i}, @employeeId{i}, @seat{i}, @state{i}::conf_member_state)";
-                }
-
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_members(conf_id, employee_id, seat, state) VALUES {string.Join(", ", values)}");
-            }
-            
-            // добавить новые сообщения
-            if (command.Messages.Any())
-            {
-                string[] values = new string[command.Messages.Count];
-
-                DbManager.ClearParameters();
-                for (int i = 0; i < command.Messages.Count; i++)
-                {
-                    Message.Message m = command.Messages[i];
-
-                    DbManager.AddParameter($"confId{i}", command.Id);
-                    DbManager.AddParameter($"active{i}", m.Active);
-                    DbManager.AddParameter($"content{i}", m.Content);
-
-                    values[i] = $"(@confId{i}, @active{i}, @content{i})";
-                }
-
-                await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"INSERT INTO conf_hall.conf_messages(conf_id, active, content) VALUES {string.Join(", ", values)}");
-            }
-
-            DbManager.CommitTransaction();
             return updated > 0;
         }
 

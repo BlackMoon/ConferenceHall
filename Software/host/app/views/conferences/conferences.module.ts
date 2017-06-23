@@ -16,8 +16,7 @@ import {
     SplitButtonModule,
     TabViewModule,
     ToggleButtonModule,
-    ToolbarModule,
-    PanelModule
+    ToolbarModule
 } from 'primeng/primeng';
 
 import { HubService } from "../../common/hub-service";
@@ -62,8 +61,7 @@ import { SchemesModule } from '../schemes/schemes.module';
         SplitButtonModule,
         TabViewModule,
         ToggleButtonModule,
-        ToolbarModule,
-        PanelModule],
+        ToolbarModule],
     providers: [ConferenceService, DatePipe, DateToUtcPipe, HubService]
 })
 export class ConferencesModule { }

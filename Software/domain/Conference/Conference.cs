@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using domain.Common;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using domain.Common;
 using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace domain.Conference
 {
@@ -56,9 +56,9 @@ namespace domain.Conference
      
         public string Description { get; set; }
 
-        public ConfState ConfState { get; set; }
+        public ConfState State { get; set; }
         
-        [JsonIgnore]
+        /*[JsonIgnore]
         public string State
         {
             // pgSql::conf_state --> lowerCase
@@ -69,7 +69,7 @@ namespace domain.Conference
                 Enum.TryParse(value, true, out confState);
                 ConfState = confState;
             }
-        }
+        }*/
 
         [Dapper.Contrib.Extensions.Write(false)]
         public IList<Member.Member> Members { get; set; }

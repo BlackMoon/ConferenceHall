@@ -2,6 +2,7 @@
 using domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using NpgsqlTypes;
 
 namespace domain.SysUser
 {
@@ -24,6 +25,7 @@ namespace domain.SysUser
     {
         User,
 
+        [PgName("poweruser")]
         PowerUser,
 
         Admin,
@@ -44,20 +46,7 @@ namespace domain.SysUser
         [Dapper.Contrib.Extensions.Write(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public UserOperation Operation { get; set; }
-
-        [Dapper.Contrib.Extensions.Write(false)]
-        public UserRole UserRole { get; set; }
-        
-        [JsonIgnore]
-        public string Role
-        {
-            get { return UserRole.ToString(); }
-            set
-            {
-                UserRole userRole;
-                Enum.TryParse(value, true, out userRole);
-                UserRole = userRole;
-            }
-        }
+       
+        public UserRole Role { get; set; }
     }
 }

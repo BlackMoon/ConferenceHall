@@ -57,19 +57,7 @@ namespace domain.Member
         /// Статус
         /// </summary>
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public MemberState MemberState { get; set; }
-        
-        [JsonIgnore]
-        public string State
-        {
-            get { return MemberState.ToString().ToLower(); }
-            set
-            {
-                MemberState memberState;
-                Enum.TryParse(value, true, out memberState);
-                MemberState = memberState;
-            }
-        }
+        public MemberState State { get; set; }
 
     }
 }

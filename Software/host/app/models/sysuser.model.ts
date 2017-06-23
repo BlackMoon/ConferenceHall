@@ -49,13 +49,13 @@ export class SysUserModel extends KeyModel  {
     login: string;
     password: string;
     operation: UserOperation;
-    userRole: UserRole;
+    role: UserRole;
 
     constructor() {
         super();
 
         this.locked = false;
         this.login = undefined;
-        this.userRole = undefined;
+        this.role = undefined;
     }
 }

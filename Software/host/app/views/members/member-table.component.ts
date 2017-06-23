@@ -72,7 +72,7 @@ export class MemberTableComponent {
 
     changeState(checked, member: MemberModel) {
         
-        member.memberState = checked ? MemberState.Confirmed : MemberState.Registered;
+        member.state = checked ? MemberState.Confirmed : MemberState.Registered;
         this.stateChanged.emit(member);     
     }
 

@@ -39,18 +39,6 @@ namespace domain.Group
         /// <summary>
         /// Тип группы
         /// </summary>
-        public GroupType GroupType { get; set; }
-
-        [Column("type")]
-        [JsonIgnore]
-        public string Type
-        {
-            set
-            {
-                GroupType groupType;
-                Enum.TryParse(value, true, out groupType);
-                GroupType = groupType;
-            }
-        }
+        public GroupType Type { get; set; }
     }
 }

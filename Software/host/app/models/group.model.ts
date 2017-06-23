@@ -9,13 +9,13 @@ export class GroupModel extends KeyModel {
     
     name: string;
     icon?: string;
-    groupType: GroupType;
+    type: GroupType;
 
     constructor() {
         super();
     
         this.icon = undefined;
         this.name = undefined;
-        this.groupType = GroupType.Global;
+        this.type = GroupType.Global;
     }
 }

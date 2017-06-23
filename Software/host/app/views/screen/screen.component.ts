@@ -110,7 +110,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                                         let m = this.members[i];
 
                                         if (m.id === member.id) {
-                                            m.memberState = member.memberState;
+                                            m.state = member.state;
                                             m.seat = member.seat;
                                             break;
                                         }
@@ -135,7 +135,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
             .subscribe((a: Array<any>) => {
                 // занятые места
                 let members: MemberModel[] = a[1] || [];
-                [].forEach.call(members, m => this.schemeMain.toggleMark(m.seat));
+                [].forEach.call(members, m => (m.memberState === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat));
             });
 
         // clock

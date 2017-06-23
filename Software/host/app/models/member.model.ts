@@ -32,11 +32,6 @@ export class MemberModel extends KeyModel {
     name: string;
 
     /**
-     * Состояние (в режиме конференции)
-     */
-    memberState: MemberState;
-
-    /**
      * Наименование организации
      */
     job: string;
@@ -46,6 +41,10 @@ export class MemberModel extends KeyModel {
      */
     position: string;  
 
+    /**
+     * Пред. место
+     */
+    oldSeat: string;
     
     /**
      * Место
@@ -53,9 +52,9 @@ export class MemberModel extends KeyModel {
     seat: string;
 
     /**
-     * Пред. место
+     * Состояние (в режиме конференции)
      */
-    oldSeat: string;
+    state: MemberState;
 
     constructor() {
 
@@ -65,9 +64,9 @@ export class MemberModel extends KeyModel {
         this.employeeId = undefined;
         this.name = undefined;
         this.job = undefined;      
-        this.memberState = MemberState.Invited;
+        this.oldSeat = undefined;
         this.position = undefined;
         this.seat = undefined;
-        this.oldSeat = undefined;
+        this.state = MemberState.Invited;
     }
 }

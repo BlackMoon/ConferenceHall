@@ -52,33 +52,27 @@ export class FindConferencesQuery {
  * Модель. Конференция
  */
 export class ConferenceModel extends KeyModel {
-
-    confState: ConfState;
+    
     description: string;
     hallId?: number;
     schemeId?: number;
    
     startDate?: Date;
     endDate?: Date;
-   
+
+    state: ConfState;
     subject: string;
-    
-    members?: MemberModel[];
-    messages?: MessageModel[];
 
     constructor() {
         super();
-
-        this.confState = ConfState.Planned;
+        
         this.description = null;
         this.hallId = null;
         this.startDate = null;
         this.endDate = null;
+        this.state = ConfState.Planned;
         this.subject = null;
         this.schemeId = null;
-
-        this.members = undefined;
-        this.messages = undefined;
     }
 }
 

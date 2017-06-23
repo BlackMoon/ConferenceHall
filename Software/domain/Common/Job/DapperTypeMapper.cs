@@ -1,7 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using Dapper;
+﻿using Dapper;
+using domain.SysUser;
 using Kit.Core.CQRS.Job;
+using Npgsql;
+using System;
+using System.Threading.Tasks;
+using domain.Conference;
+using domain.Group;
+using domain.Member;
 
 namespace domain.Common.Job
 {
@@ -11,6 +16,11 @@ namespace domain.Common.Job
         {
             // Should column names like User_Id be allowed to match properties/fields like UserId
             DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+            NpgsqlConnection.MapEnumGlobally<ConfState>();
+            NpgsqlConnection.MapEnumGlobally<GroupType>("elgroup_type");
+            NpgsqlConnection.MapEnumGlobally<MemberState>();
+            NpgsqlConnection.MapEnumGlobally<UserRole>();
         }
 
         public Task RunAsync()
