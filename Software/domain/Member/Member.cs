@@ -29,6 +29,7 @@ namespace domain.Member
     [Table("conf_hall.conf_members")]
     public class Member : KeyObject
     {
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int EmployeeId { get; set; }
 
         public string Name { get; set; }

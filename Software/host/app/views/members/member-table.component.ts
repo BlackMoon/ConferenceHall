@@ -63,7 +63,7 @@ export class MemberTableComponent {
     constructor(
         private memberService: MemberService,
         private logger: Logger) { }
-
+    
     changeSeat(seat, member: MemberModel) {
         
         member.seat = seat;
@@ -77,6 +77,25 @@ export class MemberTableComponent {
         this.stateChanged.emit(member);     
     }
 
+    confirmMember(member) {
+
+        let found = false;
+
+        for (let i = 0; i < this.members.length; i++) {
+            let m = this.members[i];
+
+            if (m.id === member.id) {
+                m.state = member.state;
+                m.seat = member.seat;
+                found = true;
+            }
+        }
+
+        !found && this.members.push(member);
+    }
+
+    getMember = id => this.members.find(m => m.id === id);
+
     loadMembers() {
         
         this.memberService
@@ -87,6 +106,12 @@ export class MemberTableComponent {
                     this.membersLoaded.emit(members);
                 },
                 error => this.logger.error2(error));    
+    }
+
+    removeMember(id) {
+
+        let ix = this.members.findIndex(m => m.id === id);
+        this.members.splice(ix, 1);
     }
 
     selectRow(e) {

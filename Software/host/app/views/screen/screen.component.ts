@@ -22,10 +22,6 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     canvas: any;
     canvasBox: any;
 
-    initialHeight: number;
-    initialWidth: number;
-    members: MemberModel[];
-
     now: Date = new Date();
     endDate: Date;
     startDate: Date;
@@ -58,7 +54,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
      */
     ticker: string;
 
-    @ViewChild('canvasbox') canvasBoxElRef: ElementRef;
+    @ViewChild('box') boxElRef: ElementRef;
 
     @ViewChild('header') headerElRef: ElementRef;
 
@@ -98,41 +94,21 @@ export class ScreenComponent implements AfterViewInit, OnInit {
                             this.hubService
                                 .confirmMember
                                 .subscribe(member => {
-
+                                    
                                     this.schemeMain.toggleMark(member.oldSeat, false);
                                     this.schemeMain.toggleMark(member.seat, true);
-
-                                    let found = false;
-
-                                    for (let i = 0; i < this.members.length; i++) {
-                                        let m = this.members[i];
-
-                                        if (m.id === member.id) {
-                                            m.state = member.state;
-                                            m.seat = member.seat;
-                                            found = true;
-                                        }
-                                    }
-
-                                    !found && this.members.push(member);
+                                    this.memberTable.confirmMember(member);
                                 });
 
                             this.hubService
                                 .deleteMember
                                 .subscribe(id => {
 
-                                    let ix;
-                                    for (let i = 0; i < this.members.length; i++) {
-                                        let m = this.members[i];
-
-                                        if (m.id === id) {
-                                            ix = i;
-                                            this.schemeMain.toggleMark(m.seat, false);    
-                                            break;
-                                        }
+                                    let member = this.memberTable.getMember(id);
+                                    if (member) {
+                                        this.schemeMain.toggleMark(member.seat, false);   
+                                        this.memberTable.removeMember(member.id);
                                     }
-
-                                    this.members.splice(ix, 1);
                                 });
 
                             this.hubService
@@ -178,6 +154,6 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     }
     
     onResize() {
-        this.canvasBoxElRef.nativeElement.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.headerElRef.nativeElement.offsetHeight - this.footerElRef.nativeElement.offsetHeight}px`;
+        this.boxElRef.nativeElement.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.headerElRef.nativeElement.offsetHeight - this.footerElRef.nativeElement.offsetHeight}px`;
     }
 }
