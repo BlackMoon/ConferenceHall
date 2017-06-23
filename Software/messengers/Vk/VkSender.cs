@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace messengers.Vk
 {
+    [SenderKind("Vk")]
     public class VkSender : IMessageSender
     {
         private readonly VkOptions _vkSettings;
