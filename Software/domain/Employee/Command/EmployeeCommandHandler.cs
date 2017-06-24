@@ -58,6 +58,9 @@ namespace domain.Employee.Command
             // Привязать/отвязать пользователя
             if (command.User != null)
             {
+                // параметр pemployee_id для хранимой процедуры
+                DbManager.AddParameter("pemployee_id", command.Id);
+
                 switch (command.User.Operation)
                 {
                     case SysUser.UserOperation.Bind:

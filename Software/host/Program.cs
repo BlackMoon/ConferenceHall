@@ -49,7 +49,7 @@ namespace host
 
                     NameValueCollection nvc = nvc = new NameValueCollection();
 
-                    // строка вида [confid=..&id=...&oldseat=...]
+                    // строка вида [confid=..&id=..&oldseat=..]
                     foreach (string s in Regex.Split(info, "&"))
                     {
                         string[] pair = Regex.Split(s, "=");
