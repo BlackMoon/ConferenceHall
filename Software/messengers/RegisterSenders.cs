@@ -1,27 +1,37 @@
-﻿using System;
+﻿using DryIoc;
+using Kit.Core.CQRS.Job;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DryIoc;
-using Kit.Core.CQRS.Job;
 using System.Reflection;
+using System.Threading.Tasks;
+using messengers.Email;
+using messengers.Sms;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace messengers
 {
     public class RegisterSenders: IStartupJob
     {
         private readonly Assembly _assembly;
-        
+
+        private readonly IConfigurationRoot _configuration;
         private readonly IContainer _container;
-        public RegisterSenders(IContainer container)
+        private readonly IServiceCollection _services;
+
+        public RegisterSenders(IConfigurationRoot configuration, IContainer container, IServiceCollection services)
         {
             _assembly = GetType().GetTypeInfo().Assembly;
+
+            _configuration = configuration;
             _container = container;
+            _services = services;
         }
 
         public void Run()
         {
-            IDictionary<string, Type> messengers = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
             Func<Type, bool> pre = t => t.IsAssignableTo(typeof(IMessageSender));
             
             foreach (Type t in _assembly.GetTypes().Where(pre))
@@ -29,14 +39,15 @@ namespace messengers
                 // Вид мессенджера --> из аттрибута
                 var attr = (SenderKindAttribute)t.GetTypeInfo().GetCustomAttribute(typeof(SenderKindAttribute));
                 if (attr != null)
-                {
-                    messengers.Add(attr.MessengerKind, t);
-                    _container.Register(t);
-                }
+                    _container.Register(typeof(IMessageSender), t, serviceKey: attr.MessengerKind.ToLower());
             }
 
             _container.Register<SenderManager>(reuse: Reuse.Singleton);
-            _container.RegisterInitializer<SenderManager>((m, r) => m.Messengers = messengers );
+
+            #region other sender misc
+            _services.Configure<SmtpOptions>(_configuration.GetSection("SmtpConnection"));
+
+            #endregion
         }
 
         public Task RunAsync()

@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DryIoc;
 
 namespace messengers
 {    
     public class SenderManager
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IContainer _container;
 
-        /// <summary>
-        /// Словарь соответвий [вид - мессенджер] 
-        /// </summary>
-        public IDictionary<string, Type> Messengers;
-
-        public SenderManager(IServiceProvider serviceProvider)
+        public SenderManager(IContainer container)
         {
-            _serviceProvider = serviceProvider;
+            _container = container;
         }
 
         public void Send(string subject, string body, params Contact[] contacts)
@@ -27,14 +23,11 @@ namespace messengers
             ILookup<string, Contact> lookup = (Lookup<string, Contact>)contacts.ToLookup(c => c.Kind, c => c);
             foreach (IGrouping<string, Contact> g in lookup)
             {
-                Type t = null;
-                Messengers?.TryGetValue(g.Key, out t);
-
-                if (t != null)
+                IMessageSender sender = _container.Resolve<IMessageSender>(serviceKey: g.Key);
+                if (sender != null)
                 {
                     IEnumerable<Contact> values = lookup[g.Key];
-
-                    IMessageSender sender = (IMessageSender)_serviceProvider.GetService(t);
+                    
                     sender.Send(subject, body, values.Select(c => c.Address).ToArray());
 
                     if (sender.Errors != null && sender.Errors.Any())
@@ -56,21 +49,18 @@ namespace messengers
             ILookup<string, Contact> lookup = (Lookup<string, Contact>)contacts.ToLookup(c => c.Kind, c => c);
             foreach (IGrouping<string, Contact> g in lookup)
             {
-                Type t = null;
-                Messengers?.TryGetValue(g.Key, out t);
-
-                if (t != null)
+                IMessageSender sender = _container.Resolve<IMessageSender>(serviceKey: g.Key, ifUnresolved: IfUnresolved.ReturnDefault);
+                if (sender != null)
                 {
                     IEnumerable<Contact> values = lookup[g.Key];
-
-                    IMessageSender sender = (IMessageSender)Activator.CreateInstance(t);
+                    
                     await sender.SendAsync(subject, body, values.Select(c => c.Address).ToArray());
 
                     if (sender.Errors != null && sender.Errors.Any())
                         errors.AddRange(sender.Errors);
                 }
                 else
-                    errors.Add($"Messenger for type {g.Key} not found.");
+                    errors.Add($"Messenger for type {g.Key} not found");
             }
 
             if (errors.Any())
