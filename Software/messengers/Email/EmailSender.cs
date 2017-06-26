@@ -53,7 +53,7 @@ namespace messengers.Email
             {
                 try
                 {
-                    client.Connect(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSSL);
+                    client.Connect(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
                     client.Authenticate(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
                     client.Send(emailMessage);
                     client.Disconnect(true);
@@ -89,7 +89,7 @@ namespace messengers.Email
             {
                 try
                 {
-                    await client.ConnectAsync(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSSL);
+                    await client.ConnectAsync(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
                     await client.AuthenticateAsync(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
                     await client.SendAsync(emailMessage);
 

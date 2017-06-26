@@ -1,11 +1,11 @@
-﻿using System;
+﻿using DryIoc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DryIoc;
 
 namespace messengers
-{    
+{
     public class SenderManager
     {
         private readonly IContainer _container;
@@ -44,7 +44,7 @@ namespace messengers
         public async Task SendAsync(string subject, string body, params Contact [] contacts)
         {
             List<string> errors = new List<string>();
-            
+          
             // фильтр по виду контакта
             ILookup<string, Contact> lookup = (Lookup<string, Contact>)contacts.ToLookup(c => c.Kind, c => c);
             foreach (IGrouping<string, Contact> g in lookup)

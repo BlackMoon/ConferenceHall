@@ -5,21 +5,16 @@ namespace messengers.Email
     // тип для связи с smtp сервером
     public class SmtpOptions
     {
-        public SmtpOptions()
-        {
-            PasswordSender = "Anapa19811981";
-            SmtpServer = "smtp.timeweb.ru";
-            EmailSender = "fiseyskiysv@aquilon-st.ru";
-            NameSender = "Станислав";
-            UseSSL = false;
-            SmtpPort = 25;
-        }
+        public string NameSender { get; set; }
 
-        public string NameSender;
-        public string EmailSender;
-        public string PasswordSender;
-        public string SmtpServer;
-        public Int32 SmtpPort;
-        public bool UseSSL;
+        public string EmailSender { get; set; }
+
+        public string PasswordSender { get; set; }
+
+        public string SmtpServer { get; set; }
+
+        public Int32 SmtpPort { get; set; }
+
+        public bool UseSsl { get; set; }
     }
 }

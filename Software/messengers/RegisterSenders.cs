@@ -47,6 +47,8 @@ namespace messengers
             _services.Configure<SmtpOptions>(_configuration.GetSection("SmtpConnection"));
 
             #endregion
+
+            
         }
 
         public Task RunAsync()
