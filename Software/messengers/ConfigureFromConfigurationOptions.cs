@@ -20,7 +20,7 @@ namespace messengers
         {
             if (config == null)
             {
-                throw new ArgumentNullException("config");
+                 throw new ArgumentNullException("config");
             }
         }
     }

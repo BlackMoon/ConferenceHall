@@ -19,7 +19,7 @@ namespace messengers
         /// <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> so that additional calls can be chained.</returns>
         public static IServiceCollection Configure<TOptions>(this IServiceCollection services, IConfiguration config)
         where TOptions : class
-        {
+         {
             if (services == null)
             {
                 throw new ArgumentNullException("services");
@@ -30,6 +30,6 @@ namespace messengers
             }
             ServiceCollectionServiceExtensions.AddSingleton<IOptionsChangeTokenSource<TOptions>>(services, new ConfigurationChangeTokenSource<TOptions>(config));
             return ServiceCollectionServiceExtensions.AddSingleton<IConfigureOptions<TOptions>>(services, new ConfigureFromConfigurationOptions<TOptions>(config));
-        }
+         }
     }
 }
