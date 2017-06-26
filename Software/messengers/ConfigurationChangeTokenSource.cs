@@ -32,7 +32,7 @@ namespace messengers
         /// <returns></returns>
         public IChangeToken GetChangeToken()
         {
-             return this._config.GetReloadToken();
+            return this._config.GetReloadToken();
         }
     }
 }
