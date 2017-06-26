@@ -64,12 +64,12 @@ export class TickerService extends HttpDataService<TickerModel> {
 
     /**
      * Отправить уведомления
-     * @param subject
+     * @param text
      * @param ids - id сотрудников
      */
-    notify(subject, employeeIds: number[]) : Observable<any> {
+    notify(text, ids: number[]) : Observable<any> {
 
-        let body = { employeeIds: employeeIds, subject: subject };
+        let body = { ids: ids, body: text };
 
         return this.http
             .post(`${this.url}/send`, body)

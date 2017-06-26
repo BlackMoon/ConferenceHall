@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using domain.Contact.Query;
+using domain.Notification;
 using domain.Ticker;
 using domain.Ticker.Command;
 using domain.Ticker.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
+using messengers;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +18,11 @@ namespace host.Controllers
     [Route("api/[controller]")]
     public class TickersController : CqrsController
     {
-        public TickersController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        private readonly SenderManager _senderManager;
+
+        public TickersController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, SenderManager senderManager) : base(commandDispatcher, queryDispatcher)
         {
+            _senderManager = senderManager;
         }
 
         [HttpGet("{confId}")]
@@ -49,9 +57,36 @@ namespace host.Controllers
         }
         
         [HttpPost("/api/[controller]/send")]
-        public Task Send([FromBody]string value)
+        public async Task Send([FromBody]Notification value)
         {
-            return Task.FromResult(0);
+            IList<string> errors = new List<string>();
+
+            // ids --> employee ids
+            if (value.Ids != null)
+            {
+                foreach (int id in value.Ids)
+                {
+                    try
+                    {
+                        var dbContacts = await QueryDispatcher.DispatchAsync<FindContactsQuery, IEnumerable<Contact>>(new FindContactsQuery() { EmployeeId = id });
+                        var contacts = dbContacts
+                            .Select(c => new Contact()
+                            {
+                                Address = c.Address,
+                                Kind = c.Kind
+                            });
+
+                        await _senderManager.SendAsync("Внимание!", value.Body, contacts.ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        errors.Add(ex.Message);
+                    }
+                }       
+            }
+
+            if (errors.Any())
+                throw new Exception(string.Join(". ", errors));
         }
 
     }

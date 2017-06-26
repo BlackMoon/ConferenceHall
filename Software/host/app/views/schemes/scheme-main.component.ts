@@ -136,9 +136,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     ngOnDestroy() {
-        this.canvas.removeEventListener("mousedown");
-        this.canvas.removeEventListener("mousemove");
-        this.canvas.removeEventListener("mouseup");
+
+        if (this.canvas) {
+            this.canvas.removeEventListener("mousedown");
+            this.canvas.removeEventListener("mousemove");
+            this.canvas.removeEventListener("mouseup");
+        }
     }
 
     onKeyDown(event) {

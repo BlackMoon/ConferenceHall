@@ -2,7 +2,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SelectItem } from 'primeng/primeng';
+import { Message, SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { EmployeeService } from '../employees/employee.service';
 import { TickerService } from './ticker.service';
@@ -15,6 +15,8 @@ import { TickerService } from './ticker.service';
 export class NotificationComponent implements OnInit {
 
     conferenceId: number;
+
+    msgs: Message[] = [];
     recipients: SelectItem[] = [];
 
     sendMessageForm: FormGroup;
@@ -53,13 +55,17 @@ export class NotificationComponent implements OnInit {
     }
 
     send(e, m) {
-
+        debugger;
         e.preventDefault();
+        this.msgs.length = 0;
 
         this.tickerService
             .notify(m.subject, m.selectedRecipients)
             .subscribe(
                 _ => { },
-                error => {});
+                error => {
+                    error.severity = "error";
+                    this.msgs.push(error);
+                });
     }
 }
