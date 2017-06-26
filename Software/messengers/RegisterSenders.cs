@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using messengers.Email;
-using messengers.Sms;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace messengers
