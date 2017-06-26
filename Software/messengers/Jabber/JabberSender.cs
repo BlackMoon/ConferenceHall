@@ -8,6 +8,7 @@ using Matrix.Xmpp;
 using Matrix.Xmpp.Client;
 using System.Threading;
 
+
 namespace messengers.Jabber
 {
     [SenderKind("Jabber")]
@@ -54,12 +55,12 @@ namespace messengers.Jabber
             xmppClient.Compression = true;
             xmppClient.SetXmppDomain(jid.Server);
             xmppClient.StartTls = true;
-            xmppClient.OnAuthError += xmppClient_OnAuthError;
-            xmppClient.OnError += xmppClient_OnError;
+            xmppClient.OnAuthError += new EventHandler<Matrix.Xmpp.Sasl.SaslEventArgs>(xmppClient_OnAuthError);
+            xmppClient.OnError += new EventHandler<ExceptionEventArgs>(xmppClient_OnError);
             xmppClient.Open();
-            xmppClient.OnLogin += XmppClientOnLogin;
+            xmppClient.OnLogin += new EventHandler<Matrix.EventArgs>(XmppClientOnLogin);
             Wait = true;
-            Thread.Sleep(500);
+            Thread.Sleep(_jabberSettings.JabberDelay);
             xmppClient.SendPresence(Show.Chat, "Online");
             foreach (var recipient in addresses)
             {
@@ -91,7 +92,7 @@ namespace messengers.Jabber
             xmppClient.Open();
             xmppClient.OnLogin += new EventHandler<Matrix.EventArgs>(XmppClientOnLogin);
             Wait = true;
-            Thread.Sleep(500);
+            Thread.Sleep(_jabberSettings.JabberDelay);
             xmppClient.SendPresence(Show.Chat, "Online");
             foreach (var recipient in addresses)
             {
@@ -101,8 +102,7 @@ namespace messengers.Jabber
                 }
                 else
                 {
-                    await Task.Delay(100);
-                    xmppClient.Send(new Message(new Jid(recipient), MessageType.Chat, body));
+                    await Task.Run(() => { var send = xmppClient.Send(new Message(new Jid(recipient), MessageType.Chat, body)); });  //отправляем сообщение
                 }
             }
             xmppClient.Close();
