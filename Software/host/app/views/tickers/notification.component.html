@@ -1,0 +1,18 @@
+﻿<form [formGroup]="sendMessageForm" (ngSubmit)="send($event, sendMessageForm.value)">
+
+    <div class="ui-widget-header" style="padding: .5em .75em">
+        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+        <div class="ui-toolbar-group-right">
+            <button pButton type="submit" label="Отправить" icon="fa-envelope-o" [disabled]="!sendMessageForm.valid"></button>
+        </div>
+    </div>
+    
+    <div class="ui-g ui-widget-header">
+        <div class="ui-g-12 ui-widget">
+            <p-multiSelect defaultLabel="Кому" formControlName="selectedRecipients" [options]="recipients" [style]="{'width':'100%'}"></p-multiSelect>
+        </div>
+        <div class="ui-g-12 ui-widget">
+            <textarea pInputTextarea formControlName="subject" class="w100p" rows="12"></textarea>
+        </div>
+    </div>
+</form>

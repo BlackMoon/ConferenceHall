@@ -98,7 +98,7 @@ export class ScreenComponent implements OnInit {
                                 });
 
                             this.hubService
-                                .deleteMember
+                                .unregisterMember
                                 .subscribe(id => {
 
                                     let member = this.memberTable.getMember(id);

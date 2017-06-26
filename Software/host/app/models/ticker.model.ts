@@ -1,10 +1,9 @@
 ﻿import { KeyModel } from './index';
-import { JsonProperty } from '../common/map-utils';
 
 /**
  * Модель. Сообщения конференции
  */
-export class MessageModel extends KeyModel {
+export class TickerModel extends KeyModel {
 
     active: boolean;
     content: string;

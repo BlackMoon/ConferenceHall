@@ -21,4 +21,20 @@ export class EmployeeService extends HttpDataService<EmployeeModel> {
             .map((r: Response) => MapUtils.deserialize(EmployeeModel, r.json()))
             .catch(handleResponseError);
     }
+
+    /**
+     * Найти сотрудников (всех / только по конференции)
+     * @param confId 
+     */
+    getAll(confId?:number): Observable<any>
+    {
+        let params: URLSearchParams = new URLSearchParams();
+
+        confId && params.append("confId", confId.toString());
+
+        return this.http
+            .get(this.url, { params: params })
+            .map((r: Response) => r.json())
+            .catch(handleResponseError);
+    }
 }

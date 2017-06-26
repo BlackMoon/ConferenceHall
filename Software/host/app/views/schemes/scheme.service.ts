@@ -40,7 +40,7 @@ export class SchemeService extends HttpDataService<SchemeModel> {
 
     /**
      * Удаляет схемы
-     * @param c
+     * @param ids
      */
     delete(ids: number[]): Observable<any> {
 

@@ -3,12 +3,12 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
 import { HttpDataService } from '../../common/data-service';
-import { GroupCommand, MessageModel } from '../../models';
+import { TickerModel } from '../../models';
 
 @Injectable()
-export class MessageService extends HttpDataService<MessageModel> {
+export class TickerService extends HttpDataService<TickerModel> {
 
-    url: string = isDevMode() ? "http://localhost:64346/api/messages" : "api/messages";
+    url: string = isDevMode() ? "http://localhost:64346/api/tickers" : "api/tickers";
 
     constructor(http: Http) { super(http); }
 
@@ -43,9 +43,11 @@ export class MessageService extends HttpDataService<MessageModel> {
 
     /**
      * Удаляет сообщения
-     * @param c
+     * @param ids
      */
-    delete(c: GroupCommand): Observable<any> {
+    delete(ids: number[]): Observable<any> {
+
+        let c = { ids: ids };
 
         return this.http
             .post(`${this.url}/delete`, c)
@@ -57,6 +59,20 @@ export class MessageService extends HttpDataService<MessageModel> {
         return this.http
             .get(`${this.url}/${confid}`)
             .map((r: Response) => r.json())
+            .catch(handleResponseError);
+    }
+
+    /**
+     * Отправить уведомления
+     * @param subject
+     * @param ids - id сотрудников
+     */
+    notify(subject, employeeIds: number[]) : Observable<any> {
+
+        let body = { employeeIds: employeeIds, subject: subject };
+
+        return this.http
+            .post(`${this.url}/send`, body)
             .catch(handleResponseError);
     }
 }

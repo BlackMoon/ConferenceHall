@@ -2,20 +2,20 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
-import { MessageModel } from '../../models';
-import { MessageService } from './message.service';
+import { TickerModel } from '../../models';
+import { TickerService } from './ticker.service';
 
 @Component({
-    selector: "message-table",
-    templateUrl: "message-table.component.html"
+    selector: "ticker-table",
+    templateUrl: "ticker-table.component.html"
 })
-export class MessageTableComponent {
+export class TickerTableComponent {
 
     editMode: boolean;
-    messageForm: FormGroup;
+    tickerForm: FormGroup;
 
-    messages: MessageModel[] = [];
-    selectedMessages: MessageModel[] = [];
+    tickers: TickerModel[] = [];
+    selectedTickers: TickerModel[] = [];
 
     // ReSharper disable InconsistentNaming
     private _conferenceId: number;
@@ -27,34 +27,34 @@ export class MessageTableComponent {
     @Input()
     set conferenceId(value: number) {
         this._conferenceId = value;
-        value && this.loadMessages();
+        value && this.loadTickers();
     }
 
     constructor(
         private confirmationService: ConfirmationService,
+        private tickerService: TickerService,
         private fb: FormBuilder,
-        private logger: Logger,
-        private messageService: MessageService) { }
+        private logger: Logger) { }
 
     ngOnInit() {
 
-        this.messageForm = this.fb.group({
+        this.tickerForm = this.fb.group({
             content: [null, Validators.required]    
         });
     }
 
-    addMessage(message) {
+    addTicker(ticker) {
 
-        message.active = true;
-        message.conferenceId = this.conferenceId;
+        ticker.active = true;
+        ticker.conferenceId = this.conferenceId;
 
-        this.messageService
-            .add(message)
+        this.tickerService
+            .add(ticker)
             .subscribe(
                 key => {
-                    message.id = key;
-                    this.messages.push(message);
-                    this.messageForm.reset();
+                    ticker.id = key;
+                    this.tickers.push(ticker);
+                    this.tickerForm.reset();
                 },
                 error => this.logger.error2(error));
     }
@@ -63,7 +63,7 @@ export class MessageTableComponent {
         
         e.originalEvent.stopPropagation();
 
-        this.messageService
+        this.tickerService
             .changeActive(message.id, e.checked)
             .subscribe(
                 _ => message.active = e.checked,
@@ -75,7 +75,7 @@ export class MessageTableComponent {
         let content = e.currentTarget.value;
 
         if (content !== message.content) {
-            this.messageService
+            this.tickerService
                 .changeContent(message.id, content)
                 .subscribe(
                     _ => message.content = content,
@@ -85,16 +85,16 @@ export class MessageTableComponent {
 
     changeEditMode() {
         this.editMode = !this.editMode;
-        this.selectedMessages.length = 0;
+        this.selectedTickers.length = 0;
     }
     
 
-    loadMessages() {
-
-        this.messageService
+    loadTickers() {
+       
+        this.tickerService
             .getAll(this.conferenceId)
             .subscribe(
-                messages => this.messages = messages,
+                tickers => this.tickers = tickers,
                 error => this.logger.error2(error)
             );
     }
@@ -106,20 +106,18 @@ export class MessageTableComponent {
             icon: 'fa fa-trash',
             message: `Удалить выбранные записи?`,
             accept: _ => {
-
-                let c = { ids: this.selectedMessages.map(s => s.id) };
-
-                this.messageService
-                    .delete(c)
+                
+                this.tickerService
+                    .delete(this.selectedTickers.map(s => s.id))
                     .subscribe(
                     _ => {
 
-                        this.selectedMessages.forEach(h => {
-                            let ix = this.messages.findIndex(n => n.id === h.id);
-                            this.messages.splice(ix, 1);
+                        this.selectedTickers.forEach(h => {
+                            let ix = this.tickers.findIndex(n => n.id === h.id);
+                            this.tickers.splice(ix, 1);
                         });
 
-                        this.selectedMessages.length = 0;
+                        this.selectedTickers.length = 0;
                     },
                     error => this.logger.error2(error));
             }

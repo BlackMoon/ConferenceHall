@@ -7,7 +7,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Accordion } from 'primeng/components/accordion/accordion';
 import { locale } from "../../common/locale";
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, EmployeeModel, MemberModel, MemberState, MessageModel } from '../../models';
+import { ConferenceModel, ConfState, EmployeeModel, MemberModel, MemberState } from '../../models';
 
 import { ConferenceService } from './conference.service';
 import { EmployeeService } from '../employees/employee.service';
@@ -16,7 +16,7 @@ import { MemberService } from '../members/member.service';
 import { SchemeService } from "../schemes/scheme.service";
 
 import { DateToUtcPipe } from "../../common/globals/pipes";
-import { MessageTableComponent } from "../messages/message-table.component";
+import { TickerTableComponent } from "../tickers/ticker-table.component";
 import { OrganizationTreeComponent } from "../organizations/organization-tree.component";
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 
@@ -51,9 +51,9 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     selectedMembers: MemberModel[] = [];
 
     @ViewChild(Accordion) accordion: Accordion;
-    @ViewChild(MessageTableComponent) messageTable: MessageTableComponent;
     @ViewChild(OrganizationTreeComponent) organizationTree: OrganizationTreeComponent;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
+    @ViewChild(TickerTableComponent) tickerTable: TickerTableComponent;
 
     constructor(
         private dateToUtcPipe: DateToUtcPipe,
@@ -118,7 +118,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 
                 if (this.id) {
                     this.loadMembers(this.id);
-                    this.messageTable.conferenceId = this.id;
+                    this.tickerTable.conferenceId = this.id;
                     return this.conferenceService.get(this.id);
                 }
 

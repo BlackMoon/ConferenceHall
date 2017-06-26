@@ -16,7 +16,7 @@ enum SignalRConnectionStatus {
  */
 interface IHubClient {
     confirmMember(member);
-    deleteMember(id);
+    unregisterMember(id);
     sendTickers(tickers: string[]);
 }
 
@@ -29,13 +29,13 @@ export class HubService {
     connectionState: Observable<SignalRConnectionStatus>;
 
     confirmMember: Observable<MemberModel>;
-    deleteMember: Observable<number>;
+    unregisterMember: Observable<number>;
     sendTickers: Observable<string[]>;
 
     private connectionStateSubject = new Subject<SignalRConnectionStatus>();
 
     private confirmMemberSubject = new Subject<MemberModel>();
-    private deleteMemberSubject = new Subject<number>();
+    private unregisterMemberSubject = new Subject<number>();
     private sendTickersSubject = new Subject<string[]>();
 
     constructor() {
@@ -43,7 +43,7 @@ export class HubService {
         this.connectionState = this.connectionStateSubject.asObservable();
 
         this.confirmMember = this.confirmMemberSubject.asObservable();
-        this.deleteMember = this.deleteMemberSubject.asObservable();
+        this.unregisterMember = this.unregisterMemberSubject.asObservable();
         this.sendTickers = this.sendTickersSubject.asObservable();
     }
 
@@ -64,11 +64,11 @@ export class HubService {
     }
 
     /**
-     * server's deleteMember method
+     * server's unregisterMember method
      * @param id
      */
-    private onDeleteMember(id) {
-        this.deleteMemberSubject.next(id);
+    private onUnregisterMember(id) {
+        this.unregisterMemberSubject.next(id);
     }
 
     /**
@@ -90,7 +90,7 @@ export class HubService {
             let client = <IHubClient>proxy.client;
            
             client.confirmMember = member => this.onConfirmMember(member);
-            client.deleteMember = id => this.onDeleteMember(id);
+            client.unregisterMember = id => this.onUnregisterMember(id);
             client.sendTickers = tickers => this.onSendTickers(tickers);
 
             // start the connection

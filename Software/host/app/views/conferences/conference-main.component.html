@@ -5,7 +5,7 @@
         <div class="ui-widget-header" style="padding: .5em .75em">
             <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
             <div class="ui-toolbar-group-right">
-                <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0" [routerLink]="['/send']"></button>
+                <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0" [routerLink]="['/send', id]"></button>
                 <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid"></button>
             </div>
         </div>
@@ -116,7 +116,7 @@
             </p-accordionTab>
             
             <p-accordionTab header="Сообщения" [ngClass]="{'ui-helper-hidden': id === undefined }">
-                <message-table></message-table>
+                <ticker-table></ticker-table>
             </p-accordionTab>
 
         </p-accordion>

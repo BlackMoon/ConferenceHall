@@ -1,4 +1,4 @@
-﻿<p-dataTable dataKey="id" [value]="messages" [rows]="10" [editable]="true" selectionMode="{{this.editMode ? 'multiple' : ''}}" [(selection)]="selectedMessages" styleClass="no-header">
+﻿<p-dataTable dataKey="id" [value]="tickers" [rows]="10" [editable]="true" selectionMode="{{this.editMode ? 'multiple' : ''}}" [(selection)]="selectedTickers" styleClass="no-header">
     <p-header *ngIf="!readOnly">
         <div class="ui-g">
             <div class="ui-g-12 ui-g-nopad">
@@ -10,11 +10,11 @@
     </p-header>
     <p-footer>
         
-        <form [formGroup]="messageForm" (ngSubmit)="addMessage(messageForm.value)">
+        <form [formGroup]="tickerForm" (ngSubmit)="addTicker(tickerForm.value)">
             <div class="ui-g">
                 <div class="ui-g-2 ui-g-nopad">
                     <div class="ui-toolbar-group-left">
-                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedMessages.length === 0" *ngIf="editMode" (click)="removeRows()"></button>
+                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedTickers.length === 0" *ngIf="editMode" (click)="removeRows()"></button>
                     </div>
                 </div>
                 <div class="ui-g-8 ui-g-nopad">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="ui-g-2 ui-g-nopad">
                     <div class="ui-toolbar-group-right">
-                        <button type="submit" pButton icon="fa-plus" title="Добавить контакт" [disabled]="!messageForm.valid"></button>
+                        <button type="submit" pButton icon="fa-plus" title="Добавить" [disabled]="!tickerForm.valid"></button>
                     </div>
                 </div>
             </div>
@@ -30,13 +30,13 @@
     </p-footer>
     <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
     <p-column field="content" [editable]="true">
-        <ng-template let-message="rowData" pTemplate="editor">
-            <textarea pInputTextarea [ngModel]="message.content" rows="3" class="w100p" (blur)="changeContent($event, message)"></textarea>
+        <ng-template let-col let-ticker="rowData" pTemplate="editor">
+            <textarea pInputTextarea [ngModel]="ticker[col.field]" rows="3" class="w100p" (blur)="changeContent($event, ticker)"></textarea>
         </ng-template>
     </p-column>
     <p-column field="active" [style]="{'text-align': 'center', 'width': '15%'}">
-        <ng-template let-message="rowData" pTemplate="body">
-            <p-inputSwitch onLabel="Вкл" offLabel="Откл" [ngModel]="message.active" (onChange)="changeActive($event, message)"></p-inputSwitch>
+        <ng-template let-col let-ticker="rowData" pTemplate="body">
+            <p-inputSwitch onLabel="Вкл" offLabel="Откл" [ngModel]="ticker[col.field]" (onChange)="changeActive($event, ticker)"></p-inputSwitch>
         </ng-template>
     </p-column>
 </p-dataTable>
