@@ -1,6 +1,6 @@
 ﻿using Kit.Core.CQRS.Command;
 
-namespace domain.Message.Command
+namespace domain.Ticker.Command
 {
     /// <summary>
     /// Команда. Частичное обновление сообщения (могут задаваться разные свойства)

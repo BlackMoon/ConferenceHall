@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using domain.Member;
+﻿using domain.Member;
 using domain.Member.Query;
 using domain.Screen.Query;
 using DryIoc;
@@ -13,6 +8,11 @@ using Kit.Dal.DbManager;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Text.RegularExpressions;
+using domain.Ticker.Query;
 
 namespace host
 {
@@ -59,11 +59,12 @@ namespace host
                         }
                     }
 
-                    int confId, memberId;
+                    int confId;
                     string group = nvc["confid"];
                     
                     if (int.TryParse(group, out confId) && Broadcaster.GetVolume(group) > 0)
                     {
+                        int memberId;
                         switch (eventArgs.Condition.ToLower())
                         {
                             case "conf_members_change":
@@ -92,13 +93,13 @@ namespace host
                             case "conf_members_del":
 
                                 if (int.TryParse(nvc["id"], out memberId))
-                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).DeleteMember(memberId);
+                                    connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).UnregisterMember(memberId);
 
                                 break;
 
                             case "conf_messages_change":
 
-                                var tickers = queryDispatcher.Dispatch<FindTickersByConference, IEnumerable<string>>(new FindTickersByConference() { Id = confId });
+                                var tickers = queryDispatcher.Dispatch<FindTickersQuery, IEnumerable<string>>(new FindTickersQuery() { ConferenceId = confId });
                                 // отправить уведомления signalR клиенту(ам)
                                 connectionManager.GetHubContext<Broadcaster>().Clients.Group(group).SendTickers(tickers);
 

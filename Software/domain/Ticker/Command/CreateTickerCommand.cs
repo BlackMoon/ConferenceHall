@@ -1,11 +1,11 @@
 ﻿using Kit.Core.CQRS.Command;
 
-namespace domain.Message.Command
+namespace domain.Ticker.Command
 {
     /// <summary>
     /// Команда. Создание сообщения конференции
     /// </summary>
-    public class CreateMessageCommand : ICommand
+    public class CreateTickerCommand : ICommand
     {
         public bool Active { get; set; }
 

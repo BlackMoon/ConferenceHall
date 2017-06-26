@@ -3,10 +3,10 @@ using domain.Contact.Command;
 using domain.Element.Command;
 using domain.Employee.Command;
 using domain.Hall.Command;
-using domain.Message.Command;
 using domain.Organization;
 using domain.Organization.Command;
 using domain.Scheme.Command;
+using domain.Ticker.Command;
 using Kit.Core.CQRS.Job;
 using Mapster;
 using System;
@@ -18,11 +18,6 @@ namespace domain.Common.Job
     {
         public void Run()
         {
-            #region Contact
-            // CreateContactCommand --> Contact
-            TypeAdapterConfig<CreateContactCommand, Contact.Contact>
-                .ForType();
-            #endregion
 
             #region Conference
             // CreateConferenceCommand --> Conference
@@ -31,6 +26,12 @@ namespace domain.Common.Job
 
             // DeleteConferenceCommand --> Conference
             TypeAdapterConfig<DeleteConferenceCommand, Conference.Conference>
+                .ForType();
+            #endregion
+
+            #region Contact
+            // CreateContactCommand --> Contact
+            TypeAdapterConfig<CreateContactCommand, Contact.Contact>
                 .ForType();
             #endregion
 
@@ -54,13 +55,7 @@ namespace domain.Common.Job
                 .ForType();
 
             #endregion
-
-            #region Message
-            // CreateMessageCommand --> Message
-            TypeAdapterConfig<CreateMessageCommand, Message.Message>
-                .ForType();
-            #endregion
-
+            
             #region Organization
 
             // CreateOrganizationCommand --> Organization
@@ -84,6 +79,12 @@ namespace domain.Common.Job
             #region Scheme
             // CreateSchemeCommand --> Scheme
             TypeAdapterConfig<CreateSchemeCommand, Scheme.Scheme>
+                .ForType();
+            #endregion
+
+            #region Ticker
+            // CreateTickerCommand --> Ticker
+            TypeAdapterConfig<CreateTickerCommand, Ticker.Ticker>
                 .ForType();
             #endregion
         }

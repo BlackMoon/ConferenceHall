@@ -1,45 +1,45 @@
-﻿using System.Data;
-using System.Threading.Tasks;
+﻿using Dapper.Contrib.Extensions;
 using domain.Common.Command;
-using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
-namespace domain.Message.Command
+namespace domain.Ticker.Command
 {
-    public class MessageCommandHandler : 
-        KeyObjectCommandHandler<Message>,
-        ICommandHandler<DeleteMessagesCommand>,
-        ICommandHandlerWithResult<CreateMessageCommand, int>,
+    public class TickerCommandHandler : 
+        KeyObjectCommandHandler<Ticker>,
+        ICommandHandler<DeleteTickersCommand>,        
+        ICommandHandlerWithResult<CreateTickerCommand, int>,
         ICommandHandlerWithResult<PartialUpdateCommand, bool>
     {
-        public MessageCommandHandler(IDbManager dbManager, ILogger<MessageCommandHandler> logger) : base(dbManager, logger)
+        public TickerCommandHandler(IDbManager dbManager, ILogger<TickerCommandHandler> logger) : base(dbManager, logger)
         {
         }
 
-        public int Execute(CreateMessageCommand command)
+        public int Execute(CreateTickerCommand command)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> ExecuteAsync(CreateMessageCommand command)
+        public async Task<int> ExecuteAsync(CreateTickerCommand command)
         {
             await DbManager.OpenAsync();
 
-            Message message = new Message();
+            Ticker message = new Ticker();
             return await DbManager.DbConnection.InsertAsync(command.Adapt(message));
         }
 
-        public void Execute(DeleteMessagesCommand command)
+        public void Execute(DeleteTickersCommand command)
         {
             throw new NotImplementedException();
         }
 
-        public async Task ExecuteAsync(DeleteMessagesCommand command)
+        public async Task ExecuteAsync(DeleteTickersCommand command)
         {
             DbManager.AddParameter("Ids", command.Ids);
 
@@ -74,6 +74,6 @@ namespace domain.Message.Command
             Logger.LogInformation($"Modified {updated} records");
 
             return updated > 0;
-        }
+        }        
     }
 }

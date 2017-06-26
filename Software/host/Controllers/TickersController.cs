@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using domain.Message;
-using domain.Message.Command;
-using domain.Message.Query;
+using domain.Ticker;
+using domain.Ticker.Command;
+using domain.Ticker.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.JsonPatch;
@@ -11,16 +11,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace host.Controllers
 {
     [Route("api/[controller]")]
-    public class MessagesController : CqrsController
+    public class TickersController : CqrsController
     {
-        public MessagesController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        public TickersController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
         {
         }
 
         [HttpGet("{confId}")]
-        public Task<IEnumerable<Message>> Get(int confId)
+        public Task<IEnumerable<Ticker>> Get(int confId)
         {
-            return QueryDispatcher.DispatchAsync<FindMessagesQuery, IEnumerable<Message>>(new FindMessagesQuery(){ ConferenceId = confId });
+            return QueryDispatcher.DispatchAsync<FindTickersQuery, IEnumerable<Ticker>>(new FindTickersQuery(){ ConferenceId = confId });
         }
 
         [HttpPatch("{id}")]
@@ -37,15 +37,22 @@ namespace host.Controllers
         }
 
         [HttpPost]
-        public Task<int> Post([FromBody]CreateMessageCommand value)
+        public Task<int> Post([FromBody]CreateTickerCommand value)
         {
-            return CommandDispatcher.DispatchAsync<CreateMessageCommand, int>(value);
+            return CommandDispatcher.DispatchAsync<CreateTickerCommand, int>(value);
         }
 
         [HttpPost("/api/[controller]/delete")]
-        public Task DeleteSchemes([FromBody]DeleteMessagesCommand value)
+        public Task DeleteMessages([FromBody]DeleteTickersCommand value)
         {
             return CommandDispatcher.DispatchAsync(value);
         }
+        
+        [HttpPost("/api/[controller]/send")]
+        public Task Send([FromBody]string value)
+        {
+            return Task.FromResult(0);
+        }
+
     }
 }

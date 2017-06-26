@@ -15,11 +15,11 @@ namespace host.Hubs
         Task ConfirmMember(Member member);
 
         /// <summary>
-        /// Удаление участника
+        /// Разрегистрировать участника
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task DeleteMember(int id);
+        Task UnregisterMember(int id);
 
         /// <summary>
         /// Отправить сообщения в бегущую строку

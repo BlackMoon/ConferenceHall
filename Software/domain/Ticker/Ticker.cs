@@ -3,13 +3,13 @@ using domain.Common;
 using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
 
-namespace domain.Message
+namespace domain.Ticker
 {
     /// <summary>
     /// Сообщения конференции
     /// </summary>
     [Table("conf_hall.conf_messages")]
-    public class Message : KeyObject, ICommand
+    public class Ticker : KeyObject, ICommand
     {        
         [Column("conf_id")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]

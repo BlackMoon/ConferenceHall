@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kit.Core.CQRS.Query;
 
 namespace domain.Employee.Query
 {
     public class EmployeeQueryHandler :
-        KeyObjectQueryHandler<FindEmployeeByIdQuery, Employee>
+        KeyObjectQueryHandler<FindEmployeeByIdQuery, Employee>,
+        IQueryHandler<FindEmployeesQuery, IEnumerable<Employee>>
     {
 
         public EmployeeQueryHandler(IDbManager dbManager) : base(dbManager)
@@ -58,6 +60,33 @@ namespace domain.Employee.Query
             var employees = await DbManager.DbConnection.QueryAsync(sqlBuilder.ToString(), map, new { id = query.Id });
 
             return employees.SingleOrDefault(e => e != null);
+        }
+
+        public IEnumerable<Employee> Execute(FindEmployeesQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Employee>> ExecuteAsync(FindEmployeesQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
+                .Column("e.id")
+                .Column("e.name");
+
+            DynamicParameters param = new DynamicParameters();
+
+            // фильтр по конференции
+            if (query.ConferenceId.HasValue)
+            {
+                sqlBuilder
+                    .Join("conf_hall.conf_members m ON m.employee_id = e.id")
+                    .Where("m.conf_id = @conferenceId");
+
+                param.Add("conferenceId", query.ConferenceId);
+            }
+
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryAsync<Employee>(sqlBuilder.ToString(), param);
         }
     }
 }

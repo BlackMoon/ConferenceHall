@@ -1,11 +1,11 @@
 ﻿using domain.Common.Query;
 
-namespace domain.Message.Query
+namespace domain.Ticker.Query
 {
     /// <summary>
     /// Запрос. Поиск сообщений конференции
     /// </summary>
-    public class FindMessagesQuery: GetAllQuery
+    public class FindTickersQuery: GetAllQuery
     {
         public int ConferenceId { get; set; }
     }

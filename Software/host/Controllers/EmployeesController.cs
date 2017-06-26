@@ -18,6 +18,12 @@ namespace host.Controllers
 
         }
 
+        [HttpGet]
+        public Task<IEnumerable<Employee>> GetEmployeesByConferenceId(int? confId)
+        {
+            return QueryDispatcher.DispatchAsync<FindEmployeesQuery, IEnumerable<Employee>>(new FindEmployeesQuery() { ConferenceId = confId });
+        }
+
         // GET api/members/5
         [HttpGet("{id}")]
         public Task<Employee> Get(int id)

@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using domain.Common;
-using Dapper.Contrib.Extensions;
+﻿using domain.Common;
 using Kit.Core.CQRS.Command;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace domain.Employee
 {
-    [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.employees")]
+    [Table("conf_hall.employees")]
     public class Employee : KeyObject, ICommand
     {
         [Column("org_id")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int OrgId { get; set; }      
 
         public string Name { get; set; }
@@ -19,10 +20,10 @@ namespace domain.Employee
         /// </summary>
         public string Position { get; set; }        
 
-        [Write(false)]
+        [Dapper.Contrib.Extensions.Write(false)]
         public SysUser.SysUser User { get; set; }
 
-        [Write(false)]
+        [Dapper.Contrib.Extensions.Write(false)]
         public IList<Contact.Contact> Contacts { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using domain.Common;
 using Kit.Core.CQRS.Command;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -62,6 +61,6 @@ namespace domain.Conference
         public IList<Member.Member> Members { get; set; }
 
         [Dapper.Contrib.Extensions.Write(false)]
-        public IList<Message.Message> Messages { get; set; }
+        public IList<Ticker.Ticker> Messages { get; set; }
     }
 }
