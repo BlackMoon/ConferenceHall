@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using CacheManager.Core;
+﻿using CacheManager.Core;
 using domain;
 using domain.Element;
 using DryIoc;
@@ -11,7 +9,6 @@ using Kit.Core;
 using Kit.Core.CQRS.Job;
 using Kit.Dal.DbManager;
 using messengers;
-using messengers.Email;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +18,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Net;
 using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
 
 namespace host
@@ -51,15 +50,12 @@ namespace host
                          ServiceLifetime.Transient));
 
             services.AddOptions();
-            
+            services.AddSingleton(Configuration);
+            services.AddSingleton(services);
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
             
             // CORS в режиме debug'a
             services.AddCors(o => o.AddPolicy("AllowAll", b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-
-            #region messenger's options
-            services.Configure<SmtpOptions>(Configuration.GetSection("SmtpConnection"));
-            #endregion
 
             services.Configure<TokenProviderOptions>(Configuration.GetSection("TokenAuthentication"));
             
@@ -112,10 +108,10 @@ namespace host
 
             container.Register<SecretStorage>(Reuse.Singleton);
             #endregion
-
+           
             // Startup Jobs
             container.Register<IStartupJob, RegisterSenders>();
-
+            
             IJobDispatcher dispatcher = container.Resolve<IJobDispatcher>(IfUnresolved.ReturnDefault);
             dispatcher?.Dispatch<IStartupJob>();
             

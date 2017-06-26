@@ -55,7 +55,7 @@ export class NotificationComponent implements OnInit {
     }
 
     send(e, m) {
-        debugger;
+        
         e.preventDefault();
         this.msgs.length = 0;
 
@@ -64,8 +64,9 @@ export class NotificationComponent implements OnInit {
             .subscribe(
                 _ => { },
                 error => {
-                    error.severity = "error";
-                    this.msgs.push(error);
+                    
+                    let lines = error.summary.split("<br>") || [];
+                    lines.forEach(l => this.msgs.push({ severity: "error", detail: l }));
                 });
     }
 }

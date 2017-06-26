@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using domain.Contact.Query;
+using domain.Employee;
+using domain.Employee.Query;
 using domain.Notification;
 using domain.Ticker;
 using domain.Ticker.Command;
@@ -66,27 +67,31 @@ namespace host.Controllers
             {
                 foreach (int id in value.Ids)
                 {
+                    Employee employee = null;
                     try
                     {
-                        var dbContacts = await QueryDispatcher.DispatchAsync<FindContactsQuery, IEnumerable<Contact>>(new FindContactsQuery() { EmployeeId = id });
-                        var contacts = dbContacts
+                        employee = await QueryDispatcher.DispatchAsync<FindEmployeeByIdQuery, Employee>(new FindEmployeeByIdQuery() { Id = id });
+
+                        Contact [] contacts = employee?.Contacts
+                            .Where(c => c.Active)
                             .Select(c => new Contact()
                             {
                                 Address = c.Address,
                                 Kind = c.Kind
-                            });
+                            })
+                            .ToArray();
 
-                        await _senderManager.SendAsync("Внимание!", value.Body, contacts.ToArray());
+                        await _senderManager.SendAsync("Внимание!", value.Body, contacts);
                     }
                     catch (Exception ex)
                     {
-                        errors.Add(ex.Message);
+                        errors.Add($"{employee?.Name}: {ex.Message}");
                     }
                 }       
             }
 
             if (errors.Any())
-                throw new Exception(string.Join(". ", errors));
+                throw new Exception(string.Join(".<br>", errors));
         }
 
     }
