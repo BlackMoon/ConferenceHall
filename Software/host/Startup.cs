@@ -20,6 +20,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Net;
+using messengers.Email;
+using Microsoft.Extensions.Options;
 using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
 
 namespace host
@@ -73,7 +75,7 @@ namespace host
                 });
 
             services.AddRouting(options => options.LowercaseUrls = true);
-
+            
             // Add dependencies
             IContainer container = ConfigureDependencies(services, "domain", "Kit.Core", "Kit.Dal", "Kit.Dal.Postgre");
             

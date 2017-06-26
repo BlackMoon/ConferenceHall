@@ -9,12 +9,18 @@ import { TickerService } from './ticker.service';
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    styles: [".ui-multiselect-filter-container { width: 85% }", ".ui-multiselect-panel {width: 50%}"],
+    styles: [
+        ".ui-multiselect-filter-container { width: 85% }",
+        ".ui-multiselect-panel {width: 50% } ",
+        ".ui-panel-titlebar { display: none }",
+        ".ui-panel-content.ui-widget-content { padding: 0 !important}"
+    ],
     templateUrl: "notification.component.html"
 })
 export class NotificationComponent implements OnInit {
 
     conferenceId: number;
+    loading: boolean;
 
     msgs: Message[] = [];
     recipients: SelectItem[] = [];
@@ -58,12 +64,15 @@ export class NotificationComponent implements OnInit {
         
         e.preventDefault();
         this.msgs.length = 0;
+        this.loading = true;
 
         this.tickerService
             .notify(m.subject, m.selectedRecipients)
             .subscribe(
-                _ => { },
+                _ => this.loading = false,
                 error => {
+                    this.loading = false;
+
                     let lines = error.summary.split("<br>") || [];
                     lines.forEach(l => this.msgs.push({ severity: "error", detail: l }));
                 });
