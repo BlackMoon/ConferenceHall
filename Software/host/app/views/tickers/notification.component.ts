@@ -64,7 +64,6 @@ export class NotificationComponent implements OnInit {
             .subscribe(
                 _ => { },
                 error => {
-                    
                     let lines = error.summary.split("<br>") || [];
                     lines.forEach(l => this.msgs.push({ severity: "error", detail: l }));
                 });

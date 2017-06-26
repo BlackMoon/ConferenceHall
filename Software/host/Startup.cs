@@ -34,6 +34,7 @@ namespace host
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("messengers.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -52,6 +53,7 @@ namespace host
             services.AddOptions();
             services.AddSingleton(Configuration);
             services.AddSingleton(services);
+
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
             
             // CORS в режиме debug'a
