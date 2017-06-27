@@ -32,7 +32,11 @@ namespace messengers.Sms
         private double _totalCost;
         private double _balance;
 
-        public Func<string, bool> AddressValidator { get;} = PhoneNumberTemplate;
+        public Func<string, bool> AddressValidator { get; set; } = s =>
+        {
+            Regex myReg = new Regex(@"[7]\d{10}"); // создание регулярного выражения состоящего из 11 цифр для мобильного телефона
+            return myReg.IsMatch(s);
+        };
 
         public SmsSender(IOptions<SmsOptions> smsOptions)
         {
