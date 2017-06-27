@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -16,7 +17,7 @@ namespace messengers.Email
         private readonly SmtpOptions _smtpSettings;
 
 
-       
+
         public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {
             _smtpSettings = smtpOptions.Value;
@@ -27,41 +28,58 @@ namespace messengers.Email
             // regex для email: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
             Regex myReg = new Regex(@"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$");  // создание регулярного выражения проверки электронной почты
-            bool result = myReg.IsMatch(email); 
+            bool result = myReg.IsMatch(email);
             return result;
         }
 
         // генерация сообщения
         public void Send(string subject, string body, params string[] addresses)
         {
-            var emailMessage = new MimeMessage();
-
-           foreach (var email in addresses)
+            if (addresses.IsNullOrEmpty())
             {
-              if (!EmailTemplate(email)) {_errors.Add(email + " почтовый ящик в неизвестном формате");}
-              else {emailMessage.To.Add(new MailboxAddress("", email));}
+                _errors.Add(" Список адресатов не заполнен. ");
             }
-
-            emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-            emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            else
             {
-                Text = body
-            };
+                var emailMessage = new MimeMessage();
 
-            using (var client = new SmtpClient())
-            {
-                try
+                foreach (var email in addresses)
                 {
-                    client.Connect(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
-                    client.Authenticate(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
-                    client.Send(emailMessage);
-                    client.Disconnect(true);
+                    if (!EmailTemplate(email))
+                    {
+                        _errors.Add(email + " почтовый ящик в неизвестном формате");
+                    }
+                    else
+                    {
+                        emailMessage.To.Add(new MailboxAddress("", email));
+                    }
                 }
 
-                catch (Exception ex)
+                emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
+                emailMessage.Subject = subject;
+          
+                if (!body.IsNullOrEmpty())
                 {
-                    _errors.Add(ex.Message);
+                    emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                    {
+                        Text = body
+                    };
+                }
+
+                using (var client = new SmtpClient())
+                {
+                    try
+                    {
+                        client.Connect(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
+                        client.Authenticate(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
+                        client.Send(emailMessage);
+                        client.Disconnect(true);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        _errors.Add(ex.Message);
+                    }
                 }
             }
 
@@ -69,35 +87,45 @@ namespace messengers.Email
 
         public async Task SendAsync(string subject, string body, params string[] addresses)
         {
-            var emailMessage = new MimeMessage();
-
-
-            foreach (var email in addresses)
+            if (addresses.IsNullOrEmpty())
             {
-                if (!EmailTemplate(email)) { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
-                else { emailMessage.To.Add(new MailboxAddress("", email)); }
+                _errors.Add(" Список адресатов не заполнен. ");
             }
-
-            emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-            emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            else
             {
-                Text = body
-            };
+                var emailMessage = new MimeMessage();
 
-            using (var client = new SmtpClient())
-            {
-                try
+                foreach (var email in addresses)
                 {
-                    await client.ConnectAsync(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
-                    await client.AuthenticateAsync(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
-                    await client.SendAsync(emailMessage);
-
-                    await client.DisconnectAsync(true);
+                    if (!EmailTemplate(email)) { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
+                    else { emailMessage.To.Add(new MailboxAddress("", email)); }
                 }
-                catch (Exception ex)
+
+                emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
+                emailMessage.Subject = subject;
+                if (!body.IsNullOrEmpty())
                 {
-                    _errors.Add(ex.Message);
+                    emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                    {
+                        Text = body
+                    };
+                }
+
+
+                using (var client = new SmtpClient())
+                {
+                    try
+                    {
+                        await client.ConnectAsync(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
+                        await client.AuthenticateAsync(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
+                        await client.SendAsync(emailMessage);
+
+                        await client.DisconnectAsync(true);
+                    }
+                    catch (Exception ex)
+                    {
+                        _errors.Add(ex.Message);
+                    }
                 }
             }
         }
