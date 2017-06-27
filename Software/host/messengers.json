@@ -1,5 +1,5 @@
 {
-  
+
   "SmtpConnection": {
     "NameSender": "Станислав",
     "EmailSender": "fiseyskiysv@aquilon-st.ru",
@@ -7,6 +7,35 @@
     "SmtpServer": "smtp.timeweb.ru",
     "SmtpPort": "25",
     "UseSSL": "false"
+  },
+
+  "JabberOptions": {
+    "JabberLogin": "fiseyskiysv@jabber.aquilon.ru",
+    "JabberPassword": "Anapa19811981",
+    "JabberDelay": "500"
+  },
+
+  "SmsOptions": {
+    "SmsRuLogin": "79172472533",
+    "SmsRuPassword": "Anapa19811981",
+    "SmsRuApilD": "0F7658A1-2CA5-CF06-00FA-BFF55984B58D",
+    "SmsPostDomain": "@sms.ru",
+    "GetJson": "1",
+    "SendUrl": "https://sms.ru/sms/send?",
+    "BalanceUrl": "https://sms.ru/my/balance?",
+    "CostUrl": "https://sms.ru/sms/cost?",
+    "PasswordSender": "Anapa19811981",
+    "SmtpServer": "smtp.timeweb.ru",
+    "EmailSender": "fiseyskiysv@aquilon-st.ru",
+    "NameSender": "Станислав",
+    "UseSSL": "false",
+    "SmtpPort": "25"
+  },
+
+  "VkOptions": {
+    "VkLogin": "79266472576",
+    "VkPassword": "If4ZVeA9",
+    "VkAppId": "6086501"
   }
 
 }
