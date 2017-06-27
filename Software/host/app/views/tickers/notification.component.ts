@@ -42,7 +42,6 @@ export class NotificationComponent implements OnInit {
             subject: [null]
         });
 
-
         this.route.params
 
             .switchMap((params: Params) => {
