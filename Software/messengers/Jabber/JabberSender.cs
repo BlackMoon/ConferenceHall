@@ -17,7 +17,7 @@ namespace messengers.Jabber
 
         private readonly JabberOptions _jabberSettings;
 
-        public Func<string, bool> AddressValidator { get; } = s => true;
+        public Func<string, bool> AddressValidator  { get;} = JabberTemplate;
         public JabberSender(IOptions<JabberOptions> jabberOptions)
         {
             _jabberSettings = jabberOptions.Value;
@@ -65,7 +65,7 @@ namespace messengers.Jabber
             xmppClient.SendPresence(Show.Chat, "Online");
             foreach (var recipient in addresses)
             {
-                if (!JabberTemplate(recipient))
+                if (!AddressValidator(recipient))
                 {
                     _errors.Add(recipient + " jid в неизвестном формате");
                 }
@@ -97,7 +97,7 @@ namespace messengers.Jabber
             xmppClient.SendPresence(Show.Chat, "Online");
             foreach (var recipient in addresses)
             {
-                if (!JabberTemplate(recipient))
+                if (!AddressValidator(recipient))
                 {
                     _errors.Add(recipient + " jid в неизвестном формате");
                 }

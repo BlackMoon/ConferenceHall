@@ -34,6 +34,6 @@ namespace messengers
         /// <summary>
         /// Делегат проверки адреса
         /// </summary>
-        Func<string, bool> AddressValidator { get; }
+        Func<string, bool> AddressValidator { get; set; }
     }
 }

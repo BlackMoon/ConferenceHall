@@ -32,7 +32,11 @@ namespace messengers.Sms
         private double _totalCost;
         private double _balance;
 
-        public Func<string, bool> AddressValidator { get; } = s => true;
+        public Func<string, bool> AddressValidator { get; set; } = s =>
+        {
+            Regex myReg = new Regex(@"[7]\d{10}"); // создание регулярного выражения состоящего из 11 цифр для мобильного телефона
+            return myReg.IsMatch(s);
+        };
 
         public SmsSender(IOptions<SmsOptions> smsOptions)
         {
@@ -154,7 +158,7 @@ namespace messengers.Sms
             {
                 foreach (string phone in addresses)
                 {
-                    if (!PhoneNumberTemplate(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
+                    if (!AddressValidator(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
                 }
 
                 string recipients = String.Join(",", addresses);
@@ -203,7 +207,7 @@ namespace messengers.Sms
             {
                 foreach (string phone in addresses)
                 {
-                    if (!PhoneNumberTemplate(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
+                    if (!AddressValidator(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
                 }
                 string recipients = String.Join(",", addresses);
                 string bodySmsEncode = System.Net.WebUtility.UrlEncode(body);
