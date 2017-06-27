@@ -69,7 +69,10 @@ export class NotificationComponent implements OnInit {
         this.tickerService
             .notify(m.subject, m.selectedRecipients)
             .subscribe(
-                _ => this.loading = false,
+                _ => {
+                    this.loading = false;
+                    this.msgs.push({ severity: "info", detail: "Уведомление отправлено" });
+                },
                 error => {
                     this.loading = false;
 
