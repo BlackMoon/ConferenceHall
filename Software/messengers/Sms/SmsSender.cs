@@ -32,7 +32,7 @@ namespace messengers.Sms
         private double _totalCost;
         private double _balance;
 
-
+        public Func<string, bool> AddressValidator { get; } = s => true;
 
         public SmsSender(IOptions<SmsOptions> smsOptions)
         {
@@ -126,10 +126,11 @@ namespace messengers.Sms
 
         public bool CheckSendBalance(string body, params string[] addresses)
         {
-            Task t1 = CostAsync(body, addresses);
-            t1.Wait();
-            Task t2 = BalanceAsync();
-            t2.Wait();
+            Task t1 = CostAsync(body, addresses), 
+                 t2 = BalanceAsync();
+
+            Task.WaitAll(t1, t2);
+
             if (_totalCost > _balance)
             {
                 _errors.Add("Денег на лицевом счете, не хватает на отсылку смс");

@@ -17,6 +17,7 @@ namespace messengers.Jabber
 
         private readonly JabberOptions _jabberSettings;
 
+        public Func<string, bool> AddressValidator { get; } = s => true;
         public JabberSender(IOptions<JabberOptions> jabberOptions)
         {
             _jabberSettings = jabberOptions.Value;

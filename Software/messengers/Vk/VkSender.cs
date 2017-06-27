@@ -14,6 +14,8 @@ namespace messengers.Vk
     {
         private readonly VkOptions _vkSettings;
 
+        public Func<string, bool> AddressValidator { get; } = s => true;
+
         public VkSender(IOptions<VkOptions> vkOptions)
         {
             _vkSettings = vkOptions.Value;
@@ -115,7 +117,6 @@ namespace messengers.Vk
         private IList<string> _errors = new List<string>();
 
         public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
-
     }
 
 
