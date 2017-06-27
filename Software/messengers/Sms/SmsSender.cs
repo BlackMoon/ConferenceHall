@@ -175,7 +175,7 @@ namespace messengers.Sms
                 {
                     try
                     {
-                        client.Connect(_smsSettings.SmtpServer, _smsSettings.SmtpPort, _smsSettings.UseSSL);
+                        client.Connect(_smsSettings.SmtpServer, _smsSettings.SmtpPort, _smsSettings.UseSsl);
                         client.Authenticate(_smsSettings.EmailSender, _smsSettings.PasswordSender);
                         client.Send(emailMessage);
                         client.Disconnect(true);

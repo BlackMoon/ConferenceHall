@@ -2,17 +2,13 @@
 {
     public class VkOptions
     {
+        // тип для связи с вконтакте
 
-        public VkOptions()
-        {
-            VkLogin = "79266472576";
-            VkPassword = "If4ZVeA9";
-            VkAppId = 6086501;
-        }
+        public string VkLogin { get; set; }
 
-        public string VkLogin;
-        public string VkPassword;
-        public ulong VkAppId;
+        public string VkPassword { get; set; }
+
+        public ulong VkAppId { get; set; }
 
     }
 }
