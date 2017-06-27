@@ -14,7 +14,7 @@ namespace messengers.Vk
     {
         private readonly VkOptions _vkSettings;
 
-        public Func<string, bool> AddressValidator { get; } = s => true;
+        public Func<string, bool> AddressValidator { get;} = VkTemplate;
 
         public VkSender(IOptions<VkOptions> vkOptions)
         {
@@ -51,7 +51,7 @@ namespace messengers.Vk
             mesSend.Message = body;
             foreach (var vkid in addresses)
             {
-                if (!VkTemplate(vkid))
+                if (!AddressValidator(vkid))
                 {
                     _errors.Add(vkid + " vk_id в неизвестном формате");
                 }
@@ -95,7 +95,7 @@ namespace messengers.Vk
             mesSend.Message = body;
             foreach (var vkid in addresses)
             {
-                if (!VkTemplate(vkid))
+                if (!AddressValidator(vkid))
                 {
                     _errors.Add(vkid + " vk_id в неизвестном формате");
                 }
