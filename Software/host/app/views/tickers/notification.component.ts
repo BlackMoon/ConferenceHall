@@ -39,7 +39,7 @@ export class NotificationComponent implements OnInit {
 
         this.sendMessageForm = this.fb.group({
             selectedRecipients: [null, Validators.required],
-            subject: [null]
+            body: [null]
         });
 
         this.route.params
@@ -59,6 +59,12 @@ export class NotificationComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
+    addLink() {
+
+        let body = (this.sendMessageForm.get("body").value || "") + `\n${document.location.origin}/conferences/${this.conferenceId}`;
+        this.sendMessageForm.patchValue({ body: body });
+    }
+
     send(e, m) {
         
         e.preventDefault();
@@ -66,7 +72,7 @@ export class NotificationComponent implements OnInit {
         this.loading = true;
 
         this.tickerService
-            .notify(m.subject, m.selectedRecipients)
+            .notify(m.body, m.selectedRecipients)
             .subscribe(
                 _ => {
                     this.loading = false;

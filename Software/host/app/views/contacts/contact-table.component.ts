@@ -64,6 +64,10 @@ export class ContactTableComponent implements OnInit {
             .subscribe(
                 key => {
                     contact.id = key;
+
+                    let sender = this.senders.find(s => s.value === contact.kind);
+                    sender && (contact.name = sender.label);
+
                     this.contacts.push(contact);
                     this.contactForm.reset();
                 },

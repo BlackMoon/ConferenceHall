@@ -65,7 +65,7 @@ namespace messengers
 
             Configure<JabberOptions>(_configuration.GetSection("JabberOptions"));
             Configure<SmsOptions>(_configuration.GetSection("SmsOptions"));
-            Configure<SmtpOptions>(_configuration.GetSection("SmtpConnection"));
+            Configure<SmtpOptions>(_configuration.GetSection("SmtpOptions"));
             Configure<VkOptions>(_configuration.GetSection("VkOptions"));
 
             #endregion
