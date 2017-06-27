@@ -69,10 +69,12 @@ namespace domain.Employee.Query
 
         public async Task<IEnumerable<Employee>> ExecuteAsync(FindEmployeesQuery query)
         {
+            IEnumerable<Employee> result = Enumerable.Empty<Employee>();
+
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
                 .Column("e.id")
                 .Column("e.name");
-
+            
             DynamicParameters param = new DynamicParameters();
 
             // фильтр по конференции
@@ -86,7 +88,47 @@ namespace domain.Employee.Query
             }
 
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<Employee>(sqlBuilder.ToString(), param);
+            
+            // фильтр по сотрудникам
+            if (query.Ids != null)
+            {
+                Employee prev = null;
+                Func<Employee, Contact.Contact, Employee> map = (e, c) =>
+                {
+                    if (prev != null && prev.Id == e.Id)
+                    {
+                        if (c != null)
+                            prev.Contacts.Add(c);
+
+                        return null;
+                    }
+
+                    prev = e;
+                    prev.Contacts = new List<Contact.Contact>();
+
+                    if (c != null)
+                        prev.Contacts.Add(c);
+
+                    return e;
+                };
+
+                sqlBuilder
+                    .Column("c.id")
+                    .Column("c.active")
+                    .Column("c.address")
+                    .Column("c.kind")
+                    .LeftJoin("conf_hall.contacts c ON c.employee_id = e.id")
+                    .Where("e.id = ANY(@ids)");
+
+                param.Add("ids", query.Ids);
+
+                var employees = await DbManager.DbConnection.QueryAsync(sqlBuilder.ToString(), map, param);
+                result = employees.Where(e => e != null);
+            }
+            else
+                result = await DbManager.DbConnection.QueryAsync<Employee>(sqlBuilder.ToString(), param);
+
+            return result;
         }
     }
 }

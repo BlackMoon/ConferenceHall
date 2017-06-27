@@ -5,7 +5,7 @@ namespace domain.Notification
     /// <summary>
     /// Команда. Уведомление
     /// </summary>
-    public class Notification : GroupCommand
+    public class NotificationCommand : GroupCommand
     {
         public string Subject { get; set; }
 

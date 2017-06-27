@@ -8,5 +8,7 @@ namespace domain.Employee.Query
     public class FindEmployeesQuery : GetAllQuery
     {
         public int? ConferenceId { get; set; }
+
+        public int[] Ids { get; set; }
     }
 }

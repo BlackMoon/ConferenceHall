@@ -58,38 +58,32 @@ namespace host.Controllers
         }
         
         [HttpPost("/api/[controller]/send")]
-        public async Task Send([FromBody]Notification value)
+        public async Task Send([FromBody]NotificationCommand value)
         {
             IList<string> errors = new List<string>();
-
-            // ids --> employee ids
-            if (value.Ids != null)
+            
+            IEnumerable<Employee> employees = await QueryDispatcher.DispatchAsync<FindEmployeesQuery, IEnumerable<Employee>>(new FindEmployeesQuery() { Ids = value.Ids });
+            foreach (var e in employees)
             {
-                foreach (int id in value.Ids)
+                try
                 {
-                    Employee employee = null;
-                    try
-                    {
-                        employee = await QueryDispatcher.DispatchAsync<FindEmployeeByIdQuery, Employee>(new FindEmployeeByIdQuery() { Id = id });
+                    Contact[] contacts = e?.Contacts
+                        .Where(c => c.Active)
+                        .Select(c => new Contact()
+                        {
+                            Address = c.Address,
+                            Kind = c.Kind
+                        })
+                        .ToArray();
 
-                        Contact [] contacts = employee?.Contacts
-                            .Where(c => c.Active)
-                            .Select(c => new Contact()
-                            {
-                                Address = c.Address,
-                                Kind = c.Kind
-                            })
-                            .ToArray();
-
-                        await _senderManager.SendAsync("Внимание!", value.Body, contacts);
-                    }
-                    catch (Exception ex)
-                    {
-                        errors.Add($"{employee?.Name}: {ex.Message}");
-                    }
-                }       
+                    await _senderManager.SendAsync("Внимание!", value.Body, contacts);
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"{e?.Name}: {ex.Message}");
+                }
             }
-
+            
             if (errors.Any())
                 throw new Exception(string.Join(".<br>", errors));
         }
