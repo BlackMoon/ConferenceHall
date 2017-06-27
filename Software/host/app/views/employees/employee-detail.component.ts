@@ -87,7 +87,7 @@ export class EmployeeDetailComponent implements OnInit {
 
         this.employeeService[employee.id ? 'update' : 'add'](employee)
             .subscribe(
-                _ => this.location.back(),
+                _ => this.logger.info("Ok"),
                 error => this.logger.error2(error)
             );
     }

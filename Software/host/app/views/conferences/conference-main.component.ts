@@ -31,7 +31,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     conferenceForm: FormGroup;
     locale: any;
 
-    // id нужен для добавления новых участников
+    // id нужен для добавления новых участников и вкладок
     id: number;             
 
     schemeId: number;
@@ -275,9 +275,14 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         const computedTabs: number[] = [2, 3];
       
         let tabs = this.accordion.el.nativeElement.querySelectorAll("div.ui-accordion-content");
-        
-        [].forEach.call(tabs,
-            (tab, ix) => (computedTabs.indexOf(ix) !== -1) && (tab.style.height = `${document.documentElement.clientHeight * 0.75}px`));
+      
+        for (let ix = 0; ix < tabs.length; ix++) {
+            
+            if (computedTabs.indexOf(ix) !== -1) {
+                let tab = tabs[ix];
+                tab.style.height = `${document.documentElement.clientHeight * 0.75}px`;
+            }    
+        }
     }
 
     save(event, conference) {
@@ -293,8 +298,10 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .subscribe(
                 id => {
 
-                    if (method === "add")
+                    if (method === "add") {
                         this.id = id;
+                        setTimeout(() => this.onResize(), 0);
+                    }
 
                     this.logger.info("Ok");
                 },

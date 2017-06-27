@@ -62,7 +62,7 @@ export class OrganizationDetailComponent implements OnInit {
 
         this.organizationService[org.id ? "update" : "add"](org)
             .subscribe(
-                _ => this.location.back(),
+                _ => this.logger.info("Ok"),
                 error => this.logger.error2(error));
     }
     

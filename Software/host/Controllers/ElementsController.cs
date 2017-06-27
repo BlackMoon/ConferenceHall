@@ -65,6 +65,28 @@ namespace host.Controllers
             return new FileContentResult(fileContents, contentType);
         }
 
+        /// <summary>
+        /// Получить миниатюру элемента
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("/api/thumbnail/{id}")]
+        public async Task<ActionResult> GetThumbnail(int id)
+        {
+            byte[] fileContents = { };
+            string contentType = "image/*";
+
+            Element el = await Get(id);
+            if (el != null)
+            {
+                fileContents = el.Thumbnail;
+                contentType = el.MimeType;
+            }
+
+            return new FileContentResult(fileContents, contentType);
+        }
+
+
         [HttpPost("/api/[controller]/favorites")]
         public Task AddToFavorites([FromBody]AddToFavoritesCommand value)
         {

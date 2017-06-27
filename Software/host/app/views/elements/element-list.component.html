@@ -6,7 +6,7 @@
                     <img class="center" src="/api/shape/{{element.id | uniquesuffix}}" width="48" title="{{element.name}}">
                 </div>
 
-                <i class="fa {{element.selected ? 'fa-check-square-o' : 'fa-square-o' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)" ></i>
+                <i class="fa fa-lg {{element.selected ? 'fa-check-square-o' : 'fa-square-o' }} ui-select" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)" ></i>
                 <div class="text-ellipsis">
                     <small>{{element.name}}</small>
                 </div>
@@ -17,7 +17,7 @@
 <p-dataList [value]="elements" [styleClass]="'h100p'" *ngIf="smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-widget-content">
-            <div class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
+            <div pDraggable="dd_elem" class="ui-grid-row" [ngStyle]="{'padding': '0.5em'}" (onDragStart)="dragStart($event,element)">
                 <div class="ui-grid-col-3">
                     <img class="center" src="/api/shape/{{element.id | uniquesuffix}}" width="32" title="{{element.name}}">
                 </div>
@@ -26,7 +26,7 @@
                     <small>{{element.width + ' x ' + element.height}}</small>
                 </div>
                 <div class="ui-grid-col-1">
-                    <i class="fa {{element.selected ? 'fa-check-square-o' : 'fa-square-o' }}" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
+                    <i class="fa fa-lg {{element.selected ? 'fa-check-square-o' : 'fa-square-o' }}" [ngStyle]="{'cursor':'pointer'}" (click)="selectElement(element)"></i>
                 </div>
             </div>
         </div>

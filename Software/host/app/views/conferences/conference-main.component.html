@@ -83,7 +83,7 @@
                 </div>
             </p-accordionTab>
 
-            <p-accordionTab header="Участники" [ngClass]="{'ui-helper-hidden': id === undefined }">
+            <p-accordionTab header="Участники" *ngIf="id !== undefined">
                 <div class="ui-g-12 ui-g-nopad h100p">
                     <div class="ui-g-6 ui-md-6 ui-widget-content ui-g-nopad h100p">
                         <member-table [members]="members" readOnly="true" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
@@ -101,7 +101,7 @@
                 </div>
             </p-accordionTab>
 
-            <p-accordionTab header="Схема" [ngClass]="{'ui-helper-hidden': id === undefined }">
+            <p-accordionTab header="Схема" *ngIf="id !== undefined">
                 <div class="ui-toolbar-group-right">
                     <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
                 </div>
@@ -115,7 +115,7 @@
                 </div>
             </p-accordionTab>
             
-            <p-accordionTab header="Сообщения" [ngClass]="{'ui-helper-hidden': id === undefined }">
+            <p-accordionTab header="Сообщения" *ngIf="id !== undefined">
                 <ticker-table></ticker-table>
             </p-accordionTab>
 
