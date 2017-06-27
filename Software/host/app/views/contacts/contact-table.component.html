@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="ui-g-2 ui-g-nopad">
-                    <p-dropdown formControlName="kind" [options]="kinds"></p-dropdown>
+                    <p-dropdown formControlName="kind" [options]="senders" [autoWidth]="false"></p-dropdown>
                 </div>
                 <div class="ui-g-6 ui-g-nopad">
                     <input pInputText type="text" formControlName="address" class="w100p"/>
@@ -34,7 +34,7 @@
     <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
     <p-column field="kind" [editable]="true" [style]="{'overflow':'visible'}">
         <ng-template let-col let-contact="rowData" pTemplate="editor">
-            <p-dropdown [(ngModel)]="contact[col.field]" [options]="kinds" [autoWidth]="false" (onChange)="changeKind($event, contact)"></p-dropdown>
+            <p-dropdown [(ngModel)]="contact[col.field]" [options]="senders" [autoWidth]="false" (onChange)="changeKind($event, contact)"></p-dropdown>
         </ng-template>
     </p-column>
     <p-column field="address" [editable]="true">

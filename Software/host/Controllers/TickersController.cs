@@ -61,7 +61,7 @@ namespace host.Controllers
         public async Task Send([FromBody]NotificationCommand value)
         {
             IList<string> errors = new List<string>();
-            
+           
             IEnumerable<Employee> employees = await QueryDispatcher.DispatchAsync<FindEmployeesQuery, IEnumerable<Employee>>(new FindEmployeesQuery() { Ids = value.Ids });
             foreach (var e in employees)
             {

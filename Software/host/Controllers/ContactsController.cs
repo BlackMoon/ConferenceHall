@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using domain.Contact.Command;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using messengers;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace host.Controllers
@@ -10,8 +12,17 @@ namespace host.Controllers
     [Route("api/[controller]")]
     public class ContactsController : CqrsController
     {
-        public ContactsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher) : base(commandDispatcher, queryDispatcher)
+        private readonly SenderManager _senderManager;
+
+        public ContactsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, SenderManager senderManager) : base(commandDispatcher, queryDispatcher)
         {
+            _senderManager = senderManager;
+        }
+
+        [HttpGet("/api/[controller]/senders")]
+        public IEnumerable<string> GetRegisteredSenders()
+        {
+            return _senderManager.RegisteredSenders;
         }
 
         [HttpPost]

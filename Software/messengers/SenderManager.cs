@@ -10,10 +10,29 @@ namespace messengers
     {
         private readonly IContainer _container;
 
+        private IEnumerable<string> _registeredSenders;
+
+        /// <summary>
+        /// Список зарегистрированных мессенджеров
+        /// </summary>
+        public IEnumerable<string> RegisteredSenders
+        {
+            get
+            {
+                return _registeredSenders ?? 
+                    (_registeredSenders = _container
+                           .GetServiceRegistrations()
+                           .Where(r => r.ServiceType == typeof(IMessageSender))
+                           .Select(r => (string) r.OptionalServiceKey))
+                           .OrderBy(k => k);
+            }
+        }
+
         public SenderManager(IContainer container)
         {
             _container = container;
         }
+        
 
         public void Send(string subject, string body, params Contact[] contacts)
         {
@@ -23,7 +42,7 @@ namespace messengers
             ILookup<string, Contact> lookup = (Lookup<string, Contact>)contacts.ToLookup(c => c.Kind, c => c);
             foreach (IGrouping<string, Contact> g in lookup)
             {
-                IMessageSender sender = _container.Resolve<IMessageSender>(serviceKey: g.Key);
+                IMessageSender sender = _container.Resolve<IMessageSender>(serviceKey: g.Key, ifUnresolved: IfUnresolved.ReturnDefault);
                 if (sender != null)
                 {
                     IEnumerable<Contact> values = lookup[g.Key];
@@ -64,7 +83,7 @@ namespace messengers
             }
 
             if (errors.Any())
-                throw new Exception(string.Join(". ", errors));
+                throw new Exception(string.Join(".<br>", errors));
         }
 
     }

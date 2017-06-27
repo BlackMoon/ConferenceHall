@@ -20,7 +20,7 @@ export class ContactTableComponent implements OnInit {
     @Input()
     employeeId: number;
 
-    kinds: SelectItem[] = [{label: 'email', value: 'email'}, {label:'sms', value: 'sms'}];
+    senders: SelectItem[];
 
     @Input()
     contacts: ContactModel[];
@@ -36,7 +36,11 @@ export class ContactTableComponent implements OnInit {
         this.contactForm = this.fb.group({
             address: [null, Validators.required],
             kind: [defaultKind, Validators.required]
-        });    
+        });
+
+        this.contactService
+            .getSenders()
+            .subscribe(senders => this.senders = senders.map(s => <SelectItem>{ label: s, value: s}));
     }
 
     addContact(contact) {       
