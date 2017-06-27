@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace messengers.Jabber
 {
-    [SenderKind("Jabber")]
+    [SenderKind("Jabber", "XMPP (Jabber)")]
     public class JabberSender : IMessageSender
     {
 

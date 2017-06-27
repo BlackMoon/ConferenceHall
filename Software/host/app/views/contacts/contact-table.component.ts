@@ -19,7 +19,7 @@ export class ContactTableComponent implements OnInit {
 
     @Input()
     employeeId: number;
-
+    
     senders: SelectItem[];
 
     @Input()
@@ -40,7 +40,18 @@ export class ContactTableComponent implements OnInit {
 
         this.contactService
             .getSenders()
-            .subscribe(senders => this.senders = senders.map(s => <SelectItem>{ label: s, value: s}));
+            .subscribe((senders:Map<string, string>) => {
+                
+                let keys = Object.keys(senders);
+                this.senders = new Array(keys.length);
+
+                for (let ix = 0; ix < keys.length; ix++) {
+                    let k = keys[ix];
+                    this.senders[ix] = <SelectItem>{ label: senders[k] || k, value: k };
+                }
+
+                this.contacts.forEach(c => c.name = senders[c.kind] || c.kind);
+            });
     }
 
     addContact(contact) {       
@@ -89,7 +100,12 @@ export class ContactTableComponent implements OnInit {
         this.contactService
             .changeKind(contact.id, e.value)
             .subscribe(
-                _ => contact.kind = e.value,
+                _ => {
+                    contact.kind = e.value;
+
+                    let sender = this.senders.find(s => s.value === contact.kind);
+                    sender && (contact.name = sender.label);
+                },
                 error => this.logger.error2(error));
     }
 

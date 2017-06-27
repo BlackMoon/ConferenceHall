@@ -10,29 +10,17 @@ namespace messengers
     {
         private readonly IContainer _container;
 
-        private IEnumerable<string> _registeredSenders;
-
         /// <summary>
         /// Список зарегистрированных мессенджеров
         /// </summary>
-        public IEnumerable<string> RegisteredSenders
-        {
-            get
-            {
-                return _registeredSenders ?? 
-                    (_registeredSenders = _container
-                           .GetServiceRegistrations()
-                           .Where(r => r.ServiceType == typeof(IMessageSender))
-                           .Select(r => (string) r.OptionalServiceKey))
-                           .OrderBy(k => k);
-            }
-        }
+        public IEnumerable<KeyValuePair<string, string>> RegisteredSenders { get; private set; }
 
-        public SenderManager(IContainer container)
+
+        public SenderManager(IContainer container, IEnumerable<KeyValuePair<string, string>> senders)
         {
             _container = container;
+            RegisteredSenders = senders;
         }
-        
 
         public void Send(string subject, string body, params Contact[] contacts)
         {

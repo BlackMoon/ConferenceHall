@@ -2,13 +2,14 @@
 using Kit.Core.CQRS.Command;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
+using Dapper.Contrib.Extensions;
 
 namespace domain.Contact
 {
     /// <summary>
     /// Контакт
     /// </summary>
-    [Table("conf_hall.contacts")]
+    [System.ComponentModel.DataAnnotations.Schema.Table("conf_hall.contacts")]
     public class Contact : KeyObject, ICommand
     {        
         [Column("employee_id")]

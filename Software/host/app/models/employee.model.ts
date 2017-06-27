@@ -9,20 +9,22 @@ import SysUserModel = sysuser.SysUserModel;
  * Модель. Контакт
  */
 export class ContactModel extends KeyModel {
-
-    kind: string;
+    
+    active: boolean;
 
     address: string;
 
-    active: boolean;
+    kind: string;
+
+    name: string; 
 
     constructor() {
         super();
 
-        this.kind = undefined;
-        this.address = undefined;
         this.active = false;
-
+        this.address = undefined;
+        this.kind = undefined;
+        this.name = undefined;
     }
 }
 

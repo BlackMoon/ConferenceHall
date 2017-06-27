@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using messengers.Jabber;
+using messengers.Sms;
+using messengers.Vk;
 
 namespace messengers
 {
@@ -39,6 +42,7 @@ namespace messengers
 
         public void Run()
         {
+            IDictionary<string, string> senders = new SortedDictionary<string, string>();
             Func <Type, bool> pre = t => t.IsAssignableTo(typeof(IMessageSender));
             
             foreach (Type t in _assembly.GetTypes().Where(pre))
@@ -46,13 +50,23 @@ namespace messengers
                 // Вид мессенджера --> из аттрибута
                 var attr = (SenderKindAttribute)t.GetTypeInfo().GetCustomAttribute(typeof(SenderKindAttribute));
                 if (attr != null)
-                    _container.Register(typeof(IMessageSender), t, serviceKey: attr.MessengerKind.ToLower());
+                {
+                    string kind = attr.MessengerKind.ToLower(),
+                           name = attr.MessengerName;
+
+                    _container.Register(typeof(IMessageSender), t, serviceKey: kind);
+                    senders.Add(kind, name);
+                }
             }
 
-            _container.Register<SenderManager>(reuse: Reuse.Singleton);
-            
+            _container.Register(reuse: Reuse.Singleton, made: Made.Of(() => new SenderManager(Arg.Of<IContainer>(), senders)));
+
             #region other sender's registrations
+
+            Configure<JabberOptions>(_configuration.GetSection("JabberOptions"));
+            Configure<SmsOptions>(_configuration.GetSection("SmsOptions"));
             Configure<SmtpOptions>(_configuration.GetSection("SmtpConnection"));
+            Configure<VkOptions>(_configuration.GetSection("VkOptions"));
 
             #endregion
         }

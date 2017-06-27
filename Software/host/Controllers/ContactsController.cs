@@ -20,7 +20,7 @@ namespace host.Controllers
         }
 
         [HttpGet("/api/[controller]/senders")]
-        public IEnumerable<string> GetRegisteredSenders()
+        public IEnumerable<KeyValuePair<string, string>> GetRegisteredSenders()
         {
             return _senderManager.RegisteredSenders;
         }

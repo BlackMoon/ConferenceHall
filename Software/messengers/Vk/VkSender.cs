@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace messengers.Vk
 {
-    [SenderKind("Vk")]
+    [SenderKind("Vk", "ВКонтакте")]
     public class VkSender : IMessageSender
     {
         private readonly VkOptions _vkSettings;
@@ -88,7 +88,7 @@ namespace messengers.Vk
             {
                 _errors.Add("авторизация в vk не прошла. " + ex.Message);
             }
-            vk.Authorize(authorize); // авторизуемся после чего в vk.Token должен появиться ключ в случае успешной авторизации
+            
             var mesSend = new MessagesSendParams();
             mesSend.Message = body;
             foreach (var vkid in addresses)
