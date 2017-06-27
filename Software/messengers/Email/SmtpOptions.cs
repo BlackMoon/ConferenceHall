@@ -13,7 +13,7 @@ namespace messengers.Email
 
         public string SmtpServer { get; set; }
 
-        public Int32 SmtpPort { get; set; }
+        public int SmtpPort { get; set; } = 25;
 
         public bool UseSsl { get; set; }
     }
