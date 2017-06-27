@@ -16,7 +16,7 @@ namespace messengers.Email
 
         private readonly SmtpOptions _smtpSettings;
 
-        public Func<string, bool> AddressValidator { get;} = EmailTemplate ;
+        public Func<string, bool> AddressValidator { get; set; } = s => true;
 
         public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {

@@ -14,7 +14,7 @@ namespace messengers.Vk
     {
         private readonly VkOptions _vkSettings;
 
-        public Func<string, bool> AddressValidator { get;} = VkTemplate;
+        public Func<string, bool> AddressValidator { get; set; } = s => true;
 
         public VkSender(IOptions<VkOptions> vkOptions)
         {
