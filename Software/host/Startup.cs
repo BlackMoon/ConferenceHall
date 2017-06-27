@@ -20,8 +20,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Net;
-using messengers.Email;
-using Microsoft.Extensions.Options;
 using ConfigurationBuilder = Microsoft.Extensions.Configuration.ConfigurationBuilder;
 
 namespace host
@@ -54,7 +52,6 @@ namespace host
 
             services.AddOptions();
             services.AddSingleton(Configuration);
-            services.AddSingleton(services);
 
             services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
             

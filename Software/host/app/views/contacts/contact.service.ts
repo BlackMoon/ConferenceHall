@@ -66,4 +66,12 @@ export class ContactService extends HttpDataService<ContactModel> {
             .post(`${this.url}/delete`, c)
             .catch(handleResponseError);
     }    
+
+    getSenders(): Observable<any> {
+
+        return this.http
+            .get(`${this.url}/senders`)
+            .map((r: Response) => r.json())
+            .catch(handleResponseError);    
+    }
 }
