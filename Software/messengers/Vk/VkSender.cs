@@ -14,18 +14,15 @@ namespace messengers.Vk
     {
         private readonly VkOptions _vkSettings;
 
-        public Func<string, bool> AddressValidator { get;} = VkTemplate;
+        public Func<string, bool> AddressValidator { get; set; } = s =>
+        {
+            Regex myReg = new Regex(@"\d");  // создание регулярного выражения проверки vk_id
+            return myReg.IsMatch(s);
+        };
 
         public VkSender(IOptions<VkOptions> vkOptions)
         {
             _vkSettings = vkOptions.Value;
-        }
-
-        public bool VkTemplate(string user)
-        {
-            Regex myReg = new Regex(@"\d");  // создание регулярного выражения проверки vk_id
-            bool result = myReg.IsMatch(user);
-            return result;
         }
 
         // region генерация сообщения
@@ -90,7 +87,7 @@ namespace messengers.Vk
             {
                 _errors.Add("авторизация в vk не прошла. " + ex.Message);
             }
-            
+
             var mesSend = new MessagesSendParams();
             mesSend.Message = body;
             foreach (var vkid in addresses)

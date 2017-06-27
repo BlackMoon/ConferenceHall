@@ -44,13 +44,6 @@ namespace messengers.Sms
         }
 
 
-        public bool PhoneNumberTemplate(string phone)
-        {
-            Regex myReg = new Regex(@"[7]\d{10}"); // создание регулярного выражения состоящего из 11 цифр для мобильного телефона
-            bool result = myReg.IsMatch(phone);
-            return result;
-        }
-
         public async Task CostAsync(string body, params string[] addresses)
         {
             // Проверить стоимость сообщений перед отправкой один текст на несколько номеров:
