@@ -1,55 +1,58 @@
-﻿<form [formGroup]="employeeForm" (ngSubmit)="save($event, employeeForm.value)">
+﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
 
-    <div class="ui-widget-header" style="padding: .5em .75em">
-        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-        <div class="ui-toolbar-group-right">
-            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!employeeForm.valid"></button>
-        </div>
-    </div>
-
-    <input type="hidden" formControlName="id" />
-
-    <p-accordion>
-
-        <p-accordionTab header="Сотрудник" [selected]="true">
-
-            <div class="ui-g">
-                <div class="ui-g-8 ui-g-nopad">
-                    <div class="ui-g-4">
-                        ФИО *:
-                    </div>
-                    <div class="ui-g-8">
-                        <input pInputText type="text" formControlName="name" class="w100p" />
-                    </div>
-                </div>
-                <div class="ui-g-8 ui-g-nopad">
-                    <div class="ui-g-4">
-                        Организация *:
-                    </div>
-                    <div class="ui-g-8">
-                        <p-dropdown formControlName="orgId" [options]="orgs" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
-                    </div>
-                </div>
-                <div class="ui-g-8 ui-g-nopad">
-                    <div class="ui-g-4">
-                        Должность :
-                    </div>
-                    <div class="ui-g-8">
-                        <input pInputText type="text" formControlName="position" class="w100p" />
-                    </div>
-                </div>
+    <form [formGroup]="employeeForm" (ngSubmit)="save($event, employeeForm.value)">
+        
+        <div class="ui-widget-header" style="padding: .5em .75em">
+            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+            <div class="ui-toolbar-group-right">
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!employeeForm.valid"></button>
             </div>
+        </div>
 
-        </p-accordionTab>
+        <input type="hidden" formControlName="id" />
 
-        <p-accordionTab header="Системный пользователь">
-            <sysuser-detail [group]="employeeForm.controls.user"></sysuser-detail>
-        </p-accordionTab>
+        <p-accordion>
+            
+            <p-accordionTab header="Сотрудник" [selected]="true">
 
-        <p-accordionTab header="Контакты" *ngIf="employeeForm.value.id">
-            <contact-table [contacts]="contacts" [employeeId]="employeeForm.value.id"></contact-table>
-        </p-accordionTab>
+                <div class="ui-g">
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            ФИО *:
+                        </div>
+                        <div class="ui-g-8">
+                            <input pInputText type="text" formControlName="name" class="w100p"/>
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Организация *:
+                        </div>
+                        <div class="ui-g-8">
+                            <p-dropdown formControlName="orgId" [options]="orgs" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="ui-g-8 ui-g-nopad">
+                        <div class="ui-g-4">
+                            Должность :
+                        </div>
+                        <div class="ui-g-8">
+                            <input pInputText type="text" formControlName="position" class="w100p"/>
+                        </div>
+                    </div>
+                </div>
 
-    </p-accordion>
+            </p-accordionTab>            
+            
+            <p-accordionTab header="Системный пользователь">
+                <sysuser-detail [group]="employeeForm.controls.user"></sysuser-detail>
+            </p-accordionTab>
 
-</form>
+            <p-accordionTab header="Контакты" *ngIf="employeeForm.value.id">
+                <contact-table [contacts]="contacts" [employeeId]="employeeForm.value.id"></contact-table>
+            </p-accordionTab>
+
+        </p-accordion>
+
+    </form>
+</div>
