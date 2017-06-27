@@ -16,7 +16,7 @@ namespace messengers.Email
 
         private readonly SmtpOptions _smtpSettings;
 
-        public Func<string, bool> AddressValidator { get; } = s => true;
+        public Func<string, bool> AddressValidator { get;} = EmailTemplate ;
 
         public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {
@@ -45,7 +45,7 @@ namespace messengers.Email
 
                 foreach (var email in addresses)
                 {
-                    if (!EmailTemplate(email))
+                    if (!AddressValidator(email))
                     {
                         _errors.Add(email + " почтовый ящик в неизвестном формате");
                     }
@@ -97,7 +97,7 @@ namespace messengers.Email
 
                 foreach (var email in addresses)
                 {
-                    if (!EmailTemplate(email)) { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
+                    if (!AddressValidator(email)) { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
                     else { emailMessage.To.Add(new MailboxAddress("", email)); }
                 }
 
