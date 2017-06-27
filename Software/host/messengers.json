@@ -1,6 +1,6 @@
 {
 
-  "SmtpConnection": {
+  "SmtpOptions": {
     "NameSender": "Станислав",
     "EmailSender": "fiseyskiysv@aquilon-st.ru",
     "PasswordSender": "Anapa19811981",
