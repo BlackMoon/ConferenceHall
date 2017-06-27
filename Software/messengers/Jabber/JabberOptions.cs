@@ -4,17 +4,12 @@ namespace messengers.Jabber
 {
     public class JabberOptions
     {
+        // тип для отправки в jabbber клиент
+        public string JabberLogin { get; set; }
 
-        public JabberOptions()
-        {
-            JabberLogin = "fiseyskiysv@jabber.aquilon.ru";
-            JabberPassword = "Anapa19811981";
-            JabberDelay = 500;
-        }
+        public string JabberPassword { get; set; }
 
-        public string JabberLogin;
-        public string JabberPassword;
-        public Int32 JabberDelay;
+        public Int32 JabberDelay { get; set; }
 
     }
 }
