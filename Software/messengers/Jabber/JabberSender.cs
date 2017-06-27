@@ -17,7 +17,12 @@ namespace messengers.Jabber
 
         private readonly JabberOptions _jabberSettings;
 
-        public Func<string, bool> AddressValidator { get; set; } = s => true;
+        public Func<string, bool> AddressValidator  { get; set; } = s =>
+        {    
+            // regex для jid: https://stackoverflow.com/questions/1351041/what-is-the-regular-expression-for-validating-jabber-id
+            Regex myReg = new Regex(@"^\A([a-z0-9\.\-_\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z$");  // создание регулярного выражения проверки jid
+            return myReg.IsMatch(s);
+        };
         public JabberSender(IOptions<JabberOptions> jabberOptions)
         {
             _jabberSettings = jabberOptions.Value;

@@ -1,68 +1,66 @@
-﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
+﻿<form [formGroup]="hallForm" (ngSubmit)="save($event, hallForm.value)">
 
-    <form [formGroup]="hallForm" (ngSubmit)="save($event, hallForm.value)">
-
-        <div class="ui-widget-header" style="padding: .5em .75em">
-            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-            <div class="ui-toolbar-group-right">
-                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!hallForm.valid"></button>
-            </div>
+    <div class="ui-widget-header" style="padding: .5em .75em">
+        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+        <div class="ui-toolbar-group-right">
+            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!hallForm.valid"></button>
         </div>
+    </div>
 
-        <input type="hidden" formControlName="id" />
+    <input type="hidden" formControlName="id" />
 
-        <p-accordion>
-            <p-accordionTab header="Холл" [selected]="true">
+    <p-accordion>
+        <p-accordionTab header="Холл" [selected]="true">
 
-                <div class="ui-g">
-                    <div class="ui-g-8 ui-g-nopad">
-                        <div class="ui-g-4">
-                            Наименование *:
+            <div class="ui-g">
+                <div class="ui-g-8 ui-g-nopad">
+                    <div class="ui-g-4">
+                        Наименование *:
+                    </div>
+                    <div class="ui-g-8">
+                        <input pInputText type="text" formControlName="name" class="w100p" />
+                    </div>
+                </div>
+                <div class="ui-g-8 ui-g-nopad">
+                    <div class="ui-g-4">
+                        Описание :
+                    </div>
+                    <div class="ui-g-8">
+                        <textarea pInputTextarea rows="6" formControlName="description" class="w100p"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </p-accordionTab>
+
+        <p-accordionTab header="Размер">
+            <div class="ui-g">
+                <div class="ui-g-8 ui-g-nopad">
+                    <div class="ui-g-4">
+                        <div class="ui-g-6">
+                            Длина *:
                         </div>
-                        <div class="ui-g-8">
-                            <input pInputText type="text" formControlName="name" class="w100p" />
+                        <div class="ui-g-6">
+                            <p-spinner formControlName="height" [min]="1" [step]="0.5"></p-spinner>
                         </div>
                     </div>
-                    <div class="ui-g-8 ui-g-nopad">
-                        <div class="ui-g-4">
-                            Описание :
+                    <div class="ui-g-2"></div>
+                    <div class="ui-g-4">
+                        <div class="ui-g-6">
+                            Ширина *:
                         </div>
-                        <div class="ui-g-8">
-                            <textarea pInputTextarea rows="6" formControlName="description" class="w100p"></textarea>
+                        <div class="ui-g-6">
+                            <p-spinner formControlName="width" [min]="1" [step]="0.5"></p-spinner>
                         </div>
                     </div>
                 </div>
+            </div>
+        </p-accordionTab>
 
-            </p-accordionTab>
+        <p-accordionTab header="Схемы" *ngIf="hallForm.value.id">
+            <scheme-table [hallId]="hallForm.value.id" [schemes]="schemes"></scheme-table>
+        </p-accordionTab>
+    </p-accordion>
 
-            <p-accordionTab header="Размер">
-                <div class="ui-g">
-                    <div class="ui-g-8 ui-g-nopad">
-                        <div class="ui-g-4">
-                            <div class="ui-g-6">
-                                Длина *:
-                            </div>
-                            <div class="ui-g-6">
-                                <p-spinner formControlName="height" [min]="1" [step]="0.5"></p-spinner>
-                            </div>
-                        </div>
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-4">
-                            <div class="ui-g-6">
-                                Ширина *:
-                            </div>
-                            <div class="ui-g-6">
-                                <p-spinner formControlName="width" [min]="1" [step]="0.5"></p-spinner>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </p-accordionTab>
+</form>
 
-            <p-accordionTab header="Схемы" *ngIf="hallForm.value.id">
-                <scheme-table [hallId]="hallForm.value.id" [schemes]="schemes"></scheme-table>
-            </p-accordionTab>
-        </p-accordion>
-
-    </form>
-</div>

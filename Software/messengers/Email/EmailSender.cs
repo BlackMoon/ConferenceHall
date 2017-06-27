@@ -16,22 +16,23 @@ namespace messengers.Email
 
         private readonly SmtpOptions _smtpSettings;
 
-        public Func<string, bool> AddressValidator { get; set; } = s => true;
+        public Func<string, bool> AddressValidator { get; set; } = s =>
+        {
+            // создание регулярного выражения проверки электронной почты
+            // regex для email: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
+            Regex myReg =
+                    new Regex(
+                        @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                        @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$");
+            return myReg.IsMatch(s);
+        };
 
         public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {
             _smtpSettings = smtpOptions.Value;
         }
 
-        public bool EmailTemplate(string email)
-        {
-            // regex для email: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
-            Regex myReg = new Regex(@"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$");  // создание регулярного выражения проверки электронной почты
-            bool result = myReg.IsMatch(email);
-            return result;
-        }
-
+ 
         // генерация сообщения
         public void Send(string subject, string body, params string[] addresses)
         {
@@ -57,7 +58,7 @@ namespace messengers.Email
 
                 emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
                 emailMessage.Subject = subject;
-          
+
                 if (!body.IsNullOrEmpty())
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
