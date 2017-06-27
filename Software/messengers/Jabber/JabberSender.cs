@@ -28,14 +28,6 @@ namespace messengers.Jabber
             _jabberSettings = jabberOptions.Value;
         }
 
-        public bool JabberTemplate(string jid)
-        {
-            // regex для jid: https://stackoverflow.com/questions/1351041/what-is-the-regular-expression-for-validating-jabber-id
-            Regex myReg = new Regex(@"^\A([a-z0-9\.\-_\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z$");  // создание регулярного выражения проверки jid
-            bool result = myReg.IsMatch(jid);
-            return result;
-        }
-
         private void XmppClientOnLogin(object sender, Matrix.EventArgs e)
         {
             Wait = false;
