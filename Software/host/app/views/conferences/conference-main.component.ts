@@ -118,7 +118,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                 
                 if (this.id) {
                     this.loadMembers(this.id);
-                    this.tickerTable.conferenceId = this.id;
+                    
+                    setTimeout(() => this.tickerTable.conferenceId = this.id, 0);
                     return this.conferenceService.get(this.id);
                 }
 
@@ -168,7 +169,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     loadMembers(confid) {
-
+        
         this.memberService
             .getAll(confid)
             .subscribe(
