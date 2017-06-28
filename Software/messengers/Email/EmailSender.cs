@@ -32,7 +32,7 @@ namespace messengers.Email
             _smtpSettings = smtpOptions.Value;
         }
 
- 
+
         // генерация сообщения
         public void Send(string subject, string body, params string[] addresses)
         {
@@ -63,7 +63,8 @@ namespace messengers.Email
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
-                        Text = body
+                        Text = body,
+                        ContentType = { Charset = _smtpSettings.Charset }
                     };
                 }
 
@@ -108,7 +109,8 @@ namespace messengers.Email
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
-                        Text = body
+                        Text = body,
+                        ContentType = { Charset = _smtpSettings.Charset }
                     };
                 }
 

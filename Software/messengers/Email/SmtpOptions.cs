@@ -35,5 +35,9 @@ namespace messengers.Email
         /// Булева переменная показывающая, использовать ли шифрование по протоколу SSL при отправке почты
         /// </summary>
         public bool UseSsl { get; set; }
+        /// <summary>
+        /// Кодировка тела письма
+        /// </summary>
+        public string Charset { get; set; }
     }
 }

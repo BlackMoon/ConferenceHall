@@ -6,7 +6,8 @@
     "PasswordSender": "Anapa19811981",
     "SmtpServer": "smtp.timeweb.ru",
     "SmtpPort": "25",
-    "UseSSL": "false"
+    "UseSSL": "false",
+    "Charset": "utf-8"
   },
 
   "JabberOptions": {
