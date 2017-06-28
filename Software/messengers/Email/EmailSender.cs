@@ -55,9 +55,11 @@ namespace messengers.Email
                         emailMessage.To.Add(new MailboxAddress("", email));
                     }
                 }
-
                 emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-                emailMessage.Subject = subject;
+                if (!subject.IsNullOrEmpty())
+                {
+                    emailMessage.Subject = subject;
+                }
 
                 if (!body.IsNullOrEmpty())
                 {
@@ -104,7 +106,11 @@ namespace messengers.Email
                 }
 
                 emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-                emailMessage.Subject = subject;
+                if (!subject.IsNullOrEmpty())
+                {
+                    emailMessage.Subject = subject;
+                }
+
                 if (!body.IsNullOrEmpty())
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
