@@ -1,67 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Castle.Core.Internal;
+﻿using Castle.Core.Internal;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace messengers.Email
 {
     [SenderKind("Email")]
     public class EmailSender : IMessageSender
     {
-
         private readonly SmtpOptions _smtpSettings;
 
+        private readonly IList<string> _errors = new List<string>();
+
+        public IEnumerable<string> Errors => _errors;
+
+        /// <summary>
+        /// regex для email: 
+        /// https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
+        /// </summary>
         public Func<string, bool> AddressValidator { get; set; } = s =>
         {
-            // создание регулярного выражения проверки электронной почты
-            // regex для email: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
-            Regex myReg =
-                    new Regex(
-                        @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+            Regex rgx = new Regex(@"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                         @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$");
-            return myReg.IsMatch(s);
+
+            return rgx.IsMatch(s);
         };
 
         public EmailSender(IOptions<SmtpOptions> smtpOptions)
         {
             _smtpSettings = smtpOptions.Value;
         }
-
-
-        // генерация сообщения
+        
         public void Send(string subject, string body, params string[] addresses)
         {
-            if (addresses.IsNullOrEmpty())
-            {
-                _errors.Add(" Список адресатов не заполнен. ");
-            }
-            else
+            if (addresses != null && addresses.Any())
             {
                 var emailMessage = new MimeMessage();
+                emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
 
                 foreach (var email in addresses)
                 {
-                    if (!AddressValidator(email))
-                    {
-                        _errors.Add(email + " почтовый ящик в неизвестном формате");
-                    }
-                    else
-                    {
+                    if (AddressValidator(email))
                         emailMessage.To.Add(new MailboxAddress("", email));
-                    }
-                }
-                emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-                if (!subject.IsNullOrEmpty())
-                {
-                    emailMessage.Subject = subject;
+                    else
+                        _errors.Add(email + " почтовый ящик в неизвестном формате");
                 }
 
-                if (!body.IsNullOrEmpty())
+                if (!string.IsNullOrEmpty(subject))
+                    emailMessage.Subject = subject;
+
+                if (!string.IsNullOrEmpty(body))
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
@@ -70,6 +63,7 @@ namespace messengers.Email
                     };
                 }
 
+                // send
                 using (var client = new SmtpClient())
                 {
                     try
@@ -77,15 +71,19 @@ namespace messengers.Email
                         client.Connect(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
                         client.Authenticate(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
                         client.Send(emailMessage);
-                        client.Disconnect(true);
                     }
-
                     catch (Exception ex)
                     {
                         _errors.Add(ex.Message);
                     }
+                    finally
+                    {
+                        client.Disconnect(true);
+                    }
                 }
             }
+            else
+                _errors.Add(" Список адресатов не заполнен. ");
 
         }
 
@@ -139,9 +137,7 @@ namespace messengers.Email
             }
         }
 
-        private IList<string> _errors = new List<string>();
-
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
+        
 
     }
 
