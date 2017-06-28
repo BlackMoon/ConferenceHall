@@ -287,7 +287,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     save(event, conference) {
-
+        
         let conf:ConferenceModel = Object.assign({}, conference);
         conference.startDate && (conf.startDate = this.dateToUtcPipe.transform(conference.startDate));
         conference.endDate && (conf.endDate = this.dateToUtcPipe.transform(conference.endDate));

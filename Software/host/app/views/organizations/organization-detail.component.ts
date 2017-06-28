@@ -1,5 +1,5 @@
 ﻿import { Location } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ export class OrganizationDetailComponent implements OnInit {
      */
     id?: number;
 
-    orgForm: FormGroup;
+    orgForm: any;
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
 
@@ -67,3 +67,4 @@ export class OrganizationDetailComponent implements OnInit {
     }
     
 }
+ 

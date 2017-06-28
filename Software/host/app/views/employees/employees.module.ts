@@ -13,6 +13,7 @@ import {
     ToggleButtonModule
 } from 'primeng/primeng';
 
+import { UiModule } from '../../common/ui/ui.module';
 import { ContactsModule } from '../contacts/contacts.module';
 import { EmployeeDetailComponent } from './employee-detail.component';
 import { SysUserDetailComponent } from './sysuser-detail.component';
@@ -35,7 +36,8 @@ import { EmployeeService } from './employee.service';
         EmployeeRoutingModule,
         PasswordModule,
         ReactiveFormsModule,
-        ToggleButtonModule
+        ToggleButtonModule,
+        UiModule
     ],
     providers: [EmployeeService]
 })

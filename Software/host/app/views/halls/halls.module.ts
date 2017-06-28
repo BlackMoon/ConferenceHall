@@ -16,6 +16,7 @@ import {
     ToolbarModule
 } from 'primeng/primeng';
 
+import { UiModule } from '../../common/ui/ui.module';
 import { HallDetailComponent } from './hall-detail.component';
 import { HallTableComponent } from './hall-table.component';
 import { HallRoutingModule } from './halls-routing.module';
@@ -42,7 +43,8 @@ import { SchemesModule } from "../schemes/schemes.module";
         SchemesModule, 
         SpinnerModule,
         ToggleButtonModule,
-        ToolbarModule],
+        ToolbarModule,
+        UiModule],
     providers: [HallService]
 })
 export class HallsModule { }

@@ -29,6 +29,7 @@ import { ConferenceScheduleComponent } from './conference-schedule.component';
 import { ConferenceRoutingModule } from './conferences-routing.module';
 import { ConferenceService } from './conference.service';
 
+import { UiModule } from '../../common/ui/ui.module';
 import { HallsModule } from '../halls/halls.module';
 import { MembersModule } from '../members/members.module';
 import { OrganizationsModule } from '../organizations/organizations.module';
@@ -61,7 +62,8 @@ import { TickersModule } from '../tickers/tickers.module';
         TabViewModule,
         TickersModule,
         ToggleButtonModule,
-        ToolbarModule],
+        ToolbarModule,
+        UiModule],
     providers: [ConferenceService, DatePipe, DateToUtcPipe, HubService]
 })
 export class ConferencesModule { }

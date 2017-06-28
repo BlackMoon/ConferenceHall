@@ -51,22 +51,3 @@ export class MatchHeightDirective implements AfterViewChecked {
             .forEach((x: HTMLElement) => x.style.height = `${maxHeight}px`);
     }
 }
-
-@Component({
-    selector: "p-comcolumn"
-})
-export class CommandColumnComponent extends Column {
-    
-    
-
-    ngOnInit() {
-        //debugger;
-        //let component = (<any>this.view)._element.component;
-
-        //TODO: add initialization code here
-    }
-
-    ngAfterContentInit() {
-        //debugger;
-    }
-}

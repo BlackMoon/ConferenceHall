@@ -2,25 +2,31 @@
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="position:absolute; top:40%; left:50%"></i>
 </p-blockUI>
 
-<form [formGroup]="sendMessageForm" (ngSubmit)="send($event, sendMessageForm.value)">
-
-    <div class="ui-widget-header" style="padding: .5em .75em">
+<detail>
+    <nav>
         <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
         <div class="ui-toolbar-group-right">
-            <button pButton type="button" title="Создать ссылку" icon="fa-link" (click)="addLink()"></button>
-            <button pButton type="submit" label="Отправить" icon="fa-envelope-o" [disabled]="!sendMessageForm.valid"></button>
+            <button pButton type="button" title="Создать ссылку" icon="fa-link" [disabled]="loading" (click)="addLink()"></button>
+            <button pButton type="submit" label="Отправить" icon="fa-envelope-o" [disabled]="!sendMessageForm.valid || loading" form="sendMessageForm"></button>
         </div>
-    </div>
-    
-    <p-panel #pnl>
-        <div class="ui-g">
-            <div class="ui-g-12 ui-widget">
-                <p-multiSelect defaultLabel="Кому" formControlName="selectedRecipients" [options]="recipients" [style]="{'width':'100%'}"></p-multiSelect>
-            </div>
-            <div class="ui-g-12 ui-widget">
-                <textarea pInputTextarea formControlName="body" class="w100p" rows="12"></textarea>
-                <p-messages [value]="msgs"></p-messages>
-            </div>
-        </div>
-    </p-panel>
-</form>
+    </nav>
+
+    <main>
+        <form id="sendMessageForm" [formGroup]="sendMessageForm" (ngSubmit)="send($event, sendMessageForm.value)">
+
+            <p-panel #pnl>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-widget">
+                        <p-multiSelect defaultLabel="Кому" formControlName="selectedRecipients" [options]="recipients" [style]="{'width':'100%'}"></p-multiSelect>
+                    </div>
+                    <div class="ui-g-12 ui-widget">
+                        <textarea pInputTextarea formControlName="body" class="w100p" rows="12"></textarea>
+                        <p-messages [value]="msgs"></p-messages>
+                    </div>
+                </div>
+            </p-panel>
+        </form>
+    </main>
+
+</detail>
+

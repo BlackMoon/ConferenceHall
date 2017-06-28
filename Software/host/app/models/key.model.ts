@@ -11,7 +11,8 @@ export type TimeRange = Range<Date>;
 /**
  * Интерфейс selected объекта
  */
-export interface ISelected {
+// ReSharper disable InconsistentNaming
+export interface Selected {
     selected: boolean;
 }
 
@@ -19,7 +20,7 @@ export interface ISelected {
  * Базовая модель объекта
  */
 export class KeyModel {
-    id?: number;
+    id: number;
 
     constructor() {
         this.id = undefined;

@@ -1,10 +1,10 @@
-﻿import { ISelected, KeyModel, SchemeModel } from './index';
+﻿import { KeyModel, SchemeModel, Selected } from './index';
 import { JsonProperty } from '../common/map-utils';
 
 /**
  * Модель. Конференц-холл
  */
-export class HallModel extends KeyModel implements ISelected {
+export class HallModel extends KeyModel implements Selected {
    
     name: string;
     description?: string;
