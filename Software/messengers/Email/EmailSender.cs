@@ -32,7 +32,7 @@ namespace messengers.Email
             _smtpSettings = smtpOptions.Value;
         }
 
- 
+
         // генерация сообщения
         public void Send(string subject, string body, params string[] addresses)
         {
@@ -55,15 +55,18 @@ namespace messengers.Email
                         emailMessage.To.Add(new MailboxAddress("", email));
                     }
                 }
-
                 emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-                emailMessage.Subject = subject;
+                if (!subject.IsNullOrEmpty())
+                {
+                    emailMessage.Subject = subject;
+                }
 
                 if (!body.IsNullOrEmpty())
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
-                        Text = body
+                        Text = body,
+                        ContentType = { Charset = _smtpSettings.Charset }
                     };
                 }
 
@@ -103,12 +106,17 @@ namespace messengers.Email
                 }
 
                 emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-                emailMessage.Subject = subject;
+                if (!subject.IsNullOrEmpty())
+                {
+                    emailMessage.Subject = subject;
+                }
+
                 if (!body.IsNullOrEmpty())
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
-                        Text = body
+                        Text = body,
+                        ContentType = { Charset = _smtpSettings.Charset }
                     };
                 }
 
