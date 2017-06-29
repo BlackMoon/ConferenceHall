@@ -15,15 +15,24 @@ namespace messengers.Vk
     {
         private readonly VkOptions _vkSettings;
 
-        private IList<string> _errors = new List<string>();
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
+        private Lazy<IList<string>> _errors =
+           new Lazy<IList<string>>(() => new List<string>());
+
+        public IList<string> ErrorsList
+        {
+            get { return _errors.Value; }
+            set { _errors = new Lazy<IList<string>>(() => value); }
+        }
+
+
+        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
 
         /// <summary>
         /// создание регулярного выражения проверки vk_id
         /// </summary>
         public Func<string, bool> AddressValidator { get; set; } = s =>
         {
-            Regex rgx = new Regex(@"\d"); 
+            Regex rgx = new Regex(@"\d");
             return rgx.IsMatch(s);
         };
 
@@ -47,21 +56,19 @@ namespace messengers.Vk
                 try
                 {
                     vk.Authorize(authorize);
-                        // авторизуемся после чего в vk.Token должен появиться ключ в случае успешной авторизации
+                    // авторизуемся после чего в vk.Token должен появиться ключ в случае успешной авторизации
                 }
                 catch (Exception ex)
                 {
-                    _errors.Add("авторизация в vk не прошла. " + ex.Message);
+
+                    ErrorsList.Add("авторизация в vk не прошла. " + ex.Message);
+                    return;
                 }
                 var mesSend = new MessagesSendParams();
                 mesSend.Message = body;
                 foreach (var vkid in addresses)
                 {
-                    if (!AddressValidator(vkid))
-                    {
-                        _errors.Add(vkid + " vk_id в неизвестном формате");
-                    }
-                    else
+                    if (AddressValidator(vkid))
                     {
                         try
                         {
@@ -70,13 +77,17 @@ namespace messengers.Vk
                         }
                         catch (Exception ex)
                         {
-                            _errors.Add("vk_id=" + vkid + "не произошла отправка сообщения " + ex.Message);
+                            ErrorsList.Add("vk_id=" + vkid + "не произошла отправка сообщения " + ex.Message);
                         }
+                    }
+                    else
+                    {
+                        ErrorsList.Add(vkid + " vk_id в неизвестном формате");
                     }
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
         public async Task SendAsync(string subject, string body, params string[] addresses)
@@ -86,49 +97,50 @@ namespace messengers.Vk
             if (addresses != null && addresses.Any())
             {
                 var authorize = new ApiAuthParams();
-            Settings settings = Settings.Messages; // уровень доступа к данным, Messages=работа с сообщениями
-            var vk = new VkApi();
-            authorize.Settings = settings;
-            authorize.Login = _vkSettings.VkLogin;
-            authorize.Password = _vkSettings.VkPassword;
-            authorize.ApplicationId = _vkSettings.VkAppId;
-            try
-            {
-                vk.Authorize(authorize);
+                Settings settings = Settings.Messages; // уровень доступа к данным, Messages=работа с сообщениями
+                var vk = new VkApi();
+                authorize.Settings = settings;
+                authorize.Login = _vkSettings.VkLogin;
+                authorize.Password = _vkSettings.VkPassword;
+                authorize.ApplicationId = _vkSettings.VkAppId;
+                try
+                {
+                    vk.Authorize(authorize);
                     // авторизуемся после чего в vk.Token должен появиться ключ в случае успешной авторизации
-            }
-            catch (Exception ex)
-            {
-                _errors.Add("авторизация в vk не прошла. " + ex.Message);
-            }
-            var mesSend = new MessagesSendParams();
-            mesSend.Message = body;
-            foreach (var vkid in addresses)
-            {
-                if (!AddressValidator(vkid))
-                {
-                    _errors.Add(vkid + " vk_id в неизвестном формате");
                 }
-                else
+                catch (Exception ex)
                 {
-                    try
+                    ErrorsList.Add("авторизация в vk не прошла. " + ex.Message);
+                    return;
+                }
+                var mesSend = new MessagesSendParams();
+                mesSend.Message = body;
+                foreach (var vkid in addresses)
+                {
+                    if (AddressValidator(vkid))
                     {
-                        mesSend.UserId = Convert.ToInt64(vkid);
-                        await Task.Run(() =>
+                        try
                         {
-                            var send = vk.Messages.Send(mesSend);
-                        }); //отправляем сообщение
+                            mesSend.UserId = Convert.ToInt64(vkid);
+                            await Task.Run(() =>
+                            {
+                                var send = vk.Messages.Send(mesSend);
+                            }); //отправляем сообщение
+                        }
+                        catch (Exception ex)
+                        {
+                            ErrorsList.Add("vk_id=" + vkid + "не произошла отправка сообщения " + ex.Message);
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        _errors.Add("vk_id=" + vkid + "не произошла отправка сообщения " + ex.Message);
+                        ErrorsList.Add(vkid + " vk_id в неизвестном формате");
                     }
                 }
             }
-        }
-        else
+            else
 
-        _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
 

@@ -18,15 +18,21 @@ namespace messengers.Jabber
 
         private readonly JabberOptions _jabberSettings;
 
-        private IList<string> _errors = new List<string>();
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
+        private Lazy<IList<string>> _errors =
+        new Lazy<IList<string>>(() => new List<string>());
 
+        public IList<string> ErrorsList
+        {
+            get { return _errors.Value; }
+            set { _errors = new Lazy<IList<string>>(() => value); }
+        }
+        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
 
         // по протоколу xmpp мы производим сначала аутентификацию: (A) client AUTH --> server (B) server SUCCESS --> клиент
         // В данной библиотеке Matrix.Xmpp это осуществляется в процедуре XmppClientOnLogin
         // а потом отправку сообщения xmppClient.Send
         // поле Wait и операция Thread.Sleep(500) введено для задержки, чтобы сообщение не отправлялось раньше, чем придет успешный ответ на аутентификацию
-        private bool Wait { get; set; }
+        private bool Wait;
 
         /// <summary>
         /// создание регулярного выражения проверки jid: https://stackoverflow.com/questions/1351041/what-is-the-regular-expression-for-validating-jabber-id
@@ -48,12 +54,12 @@ namespace messengers.Jabber
 
         private void xmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
         {
-            _errors.Add("Ошибка авторизации: " + e.Failure);
+            ErrorsList.Add("Ошибка авторизации: " + e.Failure);
         }
 
         private void xmppClient_OnError(object sender, Matrix.ExceptionEventArgs e)
         {
-            _errors.Add("Ошибка клиента: " + e.Exception);
+            ErrorsList.Add("Ошибка клиента: " + e.Exception);
         }
 
         // region генерация сообщения
@@ -85,14 +91,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            ErrorsList.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
 
@@ -128,14 +134,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            ErrorsList.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
 

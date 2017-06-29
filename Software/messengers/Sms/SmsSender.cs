@@ -15,13 +15,20 @@ namespace messengers.Sms
     [SenderKind("Sms")]
     public class SmsSender : IMessageSender
     {
+
+        private Lazy<IList<string>> _errors =
+   new Lazy<IList<string>>(() => new List<string>());
+
+        public IList<string> ErrorsList
+        {
+            get { return _errors.Value; }
+            set { _errors = new Lazy<IList<string>>(() => value); }
+        }
+        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
         public SmsSender(IOptions<SmsOptions> smsOptions)
         {
             _smsSettings = smsOptions.Value;
         }
-        private IList<string> _errors = new List<string>();
-
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
         public class CostMessages
         {
 
@@ -69,7 +76,7 @@ namespace messengers.Sms
                 HttpResponseMessage response = await client.GetAsync(messageSms);
                 response.EnsureSuccessStatusCode();
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    _errors.Add("Task CostAsync. Result statuscode is not OK. StatusCode=" + response.StatusCode);
+                    ErrorsList.Add("Task CostAsync. Result statuscode is not OK. StatusCode=" + response.StatusCode);
                 string responseBody = await response.Content.ReadAsStringAsync();
                 CostMessages ss = JsonConvert.DeserializeObject<CostMessages>(responseBody);
                 try
@@ -78,14 +85,14 @@ namespace messengers.Sms
                 }
                 catch (Exception ex)
                 {
-                    _errors.Add("Не получается получить  стоимость отправки смс: " + ex.Message);
+                    ErrorsList.Add("Не получается получить  стоимость отправки смс: " + ex.Message);
                 }
 
 
             }
             catch (HttpRequestException ex)
             {
-                _errors.Add(ex.Message);
+                ErrorsList.Add(ex.Message);
             }
 
             finally { client.Dispose(); }
@@ -106,7 +113,7 @@ namespace messengers.Sms
                 HttpResponseMessage response = await client.GetAsync(messageRequest);
                 response.EnsureSuccessStatusCode();
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    _errors.Add("Task BalanceAsync. Result statuscode is not OK. StatusCode=" + response.StatusCode);
+                    ErrorsList.Add("Task BalanceAsync. Result statuscode is not OK. StatusCode=" + response.StatusCode);
                 string responseBody = await response.Content.ReadAsStringAsync();
                 BalanceAccount ba = JsonConvert.DeserializeObject<BalanceAccount>(responseBody);
                 try
@@ -115,13 +122,13 @@ namespace messengers.Sms
                 }
                 catch (Exception ex)
                 {
-                    _errors.Add("Не удается запросить баланс на лицевом счете: " + ex.Message);
+                    ErrorsList.Add("Не удается запросить баланс на лицевом счете: " + ex.Message);
                 }
 
             }
             catch (HttpRequestException ex)
             {
-                _errors.Add(ex.Message);
+                ErrorsList.Add(ex.Message);
             }
             finally { client.Dispose(); }
         }
@@ -135,7 +142,7 @@ namespace messengers.Sms
 
             if (_totalCost > _balance)
             {
-                _errors.Add("Денег на лицевом счете, не хватает на отсылку смс");
+                ErrorsList.Add("Денег на лицевом счете, не хватает на отсылку смс");
                 return false;
             }
 
@@ -150,7 +157,7 @@ namespace messengers.Sms
         /// пример 0F7658A1 - 2CA5 - CF06 - 00FA - BFF55984B58D@sms.ru
         /// В заголовке необходимо указать номера получателей: пример 79172472533,74993221627
         /// </summary>
-        public void Send(string subject , string body, params string[] addresses)
+        public void Send(string subject, string body, params string[] addresses)
         {
             if (addresses != null && addresses.Any())
             {
@@ -159,7 +166,7 @@ namespace messengers.Sms
                 {
                     foreach (string phone in addresses)
                     {
-                        if (!AddressValidator(phone)) _errors.Add(phone + " номер не удовлетворяет телефонному формату");
+                        if (!AddressValidator(phone)) ErrorsList.Add(phone + " номер не удовлетворяет телефонному формату");
                     }
 
                     var emailMessage = new MimeMessage();
@@ -190,7 +197,7 @@ namespace messengers.Sms
                         }
                         catch (Exception ex)
                         {
-                            _errors.Add(ex.Message);
+                            ErrorsList.Add(ex.Message);
                         }
                         finally
                         {
@@ -201,7 +208,7 @@ namespace messengers.Sms
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
         /// <summary>
@@ -222,7 +229,7 @@ namespace messengers.Sms
                         foreach (string phone in addresses)
                         {
                             if (!AddressValidator(phone))
-                                _errors.Add(phone + " номер не удовлетворяет телефонному формату");
+                                ErrorsList.Add(phone + " номер не удовлетворяет телефонному формату");
                         }
                         string recipients = String.Join(",", addresses);
                         string bodySmsEncode = System.Net.WebUtility.UrlEncode(body);
@@ -237,13 +244,13 @@ namespace messengers.Sms
                             HttpResponseMessage response = await client.GetAsync(messageRequest);
                             response.EnsureSuccessStatusCode();
                             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                                _errors.Add("SendAsync response.StatusCode is not OK. StatusCode=" + response.StatusCode);
+                                ErrorsList.Add("SendAsync response.StatusCode is not OK. StatusCode=" + response.StatusCode);
                             string responseBody = await response.Content.ReadAsStringAsync();
 
                         }
                         catch (HttpRequestException ex)
                         {
-                            _errors.Add(ex.Message);
+                            ErrorsList.Add(ex.Message);
                         }
                         finally
                         {
@@ -254,7 +261,7 @@ namespace messengers.Sms
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
 
