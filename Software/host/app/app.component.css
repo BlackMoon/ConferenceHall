@@ -457,3 +457,7 @@ Raleway font
 .ui-treetable .ui-treetable-header, .ui-treetable .ui-treetable-footer {
     padding: 0.25em 0.5em;
 }
+
+[matchTree] div.ui-treetable-tablewrapper {
+    overflow: auto;
+}
