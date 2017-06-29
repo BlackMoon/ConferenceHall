@@ -10,7 +10,6 @@ import { OrganizationModel } from '../../models';
 import { OrganizationService } from "./organization.service";
 
 @Component({
-    styleUrls: ["organization-detail.component.css"],
     templateUrl: "organization-detail.component.html"
 })
 export class OrganizationDetailComponent implements OnInit {
@@ -20,6 +19,7 @@ export class OrganizationDetailComponent implements OnInit {
     id?: number;
 
     orgForm: any;
+    uploadedFiles: any[] = [];
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
 

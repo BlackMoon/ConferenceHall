@@ -1,4 +1,4 @@
-﻿import { Component, OnDestroy, OnInit } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from "rxjs";
 import { Mediator } from "../../common/mediator";
@@ -6,7 +6,9 @@ import { Mediator } from "../../common/mediator";
 import * as SVG from "../../common/svg-utils";
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
     selector: 'shape-properties',
+    styles: [".ui-spinner .ui-inputtext { width: 100%; }"],
     templateUrl: 'shape-properties.component.html'
 })
 export class ShapePropertiesComponent implements OnDestroy, OnInit {

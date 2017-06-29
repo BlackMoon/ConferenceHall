@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter,  OnInit, Output, ViewChild } from '@angular/core';
+﻿import { Component, EventEmitter,  OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -9,8 +9,9 @@ import { ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
     selector: 'element-detail',
-    styleUrls: ['element-detail.component.css'],
+    styles: [".ui-spinner .ui-inputtext { width: 100%; }"],
     templateUrl: 'element-detail.component.html'
 })
 export class ElementDetailComponent implements OnInit {

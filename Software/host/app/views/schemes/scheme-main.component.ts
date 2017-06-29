@@ -576,7 +576,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // сетку и границу не нужно сохранять
         let lines = svg.querySelectorAll(`line.${lineClass}`);
         [].forEach.call(lines, (line) => svg.removeChild(line));
-        
+
+        let box = svg.querySelector(`rect.${borderClass}`);
+        svg.removeChild(box);
+
         // снять все ранее выделенные объекты
         let frames = svg.querySelectorAll(`.${frameClass}`);
         [].forEach.call(frames,
