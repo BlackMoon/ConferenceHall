@@ -1,20 +1,20 @@
-﻿using System;
-using System.Data;
-using System.Threading.Tasks;
-using domain.Common;
+﻿using Dapper.Contrib.Extensions;
 using domain.Common.Command;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
-using Dapper.Contrib.Extensions;
+using System;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace domain.Organization.Command
 {
     public class OrganizationCommandHandler: 
         KeyObjectCommandHandler<Organization>,
+        ICommandHandler<DeleteNodesCommand>,
         ICommandHandlerWithResult<CreateOrganizationCommand, int>,
-        ICommandHandler<DeleteNodesCommand>
+        ICommandHandlerWithResult<DeleteLogoCommand, bool>
 
     {
         private const int H = 32;
@@ -45,6 +45,22 @@ namespace domain.Organization.Command
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.InsertAsync(organization);
+        }
+
+        public bool Execute(DeleteLogoCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> ExecuteAsync(DeleteLogoCommand command)
+        {
+            DbManager.AddParameter("id", command.Id);
+
+            await DbManager.OpenAsync();
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, "UPDATE conf_hall.organizations SET logo = NULL, icon = NULL WHERE id = @id");
+            Logger.LogInformation($"Modified {updated} records");
+
+            return updated > 0;
         }
 
         public void Execute(DeleteNodesCommand command)
