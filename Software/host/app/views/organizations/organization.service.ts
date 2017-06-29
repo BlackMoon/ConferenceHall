@@ -38,6 +38,16 @@ export class OrganizationService extends HttpDataService<OrganizationModel> {
             .catch(handleResponseError);    
     }
 
+    /**
+     * Удаляет логотип организации
+     * @param id
+     */
+    deleteLogo(id): Observable<any> {
+
+        return this.http
+            .delete(`${this.url}/${id}`)
+            .catch(handleResponseError);       
+    }
 
     /**
      * Поиск узлов дерева

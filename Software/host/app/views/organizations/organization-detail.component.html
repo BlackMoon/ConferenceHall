@@ -58,7 +58,7 @@
 
                     <p-accordionTab header="Логотип (макс. размер - 256 x 256)">
                         <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" multiple="true" maxFileSize="1000000" previewWidth="256" styleClass="hidden" (onSelect)="onSelect()"></p-fileUpload>
-                        <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="id && (fileUpload.files.length == 0)">
+                        <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="!noLogo && id && (fileUpload.files.length == 0)">
                             <div class="ui-fileupload-files">
                                 <div>
                                     <div class="ui-fileupload-row">
@@ -66,7 +66,7 @@
                                             <img #logo src="/api/logo/{{id | uniquesuffix }}" width="256" (load)="logo.classList.remove('ui-helper-hidden')" class="ui-helper-hidden">
                                         </div>
                                         <div>
-                                            <button pButton type="button" icon="fa-close"></button>                                            
+                                            <button pButton type="button" title="Удалить" icon="fa-close" (click)="deleteLogo()"></button>                                            
                                         </div>
                                     </div>
                                 </div>

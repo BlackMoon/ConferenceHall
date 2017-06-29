@@ -11,7 +11,8 @@ import { ElementService } from './element.service';
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: 'element-detail',
-    styles: [".ui-spinner .ui-inputtext { width: 100%; }"],
+    styles: [".ui-fileupload-row div:not(:first-child) { display: none; }",
+             ".ui-spinner .ui-inputtext { width: 100%; }"],
     templateUrl: 'element-detail.component.html'
 })
 export class ElementDetailComponent implements OnInit {

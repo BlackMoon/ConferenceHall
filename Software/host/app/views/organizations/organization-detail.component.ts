@@ -1,5 +1,5 @@
 ﻿import { Location } from '@angular/common';
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -10,6 +10,8 @@ import { OrganizationModel } from '../../models';
 import { OrganizationService } from "./organization.service";
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
+    styles: [".ui-fileupload-row div:not(:first-child):not(:last-child) { display: none; }"],
     templateUrl: "organization-detail.component.html"
 })
 export class OrganizationDetailComponent implements OnInit {
@@ -18,8 +20,11 @@ export class OrganizationDetailComponent implements OnInit {
      */
     id?: number;
 
+    /**
+     * Показатель, что логотип удален (для скрытия DOM-элементов)
+     */
+    noLogo: boolean;
     orgForm: any;
-    uploadedFiles: any[] = [];
 
     @ViewChild('fileUpload') fileUpload: FileUpload;
 
@@ -52,11 +57,20 @@ export class OrganizationDetailComponent implements OnInit {
 
     }
 
+    deleteLogo() {
+
+        this.organizationService
+            .deleteLogo(this.id)
+            .subscribe(
+                _ => this.noLogo = true,
+                error => this.logger.error2(error));
+    }
+
     onSelect = () => this.fileUpload.styleClass = "";
 
-    save(event, org) {
+    save(e, org) {
         
-        event.preventDefault();
+        e.preventDefault();
 
         (this.fileUpload.files.length > 0) && (org.logo = this.fileUpload.files[0]);
 

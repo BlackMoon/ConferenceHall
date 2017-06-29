@@ -110,7 +110,14 @@ namespace host.Controllers
 
             await CommandDispatcher.DispatchAsync<Organization, bool>(value);
         }
-        
+
+        // DELETE api/organizations/5
+        [HttpDelete("{id}")]
+        public Task Delete(int id)
+        {
+            return CommandDispatcher.DispatchAsync<DeleteLogoCommand, bool>(new DeleteLogoCommand() { Id = id });
+        }
+
         [HttpPost("/api/[controller]/delete")]
         public Task DeleteNodes([FromBody]DeleteNodesCommand value)
         {
