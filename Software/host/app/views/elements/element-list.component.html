@@ -1,4 +1,4 @@
-﻿<p-dataGrid [value]="elements" [styleClass]="'center h100p'" *ngIf="!smallGrid">
+﻿<p-dataGrid [value]="elements" styleClass="center h100p" *ngIf="!smallGrid">
     <ng-template let-element pTemplate="item">
         <div class="ui-md-6">
             <div pDraggable="dd_elem" [ngClass]="'ui-resizable'" [ngStyle]="{'height': '78px', 'padding':'12px'}" (onDragStart)="dragStart($event, element)">
