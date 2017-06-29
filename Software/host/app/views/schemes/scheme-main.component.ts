@@ -112,11 +112,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             { label: "0.1", value: 0.1 }
         ];
     }
-
-    get cloneButtonDisabled(): boolean {
-        return (this.removeButtonDisabled || !this.svgElement.classList.contains(shapeClass));
-    }
-
+  
     get removeButtonDisabled(): boolean {
         return (this.svgElement == null);
     }
@@ -182,8 +178,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         text.textContent = code;
 
-        // font-size = 1.5 * радиуса
-        text.setAttribute("font-size", `${r * 1.5}`);
+        // font-size = 1.2 * радиуса
+        text.setAttribute("font-size", `${r * 1.2}`);
         text.setAttributeNS(null, "alignment-baseline", "middle");
         text.setAttributeNS(null, "text-anchor", "middle");
         
@@ -602,15 +598,28 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     shapeClone() {
         
         let clone = this.svgElement.cloneNode(true);
-
+      
         let attr = [];
         for (let t of this.svgElement.transform.baseVal) {
             
             switch (t.type) {
                             
                 case SVGTransform.SVG_TRANSFORM_TRANSLATE:
-                    let vbox = this.canvas.viewBox.baseVal;
-                    attr.push(`translate(${vbox.x} ${vbox.y})`);
+
+                    let vbox = this.canvas.viewBox.baseVal,
+                        x = vbox.x, y = vbox.y;
+
+                    // для меток (ellipse) центр смещается на r
+                    if (this.svgElement.classList.contains(markClass))
+                    {
+                        let box = this.svgElement.getBBox();
+
+                        x += box.width / 2;
+                        y += box.height / 2;
+                    }
+                         
+                    attr.push(`translate(${x} ${y})`);
+
                     break;
                             
                 case SVGTransform.SVG_TRANSFORM_ROTATE:
