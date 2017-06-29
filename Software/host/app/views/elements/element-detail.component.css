@@ -1,11 +1,9 @@
-﻿.inputw100p button, .inputw100p input {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 100%;
+﻿.ui-fileupload-buttonbar button:not(:first-child) {
+    display: none;
 }
 
-.ui-fileupload-buttonbar button:not(:first-child) {
-    display: none;
+.ui-spinner .ui-inputtext {
+    width: 100%;    
 }
 
 .hidden .ui-fileupload-content {
