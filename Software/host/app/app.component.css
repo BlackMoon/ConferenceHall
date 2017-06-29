@@ -454,6 +454,23 @@ Raleway font
     display: none;
 }
 
+.ui-fileupload-buttonbar button:not(:first-child) {
+    display: none;
+}
+
+.ui-fileupload-content {
+    padding: 0;
+}
+
+.hidden .ui-fileupload-content {
+    display: none;
+}
+
+.ui-fileupload-row div:not(:first-child):not(:last-child) {
+    display: none;
+}
+
+
 .ui-treetable .ui-treetable-header, .ui-treetable .ui-treetable-footer {
     padding: 0.25em 0.5em;
 }
