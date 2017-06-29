@@ -8,7 +8,7 @@ import * as SVG from "../../common/svg-utils";
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: 'shape-properties',
-    styles: [".ui-inputtext { width: 100%; }"],
+    styles: [".ui-spinner .ui-inputtext { width: 100%; }"],
     templateUrl: 'shape-properties.component.html'
 })
 export class ShapePropertiesComponent implements OnDestroy, OnInit {
