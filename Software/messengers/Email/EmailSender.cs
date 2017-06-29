@@ -35,7 +35,7 @@ namespace messengers.Email
         {
             _smtpSettings = smtpOptions.Value;
         }
-        
+
         public void Send(string subject, string body, params string[] addresses)
         {
             if (addresses != null && addresses.Any())
@@ -89,27 +89,23 @@ namespace messengers.Email
 
         public async Task SendAsync(string subject, string body, params string[] addresses)
         {
-            if (addresses.IsNullOrEmpty())
-            {
-                _errors.Add(" Список адресатов не заполнен. ");
-            }
-            else
+            if (addresses != null && addresses.Any())
             {
                 var emailMessage = new MimeMessage();
-
+                emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
                 foreach (var email in addresses)
                 {
-                    if (!AddressValidator(email)) { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
-                    else { emailMessage.To.Add(new MailboxAddress("", email)); }
+                    if (AddressValidator(email)) { emailMessage.To.Add(new MailboxAddress("", email)); }
+                    else { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
                 }
 
-                emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
-                if (!subject.IsNullOrEmpty())
+
+                if (!string.IsNullOrEmpty(subject))
                 {
                     emailMessage.Subject = subject;
                 }
 
-                if (!body.IsNullOrEmpty())
+                if (!string.IsNullOrEmpty(body))
                 {
                     emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                     {
@@ -118,7 +114,7 @@ namespace messengers.Email
                     };
                 }
 
-
+                // send
                 using (var client = new SmtpClient())
                 {
                     try
@@ -126,18 +122,23 @@ namespace messengers.Email
                         await client.ConnectAsync(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort, _smtpSettings.UseSsl);
                         await client.AuthenticateAsync(_smtpSettings.EmailSender, _smtpSettings.PasswordSender);
                         await client.SendAsync(emailMessage);
-
-                        await client.DisconnectAsync(true);
                     }
                     catch (Exception ex)
                     {
                         _errors.Add(ex.Message);
                     }
+                    finally
+                    {
+                        client.Disconnect(true);
+                    }
                 }
+            }
+            {
+                _errors.Add(" Список адресатов не заполнен. ");
             }
         }
 
-        
+
 
     }
 
