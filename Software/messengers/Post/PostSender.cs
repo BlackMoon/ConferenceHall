@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace messengers.Post
 {
+    /// <summary>
+    /// В этом классе хранится информация об почтовом адрессе абонента 
+    /// </summary>
     [SenderKind("Post", "Адрес")]
-
-    // В этом классе хранится информация об почтовом адрессе абонента 
     public class PostSender : IMessageSender
     {
         public IEnumerable<string> Errors { get; set;}
