@@ -84,8 +84,19 @@ namespace domain.Organization.Command
             command.Icon = ImageScaler.ResizeImage(command.Logo, W, H, command.ContentType, 50);
             command.Logo = ImageScaler.ResizeImage(command.Logo, MaxW, MaxH, command.ContentType);
 
+            DbManager.AddParameter("pid", command.Id);
+            DbManager.AddParameter("paddress", command.Address ?? (object)DBNull.Value);
+            DbManager.AddParameter("pcode", command.Code);
+            DbManager.AddParameter("pdescription", command.Description ?? (object)DBNull.Value);
+            DbManager.AddParameter("pname", command.Name);
+            DbManager.AddParameter("picon", command.Icon ?? (object)DBNull.Value);
+            DbManager.AddParameter("plogo", command.Logo ?? (object)DBNull.Value);
+
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.UpdateAsync(command);
+            int updated = await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "organization_change");
+            Logger.LogInformation($"Modified {updated} records");
+
+            return updated > 0;
         }
     }
 }
