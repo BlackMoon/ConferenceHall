@@ -8,7 +8,7 @@
             </div>
         </nav>
         <main>
-            <form id="orgForm" [formGroup]="orgForm" (ngSubmit)="save($event, form.value)">
+            <form id="orgForm" [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
 
                 <input type="hidden" formControlName="id" />
 

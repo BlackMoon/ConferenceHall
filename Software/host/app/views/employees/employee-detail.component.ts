@@ -83,11 +83,18 @@ export class EmployeeDetailComponent implements OnInit {
         else
             user.operation = user.bind ? UserOperation.Bind : UserOperation.None;
 
-        delete user.bind;
+        delete user["bind"];
 
+        let method = employee.id ? "update" : "add";
         this.employeeService[employee.id ? 'update' : 'add'](employee)
             .subscribe(
-                _ => this.logger.info("Ok"),
+                id => {
+
+                    if (method === "add") 
+                        this.employeeForm.patchValue({ id: id });
+
+                    this.logger.info("Ok");
+                },
                 error => this.logger.error2(error)
             );
     }
