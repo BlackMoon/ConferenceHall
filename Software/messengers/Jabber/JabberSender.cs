@@ -30,26 +30,19 @@ namespace messengers.Jabber
 
         // по протоколу xmpp мы производим сначала аутентификацию: (A) client AUTH --> server (B) server SUCCESS --> клиент
         // В данной библиотеке Matrix.Xmpp это осуществляется в процедуре XmppClientOnLogin
-        // а потом отправку сообщения xmppClient.Send
-        // поле Wait и операция Thread.Sleep(500) введено для задержки, чтобы сообщение не отправлялось раньше, чем придет успешный ответ на аутентификацию
-        private bool Wait;
+        // операция Thread.Sleep(500) введено для задержки, чтобы сообщение не отправлялось раньше, чем придет успешный ответ на аутентификацию
 
         /// <summary>
         /// создание регулярного выражения проверки jid: https://stackoverflow.com/questions/1351041/what-is-the-regular-expression-for-validating-jabber-id
         /// </summary>
         public Func<string, bool> AddressValidator { get; set; } = s =>
-       {
-           Regex rgx = new Regex(@"^\A([a-z0-9\.\-_\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z$");  // создание регулярного выражения проверки jid
+           {
+               Regex rgx = new Regex(@"^\A([a-z0-9\.\-_\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z$");  // создание регулярного выражения проверки jid
            return rgx.IsMatch(s);
-       };
+           };
         public JabberSender(IOptions<JabberOptions> jabberOptions)
         {
             _jabberSettings = jabberOptions.Value;
-        }
-
-        private void XmppClientOnLogin(object sender, Matrix.EventArgs e)
-        {
-            Wait = false;
         }
 
         private void xmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
@@ -77,8 +70,6 @@ namespace messengers.Jabber
                 xmppClient.OnAuthError += new EventHandler<Matrix.Xmpp.Sasl.SaslEventArgs>(xmppClient_OnAuthError);
                 xmppClient.OnError += new EventHandler<ExceptionEventArgs>(xmppClient_OnError);
                 xmppClient.Open();
-                xmppClient.OnLogin += new EventHandler<Matrix.EventArgs>(XmppClientOnLogin);
-                Wait = true;
                 Thread.Sleep(_jabberSettings.JabberDelay);
                 xmppClient.SendPresence(Show.Chat, "Online");
                 if (!string.IsNullOrEmpty(body))
@@ -117,8 +108,6 @@ namespace messengers.Jabber
                 xmppClient.OnAuthError += new EventHandler<Matrix.Xmpp.Sasl.SaslEventArgs>(xmppClient_OnAuthError);
                 xmppClient.OnError += new EventHandler<ExceptionEventArgs>(xmppClient_OnError);
                 xmppClient.Open();
-                xmppClient.OnLogin += new EventHandler<Matrix.EventArgs>(XmppClientOnLogin);
-                Wait = true;
                 Thread.Sleep(_jabberSettings.JabberDelay);
                 xmppClient.SendPresence(Show.Chat, "Online");
                 if (!string.IsNullOrEmpty(body))
