@@ -181,7 +181,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             code = this.canvas.querySelectorAll(`g.${markClass}`).length + 1;
         
         text.textContent = code;
-        
+
+        // font-size = 1.5 * радиуса
+        text.setAttribute("font-size", `${r * 1.5}`);
         text.setAttributeNS(null, "alignment-baseline", "middle");
         text.setAttributeNS(null, "text-anchor", "middle");
         
