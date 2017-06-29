@@ -16,8 +16,7 @@ namespace messengers.Email
         private readonly SmtpOptions _smtpSettings;
 
         private readonly IList<string> _errors = new List<string>();
-
-        public IEnumerable<string> Errors => _errors;
+        public IEnumerable<string> Errors => _errors.AsEnumerable();
 
         /// <summary>
         /// regex для email: 

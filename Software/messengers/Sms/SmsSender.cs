@@ -19,9 +19,8 @@ namespace messengers.Sms
         {
             _smsSettings = smsOptions.Value;
         }
-        private IList<string> _errors = new List<string>();
-
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
+        private readonly IList<string> _errors = new List<string>();
+        public IEnumerable<string> Errors => _errors.AsEnumerable();
         public class CostMessages
         {
 

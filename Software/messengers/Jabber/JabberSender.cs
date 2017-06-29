@@ -18,15 +18,14 @@ namespace messengers.Jabber
 
         private readonly JabberOptions _jabberSettings;
 
-        private IList<string> _errors = new List<string>();
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
-
+        private readonly IList<string> _errors = new List<string>();
+        public IEnumerable<string> Errors => _errors.AsEnumerable();
 
         // по протоколу xmpp мы производим сначала аутентификацию: (A) client AUTH --> server (B) server SUCCESS --> клиент
         // В данной библиотеке Matrix.Xmpp это осуществляется в процедуре XmppClientOnLogin
         // а потом отправку сообщения xmppClient.Send
         // поле Wait и операция Thread.Sleep(500) введено для задержки, чтобы сообщение не отправлялось раньше, чем придет успешный ответ на аутентификацию
-        private bool Wait { get; set; }
+        private bool Wait;
 
         /// <summary>
         /// создание регулярного выражения проверки jid: https://stackoverflow.com/questions/1351041/what-is-the-regular-expression-for-validating-jabber-id

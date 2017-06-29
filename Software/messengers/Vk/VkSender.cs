@@ -15,8 +15,8 @@ namespace messengers.Vk
     {
         private readonly VkOptions _vkSettings;
 
-        private IList<string> _errors = new List<string>();
-        public IEnumerable<string> Errors => _errors ?? (_errors = new List<string>());
+        private readonly IList<string> _errors = new List<string>();
+        public IEnumerable<string> Errors => _errors.AsEnumerable();
 
         /// <summary>
         /// создание регулярного выражения проверки vk_id
