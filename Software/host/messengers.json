@@ -1,7 +1,7 @@
-{
+п»ї{
 
   "SmtpOptions": {
-    "NameSender": "Станислав",
+    "NameSender": "РЎС‚Р°РЅРёСЃР»Р°РІ",
     "EmailSender": "fiseyskiysv@aquilon-st.ru",
     "PasswordSender": "Anapa19811981",
     "SmtpServer": "smtp.timeweb.ru",
@@ -28,7 +28,7 @@
     "PasswordSender": "Anapa19811981",
     "SmtpServer": "smtp.timeweb.ru",
     "EmailSender": "fiseyskiysv@aquilon-st.ru",
-    "NameSender": "Станислав",
+    "NameSender": "РЎС‚Р°РЅРёСЃР»Р°РІ",
     "UseSSL": "false",
     "SmtpPort": "25"
   },
