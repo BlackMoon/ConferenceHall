@@ -1,9 +1,10 @@
 ﻿import { DatePipe } from '@angular/common';
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
+import { TabView } from "primeng/components/tabview/tabview";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
 import { AppointmentModel, ConferenceModel, ConfState, confDragType, GroupCommand, NodeGroupCommand, TimeRange } from '../../models';
 import { ConfirmationService, MenuItem } from 'primeng/primeng';
@@ -14,13 +15,15 @@ declare var $: any;
 
 @Component({
     encapsulation: ViewEncapsulation.None,
+    host: { '(window:resize)': "onResize($event)" },
     styles: [".p0501 .ui-tabview-panel { padding: 0.5em 0.1em !important; }"],
     templateUrl: 'conference-schedule.component.html'
 })
-export class ConferenceScheduleComponent {
+export class ConferenceScheduleComponent implements AfterViewInit {
     
     @ViewChild(AppointmentDialogComponent) appointmentDialog: AppointmentDialogComponent;
     @ViewChild(ConferenceTableComponent) conferenceTable: ConferenceTableComponent;
+    @ViewChild(TabView) tabView: TabView;
 
     events: any[];
     headerConfig: any;
@@ -60,6 +63,10 @@ export class ConferenceScheduleComponent {
                 command: () => this.removeEventFromSchedule(this.selectedEvent)
             }];
         
+    }
+
+    ngAfterViewInit() {
+        this.onResize();
     }
 
     appointmentDialogClosed(appointment: AppointmentModel) {
@@ -178,6 +185,15 @@ export class ConferenceScheduleComponent {
         this.loadEvents();
     }
 
+    loadEvents() {
+
+        this.conferrenceService
+            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds, this.selectedOrganizationIds)
+            .subscribe(
+            conferences => this.events = conferences.map(c => <any>{ id: c.id, hallId: c.hallId, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
+            error => this.logger.error2(error));
+    }
+
     /**
      * Из conference-list'a передается целиком объект [conference] для вставки subject/description в event schedule
      * @param conference
@@ -208,13 +224,16 @@ export class ConferenceScheduleComponent {
         this.appointmentDialog.show(<any>{ hallId: this.selectedConference.hallId, start: new Date(this.startDate.getFullYear(), month, date) }, calendarVisible);    
     }
 
-    loadEvents() {
+    onResize() {
+       
+        let tabview = this.tabView.el.nativeElement.querySelector("div.ui-tabview"),
+            panels = tabview.querySelectorAll("div.ui-tabview-panel");
 
-        this.conferrenceService
-            .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds, this.selectedOrganizationIds)
-            .subscribe(
-                conferences => this.events = conferences.map(c => <any>{ id: c.id, hallId: c.hallId, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
-                error => this.logger.error2(error));
+        for (let ix = 0; ix < panels.length; ix++) {
+            debugger;
+            let panel = panels[ix];
+            panel.style.height = `${tabview.offsetHeight - panel.offsetTop}px`;
+        }
     }
 
     removeEventFromSchedule(event) {

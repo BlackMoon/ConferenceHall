@@ -1,4 +1,4 @@
-﻿<p-treeTable #tree [value]="nodes" selectionMode="{{this.editMode || this.readOnly ? 'checkbox' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}" 
+﻿<p-treeTable matchTree [value]="nodes" selectionMode="{{this.editMode || this.readOnly ? 'checkbox' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}" 
              [(selection)]="selectedNodes" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)" (onNodeUnselect)="unSelectNode($event)">
     <p-header>
         <div class="ui-g">

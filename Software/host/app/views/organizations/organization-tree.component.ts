@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { AfterViewInit, Component, EventEmitter, OnInit, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -12,12 +12,11 @@ enum SearchKind { SearchOrg, SearchEmployee };
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    host: { '(window:resize)': "onResize($event)" },
     selector: "organization-tree",
     styles: ["div.ui-treetable-tablewrapper { overflow: auto }"],
     templateUrl: "organization-tree.component.html"
 })
-export class OrganizationTreeComponent implements AfterViewInit, OnInit {
+export class OrganizationTreeComponent implements OnInit {
 
     editMode: boolean;
     filter: string;
@@ -46,35 +45,11 @@ export class OrganizationTreeComponent implements AfterViewInit, OnInit {
 
     searchTitle: string = "По организациям";
 
-    /**
-     * div.ui-treetable
-     */
-    table: any;
-
-    /**
-     * div.ui-treetable-tablewrapper
-     */
-    wrapper: any;
-
     constructor(
         private confirmationService: ConfirmationService,
-        private elRef: ElementRef,
         private organizationService: OrganizationService,
         private logger: Logger,
         private router: Router) { }
-
-    ngAfterViewInit() {
-
-        const cls = "ui-widget-content";
-
-        this.table = this.elRef.nativeElement.querySelector(".ui-treetable");
-        this.wrapper = this.table.querySelector(".ui-treetable-tablewrapper");
-        this.wrapper.classList.add(cls);
-
-        this.wrapper.querySelector(`table.${cls}`).classList.remove(cls);
-
-        this.onResize();
-    }
 
     ngOnInit() {
         this.loadOrganizations();
@@ -220,14 +195,6 @@ export class OrganizationTreeComponent implements AfterViewInit, OnInit {
                     this.nodes = nodes;
                 },
                 error => this.logger.error2(error));
-    }
-
-    onResize() {
-        
-        let header = this.table.querySelector(".ui-treetable-header"),
-            footer = this.table.querySelector(".ui-treetable-footer");
-        
-        this.wrapper.style.height = `${this.table.offsetHeight - header.offsetHeight - footer.offsetHeight}px`;
     }
 
     removeNodes(id: number) {
