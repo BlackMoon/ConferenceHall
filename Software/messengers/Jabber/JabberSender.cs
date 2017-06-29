@@ -18,8 +18,15 @@ namespace messengers.Jabber
 
         private readonly JabberOptions _jabberSettings;
 
-        private readonly IList<string> _errors = new List<string>();
-        public IEnumerable<string> Errors => _errors.AsEnumerable();
+        private Lazy<IList<string>> _errors =
+        new Lazy<IList<string>>(() => new List<string>());
+
+        public IList<string> ErrorsList
+        {
+            get { return _errors.Value; }
+            set { _errors = new Lazy<IList<string>>(() => value); }
+        }
+        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
 
         // по протоколу xmpp мы производим сначала аутентификацию: (A) client AUTH --> server (B) server SUCCESS --> клиент
         // В данной библиотеке Matrix.Xmpp это осуществляется в процедуре XmppClientOnLogin
@@ -47,12 +54,12 @@ namespace messengers.Jabber
 
         private void xmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
         {
-            _errors.Add("Ошибка авторизации: " + e.Failure);
+            ErrorsList.Add("Ошибка авторизации: " + e.Failure);
         }
 
         private void xmppClient_OnError(object sender, Matrix.ExceptionEventArgs e)
         {
-            _errors.Add("Ошибка клиента: " + e.Exception);
+            ErrorsList.Add("Ошибка клиента: " + e.Exception);
         }
 
         // region генерация сообщения
@@ -84,14 +91,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            ErrorsList.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
 
@@ -127,14 +134,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            ErrorsList.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
         }
 
 

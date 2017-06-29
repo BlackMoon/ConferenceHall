@@ -1,5 +1,4 @@
-﻿using Castle.Core.Internal;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
@@ -15,8 +14,15 @@ namespace messengers.Email
     {
         private readonly SmtpOptions _smtpSettings;
 
-        private readonly IList<string> _errors = new List<string>();
-        public IEnumerable<string> Errors => _errors.AsEnumerable();
+        private Lazy<IList<string>> _errors =
+        
+        new Lazy<IList<string>>(() => new List<string>());
+        public IList<string> ErrorsList
+        {
+            get { return _errors.Value; }
+            set { _errors = new Lazy<IList<string>>(() => value); }
+        }
+        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
 
         /// <summary>
         /// regex для email: 
@@ -47,7 +53,7 @@ namespace messengers.Email
                     if (AddressValidator(email))
                         emailMessage.To.Add(new MailboxAddress("", email));
                     else
-                        _errors.Add(email + " почтовый ящик в неизвестном формате");
+                        ErrorsList.Add(email + " почтовый ящик в неизвестном формате");
                 }
 
                 if (!string.IsNullOrEmpty(subject))
@@ -73,7 +79,7 @@ namespace messengers.Email
                     }
                     catch (Exception ex)
                     {
-                        _errors.Add(ex.Message);
+                        ErrorsList.Add(ex.Message);
                     }
                     finally
                     {
@@ -82,7 +88,7 @@ namespace messengers.Email
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
 
         }
 
@@ -95,7 +101,7 @@ namespace messengers.Email
                 foreach (var email in addresses)
                 {
                     if (AddressValidator(email)) { emailMessage.To.Add(new MailboxAddress("", email)); }
-                    else { _errors.Add(email + " почтовый ящик в неизвестном формате"); }
+                    else { ErrorsList.Add(email + " почтовый ящик в неизвестном формате"); }
                 }
 
 
@@ -124,7 +130,7 @@ namespace messengers.Email
                     }
                     catch (Exception ex)
                     {
-                        _errors.Add(ex.Message);
+                        ErrorsList.Add(ex.Message);
                     }
                     finally
                     {
@@ -133,7 +139,7 @@ namespace messengers.Email
                 }
             }
             {
-                _errors.Add(" Список адресатов не заполнен. ");
+                ErrorsList.Add(" Список адресатов не заполнен. ");
             }
         }
 
