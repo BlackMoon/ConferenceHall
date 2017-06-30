@@ -1,5 +1,5 @@
 ﻿import { Location } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -54,6 +54,12 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     @ViewChild(OrganizationTreeComponent) organizationTree: OrganizationTreeComponent;
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
     @ViewChild(TickerTableComponent) tickerTable: TickerTableComponent;
+
+    /**
+    * элементы вклдаки [Схеиа]
+    */
+    @ViewChild("content") content: ElementRef;
+    @ViewChild("switch") switch: ElementRef;
 
     constructor(
         private dateToUtcPipe: DateToUtcPipe,
@@ -272,17 +278,33 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     onResize() {
         
-        // Вкладки [Участники, Схема]
-        const computedTabs: number[] = [2, 3];
-      
-        let tabs = this.accordion.el.nativeElement.querySelectorAll("div.ui-accordion-content");
+        let tab, tabs = this.accordion.el.nativeElement.querySelectorAll("div.ui-accordion-content");
       
         for (let ix = 0; ix < tabs.length; ix++) {
-            
-            if (computedTabs.indexOf(ix) !== -1) {
-                let tab = tabs[ix];
-                tab.style.height = `${document.documentElement.clientHeight * 0.75}px`;
-            }    
+
+            switch (ix) {
+
+                // Вкладка [Участники]
+                case 2:
+
+                    tab = tabs[ix];
+                    tab.style.height = `${document.documentElement.clientHeight * 0.75}px`;
+
+                    break;
+
+                // Вкладка [Схема]
+                case 3:
+                    
+                    tab = tabs[ix];
+                    let h = document.documentElement.clientHeight * 0.75;
+                    tab.style.height = `${h}px`;
+
+                    let cs = getComputedStyle(tab);
+
+                    this.content.nativeElement.style.height = `${h - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - this.switch.nativeElement.offsetHeight}px`;
+
+                    break;
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-﻿<p-dataTable dataKey="id" [value]="halls" [rows]="10" [loading]="loading" selectionMode="{{this.editMode || this.readOnly ? 'multiple' : 'single'}}" styleClass="{{this.readOnly ? 'no-header' : ''}}" 
+﻿<p-dataTable matchTable="ui-datatable" dataKey="id" [value]="halls" rows="10" [loading]="loading" selectionMode="{{this.editMode || this.readOnly ? 'multiple' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}" 
              [(selection)]="selectedHalls" (onRowSelect)="selectRow($event)" (onRowUnselect)="unSelectRow($event)">
     <p-header *ngIf="!readOnly">
         <div class="ui-g">

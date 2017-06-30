@@ -5,10 +5,12 @@ import { DataTableModule, DropdownModule, InputSwitchModule, } from 'primeng/pri
 import { MemberTableComponent } from './member-table.component';
 import { MemberService } from './member.service';
 
+import { UiModule } from '../../common/ui/ui.module';
+
 @NgModule({
     declarations: [MemberTableComponent],
     exports: [ MemberTableComponent],
-    imports: [ CommonModule, DataTableModule, DropdownModule, FormsModule, InputSwitchModule ],
+    imports: [ CommonModule, DataTableModule, DropdownModule, FormsModule, InputSwitchModule, UiModule ],
     providers: [MemberService]
 })
 export class MembersModule { }

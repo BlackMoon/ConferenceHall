@@ -1,9 +1,9 @@
 ﻿import { NgModule } from '@angular/core';
 import { DetailComponent } from "./detail.component";
-import { MatchTreeDirective } from "./match-tree.directive";
+import { MatchTableDirective } from "./match-table.directive";
 
 @NgModule({
-    declarations: [DetailComponent, MatchTreeDirective],
-    exports: [DetailComponent, MatchTreeDirective]
+    declarations: [DetailComponent, MatchTableDirective],
+    exports: [DetailComponent, MatchTableDirective]
 })
 export class UiModule { }

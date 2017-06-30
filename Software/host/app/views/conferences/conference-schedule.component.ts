@@ -228,11 +228,19 @@ export class ConferenceScheduleComponent implements AfterViewInit {
        
         let tabview = this.tabView.el.nativeElement.querySelector("div.ui-tabview"),
             panels = tabview.querySelectorAll("div.ui-tabview-panel");
+        
+        // calculate min offsetTop
+        let ix, top = 1e6;
+        for (ix = 0; ix < panels.length; ix++) {
+            let panel = panels[ix];
+            top = Math.min(top, panel.offsetTop);
+        }
+        
 
         for (let ix = 0; ix < panels.length; ix++) {
             debugger;
             let panel = panels[ix];
-            panel.style.height = `${tabview.offsetHeight - panel.offsetTop}px`;
+            panel.style.height = `${tabview.offsetHeight - top}px`;
         }
     }
 

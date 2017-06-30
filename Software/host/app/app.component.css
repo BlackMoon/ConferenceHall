@@ -470,6 +470,6 @@ Raleway font
     padding: 0.25em 0.5em;
 }
 
-[matchTree] div.ui-treetable-tablewrapper {
+[matchTable] div.ui-datatable-tablewrapper, [matchTable] div.ui-treetable-tablewrapper {
     overflow: auto;
 }

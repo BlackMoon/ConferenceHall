@@ -104,10 +104,10 @@
                     </p-accordionTab>
 
                     <p-accordionTab header="Схема" *ngIf="id !== undefined">
-                        <div class="ui-toolbar-group-right">
+                        <div #switch class="ui-toolbar-group-right">
                             <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
                         </div>
-                        <div class="ui-g-12 ui-g-nopad h100p">
+                        <div #content class="ui-g-12 ui-g-nopad">
 
                             <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" editable="true"
                                           (seatChanged)="memberSeatChanged($event)" (stateChanged)="memberStateChanged($event)"></member-table>

@@ -1,4 +1,4 @@
-﻿<p-treeTable matchTree [value]="nodes" selectionMode="{{this.editMode || this.readOnly ? 'checkbox' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}" 
+﻿<p-treeTable matchTable="ui-treetable" [value]="nodes" selectionMode="{{this.editMode || this.readOnly ? 'checkbox' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}" 
              [(selection)]="selectedNodes" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)" (onNodeUnselect)="unSelectNode($event)">
     <p-header>
         <div class="ui-g">
@@ -27,7 +27,7 @@
             </div>
         </div>
     </p-footer>
-    <p-column field="name" header="Наименование">
+    <p-column field="name" header="Наименование" [style]="{ 'text-overflow': 'ellipsis' }">
         <ng-template let-col let-node="rowData" pTemplate="body">
             <img #icon src="/api/icon/{{node.data['id'] | uniquesuffix}}" width="32" (load)="icon.classList.remove('ui-helper-hidden')" class="ui-helper-hidden" *ngIf="!node.leaf">
             {{node.data[col.field]}}
