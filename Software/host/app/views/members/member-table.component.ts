@@ -23,12 +23,7 @@ export class MemberTableComponent {
      */
     @Input()
     availableSeats: SelectItem[];
-
-    /**
-     * Режим чтения (для вставки в другой компонент)
-     */
-    @Input()
-    readOnly: boolean;
+   
 
     @Input()
     members: MemberModel[];
@@ -95,8 +90,6 @@ export class MemberTableComponent {
 
         !found && this.members.push(member);
     }
-
-    getMember = id => this.members.find(m => m.id === id);
 
     loadMembers() {
 

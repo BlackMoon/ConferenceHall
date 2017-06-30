@@ -1,10 +1,10 @@
 ﻿<p-dataTable matchTable="ui-datatable" [value]="members" [rows]="10" [editable]="editable" [loading]="loading"
              [selectionMode]="selectionMode" [(selection)]="selectedMembers" styleClass="h100p"
              (onRowSelect)="selectRow($event)" (onRowUnselect)="unSelectRow($event)">
-    <p-column field="name" header="ФИО"></p-column>
-    <p-column field="job" header="Организация"></p-column>
+    <p-column field="name" header="ФИО" [sortable]="true"></p-column>
+    <p-column field="job" header="Организация" [sortable]="true"></p-column>
     <p-column field="position" header="Должность"></p-column>
-    <p-column field="seat" header="Место" [editable]="editable" [style]="{ 'overflow':'visible', 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}" *ngIf="!readOnly">
+    <p-column field="seat" header="Место" [editable]="editable" [style]="{ 'overflow':'visible', 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}" *ngIf="editable">
         <ng-template let-col let-member="rowData" pTemplate="body">
             <span class="fa-stack circle {{member.state == MemberState.Confirmed ? 'on' : ''}}">
                 <strong class="fa-stack-1x">{{member[col.field]}}</strong>

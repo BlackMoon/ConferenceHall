@@ -206,7 +206,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let marks = this.canvas.querySelectorAll(`g.${markClass}[data-code="${code}"`);
 
         if (marks) {
-            [].forEach.call(marks, m => m.classList.toggle("on", true));
+            [].forEach.call(marks, m => m.classList.toggle("on", force));
         }
         
     }
@@ -577,7 +577,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         // сетку и границу не нужно сохранять
         let lines = svg.querySelectorAll(`line.${lineClass}`);
         [].forEach.call(lines, (line) => svg.removeChild(line));
-
+        
         let box = svg.querySelector(`rect.${borderClass}`);
         svg.removeChild(box);
 

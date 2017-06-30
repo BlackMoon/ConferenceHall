@@ -1,32 +1,28 @@
 ﻿<div style="position: absolute; left: -400px; top: -140px; height: 800px; width: 1800px">
     <div #wrapper class="ui-g h100p">
-        <div #header class="ui-g-12 h40 ui-g-nopad">
-            <div class="ui-g ui-widget-content">
-                <div class="ui-g-2 ui-md-2" style="background-color: rgba(255, 0, 51, 0.9);color: white">
+        <div #header class="ui-g-12 h2 h60 ui-g-nopad">
+            <div class="ui-g h100p ui-widget-content ui-corner-all">
+                <div class="ui-g-2 ui-md-2 ui-corner-left" style="background-color: rgba(255, 0, 51, 0.9);color: white">
                     {{activeScreen?.startDate | date:'HH:mm'}} - {{activeScreen?.endDate | date: 'HH:mm'}}
                 </div>
-                <div class="ui-g-8 ui-md-8" style="background-color: rgba(109, 204, 163, 0.9)">
+                <div class="ui-g-10 ui-md-10 ui-corner-right" style="background-color: rgba(109, 204, 163, 0.9)">
                     {{activeScreen?.subject}}
-                </div>
-                <div class="ui-g-2 ui-md-2" style="background-color: rgba(109, 204, 163, 0.9)">
                     <div class="ui-toolbar-group-right">
                         {{now | date:'dd.MM.yyyy HH:mm:ss'}}
                     </div>
                 </div>
             </div>
         </div>
-        <div #box class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad">
-            <member-table></member-table>
+        <div #box class="ui-g-4 ui-md-4 ui-widget-content ui-g-nopad ui-corner-left">
+            <member-screen></member-screen>
         </div>
-        <div #box class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad">
+        <div #box class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad ui-corner-right">
             <scheme-main [schemeId]="activeScreen?.schemeId"></scheme-main>
         </div>
-        <div #footer class="ui-g-12 h40 ui-g-nopad">
-            <div class="ui-g ui-widget-content">
-                <div class="ui-g-12 ui-md-12" style="background-color: rgba(109, 204, 163, 0.9)">
+        <div #footer class="ui-g-12 h2 h60 ui-widget-content ui-corner-all" style="background-color: rgba(109, 204, 163, 0.9)">
+            
                     {{ticker}}&nbsp;
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

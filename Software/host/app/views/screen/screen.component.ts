@@ -7,14 +7,14 @@ import { MemberModel, MemberState, ScreenModel } from '../../models';
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 import { HubService } from "../../common/hub-service";
 import { ScreenService } from "./screen.service";
-import { MemberTableComponent } from "../members/member-table.component";
+import { MemberScreenComponent } from "./member-screen.component";
 
 const tickInterval = 5000;
 
 @Component({
     encapsulation: ViewEncapsulation.None,
     host: { '(window:resize)': "onResize($event)" },
-    styles: [".h40 { height: 40px }"],
+    styles: [".h2 { font-size: 1.5em; font-weight: bold}", ".h60 { height: 60px }"],
     templateUrl: 'screen.component.html'
 })
 export class ScreenComponent implements OnInit {
@@ -57,7 +57,7 @@ export class ScreenComponent implements OnInit {
 
     @ViewChild('wrapper') wrapperElRef: ElementRef;
 
-    @ViewChild(MemberTableComponent) memberTable: MemberTableComponent;
+    @ViewChild(MemberScreenComponent) memberScreen: MemberScreenComponent;
 
     @ViewChild(SchemeMainComponent) schemeMain: SchemeMainComponent;
 
@@ -78,7 +78,7 @@ export class ScreenComponent implements OnInit {
 
                 if (key) {
 
-                    this.memberTable.conferenceId = key;
+                    this.memberScreen.conferenceId = key;
 
                     // служба signalR может отсутствовать
                     this.hubService
@@ -88,23 +88,23 @@ export class ScreenComponent implements OnInit {
                             this.hubService
                                 .confirmMember
                                 .subscribe(member => {
-                                    
+                                  
                                     if (member.seat !== member.oldSeat)
                                         this.schemeMain.toggleMark(member.oldSeat, false);
 
                                     this.schemeMain.toggleMark(member.seat, member.state === MemberState.Confirmed);
                                     
-                                    this.memberTable.confirmMember(member);
+                                    this.memberScreen.confirmMember(member);
                                 });
 
                             this.hubService
                                 .unregisterMember
                                 .subscribe(id => {
 
-                                    let member = this.memberTable.getMember(id);
+                                    let member = this.memberScreen.getMember(id);
                                     if (member) {
                                         this.schemeMain.toggleMark(member.seat, false);   
-                                        this.memberTable.removeMember(member.id);
+                                        this.memberScreen.removeMember(member.id);
                                     }
                                 });
 
@@ -126,7 +126,7 @@ export class ScreenComponent implements OnInit {
                 error => this.logger.error2(error));
 
         Observable
-            .combineLatest(this.schemeMain.schemeLoaded, this.memberTable.membersLoaded)
+            .combineLatest(this.schemeMain.schemeLoaded, this.memberScreen.membersLoaded)
             .subscribe((a: Array<any>) => {
                 // занятые места
                 let members: MemberModel[] = a[1] || [];

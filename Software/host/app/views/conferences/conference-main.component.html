@@ -88,7 +88,7 @@
                     <p-accordionTab header="Участники" *ngIf="id !== undefined">
                         <div class="ui-g-12 ui-g-nopad h100p">
                             <div class="ui-g-6 ui-md-6 ui-widget-content ui-g-nopad h100p">
-                                <member-table [members]="members" readOnly="true" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
+                                <member-table [members]="members" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
                             </div>
                             <div class="ui-g-1 ui-md-1 h100p" style="display: table">
                                 <div class="ui-picklist-buttons">

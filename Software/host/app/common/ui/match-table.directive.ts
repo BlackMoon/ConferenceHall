@@ -24,11 +24,12 @@ export class MatchTableDirective implements AfterViewChecked {
         const cls = "ui-widget-content";
        
         this.table = this.el.nativeElement.querySelector(`div.${this.matchTable}`);
-
+        
         if (this.table) {
             this.wrapper = this.table.querySelector(`div.${this.matchTable}-tablewrapper`);
 
             this.wrapper.classList.add(cls);
+            this.wrapper.style.overflow = "auto";
             this.wrapper.querySelector("table").classList.remove(cls);
 
             // call our matchHeight function here later
@@ -40,7 +41,7 @@ export class MatchTableDirective implements AfterViewChecked {
     onResize() {
 
         if (!this.table) return;
-
+       
         // call our applyHeight function here later
         let header = this.table.querySelector(`div.${this.matchTable}-header`),
             footer = this.table.querySelector(`div.${this.matchTable}-footer`),

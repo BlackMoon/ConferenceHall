@@ -1,0 +1,17 @@
+﻿<p-dataTable matchTable="ui-datatable" [value]="members" [rows]="10" [loading]="loading" styleClass="h100p no-header screen">
+    <p-column [style]="{ 'overflow':'visible', 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
+        <ng-template let-col let-member="rowData" pTemplate="body">
+            <span class="fa-stack fa-lg circle {{member.state == MemberState.Confirmed ? 'on' : ''}}">
+                <span class="fa-lg" style="vertical-align: initial">{{member.seat}}</span>
+            </span>
+        </ng-template>
+    </p-column>
+
+    <p-column>
+        <ng-template let-member="rowData" pTemplate="body">
+            <h2>{{member.name}}</h2>
+            <div>{{member.job}}. {{member.position}}</div>
+        </ng-template>    
+    </p-column>
+    
+</p-dataTable>
