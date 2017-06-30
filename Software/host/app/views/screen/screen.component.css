@@ -1,0 +1,18 @@
+﻿.head2 { font-size: 1.5em; font-weight: bold} 
+
+.h60 { height: 60px }
+
+.ellipsys {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.bggreen {
+    background-color: rgba(109, 204, 163, 0.9)
+}
+
+.bgred {
+    background-color: rgba(255, 0, 51, 0.9);
+}
+
