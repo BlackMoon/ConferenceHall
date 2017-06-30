@@ -60,11 +60,11 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
             length: [0],
             width: [0]
         });
-
+       
         this.shapeForm
             .valueChanges
             .subscribe(model => {
-
+                
                 model.angle = model.angle || 0;
                 
                 let attr = [];
@@ -73,6 +73,12 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                     if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
                         
                         let box = this.svgElement.getBBox();
+
+                        if (this.svgElement.classList.contains(SVG.markClass)) {
+                            let ellipse = this.svgElement.querySelector("ellipse");
+                            ellipse && (box = ellipse.getBBox());
+                        }
+
                         attr.push(`translate(${t.matrix.e - (model.width - box.width) / 2} ${t.matrix.f - (model.length - box.height) / 2})`);
                         break;
                     }
@@ -119,7 +125,8 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                             break;
                     }
                 });
-            });
+        });
+    
     }
 
     ngOnDestroy() {
