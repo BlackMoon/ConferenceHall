@@ -20,6 +20,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
     actionIcon: string;
 
     editMode: boolean;
+    loading: boolean;
 
     states: SelectItem[];
 
@@ -44,7 +45,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
         private confirmationService: ConfirmationService,
         private logger: Logger,
         private router: Router) {
-
+        
         let stateKeys = Object
             .keys(ConfState)
             .filter(k => typeof ConfState[k] !== "function");
@@ -70,11 +71,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
             endDateChange.currentValue !== endDateChange.previousValue) {
 
             if (this.selectedState !== ConfState.Planned) {
-                this.conferrenceService
-                    .getAll(this.startDate, this.endDate, this.selectedState)
-                    .subscribe(
-                        conferences => this.conferences = conferences,
-                        error => this.logger.error2(error));
+                this.loadConferences();
             }
         }
     }
@@ -95,12 +92,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
 
         this.selectedState = state;
 
-        this.conferrenceService
-            .getAll(this.startDate, this.endDate, this.selectedState)
-            .subscribe(
-                conferences => this.conferences = conferences,
-                error => this.logger.error2(error));
-
+        this.loadConferences();
         this.selectedConference = null;
     }
 
@@ -115,6 +107,23 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
     }
 
     makeAppointment = () => this.appointmentButtonClick.emit(this.selectedConference);
+
+    loadConferences(e?:any) {
+
+        this.loading = true;
+
+        this.conferrenceService
+            .getAll(this.startDate, this.endDate, this.selectedState)
+            .subscribe(
+                conferences => {
+                    this.conferences = conferences;
+                    this.loading = false;
+                },
+                error => {
+                    this.logger.error2(error);
+                    this.loading = false;
+                });    
+    }
 
     removeConference() {
 

@@ -13,6 +13,8 @@ import { Logger } from "../../common/logger";
  
 export class MemberTableComponent {
 
+    loading: boolean;
+
     // ReSharper disable once InconsistentNaming
     public MemberState = MemberState;
    
@@ -97,15 +99,21 @@ export class MemberTableComponent {
     getMember = id => this.members.find(m => m.id === id);
 
     loadMembers() {
-        
+
+        this.loading = true;
+
         this.memberService
             .getAll(this.conferenceId)
             .subscribe(
                 members => {
                     this.members = members;
                     this.membersLoaded.emit(members);
+                    this.loading = false;
                 },
-                error => this.logger.error2(error));    
+                error => {
+                    this.logger.error2(error);
+                    this.loading = false;
+                });    
     }
 
     removeMember(id) {

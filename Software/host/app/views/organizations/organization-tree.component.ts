@@ -13,12 +13,17 @@ enum SearchKind { SearchOrg, SearchEmployee };
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: "organization-tree",
-    styles: ["div.ui-treetable-tablewrapper { overflow: auto }"],
+    styles: [
+        ".ui-panel-content, .ui-panel-content-wrapper { height: 100% }",
+        ".ui-panel-titlebar { display: none }",
+        ".ui-panel-content.ui-widget-content { padding: 0 !important}"],
     templateUrl: "organization-tree.component.html"
 })
 export class OrganizationTreeComponent implements OnInit {
 
     editMode: boolean;
+    loading: boolean;
+
     filter: string;
 
     /**
@@ -178,6 +183,8 @@ export class OrganizationTreeComponent implements OnInit {
 
     loadOrganizations() {
 
+        this.loading = true;
+
         this.organizationService
             .getAll(this.emplSearch, null, this.filter)
             .subscribe(
@@ -193,8 +200,12 @@ export class OrganizationTreeComponent implements OnInit {
                     }
 
                     this.nodes = nodes;
+                    this.loading = false;
                 },
-                error => this.logger.error2(error));
+                error => {
+                    this.logger.error2(error);
+                    this.loading = false;
+                });
     }
 
     removeNodes(id: number) {

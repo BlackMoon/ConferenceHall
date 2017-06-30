@@ -300,7 +300,6 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                     tab.style.height = `${h}px`;
 
                     let cs = getComputedStyle(tab);
-
                     this.content.nativeElement.style.height = `${h - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - this.switch.nativeElement.offsetHeight}px`;
 
                     break;

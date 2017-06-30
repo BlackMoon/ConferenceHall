@@ -1,4 +1,5 @@
-﻿<p-dataTable matchTable="ui-datatable" [value]="members" [rows]="10" [editable]="editable" [selectionMode]="selectionMode" [(selection)]="selectedMembers" styleClass="h100p"
+﻿<p-dataTable matchTable="ui-datatable" [value]="members" [rows]="10" [editable]="editable" [loading]="loading"
+             [selectionMode]="selectionMode" [(selection)]="selectedMembers" styleClass="h100p"
              (onRowSelect)="selectRow($event)" (onRowUnselect)="unSelectRow($event)">
     <p-column field="name" header="ФИО"></p-column>
     <p-column field="job" header="Организация"></p-column>

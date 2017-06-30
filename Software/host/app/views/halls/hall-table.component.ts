@@ -13,7 +13,7 @@ import { HallService } from './hall.service';
 export class HallTableComponent implements OnInit {
 
     editMode: boolean;
-    loading: boolean = true;
+    loading: boolean;
 
     halls: HallModel[];
     selectedHalls: HallModel[] = [];
@@ -34,6 +34,7 @@ export class HallTableComponent implements OnInit {
 
     ngOnInit() {
 
+        this.loading = true;
         this.hallService
             .getAll()
             .subscribe(

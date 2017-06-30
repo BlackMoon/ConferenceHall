@@ -8,10 +8,12 @@ import { OrganizationRoutingModule } from './organizations-routing.module';
 
 import {
     AccordionModule,
+    BlockUIModule,
     ButtonModule,
     FileUploadModule,
     InputTextModule,
     InputTextareaModule,
+    PanelModule,
     SelectButtonModule,
     SplitButtonModule,
     ToggleButtonModule,
@@ -28,6 +30,7 @@ import { OrganizationService } from "./organization.service";
     exports: [OrganizationTreeComponent],
     imports: [
         AccordionModule,
+        BlockUIModule,
         ButtonModule, 
         CommonModule,
         GlobalsModule,
@@ -37,6 +40,7 @@ import { OrganizationService } from "./organization.service";
         InputTextModule,
         InputTextareaModule,
         OrganizationRoutingModule,
+        PanelModule,
         ReactiveFormsModule,
         SelectButtonModule,
         SplitButtonModule,
