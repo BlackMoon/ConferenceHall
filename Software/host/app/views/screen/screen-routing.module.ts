@@ -1,10 +1,11 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { Layout } from '../../common/navigation/layout';
 
 import { ScreenComponent } from './screen.component';
 
 const screenRoutes: Routes = [
-    { path: 'screen/:id', component: ScreenComponent }
+    { path: 'screen/:id', component: ScreenComponent,  data: { layout: Layout.None } }
 ];
 
 @NgModule({

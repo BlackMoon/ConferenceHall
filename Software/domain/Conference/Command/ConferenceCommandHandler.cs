@@ -174,8 +174,8 @@ namespace domain.Conference.Command
 
             if (command.State.HasValue)
             {
-                DbManager.AddParameter("state", command.State.ToString());  
-                columns.Add("state=@state::conf_state");
+                DbManager.AddParameter("state", command.State);  
+                columns.Add("state=@state");
             }
 
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");

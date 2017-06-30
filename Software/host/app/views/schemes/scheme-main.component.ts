@@ -203,9 +203,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     toggleMark(code, force?: boolean) {
-        let mark = this.canvas.querySelector(`g.${markClass}[data-code="${code}"`);
-        if (mark != null)
-            mark.classList.toggle("on", force);
+        
+        let marks = this.canvas.querySelectorAll(`g.${markClass}[data-code="${code}"`);
+
+        if (marks) {
+            [].forEach.call(marks, m => m.classList.toggle("on", true));
+        }
+        
     }
 
     canvasMouseDown(event) {
@@ -561,7 +565,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             error => this.logger.error2(error));
     }
 
-    saveScheme(scheme) {
+    save(scheme) {
 
         let svg = this.canvas.cloneNode(true);
         
@@ -588,8 +592,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.schemeService
             .update(scheme)
-            .subscribe(_ => { },
-            error => this.logger.error2(error));
+            .subscribe(
+                _ => this.logger.info("Ok"),
+                error => this.logger.error2(error));
     }
 
     /**
