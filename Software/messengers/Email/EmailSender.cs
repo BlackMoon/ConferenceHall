@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,25 +9,16 @@ using System.Threading.Tasks;
 namespace messengers.Email
 {
     [SenderKind("Email")]
-    public class EmailSender : IMessageSender
+    public class EmailSender : AbstractSender
     {
         private readonly SmtpOptions _smtpSettings;
-
-        private Lazy<IList<string>> _errors =
-        
-        new Lazy<IList<string>>(() => new List<string>());
-        public IList<string> ErrorsList
-        {
-            get { return _errors.Value; }
-            set { _errors = new Lazy<IList<string>>(() => value); }
-        }
-        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
+       
 
         /// <summary>
         /// regex для email: 
         /// https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
         /// </summary>
-        public Func<string, bool> AddressValidator { get; set; } = s =>
+        public new Func<string, bool> AddressValidator { get; set; } = s =>
         {
             Regex rgx = new Regex(@"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                         @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$");
@@ -41,7 +31,7 @@ namespace messengers.Email
             _smtpSettings = smtpOptions.Value;
         }
 
-        public void Send(string subject, string body, params string[] addresses)
+        public override void Send(string subject, string body, params string[] addresses)
         {
             if (addresses != null && addresses.Any())
             {
@@ -53,7 +43,7 @@ namespace messengers.Email
                     if (AddressValidator(email))
                         emailMessage.To.Add(new MailboxAddress("", email));
                     else
-                        ErrorsList.Add(email + " почтовый ящик в неизвестном формате");
+                        _errors.Add(email + " почтовый ящик в неизвестном формате");
                 }
 
                 if (!string.IsNullOrEmpty(subject))
@@ -79,7 +69,7 @@ namespace messengers.Email
                     }
                     catch (Exception ex)
                     {
-                        ErrorsList.Add(ex.Message);
+                        _errors.Add(ex.Message);
                     }
                     finally
                     {
@@ -88,11 +78,11 @@ namespace messengers.Email
                 }
             }
             else
-                ErrorsList.Add(" Список адресатов не заполнен. ");
+                _errors.Add(" Список адресатов не заполнен. ");
 
         }
 
-        public async Task SendAsync(string subject, string body, params string[] addresses)
+        public override async Task SendAsync(string subject, string body, params string[] addresses)
         {
             if (addresses != null && addresses.Any())
             {
@@ -100,15 +90,15 @@ namespace messengers.Email
                 emailMessage.From.Add(new MailboxAddress(_smtpSettings.NameSender, _smtpSettings.EmailSender));
                 foreach (var email in addresses)
                 {
-                    if (AddressValidator(email)) { emailMessage.To.Add(new MailboxAddress("", email)); }
-                    else { ErrorsList.Add(email + " почтовый ящик в неизвестном формате"); }
+                    if (AddressValidator(email))
+                        emailMessage.To.Add(new MailboxAddress("", email));
+                    else
+                        _errors.Add(email + " почтовый ящик в неизвестном формате");
                 }
-
-
+                
                 if (!string.IsNullOrEmpty(subject))
-                {
                     emailMessage.Subject = subject;
-                }
+             
 
                 if (!string.IsNullOrEmpty(body))
                 {
@@ -130,7 +120,7 @@ namespace messengers.Email
                     }
                     catch (Exception ex)
                     {
-                        ErrorsList.Add(ex.Message);
+                        _errors.Add(ex.Message);
                     }
                     finally
                     {
@@ -138,13 +128,10 @@ namespace messengers.Email
                     }
                 }
             }
-            {
-                ErrorsList.Add(" Список адресатов не заполнен. ");
-            }
+            else
+                _errors.Add(" Список адресатов не заполнен. ");
+            
         }
-
-
-
     }
 
 }

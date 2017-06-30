@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace messengers
@@ -30,10 +29,5 @@ namespace messengers
         /// <param name="addresses"></param>
         /// <returns></returns>
         Task SendAsync(string subject, string body, params string[] addresses);
-
-        /// <summary>
-        /// Делегат проверки адреса
-        /// </summary>
-        Func<string, bool> AddressValidator { get; set; }
     }
 }

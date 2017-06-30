@@ -1,32 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Matrix;
+﻿using Matrix;
 using Matrix.Xmpp;
 using Matrix.Xmpp.Client;
-using System.Threading;
+using Microsoft.Extensions.Options;
+using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 namespace messengers.Jabber
 {
     [SenderKind("Jabber", "XMPP (Jabber)")]
-    public class JabberSender : IMessageSender
+    public class JabberSender : AbstractSender
     {
-
         private readonly JabberOptions _jabberSettings;
 
-        private Lazy<IList<string>> _errors =
-        new Lazy<IList<string>>(() => new List<string>());
-
-        public IList<string> ErrorsList
-        {
-            get { return _errors.Value; }
-            set { _errors = new Lazy<IList<string>>(() => value); }
-        }
-        public IEnumerable<string> Errors => ErrorsList?.AsEnumerable();
 
         // по протоколу xmpp мы производим сначала аутентификацию: (A) client AUTH --> server (B) server SUCCESS --> клиент
         // В данной библиотеке Matrix.Xmpp это осуществляется в процедуре XmppClientOnLogin
@@ -35,11 +24,13 @@ namespace messengers.Jabber
         /// <summary>
         /// создание регулярного выражения проверки jid: https://stackoverflow.com/questions/1351041/what-is-the-regular-expression-for-validating-jabber-id
         /// </summary>
-        public Func<string, bool> AddressValidator { get; set; } = s =>
-           {
-               Regex rgx = new Regex(@"^\A([a-z0-9\.\-_\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z$");  // создание регулярного выражения проверки jid
-           return rgx.IsMatch(s);
-           };
+        protected new Func<string, bool> AddressValidator { get; } = s =>
+        {
+            // создание регулярного выражения проверки jid
+            Regex rgx = new Regex(@"^\A([a-z0-9\.\-_\+]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z$");
+            return rgx.IsMatch(s);
+        };
+
         public JabberSender(IOptions<JabberOptions> jabberOptions)
         {
             _jabberSettings = jabberOptions.Value;
@@ -47,31 +38,37 @@ namespace messengers.Jabber
 
         private void xmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
         {
-            ErrorsList.Add("Ошибка авторизации: " + e.Failure);
+            _errors.Add("Ошибка авторизации: " + e.Failure);
         }
 
         private void xmppClient_OnError(object sender, Matrix.ExceptionEventArgs e)
         {
-            ErrorsList.Add("Ошибка клиента: " + e.Exception);
+            _errors.Add("Ошибка клиента: " + e.Exception);
         }
 
         // region генерация сообщения
-        public void Send(string subject, string body, params string[] addresses)
+        public override void Send(string subject, string body, params string[] addresses)
         {
             if (addresses != null && addresses.Any())
             {
-                XmppClient xmppClient = new XmppClient();
                 Jid jid = new Jid(_jabberSettings.JabberLogin);
-                xmppClient.Password = _jabberSettings.JabberPassword;
-                xmppClient.Username = jid.User;
-                xmppClient.Compression = true;
+
+                XmppClient xmppClient = new XmppClient
+                {
+                    Password = _jabberSettings.JabberPassword,
+                    Username = jid.User,
+                    Compression = true
+                };
+                
                 xmppClient.SetXmppDomain(jid.Server);
                 xmppClient.StartTls = true;
-                xmppClient.OnAuthError += new EventHandler<Matrix.Xmpp.Sasl.SaslEventArgs>(xmppClient_OnAuthError);
-                xmppClient.OnError += new EventHandler<ExceptionEventArgs>(xmppClient_OnError);
+                xmppClient.OnAuthError += xmppClient_OnAuthError;
+                xmppClient.OnError += xmppClient_OnError;
                 xmppClient.Open();
+
                 Thread.Sleep(_jabberSettings.JabberDelay);
                 xmppClient.SendPresence(Show.Chat, "Online");
+
                 if (!string.IsNullOrEmpty(body))
                 {
                     foreach (var recipient in addresses)
@@ -82,34 +79,40 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            ErrorsList.Add(recipient + " jid в неизвестном формате");
+                            _errors.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                ErrorsList.Add(" Список адресатов не заполнен. ");
+                _errors.Add(" Список адресатов не заполнен. ");
         }
 
 
         // псевдоасинхронный метод для поддержания интерфейса, так как нативных методов асинхронности у Matrix.Xmpp не нашел
-        public async Task SendAsync(string subject, string body, params string[] addresses)
+        public override async Task SendAsync(string subject, string body, params string[] addresses)
         {
             if (addresses != null && addresses.Any())
             {
-                XmppClient xmppClient = new XmppClient();
                 Jid jid = new Jid(_jabberSettings.JabberLogin);
-                xmppClient.Password = _jabberSettings.JabberPassword;
-                xmppClient.Username = jid.User;
-                xmppClient.Compression = true;
+
+                XmppClient xmppClient = new XmppClient
+                {
+                    Password = _jabberSettings.JabberPassword,
+                    Username = jid.User,
+                    Compression = true
+                };
+
                 xmppClient.SetXmppDomain(jid.Server);
                 xmppClient.StartTls = true;
-                xmppClient.OnAuthError += new EventHandler<Matrix.Xmpp.Sasl.SaslEventArgs>(xmppClient_OnAuthError);
-                xmppClient.OnError += new EventHandler<ExceptionEventArgs>(xmppClient_OnError);
+                xmppClient.OnAuthError += xmppClient_OnAuthError;
+                xmppClient.OnError += xmppClient_OnError;
                 xmppClient.Open();
+
                 Thread.Sleep(_jabberSettings.JabberDelay);
                 xmppClient.SendPresence(Show.Chat, "Online");
+
                 if (!string.IsNullOrEmpty(body))
                 {
                     foreach (var recipient in addresses)
@@ -118,24 +121,19 @@ namespace messengers.Jabber
                         {
                             await Task.Run(() =>
                             {
-                                var send = xmppClient.Send(new Message(new Jid(recipient), MessageType.Chat, body));
-                            }); //отправляем сообщение
+                                xmppClient.Send(new Message(new Jid(recipient), MessageType.Chat, body));
+                            }); 
                         }
                         else
                         {
-                            ErrorsList.Add(recipient + " jid в неизвестном формате");
+                            _errors.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                ErrorsList.Add(" Список адресатов не заполнен. ");
+                _errors.Add(" Список адресатов не заполнен. ");
         }
-
-
     }
-
-
 }
-
