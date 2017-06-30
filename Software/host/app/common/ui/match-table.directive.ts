@@ -13,6 +13,9 @@ export class MatchTableDirective implements AfterViewChecked {
     @Input()
     matchTable: string = "";
 
+    @Input()
+    overflow: string = "auto";
+
     table: any;
     wrapper: any;
 
@@ -29,7 +32,7 @@ export class MatchTableDirective implements AfterViewChecked {
             this.wrapper = this.table.querySelector(`div.${this.matchTable}-tablewrapper`);
 
             this.wrapper.classList.add(cls);
-            this.wrapper.style.overflow = "auto";
+            this.wrapper.style.overflow = this.overflow;
             this.wrapper.querySelector("table").classList.remove(cls);
 
             // call our matchHeight function here later

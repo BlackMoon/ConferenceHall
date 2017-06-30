@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -12,9 +12,8 @@ import { MemberScreenComponent } from "./member-screen.component";
 const tickInterval = 5000;
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
     host: { '(window:resize)': "onResize($event)" },
-    styles: [".h2 { font-size: 1.5em; font-weight: bold}", ".h60 { height: 60px }"],
+    styleUrls: ["screen.component.css"],
     templateUrl: 'screen.component.html'
 })
 export class ScreenComponent implements OnInit {

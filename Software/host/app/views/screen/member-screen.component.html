@@ -1,4 +1,4 @@
-﻿<p-dataTable matchTable="ui-datatable" [value]="members" [rows]="10" [loading]="loading" styleClass="h100p no-header screen">
+﻿<p-dataTable matchTable="ui-datatable" overflow="hidden" [value]="members" [rows]="10" [loading]="loading" styleClass="h100p no-header screen">
     <p-column [style]="{ 'overflow':'visible', 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}">
         <ng-template let-col let-member="rowData" pTemplate="body">
             <span class="fa-stack fa-lg circle {{member.state == MemberState.Confirmed ? 'on' : ''}}">
