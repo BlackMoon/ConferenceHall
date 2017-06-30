@@ -141,8 +141,10 @@ export class ScreenComponent implements OnInit {
             if (ix > this.tickers.length - 1) {
                 ix = 0;
             }
-
+            
             this.ticker = this.tickers[ix];
+
+            this.memberScreen.scroll();
 
         }, tickInterval);
 

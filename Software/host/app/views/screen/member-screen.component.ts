@@ -1,9 +1,11 @@
-﻿import { Component, EventEmitter, Input, Output } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SelectItem } from 'primeng/primeng';
 import { MemberModel, MemberState } from '../../models';
 import { MemberService } from '../members/member.service';
 import { Logger } from "../../common/logger";
+
+const scrollStep = 0.1;
 
 @Component({
     selector: "member-screen",
@@ -11,13 +13,15 @@ import { Logger } from "../../common/logger";
     templateUrl: 'member-screen.component.html'
 })
 
-export class MemberScreenComponent {
+export class MemberScreenComponent implements AfterViewInit {
 
     loading: boolean;
 
+    // datatable wrapper element
+    wrapper: any;
+
     // ReSharper disable once InconsistentNaming
-    public MemberState = MemberState;
-    
+    public MemberState = MemberState;    
 
     @Input()
     members: MemberModel[];
@@ -36,13 +40,17 @@ export class MemberScreenComponent {
     }
    
 
-    @Output() membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();
-   
+    @Output() membersLoaded: EventEmitter<MemberModel[]> = new EventEmitter<MemberModel[]>();   
 
     constructor(
+        private el: ElementRef,
         private memberService: MemberService,
         private logger: Logger) { }
 
+
+    ngAfterViewInit() {        
+        this.wrapper = this.el.nativeElement.querySelector(".ui-datatable-tablewrapper");
+    }
    
     confirmMember(member) {
 
@@ -85,5 +93,15 @@ export class MemberScreenComponent {
 
         let ix = this.members.findIndex(m => m.id === id);
         this.members.splice(ix, 1);
+    }
+
+    scroll() {
+        
+        if (this.wrapper)
+        {            
+            let pos = this.wrapper.scrollTop / (this.wrapper.scrollHeight - this.wrapper.clientHeight);
+            
+            this.wrapper.scrollTop = (pos <= 1 - scrollStep) ? this.wrapper.scrollTop + this.wrapper.clientHeight * scrollStep : 0;            
+        }
     }
 }
