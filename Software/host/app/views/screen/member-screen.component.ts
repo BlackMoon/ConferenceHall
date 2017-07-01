@@ -99,9 +99,10 @@ export class MemberScreenComponent implements AfterViewInit {
         
         if (this.wrapper)
         {            
-            let pos = this.wrapper.scrollTop / (this.wrapper.scrollHeight - this.wrapper.clientHeight);
+            // check whether scrollEnd or not
+            let scroll = this.wrapper.scrollTop < this.wrapper.scrollHeight - this.wrapper.clientHeight;
             
-            this.wrapper.scrollTop = (pos <= 1 - scrollStep) ? this.wrapper.scrollTop + this.wrapper.clientHeight * scrollStep : 0;            
+            this.wrapper.scrollTop = scroll ? this.wrapper.scrollTop + this.wrapper.scrollHeight * scrollStep : 0;            
         }
     }
 }
