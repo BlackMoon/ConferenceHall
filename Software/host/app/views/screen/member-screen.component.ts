@@ -6,7 +6,7 @@ import { MemberService } from '../members/member.service';
 import { Logger } from "../../common/logger";
 
 const duration = 1000;
-const scrollStep = 0.1;
+const scrollStep = 0.51;
 
 @Component({
     selector: "member-screen",
@@ -17,7 +17,6 @@ const scrollStep = 0.1;
 export class MemberScreenComponent implements AfterViewInit {
 
     loading: boolean;
-    start: number;
 
     // datatable wrapper element
     wrapper: any;
@@ -103,27 +102,30 @@ export class MemberScreenComponent implements AfterViewInit {
         this.members.splice(ix, 1);
     }
 
-    animationScroll(time) {
-
-        if (!this.start)
-            this.start = time;
-
-        let elapsed = time - this.start,                         // Elapsed miliseconds since start of scrolling.
-            percent = Math.min(time / duration, 1);              // Get percent of completion in range [0, 1].
-
-        // check whether scrollEnd or not
-        let scroll = this.wrapper.scrollTop < this.wrapper.scrollHeight - this.wrapper.clientHeight;
-
-        this.wrapper.scrollTop = scroll ? this.wrapper.scrollTop + this.wrapper.clientHeight * scrollStep * percent : 0;
-
-        if (elapsed < duration) 
-            this.animationScroll(duration);
-        else
-            this.start = undefined;
-    }
-
     scroll() {
         
-        this.wrapper && this.animationScroll(duration);
+        if (this.wrapper) {
+            
+            // check whether scrollEnd or not
+            let delta = this.wrapper.clientHeight * scrollStep,
+                scrollTop = this.wrapper.scrollTop < this.wrapper.scrollHeight - this.wrapper.clientHeight ? this.wrapper.scrollTop : -delta,
+                start: number;
+
+            var callback: FrameRequestCallback = time => {
+
+                if (!start)
+                    start = time;
+
+                let elapsed = time - start,                                 // Elapsed miliseconds since start of scrolling.
+                    percent = Math.min(elapsed / duration, 1);              // Get percent of completion in range [0, 1].
+              
+                percent = this.easing(percent);
+
+                this.wrapper.scrollTop = scrollTop + delta * percent;
+                elapsed < duration && window.requestAnimationFrame(callback);
+            };
+
+            window.requestAnimationFrame(callback);
+        }
     }
 }
