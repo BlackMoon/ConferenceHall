@@ -17,5 +17,5 @@
 }
 
 .logo {
-    background: url(/assets/logo_tn.png) center center / cover no-repeat;
+    background: url(/assets/logo_tn.png) 1em center / contain no-repeat;
 }
