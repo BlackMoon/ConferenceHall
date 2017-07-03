@@ -23,7 +23,7 @@ export class OrganizationTreeComponent implements OnInit {
 
     editMode: boolean;
     loading: boolean;
-
+    
     filter: string;
 
     /**
@@ -182,7 +182,7 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     loadOrganizations() {
-
+     
         this.loading = true;
 
         this.organizationService

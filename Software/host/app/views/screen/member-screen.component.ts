@@ -5,6 +5,7 @@ import { MemberModel, MemberState } from '../../models';
 import { MemberService } from '../members/member.service';
 import { Logger } from "../../common/logger";
 
+const duration = 1000;
 const scrollStep = 0.1;
 
 @Component({
@@ -16,6 +17,7 @@ const scrollStep = 0.1;
 export class MemberScreenComponent implements AfterViewInit {
 
     loading: boolean;
+    start: number;
 
     // datatable wrapper element
     wrapper: any;
@@ -69,6 +71,12 @@ export class MemberScreenComponent implements AfterViewInit {
         !found && this.members.push(member);
     }
 
+    /**
+     * Easing function: easeInOutCubic
+     * From: https://gist.github.com/gre/1650294
+     */
+    easing = t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1; 
+
     getMember = id => this.members.find(m => m.id === id);
 
     loadMembers() {
@@ -95,14 +103,27 @@ export class MemberScreenComponent implements AfterViewInit {
         this.members.splice(ix, 1);
     }
 
+    animationScroll(time) {
+
+        if (!this.start)
+            this.start = time;
+
+        let elapsed = time - this.start,                         // Elapsed miliseconds since start of scrolling.
+            percent = Math.min(time / duration, 1);              // Get percent of completion in range [0, 1].
+
+        // check whether scrollEnd or not
+        let scroll = this.wrapper.scrollTop < this.wrapper.scrollHeight - this.wrapper.clientHeight;
+
+        this.wrapper.scrollTop = scroll ? this.wrapper.scrollTop + this.wrapper.clientHeight * scrollStep * percent : 0;
+
+        if (elapsed < duration) 
+            this.animationScroll(duration);
+        else
+            this.start = undefined;
+    }
+
     scroll() {
         
-        if (this.wrapper)
-        {            
-            // check whether scrollEnd or not
-            let scroll = this.wrapper.scrollTop < this.wrapper.scrollHeight - this.wrapper.clientHeight;
-            
-            this.wrapper.scrollTop = scroll ? this.wrapper.scrollTop + this.wrapper.scrollHeight * scrollStep : 0;            
-        }
+        this.wrapper && this.animationScroll(duration);
     }
 }

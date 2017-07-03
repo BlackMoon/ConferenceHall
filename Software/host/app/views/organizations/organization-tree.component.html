@@ -1,8 +1,4 @@
-﻿<p-blockUI [blocked]="loading" [target]="pnl">
-    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="position:absolute; top:40%; left:50%"></i>
-</p-blockUI>
-
-<p-panel #pnl styleClass="h100p" [style]="{'border': 'none'}">
+﻿<p-panel #pnl styleClass="h100p" [style]="{'border': 'none'}">
     <p-treeTable matchTable="ui-treetable" [value]="nodes" selectionMode="{{this.editMode || this.readOnly ? 'checkbox' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}"
                  [(selection)]="selectedNodes" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)" (onNodeUnselect)="unSelectNode($event)">
         <p-header>
@@ -47,3 +43,6 @@
         </p-column>
     </p-treeTable>
 </p-panel>
+<p-blockUI [blocked]="loading" [target]="pnl">
+    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="position:absolute; top:40%; left:50%"></i>
+</p-blockUI>
