@@ -16,3 +16,6 @@
     background-color: rgba(240, 60, 70, 1);
 }
 
+.logo {
+    background: url(/assets/logo_tn.png) center center / cover no-repeat;
+}

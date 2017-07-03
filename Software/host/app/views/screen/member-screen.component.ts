@@ -6,7 +6,7 @@ import { MemberService } from '../members/member.service';
 import { Logger } from "../../common/logger";
 
 const duration = 1000;
-const scrollStep = 0.51;
+const scrollStep = 0.1;
 
 @Component({
     selector: "member-screen",
