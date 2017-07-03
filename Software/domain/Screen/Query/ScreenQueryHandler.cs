@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Dapper;
 using domain.Common.Query;
-using domain.Ticker.Query;
-using Dapper;
+using domain.Conference.Query;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace domain.Screen.Query
 {
     public class ScreenQueryHandler : 
-        KeyObjectQueryHandler<FindScreenByIdQuery, Screen>
-        //IQueryHandler<FindTickersByConference, IEnumerable<string>>
+        KeyObjectQueryHandler<FindScreenByIdQuery, Screen>,
+        IQueryHandler<FindScreensQuery, IEnumerable<Screen>>
     {
         public ScreenQueryHandler(IDbManager dbManager) : base(dbManager)
         {
@@ -21,8 +18,8 @@ namespace domain.Screen.Query
 
         public override async Task<Screen> ExecuteAsync(FindScreenByIdQuery query)
         {
-            // sql для выбора конференции
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
+                .Column("c.id")
                 .Column("c.subject")
                 .Column("c.hall_scheme_id schemeid")
                 .Column("lower(c.period) startDate")
@@ -33,6 +30,25 @@ namespace domain.Screen.Query
 
             await DbManager.OpenAsync();
             return DbManager.DbConnection.QuerySingleOrDefault<Screen>(sqlBuilder.ToString(), new { id = query.Id });
+        }
+
+        public IEnumerable<Screen> Execute(FindScreensQuery query)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Screen>> ExecuteAsync(FindScreensQuery query)
+        {
+            SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
+                .Column("c.id")
+                .Column("c.subject")
+                .Column("h.name hall")
+                .Column("lower(c.period) startDate")
+                .Column("upper(c.period) endDate")
+                .Join("conf_hall.halls h ON h.id = c.hall_id");
+
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QueryAsync<Screen>(sqlBuilder.ToString());
         }
     }
 }

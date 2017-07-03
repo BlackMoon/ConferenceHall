@@ -5,7 +5,7 @@ import { Layout } from '../../common/navigation/layout';
 import { ScreenComponent } from './screen.component';
 
 const screenRoutes: Routes = [
-    { path: 'screen/:id', component: ScreenComponent,  data: { layout: Layout.None } }
+    { path: 'screens/:id', component: ScreenComponent,  data: { layout: Layout.None } }
 ];
 
 @NgModule({

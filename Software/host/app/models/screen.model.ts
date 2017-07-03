@@ -3,7 +3,7 @@
 /**
  * Модель. Активная конференция (на отдельном экране)
  */
-export class ScreenModel{
+export class ScreenModel extends KeyModel{
     
     schemeId: string;
     startDate: Date;
@@ -13,6 +13,8 @@ export class ScreenModel{
     tickers: string[];
 
     constructor() {
+
+        super();
 
         this.schemeId = null;
         this.startDate = null;

@@ -1,7 +1,13 @@
 ﻿import { CommonModule } from '@angular/common';
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from '@angular/router';
-import { ConfirmDialogModule, ConfirmationService, GrowlModule, SplitButtonModule, ToolbarModule } from 'primeng/primeng';
+import {
+    CarouselModule,
+    ConfirmDialogModule,
+    ConfirmationService,
+    GrowlModule
+} from 'primeng/primeng';
+
 import { ConferencesModule } from './conferences/conferences.module';
 import { ElementsModule } from './elements/elements.module';
 import { EmployeesModule } from './employees/employees.module';
@@ -16,6 +22,7 @@ import { HomeView } from './home.view';
     declarations: [HomeView],
     exports: [ConfirmDialogModule, CommonModule, GrowlModule],
     imports: [
+        CarouselModule,
         CommonModule,
         ConfirmDialogModule,
         ConferencesModule,
@@ -28,9 +35,7 @@ import { HomeView } from './home.view';
         OrganizationsModule,
         RouterModule,
         SchemesModule,
-        ScreenModule,
-        SplitButtonModule,
-        ToolbarModule],
+        ScreenModule],
     providers: [ConfirmationService]
 })
 export class ViewsModule { }

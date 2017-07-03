@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
@@ -8,11 +8,12 @@ import { Logger } from "./common/logger";
 const startViewKey = 'returnUrl';
 
 @Component({
+    host: { '(window:resize)': 'onResize($event)' },
     selector: 'conferenceHall-app',
     styleUrls: ['app.component.css'],
     templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit, OnInit {
 
     msgs: Message[] = [];
 
@@ -22,6 +23,10 @@ export class AppComponent implements OnInit {
      * Стартовая страница
      */
     private startView: string;
+
+    @ViewChild("bottombar") bottomBarEl: ElementRef;
+    @ViewChild("topbar") topBarEl: ElementRef;
+    @ViewChild("content") contentEl: ElementRef;
 
     constructor(
         private route: ActivatedRoute,
@@ -43,6 +48,10 @@ export class AppComponent implements OnInit {
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
     }
 
+    ngAfterViewInit() {
+        this.onResize();
+    }
+
     ngOnInit() {
 
         this.logger.msgReсeived.subscribe((msgs: Message[]) => this.msgs = msgs);
@@ -53,4 +62,13 @@ export class AppComponent implements OnInit {
     }
 
     bitTest = (layout: Layout) => this.layout & layout;
+
+    onResize() {
+        let h = window.innerHeight;
+
+        this.bottomBarEl && (h -= this.bottomBarEl.nativeElement.offsetHeight);
+        this.topBarEl && (h -= this.topBarEl.nativeElement.offsetHeight);
+
+        this.contentEl.nativeElement.style.height = `${h}px`;
+    }
 }

@@ -1,25 +1,23 @@
-﻿<div style="position: absolute; left: -400px; top: -140px; height: 800px; width: 1800px">
-    <div #wrapper class="ui-g h100p">
-        <div #header class="ui-g-12 font2 h72 ui-g-nopad logo" style="margin-bottom: 0.5em">
-            <div class="ui-g-2 ui-md-2">&nbsp;</div>
-            <div class="ui-g-10 ui-md-10 ui-corner-all bggreen" style="margin-top: 1em">
-                {{activeScreen?.subject}}
-                <div class="ui-toolbar-group-right">
-                    {{now | date:'dd.MM.yyyy HH:mm:ss'}}
-                </div>
+﻿<div #wrapper class="ui-g h100p">
+    <div #header class="ui-g-12 font2 h72 ui-g-nopad tnlogo" style="margin-bottom: 0.5em">
+        <div class="ui-g-2 ui-md-2">&nbsp;</div>
+        <div class="ui-g-10 ui-md-10 ui-corner-all bggreen" style="margin-top: 1em">
+            {{activeScreen?.subject}}
+            <div class="ui-toolbar-group-right">
+                {{now | date:'dd.MM.yyyy HH:mm:ss'}}
             </div>
         </div>
-        <div #box class="ui-g-4 ui-md-4 ui-g-nopad ui-corner-left">
-            <member-screen></member-screen>
+    </div>
+    <div #box class="ui-g-4 ui-md-4 ui-g-nopad ui-corner-left">
+        <member-screen></member-screen>
+    </div>
+    <div #box class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad ui-corner-right">
+        <scheme-main [schemeId]="activeScreen?.schemeId"></scheme-main>
+    </div>
+    <div #footer class="ui-g-12 font2 h60 ui-g-nopad" style="margin-top: 0.25em">
+        <div class="ui-g-2 ui-md-2 ui-corner-left bgred" style="color: white">
+            {{activeScreen?.startDate | date:'HH:mm'}} - {{activeScreen?.endDate | date: 'HH:mm'}}
         </div>
-        <div #box class="ui-g-8 ui-md-8 ui-widget-content ui-g-nopad ui-corner-right">
-            <scheme-main [schemeId]="activeScreen?.schemeId"></scheme-main>
-        </div>
-        <div #footer class="ui-g-12 font2 h60 ui-g-nopad" style="margin-top: 0.25em">
-            <div class="ui-g-2 ui-md-2 ui-corner-left bgred" style="color: white">
-                {{activeScreen?.startDate | date:'HH:mm'}} - {{activeScreen?.endDate | date: 'HH:mm'}}
-            </div>
-            <div class="ui-g-10 ui-md-10 bggreen ellipsys ui-corner-right">{{ticker}} &nbsp;</div>
-        </div>
+        <div class="ui-g-10 ui-md-10 bggreen ellipsys ui-corner-right">{{ticker}} &nbsp;</div>
     </div>
 </div>

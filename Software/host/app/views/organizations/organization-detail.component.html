@@ -1,82 +1,78 @@
-﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-    
-    <detail>
-        <nav>
-            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-            <div class="ui-toolbar-group-right">
-                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!orgForm.valid" form="orgForm"></button>
-            </div>
-        </nav>
-        <main>
-            <form id="orgForm" [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
+﻿<detail>
+    <nav>
+        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+        <div class="ui-toolbar-group-right">
+            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!orgForm.valid" form="orgForm"></button>
+        </div>
+    </nav>
+    <main>
+        <form id="orgForm" [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
 
-                <input type="hidden" formControlName="id" />
+            <input type="hidden" formControlName="id" />
 
-                <p-accordion>
-                    <p-accordionTab header="Организация" [selected]="true">
-                        <div class="ui-g">
-                            <div class="ui-g-7 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Код *:
-                                </div>
-                                <div class="ui-g-8">
-                                    <input pInputText type="text" formControlName="code" class="w100p" />
-                                </div>
+            <p-accordion>
+                <p-accordionTab header="Организация" [selected]="true">
+                    <div class="ui-g">
+                        <div class="ui-g-7 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Код *:
                             </div>
-                            <div class="ui-g-7 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Наименование *:
-                                </div>
-                                <div class="ui-g-8">
-                                    <input pInputText type="text" formControlName="name" class="w100p" />
-                                </div>
-                            </div>
-                            <div class="ui-g-7 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Описание :
-                                </div>
-                                <div class="ui-g-8">
-                                    <textarea pInputTextarea rows="6" formControlName="description" class="w100p"></textarea>
-                                </div>
+                            <div class="ui-g-8">
+                                <input pInputText type="text" formControlName="code" class="w100p" />
                             </div>
                         </div>
-                    </p-accordionTab>
-
-                    <p-accordionTab header="Адрес">
-                        <div class="ui-g">
-                            <div class="ui-g-7 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    &nbsp;
-                                </div>
-                                <div class="ui-g-8">
-                                    <textarea pInputTextarea type="text" rows="6" formControlName="address" class="w100p"></textarea>
-                                </div>
+                        <div class="ui-g-7 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Наименование *:
                             </div>
-
+                            <div class="ui-g-8">
+                                <input pInputText type="text" formControlName="name" class="w100p" />
+                            </div>
                         </div>
-                    </p-accordionTab>
+                        <div class="ui-g-7 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Описание :
+                            </div>
+                            <div class="ui-g-8">
+                                <textarea pInputTextarea rows="6" formControlName="description" class="w100p"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </p-accordionTab>
 
-                    <p-accordionTab header="Логотип (макс. размер - 256 x 256)">
-                        <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" multiple="true" maxFileSize="1000000" previewWidth="256" styleClass="hidden" (onSelect)="onSelect()"></p-fileUpload>
-                        <div #logo class="ui-fileupload-content ui-widget-content ui-corner-bottom ui-helper-hidden" *ngIf="!noLogo && id && (fileUpload.files.length == 0)">
-                            <div class="ui-fileupload-files">
-                                <div>
-                                    <div class="ui-fileupload-row">
-                                        <div>
-                                            <img src="/api/logo/{{id | uniquesuffix }}" width="256" (load)="logo.classList.remove('ui-helper-hidden');">
-                                        </div>
-                                        <div>
-                                            <button pButton type="button" title="Удалить" icon="fa-close" (click)="deleteLogo()"></button>                                            
-                                        </div>
+                <p-accordionTab header="Адрес">
+                    <div class="ui-g">
+                        <div class="ui-g-7 ui-g-nopad">
+                            <div class="ui-g-4">
+                                &nbsp;
+                            </div>
+                            <div class="ui-g-8">
+                                <textarea pInputTextarea type="text" rows="6" formControlName="address" class="w100p"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </p-accordionTab>
+
+                <p-accordionTab header="Логотип (макс. размер - 256 x 256)">
+                    <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" multiple="true" maxFileSize="1000000" previewWidth="256" styleClass="hidden" (onSelect)="onSelect()"></p-fileUpload>
+                    <div #logo class="ui-fileupload-content ui-widget-content ui-corner-bottom ui-helper-hidden" *ngIf="!noLogo && id && (fileUpload.files.length == 0)">
+                        <div class="ui-fileupload-files">
+                            <div>
+                                <div class="ui-fileupload-row">
+                                    <div>
+                                        <img src="/api/logo/{{id | uniquesuffix }}" width="256" (load)="logo.classList.remove('ui-helper-hidden');">
+                                    </div>
+                                    <div>
+                                        <button pButton type="button" title="Удалить" icon="fa-close" (click)="deleteLogo()"></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </p-accordionTab>
-                </p-accordion>
-            </form>            
-        </main>
+                    </div>
+                </p-accordionTab>
+            </p-accordion>
+        </form>
+    </main>
 
-    </detail>
-       
-</div>
+</detail>

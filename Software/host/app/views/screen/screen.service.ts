@@ -8,11 +8,11 @@ import { ScreenModel } from '../../models';
 import MapUtils from '../../common/map-utils';
 
 @Injectable()
-export class ScreenService {
+export class ScreenService extends HttpDataService<ScreenModel> {
 
-    url = isDevMode() ? "http://localhost:64346/api/screen" : "/api/screen";
+    url = isDevMode() ? "http://localhost:64346/api/screens" : "/api/screens";
 
-    constructor(private http: Http) { }
+    constructor(http: Http) { super(http); }
 
     get(key): Observable<ScreenModel> {
 

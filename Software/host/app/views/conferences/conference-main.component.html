@@ -1,130 +1,127 @@
-﻿<div style="position: absolute; left: -200px; height: 600px; width: 1400px">
-      
-    <detail>
-        <nav>
-            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-            <div class="ui-toolbar-group-right">
-                <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0" [routerLink]="['/send', id]"></button>
-                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid" form="conferenceForm"></button>
-            </div>
-        </nav>
-        
-        <main>
-            <form id="conferenceForm" [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
+﻿
+<detail>
+    <nav>
+        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+        <div class="ui-toolbar-group-right">
+            <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0" [routerLink]="['/send', id]"></button>
+            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid" form="conferenceForm"></button>
+        </div>
+    </nav>
 
-                <input type="hidden" formControlName="id" (ngModelChange)="idChange($event)" />
+    <main>
+        <form id="conferenceForm" [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
 
-                <p-accordion>
-                    <p-accordionTab header="Конференция" [selected]="true">
+            <input type="hidden" formControlName="id" (ngModelChange)="idChange($event)" />
 
-                        <div class="ui-g">
-                            <div class="ui-g-8 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Тема *:
+            <p-accordion>
+                <p-accordionTab header="Конференция" [selected]="true">
+
+                    <div class="ui-g">
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Тема *:
+                            </div>
+                            <div class="ui-g-8">
+                                <input pInputText type="text" formControlName="subject" class="w100p" />
+                            </div>
+                        </div>
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Описание :
+                            </div>
+                            <div class="ui-g-8">
+                                <textarea pInputTextarea formControlName="description" rows="6" class="w100p"></textarea>
+                            </div>
+                        </div>
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Статус :
+                            </div>
+                            <div class="ui-g-8">
+                                <p-dropdown formControlName="state" [options]="states" [style]="{'width':'100%'}"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-4">
+                                Холл <span *ngIf="requireValidation">*</span>:
+                            </div>
+                            <div class="ui-g-8">
+                                <p-dropdown formControlName="hallId" [options]="halls" placeholder="Выберите холл" (ngModelChange)="hallChange($event)" [style]="{'width':'100%'}"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-4 ">
+                                Схема <span *ngIf="requireValidation">*</span>:
+                            </div>
+                            <div class="ui-g-8">
+                                <p-dropdown formControlName="schemeId" [options]="schemes" placeholder="Выберите схему" (ngModelChange)="schemeIdChange($event)" [style]="{'width':'100%'}"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                </p-accordionTab>
+
+                <p-accordionTab header="Период">
+                    <div class="ui-g">
+                        <div class="ui-g-8 ui-g-nopad">
+                            <div class="ui-g-4">
+                                <div class="ui-g-6">
+                                    Начало <span *ngIf="requireValidation">*</span>:
                                 </div>
-                                <div class="ui-g-8">
-                                    <input pInputText type="text" formControlName="subject" class="w100p" />
+                                <div class="ui-g-6">
+                                    <p-calendar formControlName="startDate" dateFormat="dd.mm.yy" [showTime]="true" [locale]="locale"></p-calendar>
                                 </div>
                             </div>
-                            <div class="ui-g-8 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Описание :
+                            <div class="ui-g-2"></div>
+                            <div class="ui-g-4">
+                                <div class="ui-g-6">
+                                    Окончание <span *ngIf="requireValidation">*</span>:
                                 </div>
-                                <div class="ui-g-8">
-                                    <textarea pInputTextarea formControlName="description" rows="6" class="w100p"></textarea>
-                                </div>
-                            </div>
-                            <div class="ui-g-8 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Статус :
-                                </div>
-                                <div class="ui-g-8">
-                                    <p-dropdown formControlName="state" [options]="states" [style]="{'width':'100%'}"></p-dropdown>
-                                </div>
-                            </div>
-                            <div class="ui-g-8 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    Холл <span *ngIf="requireValidation">*</span>:
-                                </div>
-                                <div class="ui-g-8">
-                                    <p-dropdown formControlName="hallId" [options]="halls" placeholder="Выберите холл" (ngModelChange)="hallChange($event)" [style]="{'width':'100%'}"></p-dropdown>
-                                </div>
-                            </div>
-                            <div class="ui-g-8 ui-g-nopad">
-                                <div class="ui-g-4 ">
-                                    Схема <span *ngIf="requireValidation">*</span>:
-                                </div>
-                                <div class="ui-g-8">
-                                    <p-dropdown formControlName="schemeId" [options]="schemes" placeholder="Выберите схему" (ngModelChange)="schemeIdChange($event)" [style]="{'width':'100%'}"></p-dropdown>
+                                <div class="ui-g-6">
+                                    <p-calendar formControlName="endDate" dateFormat="dd.mm.yy" [showTime]="true" [locale]="locale"></p-calendar>
                                 </div>
                             </div>
                         </div>
-                    </p-accordionTab>
+                    </div>
+                </p-accordionTab>
 
-                    <p-accordionTab header="Период">
-                        <div class="ui-g">
-                            <div class="ui-g-8 ui-g-nopad">
-                                <div class="ui-g-4">
-                                    <div class="ui-g-6">
-                                        Начало <span *ngIf="requireValidation">*</span>:
-                                    </div>
-                                    <div class="ui-g-6">
-                                        <p-calendar formControlName="startDate" dateFormat="dd.mm.yy" [showTime]="true" [locale]="locale"></p-calendar>
-                                    </div>
-                                </div>
-                                <div class="ui-g-2"></div>
-                                <div class="ui-g-4">
-                                    <div class="ui-g-6">
-                                        Окончание <span *ngIf="requireValidation">*</span>:
-                                    </div>
-                                    <div class="ui-g-6">
-                                        <p-calendar formControlName="endDate" dateFormat="dd.mm.yy" [showTime]="true" [locale]="locale"></p-calendar>
-                                    </div>
-                                </div>
+                <p-accordionTab header="Участники" *ngIf="id !== undefined">
+                    <div class="ui-g-12 ui-g-nopad h100p">
+                        <div class="ui-g-6 ui-md-6 ui-widget-content ui-g-nopad h100p">
+                            <member-table [members]="members" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
+                        </div>
+                        <div class="ui-g-1 ui-md-1 h100p" style="display: table">
+                            <div class="ui-picklist-buttons">
+                                <button pButton type="button" icon="fa-angle-left" class="w100p" (click)="moveToTarget()" [disabled]="selectedEmployees.length === 0"></button>
+                                <button pButton type="button" icon="fa-angle-right" class="w100p" (click)="moveToSource()" [disabled]="selectedMembers.length === 0"></button>
+                                <button pButton type="button" icon="fa-angle-double-right" class="w100p" (click)="moveAllToSource()"></button>
                             </div>
                         </div>
-                    </p-accordionTab>
-
-                    <p-accordionTab header="Участники" *ngIf="id !== undefined">
-                        <div class="ui-g-12 ui-g-nopad h100p">
-                            <div class="ui-g-6 ui-md-6 ui-widget-content ui-g-nopad h100p">
-                                <member-table [members]="members" selectionMode="multiple" (selectionChanged)="memberTableChahged($event)"></member-table>
-                            </div>
-                            <div class="ui-g-1 ui-md-1 h100p" style="display: table">
-                                <div class="ui-picklist-buttons">
-                                    <button pButton type="button" icon="fa-angle-left" class="w100p" (click)="moveToTarget()" [disabled]="selectedEmployees.length === 0"></button>
-                                    <button pButton type="button" icon="fa-angle-right" class="w100p" (click)="moveToSource()" [disabled]="selectedMembers.length === 0"></button>
-                                    <button pButton type="button" icon="fa-angle-double-right" class="w100p" (click)="moveAllToSource()"></button>
-                                </div>
-                            </div>
-                            <div class="ui-g-5 ui-md-5 ui-widget-content ui-g-nopad h100p">
-                                <organization-tree emitData="false" readOnly="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>
-                            </div>
+                        <div class="ui-g-5 ui-md-5 ui-widget-content ui-g-nopad h100p">
+                            <organization-tree emitData="false" readOnly="true" (selectionChanged)="employeeTreeChanged($event)"></organization-tree>
                         </div>
-                    </p-accordionTab>
+                    </div>
+                </p-accordionTab>
 
-                    <p-accordionTab header="Схема" *ngIf="id !== undefined">
-                        <div #switch class="ui-toolbar-group-right">
-                            <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
-                        </div>
-                        <div #content class="ui-g-12 ui-g-nopad">
+                <p-accordionTab header="Схема" *ngIf="id !== undefined">
+                    <div #switch class="ui-toolbar-group-right">
+                        <p-inputSwitch onLabel="Схема" offLabel="Список" formControlName="showScheme" (ngModelChange)="showSchemeChange($event)"></p-inputSwitch>
+                    </div>
+                    <div #content class="ui-g-12 ui-g-nopad">
 
-                            <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" editable="true"
-                                          (seatChanged)="memberSeatChanged($event)" (stateChanged)="memberStateChanged($event)"></member-table>
+                        <member-table [ngClass]="{'ui-helper-hidden': conferenceForm.value.showScheme}" [availableSeats]="seats" [members]="members" editable="true"
+                                      (seatChanged)="memberSeatChanged($event)" (stateChanged)="memberStateChanged($event)"></member-table>
 
-                            <scheme-main [ngClass]="{'ui-helper-hidden': !conferenceForm.value.showScheme}" [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
+                        <scheme-main [ngClass]="{'ui-helper-hidden': !conferenceForm.value.showScheme}" [schemeId]="schemeId" (schemeLoaded)="schemeLoaded()"></scheme-main>
 
-                        </div>
-                    </p-accordionTab>
+                    </div>
+                </p-accordionTab>
 
-                    <p-accordionTab header="Сообщения" *ngIf="id !== undefined">
-                        <ticker-table></ticker-table>
-                    </p-accordionTab>
+                <p-accordionTab header="Сообщения" *ngIf="id !== undefined">
+                    <ticker-table></ticker-table>
+                </p-accordionTab>
 
-                </p-accordion>
-            </form>
-        </main>
+            </p-accordion>
+        </form>
+    </main>
 
-    </detail>
-
-</div>
+</detail>

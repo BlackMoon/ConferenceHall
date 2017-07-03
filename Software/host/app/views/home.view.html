@@ -1,66 +1,42 @@
-﻿<div id="c1dmp" style="left: 0px; width: 980px; position: absolute; top: 0px; height: 1626px;" class="s14">
-    <div id="c1dmpbg" class="s14bg"></div>
-    <div id="c1dmpinlineContent" class="s14inlineContent">
-
-        <div style="min-width: 10px; min-height: 10px; position: absolute; top: 0px; height: 656px; width: 1903px; left: -462px;" class="s15" id="comp-iirdn54t">
-            <div class="img1" data-uri="3b1f25_ec725068e92c4af5bad7df271d651a49.jpg" data-width="2440" data-height="783" style="height: 656px; width: 1903px;"></div>
-        </div>
-
-        <div style="left: 20px; width: 308px; position: absolute; top: 362px; height: 224px;" class="s22">
-            <div id="comp-iirf9wy1bg" class="s22bg"></div>
-            <div id="comp-iirf9wy1inlineContent" class="s22inlineContent">
-                <div style="left: 31px; width: 244px; position: absolute; top: 29px;" class="s2" id="comp-iirfi8h5">
-                    <h6 class="font_6"><a [routerLink]="['/conferences', 145]"><span class="color_11">Совещания</span></a></h6>
-                </div>
-                <div style="left: 32px; width: 243px; position: absolute; top: 76px;" class="s2" id="comp-iirfkeju">
-                    <p class="font_8">
-                        <span class="color_11">Здесь выводится список совещаний.</span>
-                    </p>
-                </div>
-                <div id="comp-iirfohqy" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" style="left: 31px; position: absolute; top: 155px; height: 41px; min-height: 18px; width: 107px;" class="s23" data-state="desktop shouldUseFlex center" data-prev-text="Read More" data-prev-min-width="65" data-prev-width="107">
-                    <a [routerLink]="['/schedule']" id="comp-iirfohqylink" class="g-transparent-a s23link">
-                        <span id="comp-iirfohqylabel" class="s23label">Подробнее</span>
-                    </a>
+﻿<p-carousel headerText="Активные совещания" [value]="screens" numVisible="5">
+    
+    <ng-template let-screen pTemplate="item">
+        <div class="ui-grid ui-grid-responsive">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12" style="height: 120px">
+                    <h2>{{screen.subject}}</h2>
                 </div>
             </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">Холл :</div>
+                <div class="ui-grid-col-6">{{screen.hall}}</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">&nbsp;</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">Начало : </div>
+                <div class="ui-grid-col-6">{{screen.startDate | date:'dd.MM.yyyy HH:mm'}}</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">&nbsp;</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-6">Окончание : </div>
+                <div class="ui-grid-col-6">{{screen.endDate | date:'dd.MM.yyyy HH:mm'}}</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">&nbsp;</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">
+                    <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/screens', screen.id]"></button>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">&nbsp;</div>
+            </div>
         </div>
+    </ng-template>
 
-        <div style="left: 335px; width: 309px; position: absolute; top: 362px; height: 224px;" class="s24">
-            <div id="comp-iirf9wy1bg" class="s24bg"></div>
-            <div id="comp-iirf9wy1inlineContent" class="s24inlineContent">
-                <div style="left: 31px; width: 244px; position: absolute; top: 29px;" class="s2" id="comp-iirfi8h5">
-                    <h6 class="font_6"><a [routerLink]="['/send']"><span class="color_11">Cотрудники</span></a></h6>
-                </div>
-                <div style="left: 32px; width: 243px; position: absolute; top: 76px;" class="s2" id="comp-iirfkeju">
-                    <p class="font_8">
-                        <span class="color_11">Здесь выводится список организаций и сотрудников.</span>
-                    </p>
-                </div>
-                <div id="comp-iirfohqy" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" style="left: 31px; position: absolute; top: 155px; height: 41px; min-height: 18px; width: 107px;" class="s23" data-state="desktop shouldUseFlex center" data-prev-text="Read More" data-prev-min-width="65" data-prev-width="107">
-                    <a [routerLink]="['/orgs']" id="comp-iirfohqylink" class="g-transparent-a s23link">
-                        <span id="comp-iirfohqylabel" class="s23label">Подробнее</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <div style="left: 652px; width: 309px; position: absolute; top: 362px; height: 224px;" class="s25">
-            <div id="comp-iirf9wy1bg" class="s25bg"></div>
-            <div id="comp-iirf9wy1inlineContent" class="s25inlineContent">
-                <div style="left: 31px; width: 244px; position: absolute; top: 29px;" class="s2" id="comp-iirfi8h5">
-                    <h6 class="font_6"><a [routerLink]="['/schemes/70']"><span class="color_11">Редактор</span></a></h6>
-                </div>
-                <div style="left: 32px; width: 243px; position: absolute; top: 76px;" class="s2" id="comp-iirfkeju">
-                    <p class="font_8">
-                        <span class="color_11">Редактор-холл.</span>
-                    </p>
-                </div>
-                <div id="comp-iirfohqy" data-align="center" data-disabled="false" data-margin="0" data-should-use-flex="true" style="left: 31px; position: absolute; top: 155px; height: 41px; min-height: 18px; width: 107px;" class="s23" data-state="desktop shouldUseFlex center" data-prev-text="Read More" data-prev-min-width="65" data-prev-width="107">
-                    <a [routerLink]="['/halls']" id="comp-iirfohqylink" class="g-transparent-a s23link">
-                        <span id="comp-iirfohqylabel" class="s23label">Read More</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</p-carousel>
