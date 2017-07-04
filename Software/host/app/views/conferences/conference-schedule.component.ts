@@ -190,8 +190,8 @@ export class ConferenceScheduleComponent implements AfterViewInit {
         this.conferrenceService
             .getAll(this.startDate, this.endDate, null, this.selectedHallIds, this.selectedEmployeeIds, this.selectedOrganizationIds)
             .subscribe(
-            conferences => this.events = conferences.map(c => <any>{ id: c.id, hallId: c.hallId, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
-            error => this.logger.error2(error));
+                conferences => this.events = conferences.map(c => <any>{ id: c.id, hallId: c.hallId, start: c.startDate, end: c.endDate, title: c.subject, description: c.description }),
+                error => this.logger.error2(error));
     }
 
     /**

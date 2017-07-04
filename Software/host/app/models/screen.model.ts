@@ -3,7 +3,7 @@
 /**
  * Модель. Активная конференция (на отдельном экране)
  */
-export class ScreenModel extends KeyModel{
+export class ScreenModel extends KeyModel {
     
     schemeId: string;
     startDate: Date;

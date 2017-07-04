@@ -11,6 +11,7 @@ import { ScreenService } from './screen.service';
 export class ScreenTableComponent implements OnInit {
 
     activeDate: Date = new Date();
+    firstVisible: number = 1;
     screens: ScreenModel[];
 
     // ReSharper disable once InconsistentNaming
@@ -40,7 +41,31 @@ export class ScreenTableComponent implements OnInit {
         this.screenService
             .getAll(this.activeDate)
             .subscribe(
-                screens => this.screens = screens,
+                screens => {
+
+                    let ix,
+                        prev = new Date(4000, 0, 0),
+                        now = new Date();
+                  
+                    screens.forEach((s, i) => {
+                        
+                        let start = new Date(s.startDate),
+                            end = new Date(s.endDate),
+                            diff = <any>end - <any>now;
+
+                        // endDate > now
+                        if (diff > 0) {
+                            // search min startDate
+                            if (start < prev) {
+                                prev = start;
+                                ix = i;
+                            }
+                        } 
+                    });
+                   
+                    this.firstVisible = ix;
+                    this.screens = screens;
+                },
                 error => this.logger.error2(error)
         );    
     }

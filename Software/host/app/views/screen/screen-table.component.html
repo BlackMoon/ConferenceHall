@@ -3,7 +3,7 @@
     <h3 style="display: inline-block">{{activeDate | date:'dd.MM.yyyy'}}</h3>
 </p-toolbar>
 
-<p-carousel [value]="screens" numVisible="5" styleClass="carousel">
+<p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="5" styleClass="carousel">
 
     <ng-template let-screen pTemplate="item">
         
@@ -27,13 +27,13 @@
                 Начало :
             </div>
             <div class="ui-g-8">
-                {{screen.startDate | date:'dd.MM.yyyy HH:mm'}}
+                {{screen.startDate | date:'HH:mm'}}
             </div>
             <div class="ui-g-4">
                 Окончание :
             </div>
             <div class="ui-g-8">
-                {{screen.endDate | date:'dd.MM.yyyy HH:mm'}}
+                {{screen.endDate | date:'HH:mm'}}
             </div>
             <div class="ui-g-12 center">
                 <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/conferences', screen.id]"></button>
