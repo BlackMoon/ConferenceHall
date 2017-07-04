@@ -5,7 +5,7 @@ import { HallDetailComponent } from './hall-detail.component';
 import { HallTableComponent } from './hall-table.component';
 
 const hallRoutes: Routes = [
-    { path: 'halls', component: HallTableComponent, data: { layout: Layout.ShowLeftSide & Layout.ShowRightSide } },
+    { path: 'halls', component: HallTableComponent },
     { path: 'halls/new', component: HallDetailComponent },    
     { path: 'halls/:id', component: HallDetailComponent }
 ];

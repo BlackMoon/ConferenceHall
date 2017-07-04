@@ -149,6 +149,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onResize() {
+        
         let offsetTop = this.readOnly ? 0 : this.canvasBox.offsetTop;
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - offsetTop}px`;
     }

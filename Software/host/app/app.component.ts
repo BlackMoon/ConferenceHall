@@ -43,7 +43,13 @@ export class AppComponent implements AfterViewInit, OnInit {
                 return r;
             })
             .mergeMap(r => r.data)
-            .subscribe((data: any) => this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader);
+            .subscribe((data: any) => {
+                this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader | Layout.ShowFooter;
+                setTimeout(() => {
+                    this.onResize();
+                }, 0);
+                
+            });
 
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
     }
@@ -65,10 +71,10 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     onResize() {
         let h = window.innerHeight;
-
+       
         this.bottomBarEl && (h -= this.bottomBarEl.nativeElement.offsetHeight);
         this.topBarEl && (h -= this.topBarEl.nativeElement.offsetHeight);
-
+        
         this.contentEl.nativeElement.style.height = `${h}px`;
     }
 }

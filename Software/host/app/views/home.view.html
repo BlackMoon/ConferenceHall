@@ -1,4 +1,4 @@
-﻿<p-carousel headerText="Активные совещания" [value]="screens" numVisible="5">
+﻿<p-carousel headerText="Активные совещания" [value]="screens" numVisible="5" styleClass="carousel">
     
     <ng-template let-screen pTemplate="item">
         <div class="ui-grid ui-grid-responsive">
@@ -7,7 +7,7 @@
                     <h2>{{screen.subject}}</h2>
                 </div>
             </div>
-            <div class="ui-grid-row">
+            <div class="ui-grid-row" style="height: 72px">
                 <div class="ui-grid-col-6">Холл :</div>
                 <div class="ui-grid-col-6">{{screen.hall}}</div>
             </div>

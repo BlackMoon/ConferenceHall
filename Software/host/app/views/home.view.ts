@@ -5,7 +5,7 @@ import { ScreenService } from './screen/screen.service';
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    styles: [".ui-grid-row { text-align: center; }"],
+    styles: [".carousel .ui-grid-row { text-align: center; }"],
     templateUrl: 'home.view.html'
 })
 export class HomeView implements OnInit {

@@ -48,7 +48,8 @@ export class ScreenComponent implements OnInit {
      */
     ticker: string;
 
-    @ViewChild('box') boxElRef: ElementRef;
+    @ViewChild('box1') box1ElRef: ElementRef;
+    @ViewChild('box2') box2ElRef: ElementRef;
 
     @ViewChild('header') headerElRef: ElementRef;
 
@@ -150,8 +151,21 @@ export class ScreenComponent implements OnInit {
 
         this.onResize();
     }
-    
+
+    ngAfterViewInit() {
+        this.onResize();
+    }
+
     onResize() {
-        this.boxElRef.nativeElement.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.headerElRef.nativeElement.offsetHeight - this.footerElRef.nativeElement.offsetHeight}px`;
+       
+        let h = this.wrapperElRef.nativeElement.offsetHeight;
+
+        let cs = getComputedStyle(this.headerElRef.nativeElement);
+        h -= this.headerElRef.nativeElement.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+
+        cs = getComputedStyle(this.footerElRef.nativeElement);
+        h -= this.footerElRef.nativeElement.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+
+        this.box1ElRef.nativeElement.style.height = this.box2ElRef.nativeElement.style.height = `${h}px`;
     }
 }
