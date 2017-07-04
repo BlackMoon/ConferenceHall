@@ -4,6 +4,7 @@ using domain.Conference.Query;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace domain.Screen.Query
@@ -46,10 +47,12 @@ namespace domain.Screen.Query
                 .Column("h.name hall")
                 .Column("lower(c.period) startDate")
                 .Column("upper(c.period) endDate")
-                .Join("conf_hall.halls h ON h.id = c.hall_id");
+                .Join("conf_hall.halls h ON h.id = c.hall_id")
+                .Where("c.period && tsrange(date_trunc('day', @startDate)::date, date_trunc('day', @startDate)::date + 1, '[)')")
+                .OrderBy("c.period");
 
             await DbManager.OpenAsync();
-            return await DbManager.DbConnection.QueryAsync<Screen>(sqlBuilder.ToString());
+            return await DbManager.DbConnection.QueryAsync<Screen>(sqlBuilder.ToString(), new { startDate = query.StartDate });
         }
     }
 }

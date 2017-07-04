@@ -196,7 +196,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             marks = this.canvas.querySelectorAll(`g.${markClass}`);
 
         if (marks) {
-            [].forEach.call(marks, m => codes.push(m.getAttribute("data-code")));    
+            [].forEach.call(marks, m => {
+
+                let code = m.getAttribute("data-code"),
+                    ix = codes.indexOf(code);
+
+                (ix === -1) && codes.push(code);
+            });    
         }
 
         return codes.sort();

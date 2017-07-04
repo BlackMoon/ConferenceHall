@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { Layout } from './layout';
 import { SelectivePreloadingStrategy } from './selective-preloading-strategy';
 import { ViewsModule } from '../../views/views.module';
-import * as views from '../../views';
 
 const routes: Routes = [
     { path: '', redirectTo: '/screens', pathMatch: 'full' }

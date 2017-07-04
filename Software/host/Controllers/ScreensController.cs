@@ -1,4 +1,5 @@
-﻿using domain.Screen;
+﻿using System;
+using domain.Screen;
 using domain.Screen.Query;
 using Kit.Core.CQRS.Command;
 using Kit.Core.CQRS.Query;
@@ -17,9 +18,9 @@ namespace host.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<Screen>> Get()
+        public Task<IEnumerable<Screen>> Get(DateTime startDate)
         {
-            return QueryDispatcher.DispatchAsync<FindScreensQuery, IEnumerable<Screen>>(new FindScreensQuery());
+            return QueryDispatcher.DispatchAsync<FindScreensQuery, IEnumerable<Screen>>(new FindScreensQuery(){ StartDate = startDate });
         }
 
         [HttpGet("{id}")]

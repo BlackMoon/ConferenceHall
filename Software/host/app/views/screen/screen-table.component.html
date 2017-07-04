@@ -1,55 +1,46 @@
 ﻿<p-toolbar>
-    <button pButton type="button" icon="fa-search"></button>
-    <button pButton type="button" icon="fa-search"></button>
+    <button pButton type="button" icon="fa-chevron-left" (click)="addDays(-1)"></button><button pButton type="button" icon="fa-chevron-right" (click)="addDays(1)"></button>
+    <h3 style="display: inline-block">{{activeDate | date:'dd.MM.yyyy'}}</h3>
 </p-toolbar>
 
 <p-carousel [value]="screens" numVisible="5" styleClass="carousel">
 
     <ng-template let-screen pTemplate="item">
-        <div class="ui-grid ui-grid-responsive">
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12" style="height: 120px">
-                    <h2>{{screen.subject}}</h2>
-                </div>
+        
+        <div class="ui-g">
+            <div class="ui-g-12 center" style="height: 120px">
+                <h2>{{screen.subject}}</h2>
             </div>
-            <div class="ui-grid-row" style="height: 72px">
-                <div class="ui-grid-col-6">Холл :</div>
-                <div class="ui-grid-col-6">{{screen.hall}}</div>
+            <div class="ui-g-4">
+                Холл :    
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">&nbsp;</div>
+            <div class="ui-g-8" style="height: 72px">
+                {{screen.hall}}
             </div>
-            <div class="ui-grid-row" style="height: 72px">
-                <div class="ui-grid-col-6">Состояние :</div>
-                <div class="ui-grid-col-6">{{ConfState.toName(screen.state)}}</div>
+            <div class="ui-g-4">
+                Состояние :
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">&nbsp;</div>
+            <div class="ui-g-8">
+                {{ConfState.toName(screen.state)}}
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-6">Начало : </div>
-                <div class="ui-grid-col-6">{{screen.startDate | date:'dd.MM.yyyy HH:mm'}}</div>
+            <div class="ui-g-4">
+                Начало :
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">&nbsp;</div>
+            <div class="ui-g-8">
+                {{screen.startDate | date:'dd.MM.yyyy HH:mm'}}
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-6">Окончание : </div>
-                <div class="ui-grid-col-6">{{screen.endDate | date:'dd.MM.yyyy HH:mm'}}</div>
+            <div class="ui-g-4">
+                Окончание :
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">&nbsp;</div>
+            <div class="ui-g-8">
+                {{screen.endDate | date:'dd.MM.yyyy HH:mm'}}
             </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">
-                    <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/conferences', screen.id]"></button>
-                    <button type="button" pButton icon="fa-desktop" [routerLink]="['/screens', screen.id]"></button>
-                </div>
-            </div>
-            <div class="ui-grid-row">
-                <div class="ui-grid-col-12">&nbsp;</div>
+            <div class="ui-g-12 center">
+                <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/conferences', screen.id]"></button>
+                <button type="button" pButton icon="fa-desktop" [routerLink]="['/screens', screen.id]"></button>
             </div>
         </div>
+       
     </ng-template>
 
 </p-carousel>

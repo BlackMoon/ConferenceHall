@@ -10,6 +10,7 @@ import { ScreenService } from './screen.service';
 })
 export class ScreenTableComponent implements OnInit {
 
+    activeDate: Date = new Date();
     screens: ScreenModel[];
 
     // ReSharper disable once InconsistentNaming
@@ -18,15 +19,29 @@ export class ScreenTableComponent implements OnInit {
     constructor(
         private logger: Logger,
         private screenService: ScreenService) { }
-
-
+    
     ngOnInit() {
+        this.loadScreens();
+    }
+
+    addDays(days:number) {
         
+        let d = this.activeDate.getDate(),
+            m = this.activeDate.getMonth(),
+            y = this.activeDate.getFullYear();
+
+        this.activeDate = new Date(y, m, d + days);
+
+        this.loadScreens();
+    }
+
+    loadScreens() {
+
         this.screenService
-            .getAll()
+            .getAll(this.activeDate)
             .subscribe(
                 screens => this.screens = screens,
                 error => this.logger.error2(error)
-            );
+        );    
     }
 }
