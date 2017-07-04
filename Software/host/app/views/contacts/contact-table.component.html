@@ -31,7 +31,7 @@
             </div>
         </form>
     </p-footer>
-    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
+    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" styleClass="center" *ngIf="editMode"></p-column>
     <p-column field="name" [editable]="true" [style]="{'overflow':'visible'}">
         <ng-template let-contact="rowData" pTemplate="editor">
             <p-dropdown [(ngModel)]="contact.kind" [options]="senders" [autoWidth]="false" (onChange)="changeKind($event, contact)"></p-dropdown>

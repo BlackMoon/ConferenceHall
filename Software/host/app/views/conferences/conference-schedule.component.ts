@@ -16,7 +16,7 @@ declare var $: any;
 @Component({
     encapsulation: ViewEncapsulation.None,
     host: { '(window:resize)': "onResize($event)" },
-    styles: [".p0501 .ui-tabview-panel { box-sizing: content-box; padding: 0.5em 0.1em !important; }"],
+    styles: [".fc-list-item-marker { width: 38px }", ".p0501 .ui-tabview-panel { box-sizing: content-box; padding: 0.5em 0.1em !important; }"],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent implements AfterViewInit {

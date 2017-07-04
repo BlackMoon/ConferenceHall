@@ -69,7 +69,7 @@ export class ContactTableComponent implements OnInit {
                     sender && (contact.name = sender.label);
 
                     this.contacts.push(contact);
-                    this.contactForm.reset();
+                    this.contactForm.reset({ kind: defaultKind });
                 },
                 error => this.logger.error2(error));        
     }

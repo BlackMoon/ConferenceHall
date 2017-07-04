@@ -6,8 +6,7 @@ import { ViewsModule } from '../../views/views.module';
 import * as views from '../../views';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: views.HomeView, data: { layout: Layout.ShowHeader | Layout.ShowFooter } }
+    { path: '', redirectTo: '/screens', pathMatch: 'full' }
 ];
 
 @NgModule({
