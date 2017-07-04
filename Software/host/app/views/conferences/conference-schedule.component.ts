@@ -16,7 +16,7 @@ declare var $: any;
 @Component({
     encapsulation: ViewEncapsulation.None,
     host: { '(window:resize)': "onResize($event)" },
-    styles: [".p0501 .ui-tabview-panel { padding: 0.5em 0.1em !important; }"],
+    styles: [".p0501 .ui-tabview-panel { box-sizing: content-box; padding: 0.5em 0.1em !important; }"],
     templateUrl: 'conference-schedule.component.html'
 })
 export class ConferenceScheduleComponent implements AfterViewInit {
@@ -227,19 +227,15 @@ export class ConferenceScheduleComponent implements AfterViewInit {
     onResize() {
        
         let tabview = this.tabView.el.nativeElement.querySelector("div.ui-tabview"),
+            nav = tabview.querySelector("ul.ui-tabview-nav"),
             panels = tabview.querySelectorAll("div.ui-tabview-panel");
-        
-        // calculate min offsetTop
-        let ix, top = 1e6;
-        for (ix = 0; ix < panels.length; ix++) {
-            let panel = panels[ix];
-            top = Math.min(top, panel.offsetTop);
-        }
-      
+
         for (let ix = 0; ix < panels.length; ix++) {
-           
-            let panel = panels[ix];
-            panel.style.height = `${tabview.offsetHeight - top}px`;
+
+            let panel = panels[ix],
+                cs = getComputedStyle(panel);
+
+            panel.style.height = `${tabview.offsetHeight - nav.offsetHeight - parseFloat(cs.paddingBottom)}px`;
         }
     }
 

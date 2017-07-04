@@ -13,11 +13,11 @@ const schemeRoutes: Routes = [
         path: "schemes/:id", component: SchemeDetailComponent,
         children: [
             { path: "", redirectTo: "groups", pathMatch: "full" },
-            { path: "groups", component: GroupListComponent, data: { preload: true, layout: Layout.None } },
-            { path: "elements", component: ElementListComponent },
-            { path: "elements/new", component: ElementDetailComponent },
-            { path: "elements/:id", component: ElementDetailComponent },
-            { path: "shape", component: ShapePropertiesComponent }
+            { path: "groups", component: GroupListComponent, data: { layout: Layout.None } },
+            { path: "elements", component: ElementListComponent, data: { layout: Layout.None } },
+            { path: "elements/new", component: ElementDetailComponent, data: { layout: Layout.None } },
+            { path: "elements/:id", component: ElementDetailComponent, data: { layout: Layout.None } },
+            { path: "shape", component: ShapePropertiesComponent, data: { layout: Layout.None } }
         ]
     }
 ];
