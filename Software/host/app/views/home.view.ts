@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Logger } from "../common/logger";
-import { ScreenModel } from '../models';
+import { ConfState, ScreenModel } from '../models';
 import { ScreenService } from './screen/screen.service';
 
 @Component({
@@ -11,6 +11,9 @@ import { ScreenService } from './screen/screen.service';
 export class HomeView implements OnInit {
 
     screens: ScreenModel[];
+
+    // ReSharper disable once InconsistentNaming
+    public ConfState = ConfState;    
     
     constructor(
         private logger: Logger,
@@ -18,6 +21,7 @@ export class HomeView implements OnInit {
 
 
     ngOnInit() {
+        
         this.screenService
             .getAll()
             .subscribe(

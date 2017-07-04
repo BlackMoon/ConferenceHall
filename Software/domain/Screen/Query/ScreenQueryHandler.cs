@@ -41,6 +41,7 @@ namespace domain.Screen.Query
         {
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.conferences c")
                 .Column("c.id")
+                .Column("c.state")
                 .Column("c.subject")
                 .Column("h.name hall")
                 .Column("lower(c.period) startDate")

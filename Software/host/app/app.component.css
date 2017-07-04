@@ -30,6 +30,7 @@ body {
     display: block;
     padding: 0;
     height: 70px;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     position: fixed;
     top: 0;
@@ -50,6 +51,9 @@ body {
     height: 60px;
     line-height: 58px;
     text-align: center;
+    -ms-transition: background-color .3s;
+    -o-transition: background-color .3s;
+    -webkit-transition: background-color .3s;
     transition: background-color .3s;
 }
 
@@ -65,7 +69,6 @@ body {
 }
 
 #layout-content {
-    padding-top: 70px;
     background-color: #fff;
 }
 
@@ -84,9 +87,13 @@ body {
 .topbar-menu > li > a {
     text-decoration: none;
     color: #fff;
+    -ms-transition: background-color .3s;
+    -o-transition: background-color .3s;
+    -webkit-transition: background-color .3s;
     transition: background-color .3s;
-    min-width: 120px;
+    min-width: 40px;
     text-align: center;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     line-height: 70px;
 }

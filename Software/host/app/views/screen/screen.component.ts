@@ -157,7 +157,7 @@ export class ScreenComponent implements OnInit {
     }
 
     onResize() {
-        debugger;
+       
         let h = this.wrapperElRef.nativeElement.offsetHeight;
 
         let cs = getComputedStyle(this.headerElRef.nativeElement);

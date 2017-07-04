@@ -14,6 +14,13 @@
             <div class="ui-grid-row">
                 <div class="ui-grid-col-12">&nbsp;</div>
             </div>
+            <div class="ui-grid-row" style="height: 72px">
+                <div class="ui-grid-col-6">Состояние :</div>
+                <div class="ui-grid-col-6">{{ConfState.toName(screen.state)}}</div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-12">&nbsp;</div>
+            </div>
             <div class="ui-grid-row">
                 <div class="ui-grid-col-6">Начало : </div>
                 <div class="ui-grid-col-6">{{screen.startDate | date:'dd.MM.yyyy HH:mm'}}</div>

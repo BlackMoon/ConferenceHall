@@ -22,17 +22,33 @@
         </a>
         
         <ul class="topbar-menu">
-            <li >
-                <a [routerLink]="['/schedule']">СОВЕЩАНИЯ</a>
+            <li>
+                <a [routerLink]="['/schedule']" title="Календарь">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </a>
             </li>
             <li >
-                <a [routerLink]="['/orgs']">СОТРУДНИКИ</a>
+                <a [routerLink]="['/orgs']" title="Сотрудники">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-users"></i>
+                    </span>
+                </a>
             </li>
             <li >
-                <a [routerLink]="['/halls']">ХОЛЛЫ</a>
+                <a [routerLink]="['/halls']" title="Холлы">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-building"></i>
+                    </span>
+                </a>
             </li>
             <li>
-                <a href="#">НАСТРОЙКИ</a>
+                <a href="#" title="Настройки">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-wrench"></i>
+                    </span>
+                </a>
             </li>
         </ul>
     </div>
