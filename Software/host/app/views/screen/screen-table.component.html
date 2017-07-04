@@ -3,36 +3,36 @@
     <h3 style="display: inline-block">{{activeDate | date:'dd.MM.yyyy'}}</h3>
 </p-toolbar>
 
-<p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="5" styleClass="carousel">
+<p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="4" styleClass="carousel">
 
     <ng-template let-screen pTemplate="item">
         
         <div class="ui-g">
-            <div class="ui-g-12 center" style="height: 120px">
-                <h2>{{screen.subject}}</h2>
+            <div class="ui-g-12 center ellipsis-m" style="height: 120px">
+                <span class="font_1">{{screen.subject}}</span>
             </div>
-            <div class="ui-g-4">
-                Холл :    
+            <div class="ui-g-5">
+                Холл :
             </div>
-            <div class="ui-g-8" style="height: 72px">
+            <div class="ui-g-7 ellipsis-m" style="height: 76px">
                 {{screen.hall}}
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-5">
                 Состояние :
             </div>
-            <div class="ui-g-8">
+            <div class="ui-g-7">
                 {{ConfState.toName(screen.state)}}
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-5">
                 Начало :
             </div>
-            <div class="ui-g-8">
+            <div class="ui-g-7">
                 {{screen.startDate | date:'HH:mm'}}
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-5">
                 Окончание :
             </div>
-            <div class="ui-g-8">
+            <div class="ui-g-7">
                 {{screen.endDate | date:'HH:mm'}}
             </div>
             <div class="ui-g-12 center">

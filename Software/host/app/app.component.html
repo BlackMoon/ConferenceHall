@@ -1,64 +1,111 @@
-﻿<div class="layout-wrapper">
-    <div #topbar id="layout-topbar" *ngIf="bitTest(Layout.ShowHeader)">
-        <a class="menu-button" href="#">
-            <i class="fa fa-bars"></i>
-        </a>
-        <a class="logo" href="#">
-            <div style="float: left; height: 44px; width: 44px">
-                <svg preserveAspectRatio="xMidYMid meet" style="stroke-width: 0" viewBox="0 82.59000396728516 500.7769775390625 340.7220153808594" xmlns="http://www.w3.org/2000/svg">
-                    <g>
-                        <path d="M489.842 270.768H403.99L373.785 167.95a10.941 10.941 0 0 0-10.622-6.529 10.932 10.932 0 0 0-9.833 7.666L290 362 223.096 91.286a10.934 10.934 0 0 0-10.443-8.601c-5.048-.095-9.519 3.25-11.811 8.135l-73.81 180.948H10.934C4.897 271.768 0 276.664 0 282.703v2.689c0 6.038 4.897 10.935 10.934 10.935h127.438c5.144 0 9.592-3.586 10.685-8.611l61.645-156.771 68.797 282.199c.808 5.931 4.854 9.688 9.832 10.126.323.028.645.042.964.042 4.604 0 8.763-2.902 10.312-8.313L364.3 208.404l20.81 79.815a10.935 10.935 0 0 0 10.242 7.107h93.714c6.038 0 10.935-4.896 10.935-10.935l.776-2.689c-.001-6.038-4.897-10.934-10.935-10.934z"></path>
-                    </g>
-                </svg>
+﻿<div class="ui-g layout-wrapper">
+    <div class="ui-xl-2 ui-g-nopad" *ngIf="bitTest(Layout.ShowLeftSide)"></div>
+    <div class="ui-g-nopad ui-g-12 ui-md-12" [ngClass]="cls">
+        <div #topbar id="layout-topbar" class="ui-g-12" *ngIf="bitTest(Layout.ShowHeader)">
+            <a class="menu-button" href="#">
+                <i class="fa fa-bars"></i>
+            </a>
+            <a class="logo" href="#">
+                <div style="float: left; height: 44px; width: 44px">
+                    <svg preserveAspectRatio="xMidYMid meet" style="stroke-width: 0" viewBox="0 82.59000396728516 500.7769775390625 340.7220153808594" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path d="M489.842 270.768H403.99L373.785 167.95a10.941 10.941 0 0 0-10.622-6.529 10.932 10.932 0 0 0-9.833 7.666L290 362 223.096 91.286a10.934 10.934 0 0 0-10.443-8.601c-5.048-.095-9.519 3.25-11.811 8.135l-73.81 180.948H10.934C4.897 271.768 0 276.664 0 282.703v2.689c0 6.038 4.897 10.935 10.934 10.935h127.438c5.144 0 9.592-3.586 10.685-8.611l61.645-156.771 68.797 282.199c.808 5.931 4.854 9.688 9.832 10.126.323.028.645.042.964.042 4.604 0 8.763-2.902 10.312-8.313L364.3 208.404l20.81 79.815a10.935 10.935 0 0 0 10.242 7.107h93.714c6.038 0 10.935-4.896 10.935-10.935l.776-2.689c-.001-6.038-4.897-10.934-10.935-10.934z"></path>
+                        </g>
+                    </svg>
+                </div>
+                <h1 class="font_0" style="margin: 0 0 0 62px; line-height: 1em">Conference&nbsp;Hall</h1>
+                <p class="font_8" style="margin: 0 0 0 62px">
+                    <span class="color_13">
+                        <span style="letter-spacing: .1em">
+                            Концепция &amp; ИАС
+                        </span>
+                    </span>
+                </p>
+            </a>
+
+            <ul class="topbar-menu">
+                <li>
+                    <a [routerLink]="['/schedule']" title="Календарь">
+                        <span class="fa-stack fa-2x">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/orgs']" title="Сотрудники">
+                        <span class="fa-stack fa-2x">
+                            <i class="fa fa-users"></i>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/halls']" title="Холлы">
+                        <span class="fa-stack fa-2x">
+                            <i class="fa fa-building"></i>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Настройки">
+                        <span class="fa-stack fa-2x">
+                            <i class="fa fa-wrench"></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div #content id="layout-content" class="ui-g-12">
+            <router-outlet></router-outlet>
+        </div>
+        <div #bottombar id="layout-bottombar" class="ui-g-12 font_8" *ngIf="bitTest(Layout.ShowFooter)">
+            <div class="ui-g-4">
+                
+                <div> © &nbsp; 2017 Aquilon Software Technologies. </div>
+               
+                <div style="float: left; height: 14px; width: 14px">
+                    <svg preserveAspectRatio="xMidYMid meet" style="stroke-width: 0" viewBox="42.17698669433594 28.26300048828125 251.81602478027344 297.4230041503906" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path d="M168.085 31.832c4.245-.454 45.943-3.569 84.851 43.417 41.057 49.578 3.873 115.419 3.873 115.419l-88.725 135.018-88.723-135.018s-37.184-65.841 3.873-115.419c38.914-46.986 80.606-43.872 84.851-43.417zm47.415 96.445c0-26.184-21.226-47.409-47.414-47.409-26.184 0-47.414 21.226-47.414 47.409 0 26.189 21.231 47.414 47.414 47.414 26.188 0 47.414-21.225 47.414-47.414z"></path>
+                        </g>
+                    </svg>
+                </div>
+
+                <div>&nbsp; 252a Беломорская,&nbsp;Казань, РТ 94158</div>
             </div>
-            <h1 class="font_0" style="margin: 0 0 0 62px; line-height: 1em">Conference&nbsp;Hall</h1>
-            <p class="font_8" style="margin: 0 0 0 62px">
-                <span class="color_13">
-                    <span style="letter-spacing: .1em">
-                        Концепция &amp; ИАС
+
+            <div class="ui-g-4">
+            
+                <div>
+                    <div>&nbsp;</div>
+                    <div style="float: left; height: 14px; width: 14px">
+                        <svg preserveAspectRatio="xMidYMid meet" style="stroke-width: 0" viewBox="-3.899993896484375 -2.700000047683716 160.89999389648438 158.90000915527344" xmlns="http://www.w3.org/2000/svg">
+                            <g>
+                                <path d="M92.3 116.4c11.4-.3 14.5-13.3 18.9-19.6 4.5-6.3 10.7-6.3 13.9-4.7 2.8 1.4 21.1 14 28.5 25.8 3.4 5.8 2.8 9.6-2.6 14.5-11 9.8-27.2 21.8-31.3 22.8-4.1 1-37.8-.9-80.7-43.8S-.5 39 .4 33.9C.9 27.8 22.1 4.6 22.1 4.6S27-2.7 35.5 1c9.7 4.2 25.4 27.8 25.4 27.8s3.4 5.8-.6 11.7c-3.8 5.8-23.7 10-23.7 20.2S46.8 82 59.4 95.1s21.5 21.6 32.9 21.3z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div>&nbsp; Tel: 123-456-789</div>
+                </div>
+            </div>
+            
+            <div class="ui-g-4">
+                <div class="ui-toolbar-group-right">
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-facebook fa-lg"></i>
                     </span>
-                </span>
-            </p>
-        </a>
-        
-        <ul class="topbar-menu">
-            <li>
-                <a [routerLink]="['/schedule']" title="Календарь">
-                    <span class="fa-stack fa-2x">
-                        <i class="fa fa-calendar"></i>
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-twitter fa-lg"></i>
                     </span>
-                </a>
-            </li>
-            <li >
-                <a [routerLink]="['/orgs']" title="Сотрудники">
-                    <span class="fa-stack fa-2x">
-                        <i class="fa fa-users"></i>
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-google-plus fa-lg"></i>
                     </span>
-                </a>
-            </li>
-            <li >
-                <a [routerLink]="['/halls']" title="Холлы">
-                    <span class="fa-stack fa-2x">
-                        <i class="fa fa-building"></i>
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#" title="Настройки">
-                    <span class="fa-stack fa-2x">
-                        <i class="fa fa-wrench"></i>
-                    </span>
-                </a>
-            </li>
-        </ul>
+                </div>
+            </div>
+        </div>
     </div>
-    <div #content id="layout-content" [ngStyle]="{'padding-top': bitTest(Layout.ShowHeader) ? '70px' : '0'}">
-        <router-outlet></router-outlet>
-    </div>
-    <div #bottombar id="layout-bottombar" *ngIf="bitTest(Layout.ShowFooter)">
-       
-    </div>
+    <div class="ui-xl-2 ui-g-nopad" *ngIf="bitTest(Layout.ShowRightSide)"></div>
 </div>
+    
 
 <p-confirmDialog #cd width="450">
     <p-footer>
@@ -66,4 +113,5 @@
         <button type="button" pButton icon="fa-check" label="Да" (click)="cd.accept()"></button>
     </p-footer>
 </p-confirmDialog>
+
 <p-growl [life]="5000" [value]="msgs"></p-growl>

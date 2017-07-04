@@ -12,7 +12,8 @@ const zoomStep = 0.1;
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    host: { '(window:keydown)': "onKeyDown($event)",
+    host: {'(window:keydown)': "onKeyDown($event)",
+            '(window:popstate)': "onPopState($event)",
             '(window:resize)' : "onResize($event)" },
     selector: 'scheme-main',
     styles: [".mark ellipse { fill: rgba(255, 255, 255, 0.9); stroke: blue; stroke-width: 2px }",
@@ -139,13 +140,17 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         }
     }
 
-    onKeyDown(event) {
+    onKeyDown(e) {
         
-        if (event.target.nodeName.toLowerCase() === "input")
+        if (e.target.nodeName.toLowerCase() === "input")
             return;
 
         // delete key
-        event.keyCode === 46 && this.svgElement != null && this.shapeRemove();
+        e.keyCode === 46 && this.svgElement != null && this.shapeRemove();
+    }
+
+    onPopState(e) {
+        console.log(e);
     }
 
     onResize() {

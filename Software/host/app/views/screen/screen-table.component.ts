@@ -5,7 +5,7 @@ import { ScreenService } from './screen.service';
 
 @Component({
     encapsulation: ViewEncapsulation.None,
-    styles: [".carousel .ui-grid-row { text-align: center; }"],
+    styles: [".carousel .ui-grid-row { text-align: center; }", ".font_1 { font-size: 1.5em; font-weight: 600 }"],
     templateUrl: 'screen-table.component.html'
 })
 export class ScreenTableComponent implements OnInit {

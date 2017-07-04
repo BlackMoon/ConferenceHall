@@ -4,12 +4,6 @@
 
 .h72 { height: 72px }
 
-.ellipsys {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; 
-}
-
 .bggreen {
     background-color: rgba(0, 180, 115, 1);
     color: white;

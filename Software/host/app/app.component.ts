@@ -15,6 +15,11 @@ const startViewKey = 'returnUrl';
 })
 export class AppComponent implements AfterViewInit, OnInit {
 
+    /**
+     * Responsive class for big screen monitors (ui-xl*)
+     */
+    cls: string;
+
     msgs: Message[] = [];
 
     private layout: Layout = Layout.None;
@@ -45,7 +50,15 @@ export class AppComponent implements AfterViewInit, OnInit {
             .mergeMap(r => r.data)
             .subscribe((data: any) => {
                 
-                this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader;
+                this.layout = (data.layout !== undefined) ? data.layout : Layout.ShowHeader | Layout.ShowLeftSide | Layout.ShowRightSide;
+              
+                this.cls = "ui-xl-12";
+
+                if (this.bitTest(Layout.ShowLeftSide | Layout.ShowRightSide))
+                    this.cls = "ui-xl-8";
+                else if (this.bitTest(Layout.ShowLeftSide) || this.bitTest(Layout.ShowRightSide))
+                    this.cls = "ui-xl-10";
+
                 setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
             });
 
@@ -69,7 +82,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     onResize() {
         let h = window.innerHeight;
-    
+      
         this.bottomBarEl && (h -= this.bottomBarEl.nativeElement.offsetHeight);
         this.topBarEl && (h -= this.topBarEl.nativeElement.offsetHeight);
         
