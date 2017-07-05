@@ -224,17 +224,19 @@ Raleway font
 
 /* ellipsis */
 .ellipsis {
+    text-overflow: ellipsis;
+    text-overflow: -o-ellipsis-lastline;
     white-space: nowrap;
 }
 
 .ellipsis-m {
-    display: block;
     display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }
 
 .ellipsis, .ellipsis-m {
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .no-header thead {

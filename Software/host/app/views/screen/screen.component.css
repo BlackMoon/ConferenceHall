@@ -14,5 +14,6 @@
 }
 
 .tnlogo {
-    background: url(/assets/logo_tn.png) 1em center / contain no-repeat;
+    max-height: 100%;
+    max-width: 100%;
 }
