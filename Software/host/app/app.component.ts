@@ -62,9 +62,9 @@ export class AppComponent implements AfterViewInit, OnInit {
                 this.cls = "ui-xl-12";
 
                 if (this.bitTest(Layout.ShowLeftSide | Layout.ShowRightSide))
-                    this.cls = "ui-xl-8";
-                else if (this.bitTest(Layout.ShowLeftSide) || this.bitTest(Layout.ShowRightSide))
                     this.cls = "ui-xl-10";
+                else if (this.bitTest(Layout.ShowLeftSide) || this.bitTest(Layout.ShowRightSide))
+                    this.cls = "ui-xl-11";
 
                 setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
             });

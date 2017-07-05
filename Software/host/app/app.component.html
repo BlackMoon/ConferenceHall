@@ -1,6 +1,6 @@
 ﻿<div class="ui-g layout-wrapper">
-    <div class="ui-xl-2 ui-g-nopad" *ngIf="bitTest(Layout.ShowLeftSide)"></div>
-    <div class="ui-g-nopad ui-g-12 ui-md-12" [ngClass]="cls">
+    <div class="ui-xl-1 ui-g-nopad" *ngIf="bitTest(Layout.ShowLeftSide)"></div>
+    <div class="ui-g-nopad ui-g-12" [ngClass]="cls">
         <div #topbar id="layout-topbar" class="ui-g-12" *ngIf="bitTest(Layout.ShowHeader)">
             <a class="menu-button" href="#">
                 <i class="fa fa-bars"></i>
@@ -103,7 +103,7 @@
             </div>
         </div>
     </div>
-    <div class="ui-xl-2 ui-g-nopad" *ngIf="bitTest(Layout.ShowRightSide)"></div>
+    <div class="ui-xl-1 ui-g-nopad" *ngIf="bitTest(Layout.ShowRightSide)"></div>
 </div>
     
 
