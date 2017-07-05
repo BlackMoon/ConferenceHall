@@ -24,6 +24,7 @@ export class SchemeDetailComponent implements OnInit {
             .subscribe((params: Params) => {
                 // (+) converts string 'id' to a number
                 this.id = params.hasOwnProperty("id") ? +params["id"] : undefined;
+                debugger;
             });
     }
     
