@@ -11,30 +11,22 @@
             <div class="ui-g-12 center ellipsis-m" style="height: 120px">
                 <span class="font_1">{{screen.subject}}</span>
             </div>
-            <div class="ui-g-5">
-                Холл :
-            </div>
-            <div class="ui-g-7 ellipsis-m" style="height: 76px">
+            <div class="ui-g-1"></div>
+            <div class="ui-g-10 ellipsis-m" style="height: 76px">
                 {{screen.hall}}
             </div>
-            <div class="ui-g-5">
-                Состояние :
-            </div>
-            <div class="ui-g-7">
+            <div class="ui-g-1"></div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-10">
+                <i class="fa fa-exclamation-circle" *ngIf="screen.state === ConfState.Active"></i>
                 {{ConfState.toName(screen.state)}}
             </div>
-            <div class="ui-g-5">
-                Начало :
+            <div class="ui-g-1"></div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-10">
+                {{screen.startDate | date:'HH:mm'}} - {{screen.endDate | date:'HH:mm'}}
             </div>
-            <div class="ui-g-7">
-                {{screen.startDate | date:'HH:mm'}}
-            </div>
-            <div class="ui-g-5">
-                Окончание :
-            </div>
-            <div class="ui-g-7">
-                {{screen.endDate | date:'HH:mm'}}
-            </div>
+            <div class="ui-g-1"></div>
             <div class="ui-g-12 center">
                 <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/conferences', screen.id]"></button>
                 <button type="button" pButton icon="fa-desktop" [routerLink]="['/screens', screen.id]"></button>
