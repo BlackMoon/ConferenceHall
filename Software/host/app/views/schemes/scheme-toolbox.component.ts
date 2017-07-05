@@ -202,6 +202,6 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
     }
 
     onResize() {
-        this.contentElRef.nativeElement.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.contentElRef.nativeElement.offsetTop - 6}px`;
+        this.contentElRef.nativeElement.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - this.contentElRef.nativeElement.offsetTop}px`;
     }
 }

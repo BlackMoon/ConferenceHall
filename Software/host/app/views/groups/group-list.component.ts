@@ -15,9 +15,7 @@ export class GroupListComponent implements OnInit {
     constructor(
         private groupService: GroupService,
         private logger: Logger,
-        private mediator: Mediator) {
-
-    }
+        private mediator: Mediator) { }
 
     ngOnInit() {
         
