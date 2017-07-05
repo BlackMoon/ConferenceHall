@@ -13,8 +13,7 @@ const zoomStep = 0.1;
 @Component({
     encapsulation: ViewEncapsulation.None,
     host: {'(window:keydown)': "onKeyDown($event)",
-            '(window:popstate)': "onPopState($event)",
-            '(window:resize)' : "onResize($event)" },
+           '(window:resize)' : "onResize($event)" },
     selector: 'scheme-main',
     styles: [".mark ellipse { fill: rgba(255, 255, 255, 0.9); stroke: blue; stroke-width: 2px }",
             ".mark.on ellipse { fill: rgba(0, 255, 0, 0.9) }"],
@@ -147,10 +146,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         // delete key
         e.keyCode === 46 && this.svgElement != null && this.shapeRemove();
-    }
-
-    onPopState(e) {
-        console.log(e);
     }
 
     onResize() {

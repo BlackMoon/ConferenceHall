@@ -2,7 +2,7 @@
 import { Http, Headers, RequestOptions, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
-import { HttpDataService } from '../../common/data-service';
+import { HttpDataService } from '../../common/http-data.service';
 import { EmployeeModel } from '../../models';
 
 import MapUtils from '../../common/map-utils';

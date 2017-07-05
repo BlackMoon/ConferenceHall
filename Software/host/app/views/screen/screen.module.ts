@@ -2,7 +2,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule, CarouselModule, DataTableModule, ToolbarModule } from 'primeng/primeng';
-import { HubService } from '../../common/hub-service';
+import { HubService } from '../../common/hub.service';
 import { MemberService } from '../members/member.service';
 import { ScreenRoutingModule } from './screen-routing.module';
 import { SchemesModule } from '../schemes/schemes.module';

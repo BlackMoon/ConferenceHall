@@ -2,8 +2,10 @@
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
-import { Layout } from "./common/navigation/layout";
+
 import { Logger } from "./common/logger";
+import { Layout } from "./common/navigation/layout";
+import { Storage } from "./common/storage";
 
 const startViewKey = 'returnUrl';
 
@@ -34,14 +36,19 @@ export class AppComponent implements AfterViewInit, OnInit {
     @ViewChild("content") contentEl: ElementRef;
 
     constructor(
-        private route: ActivatedRoute,
         private logger: Logger,
-        private router: Router) {
+        private route: ActivatedRoute,
+        private router: Router,
+        private storage: Storage) {
 
         this.router
             .events
             .filter(e => e instanceof NavigationEnd)
-            .map(() => this.route)
+            .map((e: NavigationEnd) => {
+                // store referrer
+                storage.previousRoute = e.url;
+                return this.route;
+            })
             .map(r => {
                 // find the last activated route
                 while (r.firstChild) r = r.firstChild;
@@ -59,7 +66,7 @@ export class AppComponent implements AfterViewInit, OnInit {
                 else if (this.bitTest(Layout.ShowLeftSide) || this.bitTest(Layout.ShowRightSide))
                     this.cls = "ui-xl-10";
 
-                setTimeout(() => window.dispatchEvent(new Event('resize')), 0);
+                setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
             });
 
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);

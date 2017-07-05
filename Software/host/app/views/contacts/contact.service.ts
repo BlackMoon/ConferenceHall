@@ -2,7 +2,7 @@
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { handleResponseError } from '../../common/http-error';
-import { HttpDataService } from '../../common/data-service';
+import { HttpDataService } from '../../common/http-data.service';
 import { ContactModel } from '../../models';
 
 @Injectable()

@@ -5,7 +5,7 @@ import { Logger } from "../../common/logger";
 import { borderClass, markClass } from "../../common/svg-utils";
 import { MemberModel, MemberState, ScreenModel } from '../../models';
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
-import { HubService } from "../../common/hub-service";
+import { HubService } from "../../common/hub.service";
 import { ScreenService } from "./screen.service";
 import { MemberScreenComponent } from "./member-screen.component";
 
