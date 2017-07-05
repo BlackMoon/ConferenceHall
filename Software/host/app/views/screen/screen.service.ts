@@ -29,11 +29,11 @@ export class ScreenService extends HttpDataService<ScreenModel> {
     getAll(startDate:Date): Observable<ScreenModel[]> {
 
         let d = startDate.getDate(),
-            m = startDate.getMonth(),
+            m = startDate.getMonth() + 1,       // month starts with 0
             y = startDate.getFullYear();
 
         let params: URLSearchParams = new URLSearchParams();
-        params.append("startDate", startDate.toUTCString());
+        params.append("startDate", `${y}-${m}-${d}`);
 
         return this.http
             .get(this.url, { params: params })

@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { ConfState, ScreenModel } from '../../models';
 import { ScreenService } from './screen.service';
@@ -26,6 +27,12 @@ export class ScreenTableComponent implements OnInit {
     
     ngOnInit() {
         this.loadScreens();
+
+        this.route.params
+            .switchMap((params: Params) => {
+                return Observable.empty();
+            })
+            .subscribe();
     }
 
     addDays(days:number) {
@@ -51,10 +58,11 @@ export class ScreenTableComponent implements OnInit {
                         now = new Date();
                   
                     screens.forEach((s, i) => {
-                        
+
+                        // startDate/endDate in string --> create date objects
                         let start = new Date(s.startDate),
                             end = new Date(s.endDate),
-                            diff = <any>end - <any>now;
+                            diff = <any>end - <any>now;         // in ms
 
                         // endDate > now
                         if (diff > 0) {

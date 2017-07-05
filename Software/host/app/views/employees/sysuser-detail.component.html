@@ -2,7 +2,7 @@
     
     <input type="hidden" formControlName="id"/>
 
-    <div class="ui-g-8 ui-g-nopad">
+    <div class="ui-lg-8 ui-g-12 ui-g-nopad">
         <div class="ui-g-4">
             {{bindLabel}} :
         </div>
@@ -10,7 +10,7 @@
             <p-inputSwitch formControlName="bind" onLabel="Да" offLabel="Нет"></p-inputSwitch>
         </div>
     </div>
-    <div class="ui-g-8 ui-g-nopad">
+    <div class="ui-lg-8 ui-g-12 ui-g-nopad">
         <div class="ui-g-4">
             Логин <span *ngIf="requireCredentialsValidation">*</span>:
         </div>
@@ -18,7 +18,7 @@
             <input pInputText type="text" formControlName="login" class="w100p" />
         </div>
     </div>
-    <div class="ui-g-8 ui-g-nopad">
+    <div class="ui-lg-8 ui-g-12 ui-g-nopad">
         <div class="ui-g-4">
             Роль <span *ngIf="requireCredentialsValidation">*</span>:
         </div>
@@ -26,7 +26,7 @@
             <p-dropdown formControlName="role" [options]="roles" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
         </div>
     </div>
-    <div class="ui-g-8 ui-g-nopad">
+    <div class="ui-lg-8 ui-g-12 ui-g-nopad">
         <div class="ui-g-4">
             Пароль <span *ngIf="requirePasswordValidation">*</span>:
         </div>

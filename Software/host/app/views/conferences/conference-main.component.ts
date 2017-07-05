@@ -134,7 +134,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .subscribe(
                 conference => {
                     
-                    // startDate/endDate in string --> create
+                    // startDate/endDate in string --> create date objects
                     conference.startDate && (conference.startDate = new Date(conference.startDate));
                     conference.endDate && (conference.endDate = new Date(conference.endDate));
                     
