@@ -69,7 +69,7 @@ namespace domain.Employee.Query
 
         public async Task<IEnumerable<Employee>> ExecuteAsync(FindEmployeesQuery query)
         {
-            IEnumerable<Employee> result = Enumerable.Empty<Employee>();
+            IEnumerable<Employee> result;
 
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
                 .Column("e.id")
@@ -82,7 +82,8 @@ namespace domain.Employee.Query
             {
                 sqlBuilder
                     .Join("conf_hall.conf_members m ON m.employee_id = e.id")
-                    .Where("m.conf_id = @conferenceId");
+                    .Where("m.conf_id = @conferenceId")
+                    .OrderBy("lower(e.name)");
 
                 param.Add("conferenceId", query.ConferenceId);
             }
