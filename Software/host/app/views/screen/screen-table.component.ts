@@ -1,4 +1,5 @@
-﻿import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+﻿import { Component, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Logger } from "../../common/logger";
 import { ConfState, ScreenModel } from '../../models';
 import { ScreenService } from './screen.service';
@@ -19,6 +20,8 @@ export class ScreenTableComponent implements OnInit {
     
     constructor(
         private logger: Logger,
+        private route: ActivatedRoute,
+        private router: Router,
         private screenService: ScreenService) { }
     
     ngOnInit() {
@@ -68,5 +71,10 @@ export class ScreenTableComponent implements OnInit {
                 },
                 error => this.logger.error2(error)
         );    
+    }
+
+    openDesktop(id) {
+
+        isDevMode() ? this.router.navigate(["screens", id]) : window.open(`/screens/${id}`, "_blank");
     }
 }

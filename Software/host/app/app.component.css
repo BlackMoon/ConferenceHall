@@ -229,13 +229,20 @@ Raleway font
     white-space: nowrap;
 }
 
-.ellipsis-m {
-    display: -webkit-box;
+.ellipsis-m3 {
+    -webkit-line-clamp: 3;
+}
+
+.ellipsis-m4 {
     -webkit-line-clamp: 4;
+}
+
+.ellipsis-m3, .ellipsis-m4 {
+    display: -webkit-box;
     -webkit-box-orient: vertical;
 }
 
-.ellipsis, .ellipsis-m {
+.ellipsis, .ellipsis-m3, .ellipsis-m4 {
     overflow: hidden;
 }
 

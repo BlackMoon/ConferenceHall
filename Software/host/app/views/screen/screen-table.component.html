@@ -8,11 +8,11 @@
     <ng-template let-screen pTemplate="item">
         
         <div class="ui-g">
-            <div class="ui-g-12 center ellipsis-m" style="height: 120px">
+            <div class="ui-g-12 center ellipsis-m4" style="height: 120px">
                 <span class="font_1">{{screen.subject}}</span>
             </div>
             <div class="ui-g-1"></div>
-            <div class="ui-g-10 ellipsis-m" style="height: 76px">
+            <div class="ui-g-10 ellipsis-m3" style="height: 76px">
                 {{screen.hall}}
             </div>
             <div class="ui-g-1"></div>
@@ -29,7 +29,7 @@
             <div class="ui-g-1"></div>
             <div class="ui-g-12 center">
                 <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/conferences', screen.id]"></button>
-                <button type="button" pButton icon="fa-desktop" [routerLink]="['/screens', screen.id]"></button>
+                <button type="button" pButton icon="fa-desktop" (click)="openDesktop(screen.id)"></button>
             </div>
         </div>
        
