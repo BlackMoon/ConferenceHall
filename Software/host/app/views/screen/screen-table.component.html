@@ -1,9 +1,9 @@
 ﻿<p-toolbar>
     <button pButton type="button" icon="fa-chevron-left" (click)="addDays(-1)"></button><button pButton type="button" icon="fa-chevron-right" (click)="addDays(1)"></button>
-    <h3 style="display: inline-block">{{activeDate | date:'dd.MM.yyyy'}}</h3>
+    <h3 style="display: inline-block">{{startDate | date:'dd.MM.yyyy'}}</h3>
 </p-toolbar>
 
-<p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="4" styleClass="carousel">
+<p-carousel [value]="screens" numVisible="4" styleClass="carousel">
 
     <ng-template let-screen pTemplate="item">
         

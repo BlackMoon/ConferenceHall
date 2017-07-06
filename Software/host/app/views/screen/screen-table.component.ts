@@ -1,4 +1,5 @@
-﻿import { Component, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
+﻿import { DatePipe, Location } from '@angular/common';
+import { Component, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Carousel } from "primeng/components/carousel/carousel";
@@ -12,46 +13,56 @@ import { ScreenService } from './screen.service';
     templateUrl: 'screen-table.component.html'
 })
 export class ScreenTableComponent implements OnInit {
-
-    activeDate: Date = new Date();
-    firstVisible: number = 1;
+    
     screens: ScreenModel[];
+    startDate: Date;
 
     // ReSharper disable once InconsistentNaming
     public ConfState = ConfState;  
 
     constructor(
+        private datePipe: DatePipe,
+        private location: Location,
         private logger: Logger,
         private route: ActivatedRoute,
         private router: Router,
         private screenService: ScreenService) { }
     
     ngOnInit() {
-        this.loadScreens();
         
-        // todo statrDate in http.get
         this.route.params
             .switchMap((params: Params) => {
-                return Observable.empty();
+               
+                this.startDate = new Date(params["startDate"]);
+                
+                if (!(this.startDate instanceof Date))
+                    this.startDate = new Date();
+
+                return this.screenService
+                    .getAll(this.startDate);
             })
-            .subscribe();
+            .subscribe(
+                screens => this.screens = screens,
+                error => this.logger.error2(error));
     }
 
     addDays(days:number) {
         
-        let d = this.activeDate.getDate(),
-            m = this.activeDate.getMonth(),
-            y = this.activeDate.getFullYear();
+        let d = this.startDate.getDate(),
+            m = this.startDate.getMonth(),
+            y = this.startDate.getFullYear();
 
-        this.activeDate = new Date(y, m, d + days);
+        this.startDate = new Date(y, m, d + days);
 
         this.loadScreens();
     }
 
     loadScreens() {
 
+        this.location.replaceState(`screens/${this.datePipe.transform(this.startDate, "yyyy-MM-dd")}`);
+
         this.screenService
-            .getAll(this.activeDate)
+            .getAll(this.startDate)
             .subscribe(
                 screens => this.screens = screens,
                 error => this.logger.error2(error)
@@ -60,6 +71,6 @@ export class ScreenTableComponent implements OnInit {
 
     openDesktop(id) {
 
-        isDevMode() ? this.router.navigate(["screens", id]) : window.open(`/screens/${id}`, "_blank");
+        isDevMode() ? this.router.navigate(["screen", id]) : window.open(`/screen/${id}`, "_blank");
     }
 }

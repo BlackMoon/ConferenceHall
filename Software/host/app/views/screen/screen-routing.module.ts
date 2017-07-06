@@ -6,8 +6,10 @@ import { ScreenComponent } from './screen.component';
 import { ScreenTableComponent } from './screen-table.component';
 
 const screenRoutes: Routes = [
+    // presentation mode
+    { path: 'screen/:id', component: ScreenComponent, data: { layout: Layout.None } },
     { path: 'screens', component: ScreenTableComponent, data: { layout: Layout.ShowHeader | Layout.ShowFooter | Layout.ShowLeftSide | Layout.ShowRightSide } },
-    { path: 'screens/:id', component: ScreenComponent,  data: { layout: Layout.None } }
+    { path: 'screens/:startDate', component: ScreenTableComponent, data: { layout: Layout.ShowHeader | Layout.ShowFooter | Layout.ShowLeftSide | Layout.ShowRightSide } }
 ];
 
 @NgModule({
