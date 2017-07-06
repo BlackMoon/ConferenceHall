@@ -58,7 +58,7 @@ export class ScreenTableComponent implements OnInit {
                         now = new Date();
                   
                     screens.forEach((s, i) => {
-
+                        
                         // startDate/endDate in string --> create date objects
                         let start = new Date(s.startDate),
                             end = new Date(s.endDate),
@@ -73,9 +73,9 @@ export class ScreenTableComponent implements OnInit {
                             }
                         } 
                     });
-                   
-                    this.firstVisible = ix;
+                    this.firstVisible = ix + 1;
                     this.screens = screens;
+                    
                 },
                 error => this.logger.error2(error)
         );    
