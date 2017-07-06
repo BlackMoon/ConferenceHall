@@ -34,8 +34,8 @@ export class ScreenTableComponent implements OnInit {
             .switchMap((params: Params) => {
                
                 this.startDate = new Date(params["startDate"]);
-                
-                if (!(this.startDate instanceof Date))
+               
+                if (isNaN(this.startDate.getTime()))
                     this.startDate = new Date();
 
                 return this.screenService
