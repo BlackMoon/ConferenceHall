@@ -68,7 +68,7 @@ export class HallTableComponent implements OnInit {
 
                         this.selectedHalls.forEach(h => {
                             let ix = this.halls.findIndex(n => n.id === h.id);
-                            this.halls.splice(ix, 1);
+                            (ix !== -1) && this.halls.splice(ix, 1);
                         });
 
                         this.selectedHalls.length = 0;
@@ -105,7 +105,7 @@ export class HallTableComponent implements OnInit {
                 ids = this.selectedHalls.map(h => h.id),
                 ix = ids.indexOf(id);
 
-            ids.splice(ix, 1);
+            (ix !== -1) && ids.splice(ix, 1);
 
             let c: GroupCommand = { ids: ids };
             this.selectionChanged.emit(c);

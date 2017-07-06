@@ -141,6 +141,25 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                     this.conferenceForm.patchValue(conference);
                 },
                 error => this.logger.error2(error));
+
+        // validation check
+        this.conferenceForm.get("state")
+            .valueChanges
+            .subscribe(value => {
+               
+                this.requireValidation = (value !== ConfState.Planned);
+
+                ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {
+
+                    let control = this.conferenceForm.get(c);
+                    if (control) {
+                        control.setValidators(this.requireValidation ? [Validators.required] : null);
+                        control.updateValueAndValidity();
+                    }
+                });
+
+
+            });
         
     }
 
@@ -158,20 +177,6 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             );
 
         this.schemeId = null;
-    }
-
-    idChange(value) {
-        
-        this.requireValidation = true;
-
-        ["hallId", "schemeId", "startDate", "endDate"].forEach(c => {
-
-            let control = this.conferenceForm.get(c);
-            if (control) {
-                control.setValidators([Validators.required]);
-                control.updateValueAndValidity();
-            }
-        });    
     }
 
     loadMembers(confid) {
@@ -241,7 +246,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                
                 this.selectedMembers.forEach(member => {
                     let ix = this.members.findIndex(m => m.id === member.id);
-                    this.members.splice(ix, 1);
+                    (ix !== -1) && this.members.splice(ix, 1);
                 });
 
                 this.selectedMembers.length = 0;
@@ -258,7 +263,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         this.memberService
             .addMembers(this.id, members)
             .subscribe(
-                // only new members <id, employeeId>
+                // only new members {id, employeeId}
                 nmembers => {
                    
                     nmembers.forEach(nm => {

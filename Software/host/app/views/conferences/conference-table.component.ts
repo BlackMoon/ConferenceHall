@@ -151,7 +151,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
         this.selectedConference = null;
 
         let ix = this.conferences.findIndex(c => c.id === id);
-        this.conferences.splice(ix, 1);
+        (ix !== -1) && this.conferences.splice(ix, 1);
 
         emit && this.conferenceRemoveClick.emit(id);
     }

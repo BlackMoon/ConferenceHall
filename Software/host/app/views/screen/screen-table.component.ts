@@ -1,6 +1,7 @@
-﻿import { Component, OnInit, ViewEncapsulation, isDevMode } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Carousel } from "primeng/components/carousel/carousel";
 import { Logger } from "../../common/logger";
 import { ConfState, ScreenModel } from '../../models';
 import { ScreenService } from './screen.service';
@@ -17,8 +18,8 @@ export class ScreenTableComponent implements OnInit {
     screens: ScreenModel[];
 
     // ReSharper disable once InconsistentNaming
-    public ConfState = ConfState;    
-    
+    public ConfState = ConfState;  
+
     constructor(
         private logger: Logger,
         private route: ActivatedRoute,
@@ -27,7 +28,8 @@ export class ScreenTableComponent implements OnInit {
     
     ngOnInit() {
         this.loadScreens();
-
+        
+        // todo statrDate in http.get
         this.route.params
             .switchMap((params: Params) => {
                 return Observable.empty();
@@ -51,32 +53,7 @@ export class ScreenTableComponent implements OnInit {
         this.screenService
             .getAll(this.activeDate)
             .subscribe(
-                screens => {
-
-                    let ix,
-                        prev = new Date(4000, 0, 0),
-                        now = new Date();
-                  
-                    screens.forEach((s, i) => {
-                        
-                        // startDate/endDate in string --> create date objects
-                        let start = new Date(s.startDate),
-                            end = new Date(s.endDate),
-                            diff = <any>end - <any>now;         // in ms
-
-                        // endDate > now
-                        if (diff > 0) {
-                            // search min startDate
-                            if (start < prev) {
-                                prev = start;
-                                ix = i;
-                            }
-                        } 
-                    });
-                    this.firstVisible = ix + 1;
-                    this.screens = screens;
-                    
-                },
+                screens => this.screens = screens,
                 error => this.logger.error2(error)
         );    
     }

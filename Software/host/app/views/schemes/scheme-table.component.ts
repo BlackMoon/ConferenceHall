@@ -81,7 +81,7 @@ export class SchemeTableComponent implements OnInit {
 
                         this.selectedSchemes.forEach(s => {
                             let ix = this.schemes.findIndex(n => n.id === s.id);
-                            this.schemes.splice(ix, 1);
+                            (ix !== -1) && this.schemes.splice(ix, 1);
                         });
 
                         this.selectedSchemes.length = 0;

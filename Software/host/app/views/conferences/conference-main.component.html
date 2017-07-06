@@ -11,7 +11,7 @@
     <main>
         <form id="conferenceForm" [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
 
-            <input type="hidden" formControlName="id" (ngModelChange)="idChange($event)" />
+            <input type="hidden" formControlName="id" />
 
             <p-accordion>
                 <p-accordionTab header="Конференция" [selected]="true">

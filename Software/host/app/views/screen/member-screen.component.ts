@@ -99,7 +99,7 @@ export class MemberScreenComponent implements AfterViewInit {
     removeMember(id) {
 
         let ix = this.members.findIndex(m => m.id === id);
-        this.members.splice(ix, 1);
+        (ix !== -1) && this.members.splice(ix, 1);
     }
 
     scroll() {

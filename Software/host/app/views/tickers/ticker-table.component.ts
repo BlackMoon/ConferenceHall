@@ -114,7 +114,7 @@ export class TickerTableComponent {
 
                         this.selectedTickers.forEach(h => {
                             let ix = this.tickers.findIndex(n => n.id === h.id);
-                            this.tickers.splice(ix, 1);
+                            (ix !== -1) && this.tickers.splice(ix, 1);
                         });
 
                         this.selectedTickers.length = 0;

@@ -277,8 +277,9 @@ export class ConferenceScheduleComponent implements AfterViewInit {
      * @param id
      */
     removeEventFromList(id) {
+
         let ix = this.events.findIndex(c => c.id === id);
-        this.events.splice(ix, 1);
+        (ix !== -1) && this.events.splice(ix, 1);
 
         this.selectedEvent = null;
     }

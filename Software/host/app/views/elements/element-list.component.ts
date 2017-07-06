@@ -44,7 +44,7 @@ export class ElementListComponent implements OnInit, OnDestroy  {
                    
                     for (let id of ids) {
                         let ix = this.elements.findIndex(e => e.id === id);
-                        this.elements.splice(ix, 1);
+                        (ix !== -1) && this.elements.splice(ix, 1);
                     }
                 },
                 error => this.logger.error2(error))
@@ -93,7 +93,7 @@ export class ElementListComponent implements OnInit, OnDestroy  {
             this.selectedElementIds.push(element.id);
         else {
             let ix = this.selectedElementIds.indexOf(element.id);
-            this.selectedElementIds.splice(ix, 1);
+            (ix !== -1) && this.selectedElementIds.splice(ix, 1);
         }
         
         this.mediator.broadcast("elementList_selectionChanged", this.selectedElementIds);

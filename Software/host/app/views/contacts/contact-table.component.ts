@@ -134,7 +134,7 @@ export class ContactTableComponent implements OnInit {
 
                         this.selectedContacts.forEach(h => {
                             let ix = this.contacts.findIndex(n => n.id === h.id);
-                            this.contacts.splice(ix, 1);
+                            (ix !== -1) && this.contacts.splice(ix, 1);
                         });
 
                         this.selectedContacts.length = 0;
