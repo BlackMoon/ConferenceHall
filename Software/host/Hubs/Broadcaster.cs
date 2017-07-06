@@ -1,7 +1,9 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using domain.Member;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace host.Hubs
 {
@@ -39,6 +41,13 @@ namespace host.Hubs
 
         private static readonly ConcurrentDictionary<string, int> GroupVolumes = new ConcurrentDictionary<string, int>();
 
+        private ILogger<Broadcaster> _logger;
+
+        public Broadcaster(ILogger<Broadcaster> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Возвращает кол-во подключенных клиентов группы
         /// </summary>
@@ -58,6 +67,8 @@ namespace host.Hubs
             {
                 Groups.Add(Context.ConnectionId, confId);
                 GroupVolumes.AddOrUpdate(confId, 1, (k, v) => v + 1);
+
+                _logger.LogInformation("Added {0} to group {1}.", Context.ConnectionId, confId);
             }
         }
 
@@ -89,6 +100,8 @@ namespace host.Hubs
                 else
                     // descrease count
                     GroupVolumes.TryUpdate(confId, cnt - 1, cnt);
+
+                _logger.LogInformation("Removed {0} from group {1}", Context.ConnectionId, confId);
             }
 
             return base.OnDisconnected(stopCalled);
