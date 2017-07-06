@@ -49,7 +49,7 @@ namespace domain.Screen.Query
                 .Column("upper(c.period) endDate")
                 .Join("conf_hall.halls h ON h.id = c.hall_id")
                 .Where("c.period && tsrange(date_trunc('day', @startDate)::date, date_trunc('day', @startDate)::date + 1, '[)')")
-                .OrderBy("c.period");
+                .OrderBy("c.period, c.state DESC");
 
             await DbManager.OpenAsync();
             return await DbManager.DbConnection.QueryAsync<Screen>(sqlBuilder.ToString(), new { startDate = query.StartDate });
