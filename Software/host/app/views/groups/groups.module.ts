@@ -1,18 +1,18 @@
 ﻿import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { DataListModule, DataTableModule } from 'primeng/primeng';
+import { DataTableModule } from 'primeng/primeng';
+import { UiModule } from '../../common/ui/ui.module';
 
-import { GroupListComponent } from "./group-list.component";
 import { GroupTableComponent } from "./group-table.component";
 import { GroupService } from "./group.service";
 
 @NgModule({
-    declarations: [GroupListComponent, GroupTableComponent],   
+    declarations: [GroupTableComponent],   
     imports: [
         CommonModule,
-        DataListModule,
-        DataTableModule
+        DataTableModule,
+        UiModule
     ],
     providers: [GroupService]
 })

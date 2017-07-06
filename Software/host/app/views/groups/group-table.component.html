@@ -1,14 +1,8 @@
-﻿<p-dataTable dataKey="id" matchTable="ui-datatable" [value]="groups" [styleClass]="'h100p'" [rows]="10">
-    <ng-template let-group pTemplate="item">
-        <div class="ui-grid ui-grid-responsive ui-widget-content">
-            <div class="ui-grid-row" [ngStyle]="{'cursor':'pointer', 'padding': '0.5em'}" (click)="itemClick(group)">
-                <div class="ui-grid-col-2">
-                    <i class="{{group.icon}}"></i>
-                </div>
-                <div class="ui-grid-col-10">
-                    <div class="ui-helper-clearfix">{{group.name}}</div>
-                </div>
-            </div>
-        </div>
-    </ng-template>
+﻿<p-dataTable dataKey="id" matchTable="ui-datatable" [value]="groups" selectionMode="single" styleClass="h100p no-header screen" [rows]="10" (onRowSelect)="selectRow($event)">
+    <p-column [style]="{'width':'2em'}">
+        <ng-template let-group="rowData" pTemplate="body">
+            <i class="{{group.icon}}"></i>
+        </ng-template>
+    </p-column>    
+    <p-column field="name"></p-column>    
 </p-dataTable>

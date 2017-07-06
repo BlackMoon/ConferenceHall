@@ -1,11 +1,13 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { GroupModel } from '../../models';
 import { GroupService } from './group.service';
 
 @Component({
+    encapsulation: ViewEncapsulation.None,
     selector: 'group-table',
+    styles: [".screen .ui-datatable-data > tr > td { border- width: 0 !important; }"],
     templateUrl: 'group-table.component.html'
 })
 export class GroupTableComponent implements OnInit {
@@ -26,5 +28,5 @@ export class GroupTableComponent implements OnInit {
                 error => this.logger.error2(error));
     }
 
-    itemClick = (group: GroupModel) => this.mediator.broadcast("groupList_itemClicked", group);
+    selectRow = (e) => this.mediator.broadcast("groupList_itemClicked", e.data);
 }
