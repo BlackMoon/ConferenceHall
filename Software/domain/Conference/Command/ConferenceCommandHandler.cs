@@ -35,8 +35,8 @@ namespace domain.Conference.Command
 
         public async Task<int> ExecuteAsync(CreateConferenceCommand command)
         {
-            List<string> columns = new List<string>() { "subject", "description" },
-                         values = new List<string>() { "@subject", "@description" };
+            IList<string> columns = new List<string>() { "subject", "description" },
+                          values = new List<string>() { "@subject", "@description" };
 
             DbManager.AddParameter("subject", command.Subject);
             DbManager.AddParameter("description", command.Description ?? (object)DBNull.Value);
@@ -72,20 +72,24 @@ namespace domain.Conference.Command
 
         public override async Task<bool> ExecuteAsync(Conference command)
         {
-            List<string> columns = new List<string>()
+            IList<string> columns = new List<string>()
             {
                 "subject = @subject",
                 "description = @description",
-                "period = tsrange(@startDate, @endDate)",
                 "state = @state"
             };
 
             DbManager.AddParameter("id", command.Id);
             DbManager.AddParameter("subject", command.Subject);
             DbManager.AddParameter("description", command.Description ?? (object)DBNull.Value);
-            DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);
-            DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);
             DbManager.AddParameter("state", command.State);
+
+            if (command.StartDate.HasValue && command.EndDate.HasValue)
+            {
+                columns.Add("period = tsrange(@startDate, @endDate)");
+                DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);
+                DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);
+            }
 
             if (command.HallId.HasValue)
             {
