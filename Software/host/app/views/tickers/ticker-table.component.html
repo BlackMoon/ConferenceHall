@@ -28,7 +28,7 @@
             </div>
         </form>
     </p-footer>
-    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
+    <p-column selectionMode="multiple" [style]="{ 'width':'3em'}" *ngIf="editMode"></p-column>
     <p-column field="content" [editable]="true">
         <ng-template let-col let-ticker="rowData" pTemplate="editor">
             <textarea pInputTextarea [ngModel]="ticker[col.field]" rows="3" class="w100p" (blur)="changeContent($event, ticker)"></textarea>

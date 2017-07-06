@@ -27,9 +27,9 @@
             </div>
         </form>
     </p-footer>
-    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode"></p-column>
+    <p-column selectionMode="multiple" [style]="{ 'width':'3em'}" *ngIf="editMode"></p-column>
     <p-column field="name" header="Наименование"></p-column>
-    <p-column [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode">
+    <p-column [style]="{ 'width':'60px'}" styleClass="center" *ngIf="editMode">
         <ng-template let-col let-scheme="rowData" pTemplate="body">
             <i class="fa fa-lg fa-files-o" title="Копировать" (click)="copyScheme($event, scheme.id)"></i>
         </ng-template>

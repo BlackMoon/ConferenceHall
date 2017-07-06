@@ -24,7 +24,7 @@
             </div>
         </div>
     </p-footer>
-    <p-column selectionMode="multiple" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="editMode || readOnly"></p-column>
+    <p-column selectionMode="multiple" [style]="{ 'width':'3em'}" *ngIf="editMode || readOnly"></p-column>
     <p-column field="name" header="Наименование" [sortable]="true"></p-column>
     <p-column field="description" header="Описание" *ngIf="!readOnly"></p-column>
     <p-column field="size" header="Размер, м" [style]="{ 'width':'15%'}" *ngIf="!readOnly">
