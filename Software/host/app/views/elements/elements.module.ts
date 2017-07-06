@@ -1,7 +1,9 @@
 ﻿import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { GlobalsModule } from '../../common/globals/globals.module';
+import { UiModule } from '../../common/ui/ui.module';
 
 import {
     AutoCompleteModule,
@@ -36,7 +38,8 @@ import { ElementService } from "./element.service";
         FormsModule,
         InputTextModule,
         ReactiveFormsModule,
-        SpinnerModule
+        SpinnerModule,
+        UiModule
     ],
     providers: [ElementService]
 })

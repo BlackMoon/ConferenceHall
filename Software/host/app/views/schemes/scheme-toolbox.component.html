@@ -2,7 +2,7 @@
     <div class="ui-grid ui-grid-responsive ui-grid-pad">
         <div class="ui-grid-row">
             <div class="ui-grid-col-12">
-                <input type="text" pInputText placeholder="Поиск по каталогу" [ngModel]="filter" (ngModelChange)="filterChange($event)" [ngClass]="'w100p'" [ngStyle]="{'box-sizing':'border-box'}" (keypress)="filterKeyPressed($event)" />
+                <input type="text" pInputText placeholder="Поиск по каталогу" [ngModel]="filter" (ngModelChange)="filterChange($event)" class="w100p" style="-moz-box-sizing: border-box; box-sizing: border-box" (keypress)="filterKeyPressed($event)" />
             </div>
         </div>
         <div class="ui-grid-row">
@@ -13,7 +13,7 @@
                         <div ></div>
                     </div>
                     <div class="ui-toolbar-group-right">
-                        <button pButton type="button" icon="fa-bars" (click)="toggleMenu($event)"></button>
+                        <button pButton type="button" icon="fa-bars" [disabled]="groupType != GroupType.User && this.selectedElementIds.length === 0" (click)="toggleMenu($event)"></button>
                         <p-menu #menu popup="popup" [model]="menuItems" appendTo="body"></p-menu>
                     </div>
                 </p-toolbar>

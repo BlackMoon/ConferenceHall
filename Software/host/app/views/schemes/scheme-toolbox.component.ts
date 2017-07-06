@@ -22,7 +22,12 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
     filter: string;
     header: string;
     groupId: number;
+
     groupType: GroupType;
+
+    // ReSharper disable once InconsistentNaming
+    public GroupType = GroupType;    
+
     gridButtonsVisible = false;
     selectedElementIds: number[] = [];
 
@@ -126,7 +131,7 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
         this.mediator.broadcast("elementList_viewChanged", smallGrid);
     }
 
-    toggleMenu(event) {
+    toggleMenu(e) {
 
         this.menuItems = [];
         
@@ -140,6 +145,8 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
                     command: (event) => {
                         this.header = event.item.label;
                         this.router.navigate(["elements/new"], { relativeTo: this.route });
+
+                        this.groupType = undefined;
                     }
                 });
                
@@ -148,16 +155,22 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
                     this.menuItems.push({
                         label: "Изменить",
                         icon: 'fa-pencil-square-o',
-                        command: (event) => {
-                            this.header = event.item.label;
+                        command: (e) => {
+                            this.header = e.item.label;
                             this.router.navigate([`elements/${this.selectedElementIds[0]}`], { relativeTo: this.route });
+
+                            this.groupType = undefined;
+                            this.selectedElementIds.length = 0;
                         }
                     });
 
                     this.menuItems.push({
                         label: 'Удалить',
                         icon: 'fa-trash',
-                        command: () => this.mediator.broadcast("elementList_deleteElements", { ids: this.selectedElementIds, groupid: this.groupId})
+                        command: () => {
+                            this.mediator.broadcast("elementList_deleteElements", { ids: this.selectedElementIds, groupid: this.groupId });
+                            this.selectedElementIds.length = 0;
+                        }
                     });
 
                     this.menuItems.push({
@@ -170,35 +183,30 @@ export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
 
             case GroupType.Favorites:
 
-                if (this.selectedElementIds.length > 0) {
-
-                    this.menuItems.push({
-                        label: 'Удалить из избранного',
-                        icon: 'fa-star',
-                        command: () => this.mediator.broadcast("elementList_deleteElements", { ids: this.selectedElementIds, groupid: this.groupId })
-                    });
-                }
+                this.menuItems.push({
+                    label: 'Из избранного',
+                    icon: 'fa-star',
+                    command: () => {
+                        this.mediator.broadcast("elementList_deleteElements", { ids: this.selectedElementIds, groupid: this.groupId });
+                        this.selectedElementIds.length = 0;
+                    }
+                });
 
                 break;
 
             default:
 
-                if (this.selectedElementIds.length > 0) {
-
-                    this.menuItems.push({
-                        label: 'В избранное',
-                        icon: 'fa-star',
-                        command: () => this.mediator.broadcast("elementList_addToFavorites", { ids: this.selectedElementIds, groupid: this.groupId })
-                    });
-                }
+                this.menuItems.push({
+                    label: 'В избранное',
+                    icon: 'fa-star',
+                    command: () => this.mediator.broadcast("elementList_addToFavorites", { ids: this.selectedElementIds, groupid: this.groupId })
+                });
+               
                 break;
-
         }
 
-        if (this.menuItems.length > 0) {
-            this.menuTogglerElRef.nativeElement.click();
-            event.stopPropagation();
-        }
+        this.menuTogglerElRef.nativeElement.click();
+        e.stopPropagation();
     }
 
     onResize() {

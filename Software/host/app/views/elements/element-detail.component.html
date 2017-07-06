@@ -1,62 +1,54 @@
-﻿<form [formGroup]="elementForm" (ngSubmit)="save($event, elementForm.value)">
-    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-widget-content">
-        <input type="hidden" formControlName="id" />
-        <div class="ui-grid-row inputw100p">
-            <div class="ui-grid-col-12">
-                <input type="text" pInputText formControlName="name" placeholder="Название"  />   
-            </div>
+﻿<detail>
+    <nav>
+        <div class="ui-toolbar-group-right">
+            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled" form="elementForm"></button>
         </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                Изображение :
-                <div>
-                    <small>(макс. размер - 1024 x 1024)</small>
+    </nav>
+    <main>
+        <form id="elementForm" [formGroup]="elementForm" (ngSubmit)="save($event, elementForm.value)">
+            
+            <input type="hidden" formControlName="id" />
+            
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <input type="text" pInputText formControlName="name" placeholder="Название" class="w100p" style="-moz-box-sizing: border-box; box-sizing: border-box"/>
                 </div>
-            </div>
-        </div>
-        <div class="ui-grid-row inputw100p">
-            <div class="ui-grid-col-12">
-                <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" previewWidth="48" styleClass="hidden" (onSelect)="onSelect()"></p-fileUpload>
-                <div class="ui-fileupload">
-                    <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="id && (fileUpload.files.length == 0)">
-                        <div class="ui-fileupload-files">
-                            <div>
-                                <div class="ui-fileupload-row">
-                                    <div>
-                                        <img class="center" src="/api/shape/{{id | uniquesuffix}}" width="48" height="48">
+                <div class="ui-g-12">
+                    Изображение :
+                    <div>
+                        <small>(макс. размер - 1024 x 1024)</small>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" previewWidth="48" styleClass="hidden" (onSelect)="onSelect()"></p-fileUpload>
+                    <div class="ui-fileupload">
+                        <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="id && (fileUpload.files.length == 0)">
+                            <div class="ui-fileupload-files">
+                                <div>
+                                    <div class="ui-fileupload-row">
+                                        <div>
+                                            <img class="center" src="/api/shape/{{id | uniquesuffix}}" width="48" height="48">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="ui-g-12">
+                    Реальная высота, м :
+                </div>
+                <div class="ui-g-12">
+                    <p-spinner formControlName="height" [min]="0.1" [step]="0.1"></p-spinner>
+                </div>
+                <div class="ui-g-12">
+                    Реальная ширина, м :
+                </div>
+                <div class="ui-g-12">
+                    <p-spinner formControlName="width" [min]="0.1" [step]="0.1"></p-spinner>
+                </div>
             </div>
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                Реальная высота, м :
-            </div>
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                <p-spinner formControlName="height" [min]="0.1" [step]="0.1"></p-spinner>
-            </div>
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                Реальная ширина, м :
-            </div>
-        </div>
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-12">
-                <p-spinner formControlName="width" [min]="0.1" [step]="0.1"></p-spinner>
-            </div>
-        </div>
-        <hr class="ui-widget-content" style="border:0">
-        <div class="ui-grid-row inputw100p">
-            <div class="ui-grid-col-12">
-                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled"></button>
-            </div>
-        </div>
-    </div>
-</form>
+
+        </form>
+    </main>
+</detail>

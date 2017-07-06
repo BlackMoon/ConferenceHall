@@ -22,9 +22,9 @@ export class SchemeDetailComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private storage: Storage)
-    {
-        this.referrer = storage.previousRoute;
+        private storage: Storage) {
+       
+        this.referrer = storage.previousRoute || document.referrer;
     }
 
     ngOnInit() {

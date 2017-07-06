@@ -39,9 +39,9 @@ export class ElementListComponent implements OnInit, OnDestroy  {
         this.subscription.add(
             mediator
                 .on<ElementGroupCommand>("elementList_deleteElements")
-                .flatMap((c:ElementGroupCommand) => this.elementService.delete(c))
+                .flatMap(c => this.elementService.delete(c))
                 .subscribe((ids: number[]) => {
-                       
+                   
                     for (let id of ids) {
                         let ix = this.elements.findIndex(e => e.id === id);
                         this.elements.splice(ix, 1);

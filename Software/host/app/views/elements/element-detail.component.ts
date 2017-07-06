@@ -63,9 +63,9 @@ export class ElementDetailComponent implements OnInit {
 
     onSelect = () => this.fileUpload.styleClass = "";
 
-    save(event, element) {
-        
-        event.preventDefault();
+    save(e, element) {
+       
+        e.preventDefault();
         
         (this.fileUpload.files.length > 0) && (element.image = this.fileUpload.files[0]);
 

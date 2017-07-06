@@ -43,9 +43,12 @@ export class ElementService extends HttpDataService<ElementModel> {
      */
     delete(c: ElementGroupCommand): Observable<any> {
         
+        // clone ids
+        let ids = c.ids.slice(0);
+
         return this.http
             .post(`${this.url}/delete`, c)
-            .map(_ => c.ids)
+            .map(_ => ids)
             .catch(handleResponseError);
     }
 
