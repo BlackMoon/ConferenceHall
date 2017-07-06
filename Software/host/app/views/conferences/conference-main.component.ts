@@ -314,14 +314,17 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         conference.endDate && (conf.endDate = this.dateToUtcPipe.transform(conference.endDate));
 
         delete conf["showScheme"];
-
-        let method = conf.id ? "update" : "add";
+      
+        let method = this.id ? "update" : "add";
         this.conferenceService[method](conf)
             .subscribe(
                 id => {
 
                     if (method === "add") {
+
                         this.id = id;
+                        this.conferenceForm.patchValue({ id: this.id });
+
                         setTimeout(() => this.onResize(), 0);
                     }
 
