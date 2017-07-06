@@ -90,6 +90,8 @@ namespace domain.Conference.Command
                 DbManager.AddParameter("startDate", DbType.DateTime, command.StartDate);
                 DbManager.AddParameter("endDate", DbType.DateTime, command.EndDate);
             }
+            else
+                columns.Add("period = null");
 
             if (command.HallId.HasValue)
             {
