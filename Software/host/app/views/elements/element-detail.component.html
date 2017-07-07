@@ -1,8 +1,6 @@
 ﻿<detail>
     <nav>
-        <div class="ui-toolbar-group-right">
-            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled" form="elementForm"></button>
-        </div>
+        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled" form="elementForm"></button>
     </nav>
     <main>
         <form id="elementForm" [formGroup]="elementForm" (ngSubmit)="save($event, elementForm.value)">

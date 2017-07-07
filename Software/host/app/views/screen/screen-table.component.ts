@@ -28,12 +28,15 @@ export class ScreenTableComponent implements OnInit {
 
     set screens(screens: ScreenModel[]) {
 
-        let ix = 0,
-            prev = new Date(4000, 0, 0),
-            now = new Date();
+        let ix = 0;
 
         if (screens) {
-            
+
+            ix = screens.length - 1;
+
+            let prev = new Date(4000, 0, 0),
+                now = new Date();
+
             screens.forEach((s, i) => {
 
                 // startDate/endDate in string --> create date objects
@@ -51,8 +54,9 @@ export class ScreenTableComponent implements OnInit {
                     }
                 }
             });
+            
         }
-        
+
         this.firstVisible = ix;
         this._screens = screens;
     }    

@@ -173,7 +173,17 @@ export class OrganizationTreeComponent implements OnInit {
                        
                         // node selected ?
                         let ix = this.selectedNodes.findIndex(n => n.data["id"] === id);                
-                        (ix !== -1) && (this.selectedNodes = this.selectedNodes.concat(nodes));
+                        if (ix !== -1) {
+                            
+                            nodes.forEach(n => {
+                                n.parent = e.node;
+                                this.selectedNodes.push(n);
+                            });
+                            this.selectedNodes = this.selectedNodes.concat(nodes);
+
+                            // not necessary to pass nodeGroupCommand to conference-main.component
+                            this.selectionChanged.emit(undefined);
+                        }
                     },
                     error => this.logger.error2(error));
 
