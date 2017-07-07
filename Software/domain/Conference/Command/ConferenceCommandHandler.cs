@@ -1,14 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Threading.Tasks;
+﻿using Dapper.Contrib.Extensions;
 using domain.Common.Command;
-using Dapper.Contrib.Extensions;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
 using Mapster;
 using Microsoft.Extensions.Logging;
-using TimeRange = domain.Common.Range<System.DateTime>;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
+using TimeRange = domain.Common.Range<System.DateTime>;
 
 namespace domain.Conference.Command
 {
@@ -108,7 +108,7 @@ namespace domain.Conference.Command
             await DbManager.OpenAsync();
 
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");
-            Logger.LogInformation($"Modified {updated} records");
+            Logger.LogInformation($"Modified {0} records", updated);
 
             return updated > 0;
         }
@@ -185,7 +185,7 @@ namespace domain.Conference.Command
             }
 
             int updated = await DbManager.ExecuteNonQueryAsync(CommandType.Text, $"UPDATE conf_hall.conferences SET {string.Join(",", columns)} WHERE id = @id");
-            Logger.LogInformation($"Modified {updated} records");
+            Logger.LogInformation($"Modified {0} records", updated);
 
             return updated > 0;
         }

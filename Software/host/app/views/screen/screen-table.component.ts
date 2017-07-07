@@ -1,5 +1,5 @@
 ﻿import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit, ViewChild, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Component, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Carousel } from "primeng/components/carousel/carousel";
@@ -8,8 +8,7 @@ import { ConfState, ScreenModel } from '../../models';
 import { ScreenService } from './screen.service';
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
-    styles: [".carousel .ui-grid-row { text-align: center; }", ".font_1 { font-size: 1.5em; font-weight: 600 }"],
+    styleUrls: ["screen-table.component.css"],
     templateUrl: 'screen-table.component.html'
 })
 export class ScreenTableComponent implements OnInit {
@@ -34,9 +33,9 @@ export class ScreenTableComponent implements OnInit {
             now = new Date();
 
         if (screens) {
-            debugger;
+            
             screens.forEach((s, i) => {
-
+               
                 // startDate/endDate in string --> create date objects
                 let start = new Date(s.startDate),
                     end = new Date(s.endDate),

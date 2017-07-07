@@ -1,6 +1,7 @@
 ﻿<p-toolbar>
-    <button pButton type="button" icon="fa-chevron-left" (click)="addDays(-1)"></button><button pButton type="button" icon="fa-chevron-right" (click)="addDays(1)"></button>
+    <button pButton type="button" icon="fa-chevron-left" (click)="addDays(-1)"></button>
     <h3 style="display: inline-block">{{startDate | date:'dd.MM.yyyy'}}</h3>
+    <button pButton type="button" icon="fa-chevron-right" (click)="addDays(1)"></button>
 </p-toolbar>
 
 <p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="4" styleClass="carousel">
@@ -8,7 +9,7 @@
     <ng-template let-screen pTemplate="item">
         
         <div class="ui-g">
-            <div class="ui-g-12 center ellipsis-m4" style="height: 120px">
+            <div class="ui-g-12 center ellipsis-m4" style="height: 118px">
                 <span class="font_1">{{screen.subject}}</span>
             </div>
             <div class="ui-g-1"></div>
