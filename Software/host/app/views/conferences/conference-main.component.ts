@@ -194,7 +194,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     
     memberSeatChanged(member) {
 
-        // необходимо сохранить (во время асинхронного запроса может поменяться)
+        // необходимо сохранить (в member-table.component меняется значение oldSeat)
         let oldSeat = member.oldSeat;
 
         this.memberService
