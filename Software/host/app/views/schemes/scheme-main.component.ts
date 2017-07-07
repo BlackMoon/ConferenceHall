@@ -325,7 +325,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
                 let attr = [],
                     baseVal: SVGTransformList = this.svgElement.transform.baseVal;
-                
+
                 for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
 
                     let t = baseVal.getItem(ix),
@@ -618,9 +618,12 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         
         let clone = this.svgElement.cloneNode(true);
       
-        let attr = [];
-        for (let t of this.svgElement.transform.baseVal) {
-            
+        let attr = [],
+            baseVal: SVGTransformList = this.svgElement.transform.baseVal;
+
+        for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
+
+            let t = baseVal.getItem(ix);
             switch (t.type) {
                             
                 case SVGTransform.SVG_TRANSFORM_TRANSLATE:
@@ -678,8 +681,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     shapeRotate(angle) {
 
-        let alpha = 0, attr = [];
-        for (let t of this.svgElement.transform.baseVal) {
+        let alpha = 0,
+            attr = [],
+            baseVal: SVGTransformList = this.svgElement.transform.baseVal;
+
+        for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
+
+            let t = baseVal.getItem(0);
 
             switch (t.type) {
 

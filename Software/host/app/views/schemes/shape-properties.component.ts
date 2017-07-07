@@ -43,9 +43,11 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                             length: box.height,
                             width: box.width
                         };
-                    
-                    for (let t of this.svgElement.transform.baseVal) {
-                        
+
+                    let baseVal: SVGTransformList = this.svgElement.transform.baseVal;
+                    for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
+
+                        let t = baseVal.getItem(ix);
                         switch (t.type) {
                            
                             case SVGTransform.SVG_TRANSFORM_ROTATE:
@@ -74,8 +76,12 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                 
                 model.angle = model.angle || 0;
                 
-                let attr = [];
-                for (let t of this.svgElement.transform.baseVal) {
+                let attr = [],
+                    baseVal: SVGTransformList = this.svgElement.transform.baseVal;
+
+                for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
+
+                    let t = baseVal.getItem(ix);
                     
                     if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
                         
