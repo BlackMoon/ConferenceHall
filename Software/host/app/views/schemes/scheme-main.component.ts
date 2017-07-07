@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectItem } from 'primeng/primeng';
@@ -11,13 +11,10 @@ import { SchemeService } from "./scheme.service";
 const zoomStep = 0.1;
 
 @Component({
-    encapsulation: ViewEncapsulation.None,
     host: {'(window:keydown)': "onKeyDown($event)",
            '(window:resize)' : "onResize($event)" },
     selector: 'scheme-main',
-    styles: [".mark ellipse { fill: rgba(255, 255, 255, 0.9); stroke: blue; stroke-width: 2px }",
-             ".mark.on ellipse { fill: rgba(0, 255, 0, 0.9) }",
-             ".mark text { alignment-baseline: middle; text-anchor: middle}"],
+    styleUrls: ["scheme-main.component.css"],
     templateUrl: 'scheme-main.component.html'
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
@@ -150,7 +147,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onResize() {
-        debugger;
         let offsetTop = this.readOnly ? 0 : this.canvasBox.offsetTop;
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - offsetTop}px`;
     }
@@ -227,7 +223,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         if (e.buttons === 1) {
 
             this.clickPoint = new Point(e.clientX, e.clientY);
-            debugger;
+            
             // выбор shape
             if (e.target.parentNode.nodeName === "g") {
                 this.svgElement = e.target.parentNode;
@@ -235,10 +231,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                 // на передний план --> вставка перед метками
                 let firstMark = this.canvas.querySelector(`g.${markClass}`);
                 this.canvas.insertBefore(this.svgElement, firstMark);
+                
+                let x = 0, y = 0,
+                    baseVal: SVGTransformList = this.svgElement.transform.baseVal;
 
-                let x = 0, y = 0;
-                for (let t of this.svgElement.transform.baseVal) {
+                for (let ix  = 0; ix < baseVal.numberOfItems; ix++) {
 
+                    let t = baseVal.getItem(ix);
                     if (t.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
 
                         x = t.matrix.e;
@@ -280,9 +279,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // перемещение shape
             if (this.svgElement !== null) {
                 
-                let attr = [];
-                for (let t of this.svgElement.transform.baseVal) {
-                    
+                let attr = [],
+                    baseVal: SVGTransformList = this.svgElement.transform.baseVal;
+
+                for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
+
+                    let t = baseVal.getItem(ix);
+
                     switch (t.type) {
                         
                         case SVGTransform.SVG_TRANSFORM_TRANSLATE:
@@ -320,10 +323,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
             if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass)) {
 
-                let attr = [];
-                for (let t of this.svgElement.transform.baseVal) {
+                let attr = [],
+                    baseVal: SVGTransformList = this.svgElement.transform.baseVal;
+                
+                for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
 
-                    let m: SVGMatrix = t.matrix;
+                    let t = baseVal.getItem(ix),
+                        m: SVGMatrix = t.matrix;
 
                     switch (t.type) {
                             
