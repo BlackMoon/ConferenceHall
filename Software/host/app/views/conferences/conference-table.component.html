@@ -6,7 +6,7 @@
                     <p-dropdown [options]="states" [(ngModel)]="selectedState" (onChange)="changeState($event.value)"></p-dropdown>
                 </div>
                 <div class="ui-toolbar-group-right">
-                    <button type="button" pButton icon="fa-calendar-times-o" title="Назначить" [disabled]="!this.selectedConference" (click)="makeAppointment()"></button>
+                    <button type="button" pButton icon="fa-calendar-times-o" title="Назначить" [disabled]="selectedState!==ConfState.Planned || !this.selectedConference" (click)="makeAppointment()"></button>
                     <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
                 </div>
             </div>
@@ -30,7 +30,7 @@
     <p-column field="subject" header="Наименование">
         <ng-template let-conference="rowData" pTemplate="body">
             <span pDraggable="dd_conf" class="ui-cell-data w100p" style="display: block" (onDragStart)="dragStart($event, conference)" *ngIf="selectedState===ConfState.Planned">{{conference.subject}}</span>
-            <span class="ui-cell-data" *ngIf="selectedState !==ConfState.Planned">{{conference.subject}}</span>
+            <span class="ui-cell-data" *ngIf="selectedState!==ConfState.Planned">{{conference.subject}}</span>
         </ng-template>
     </p-column> 
     <p-column [style]="{ 'width':'60px'}" [styleClass]="center" *ngIf="editMode">

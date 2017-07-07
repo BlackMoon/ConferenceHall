@@ -157,10 +157,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
                         control.updateValueAndValidity();
                     }
                 });
-
-
             });
-        
+
     }
 
     employeeTreeChanged() {
@@ -169,12 +167,14 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
     hallChange(value) {
 
-        this.schemeService
-            .getAll(value)
-            .subscribe(
-                schemes => this.schemes = schemes.map(h => <SelectItem>{ label: h.name, value: h.id }),
-                error => this.logger.error2(error)
-            );
+        if (value) {
+            this.schemeService
+                .getAll(value)
+                .subscribe(
+                    schemes => this.schemes = schemes.map(h => <SelectItem>{ label: h.name, value: h.id }),
+                    error => this.logger.error2(error)
+                );
+        }
 
         this.schemeId = null;
     }

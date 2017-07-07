@@ -38,6 +38,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
 
     conferences: ConferenceModel[];
 
+// ReSharper disable once InconsistentNaming
     public ConfState = ConfState;
 
     constructor(
@@ -158,6 +159,5 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
             emit && this.conferenceRemoveClick.emit(id);
         }
     }
-
-    selectConference = conference => this.selectedConference = conference;
+    
 }

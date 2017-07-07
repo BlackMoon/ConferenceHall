@@ -200,7 +200,7 @@ export class ConferenceScheduleComponent implements AfterViewInit {
      * @param defaultDate
      */
     makeAppointment(conference, defaultDate: Date = null) {
-
+        
         // time period like schedule's view period
         let startDate = defaultDate || this.startDate,
             endDate = defaultDate || this.endDate,
