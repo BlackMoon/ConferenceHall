@@ -4,7 +4,7 @@
         <div class="ui-g-10 bggreen font2 ui-corner-all" style="margin-top: 1em">
             <div class="ui-g-9 ui-g-nopad ellipsis">{{activeScreen?.subject}}</div>
             <div class="ui-g-nopad ui-toolbar-group-right">
-                {{now | date:'dd.MM.yyyy HH:mm:ss'}}
+                {{now | datex:'DD.MM.YYYY HH:mm:ss'}}
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
     </div>
     <div #footer class="ui-g-12 font2 h48 ui-g-nopad" style="margin-top: 0.25em">
         <div class="ui-g-2 ui-corner-left bgred" style="color: white">
-            {{activeScreen?.startDate | date:'HH:mm'}} - {{activeScreen?.endDate | date: 'HH:mm'}}
+            {{activeScreen?.startDate | datex:'HH:mm'}} - {{activeScreen?.endDate | datex: 'HH:mm'}}
         </div>
         <div class="ui-g-10 ui-md-10 bggreen ellipsis ui-corner-right" style="white-space: nowrap">{{ticker}} &nbsp;</div>
     </div>

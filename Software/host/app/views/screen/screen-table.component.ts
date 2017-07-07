@@ -35,23 +35,24 @@ export class ScreenTableComponent implements OnInit {
         if (screens) {
             
             screens.forEach((s, i) => {
-               
+
                 // startDate/endDate in string --> create date objects
-                let start = new Date(s.startDate),
-                    end = new Date(s.endDate),
-                    diff = <any>end - <any>now; // in ms
+                s.startDate = new Date(s.startDate);
+                s.endDate = new Date(s.endDate);
+                
+                let diff = <any>s.endDate - <any>now; // in ms
 
                 // endDate > now
                 if (diff > 0) {
                     // search min startDate
-                    if (start < <any>prev) {
-                        prev = start;
+                    if (s.startDate < <any>prev) {
+                        prev = s.startDate;
                         ix = i;
                     }
                 }
             });
         }
-
+        
         this.firstVisible = ix;
         this._screens = screens;
     }    

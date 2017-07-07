@@ -19,10 +19,10 @@ import {
     ToolbarModule
 } from 'primeng/primeng';
 
-import { HubService } from "../../common/hub.service";
-import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { DateToUtcPipe } from "../../common/globals/pipes";
+import { HubService } from "../../common/hub.service";
 
+import { AppointmentDialogComponent } from './appointment-dialog.component';
 import { ConferenceMainComponent } from './conference-main.component';
 import { ConferenceTableComponent } from './conference-table.component';
 import { ConferenceScheduleComponent } from './conference-schedule.component';
