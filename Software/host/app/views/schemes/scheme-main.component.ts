@@ -16,7 +16,8 @@ const zoomStep = 0.1;
            '(window:resize)' : "onResize($event)" },
     selector: 'scheme-main',
     styles: [".mark ellipse { fill: rgba(255, 255, 255, 0.9); stroke: blue; stroke-width: 2px }",
-            ".mark.on ellipse { fill: rgba(0, 255, 0, 0.9) }"],
+             ".mark.on ellipse { fill: rgba(0, 255, 0, 0.9) }",
+             ".mark text { alignment-baseline: middle; text-anchor: middle}"],
     templateUrl: 'scheme-main.component.html'
 })
 export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
@@ -149,7 +150,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     onResize() {
-        
+        debugger;
         let offsetTop = this.readOnly ? 0 : this.canvasBox.offsetTop;
         this.canvasBox.style.height = `${this.wrapperElRef.nativeElement.offsetHeight - offsetTop}px`;
     }
@@ -180,8 +181,6 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         // font-size = 1.2 * радиуса
         text.setAttribute("font-size", `${r * 1.2}`);
-        text.setAttributeNS(null, "alignment-baseline", "middle");
-        text.setAttributeNS(null, "text-anchor", "middle");
         
         g.appendChild(text);
         g.setAttribute("data-code", code);
@@ -209,11 +208,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     toggleMark(code, force?: boolean) {
-
+        
         if (this.canvas != null) {
 
             let marks = this.canvas.querySelectorAll(`g.${markClass}[data-code="${code}"`);
-
+            
             if (marks) {
                 [].forEach.call(marks, m => m.classList.toggle("on", force));
             }
@@ -221,17 +220,17 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     }
 
-    canvasMouseDown(event) {
+    canvasMouseDown(e) {
 
-        event.stopPropagation();
+        e.stopPropagation();
 
-        if (event.buttons === 1) {
+        if (e.buttons === 1) {
 
-            this.clickPoint = new Point(event.clientX, event.clientY);
-
+            this.clickPoint = new Point(e.clientX, e.clientY);
+            debugger;
             // выбор shape
-            if (event.target.parentElement.nodeName === "g") {
-                this.svgElement = event.target.parentElement;
+            if (e.target.parentNode.nodeName === "g") {
+                this.svgElement = e.target.parentNode;
 
                 // на передний план --> вставка перед метками
                 let firstMark = this.canvas.querySelector(`g.${markClass}`);
@@ -258,11 +257,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         }
     }
 
-    canvasMouseMove(event) {
+    canvasMouseMove(e) {
 
-        event.preventDefault();
+        e.preventDefault();
         
-        if (event.buttons === 1) {
+        if (e.buttons === 1) {
             
             let clickPt = this.canvas.createSVGPoint(),
                 pt: SVGPoint = this.canvas.createSVGPoint();
@@ -273,8 +272,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
             // трансформация здесь --> т.к. уже изменился viewbox
             clickPt = clickPt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
-            pt.x = event.clientX;
-            pt.y = event.clientY;
+            pt.x = e.clientX;
+            pt.y = e.clientY;
 
             pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 
@@ -313,11 +312,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         }
     }
 
-    canvasMouseUp(event) {
+    canvasMouseUp(e) {
         
-        event.preventDefault();
+        e.preventDefault();
         
-        if (event.which === 1) {
+        if (e.which === 1) {
 
             if (this.svgElement !== null && this.svgElement.classList.contains(shapeClass)) {
 
@@ -478,10 +477,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         }
     }
 
-    drop(event) {
+    drop(e) {
         
-        let element: ElementModel = JSON.parse(event.dataTransfer.getData(elemDragType)),
-            offset: Point = JSON.parse(event.dataTransfer.getData(elemDragOffset)),
+        let element: ElementModel = JSON.parse(e.dataTransfer.getData(elemDragType)),
+            offset: Point = JSON.parse(e.dataTransfer.getData(elemDragOffset)),
             id = element.id, 
             // размеры в см
             h = element.height * 100,
@@ -496,8 +495,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         g.setAttribute("data-name", element.name);
 
         let pt = this.canvas.createSVGPoint();
-        pt.x = event.clientX - offset.x;
-        pt.y = event.clientY - offset.y;
+        pt.x = e.clientX - offset.x;
+        pt.y = e.clientY - offset.y;
 
         pt = pt.matrixTransform(this.canvas.getScreenCTM().inverse());
 

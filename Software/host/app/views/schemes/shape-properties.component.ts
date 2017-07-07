@@ -28,9 +28,16 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                 .subscribe(s => {
 
                     this.svgElement = s;
-               
-                    let box = s.getBBox(),
-                        shape: any = {
+
+                    let box = this.svgElement.getBBox();
+
+                    // для меток (ellipse)
+                    if (this.svgElement.classList.contains(SVG.markClass)) {
+                        let ellipse = this.svgElement.querySelector("ellipse");
+                        ellipse && (box = ellipse.getBBox());
+                    }
+
+                    let shape: any = {
                             angle: 0,
                             code: s.getAttribute("data-code"),
                             length: box.height,

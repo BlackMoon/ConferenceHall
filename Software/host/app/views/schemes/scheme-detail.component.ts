@@ -6,10 +6,10 @@ import { Storage } from "../../common/storage";
     host: { '(window:popstate)': "onPopState($event)" },
     template: `
         <div class="ui-g h100p">
-            <div class="ui-g-2 ui-md-2 ui-widget-content ui-g-nopad">
+            <div class="ui-g-2 ui-md-2 ui-widget-content ui-g-nopad h100p">
                 <scheme-toolbox></scheme-toolbox>
             </div>
-            <div class="ui-g-10 ui-md-10 ui-widget-content ui-g-nopad">
+            <div class="ui-g-10 ui-md-10 ui-widget-content ui-g-nopad h100p">
                 <scheme-main [schemeId]="id" [readOnly]="false"></scheme-main>
             </div>
         </div>`
