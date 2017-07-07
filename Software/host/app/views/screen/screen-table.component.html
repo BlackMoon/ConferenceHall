@@ -3,7 +3,7 @@
     <h3 style="display: inline-block">{{startDate | date:'dd.MM.yyyy'}}</h3>
 </p-toolbar>
 
-<p-carousel [value]="screens" numVisible="4" styleClass="carousel">
+<p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="4" styleClass="carousel">
 
     <ng-template let-screen pTemplate="item">
         

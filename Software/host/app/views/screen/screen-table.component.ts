@@ -13,12 +13,49 @@ import { ScreenService } from './screen.service';
     templateUrl: 'screen-table.component.html'
 })
 export class ScreenTableComponent implements OnInit {
-    
-    screens: ScreenModel[];
-    startDate: Date;
 
-    // ReSharper disable once InconsistentNaming
+    firstVisible: number;
+    startDate: Date;
+   
+// ReSharper disable InconsistentNaming
+    private _screens: ScreenModel[];
+
     public ConfState = ConfState;  
+// ReSharper restore InconsistentNaming
+
+    get screens(): ScreenModel[] {
+        return this._screens;
+    }
+
+    set screens(screens: ScreenModel[]) {
+
+        let ix = 0,
+            prev = new Date(4000, 0, 0),
+            now = new Date();
+
+        if (screens) {
+            debugger;
+            screens.forEach((s, i) => {
+
+                // startDate/endDate in string --> create date objects
+                let start = new Date(s.startDate),
+                    end = new Date(s.endDate),
+                    diff = <any>end - <any>now; // in ms
+
+                // endDate > now
+                if (diff > 0) {
+                    // search min startDate
+                    if (start < <any>prev) {
+                        prev = start;
+                        ix = i;
+                    }
+                }
+            });
+        }
+
+        this.firstVisible = ix;
+        this._screens = screens;
+    }    
 
     constructor(
         private datePipe: DatePipe,
@@ -29,21 +66,19 @@ export class ScreenTableComponent implements OnInit {
         private screenService: ScreenService) { }
     
     ngOnInit() {
-        
+
         this.route.params
             .switchMap((params: Params) => {
-               
+
                 this.startDate = new Date(params["startDate"]);
-               
+
                 if (isNaN(this.startDate.getTime()))
                     this.startDate = new Date();
 
                 return this.screenService
                     .getAll(this.startDate);
             })
-            .subscribe(
-                screens => this.screens = screens,
-                error => this.logger.error2(error));
+            .subscribe(screens => this.screens = screens);
     }
 
     addDays(days:number) {
@@ -54,12 +89,11 @@ export class ScreenTableComponent implements OnInit {
 
         this.startDate = new Date(y, m, d + days);
 
+        this.location.replaceState(`screens/${this.datePipe.transform(this.startDate, "yyyy-MM-dd")}`);
         this.loadScreens();
     }
 
     loadScreens() {
-
-        this.location.replaceState(`screens/${this.datePipe.transform(this.startDate, "yyyy-MM-dd")}`);
 
         this.screenService
             .getAll(this.startDate)
