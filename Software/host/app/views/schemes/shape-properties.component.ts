@@ -132,8 +132,12 @@ export class ShapePropertiesComponent implements OnDestroy, OnInit {
                             x.setAttributeNS(null, "width", `${model.width}`);
 
                         case "text":
-                            // font-size = 1.2 от радиуса
-                            x.setAttribute("font-size", `${Math.min(model.length, model.width) * 0.6}`);
+
+                            let d = Math.min(model.length, model.width);
+
+                            // font-size = 0.6 от диаметра (1.2 от радиуса)
+                            x.setAttribute("font-size", `${d * 0.6}`);
+                            x.setAttributeNS(null, "dy", `${d * 0.18}`);
 
                             break;
                     }

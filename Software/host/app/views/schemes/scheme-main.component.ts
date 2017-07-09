@@ -177,7 +177,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         // font-size = 1.2 * радиуса
         text.setAttribute("font-size", `${r * 1.2}`);
-        text.setAttributeNS(null, "dy", ".3em");
+        text.setAttributeNS(null, "dy", `${r * 0.36}`);
 
         g.appendChild(text);
         g.setAttribute("data-code", code);
