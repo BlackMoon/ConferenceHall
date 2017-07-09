@@ -177,7 +177,8 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         // font-size = 1.2 * радиуса
         text.setAttribute("font-size", `${r * 1.2}`);
-        
+        text.setAttributeNS(null, "dy", ".3em");
+
         g.appendChild(text);
         g.setAttribute("data-code", code);
 
@@ -684,10 +685,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         let alpha = 0,
             attr = [],
             baseVal: SVGTransformList = this.svgElement.transform.baseVal;
-
+        
         for (let ix = 0; ix < baseVal.numberOfItems; ix++) {
 
-            let t = baseVal.getItem(0);
+            let t = baseVal.getItem(ix);
 
             switch (t.type) {
 
