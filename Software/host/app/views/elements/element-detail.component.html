@@ -1,15 +1,14 @@
-﻿<detail>
-    <nav>
-        <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled" form="elementForm"></button>
-    </nav>
-    <main>
-        <form id="elementForm" [formGroup]="elementForm" (ngSubmit)="save($event, elementForm.value)">
-            
+﻿<form [formGroup]="elementForm" (ngSubmit)="save($event, elementForm.value)">
+    <detail>
+        <nav>
+            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled"></button>
+        </nav>
+        <main>
             <input type="hidden" formControlName="id" />
-            
+
             <div class="ui-g">
                 <div class="ui-g-12">
-                    <input type="text" pInputText formControlName="name" placeholder="Название" class="w100p" style="-moz-box-sizing: border-box; box-sizing: border-box"/>
+                    <input type="text" pInputText formControlName="name" placeholder="Название" class="w100p" style="-moz-box-sizing: border-box; box-sizing: border-box" />
                 </div>
                 <div class="ui-g-12">
                     Изображение :
@@ -46,7 +45,6 @@
                     <p-spinner formControlName="width" [min]="0.1" [step]="0.1"></p-spinner>
                 </div>
             </div>
-
-        </form>
-    </main>
-</detail>
+        </main>
+    </detail>
+</form>

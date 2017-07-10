@@ -1,12 +1,12 @@
-﻿<detail>
-    <nav>
-        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-        <div class="ui-toolbar-group-right">
-            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!employeeForm.valid" form="employeeForm"></button>
-        </div>
-    </nav>
-    <main>
-        <form id="employeeForm" [formGroup]="employeeForm" (ngSubmit)="save($event, employeeForm.value)">
+﻿<form [formGroup]="employeeForm" (ngSubmit)="save($event, employeeForm.value)">
+    <detail>
+        <nav>
+            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+            <div class="ui-toolbar-group-right">
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!employeeForm.valid"></button>
+            </div>
+        </nav>
+        <main>
             <input type="hidden" formControlName="id" />
 
             <p-accordion>
@@ -51,6 +51,6 @@
                 </p-accordionTab>
 
             </p-accordion>
-        </form>
-    </main>
-</detail>
+        </main>
+    </detail>
+</form>
