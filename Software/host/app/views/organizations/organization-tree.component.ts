@@ -194,7 +194,7 @@ export class OrganizationTreeComponent implements OnInit {
     loadOrganizations() {
      
         this.loading = true;
-
+        
         this.organizationService
             .getAll(this.emplSearch, null, this.filter)
             .subscribe(

@@ -5,7 +5,7 @@ import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { Point } from "../../common/svg-utils";
-import { elemDragOffset, elemDragType, ElementGroupCommand, ElementModel } from '../../models';
+import { ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 
 @Component({
@@ -63,8 +63,8 @@ export class ElementListComponent implements OnInit, OnDestroy  {
         this.route.queryParams
             .switchMap((params: Params) => {
 
-                let filter = params["f"];
-                let groupid = +params["gid"]; // (+) converts string 'gid' to a number
+                let filter = params["f"],
+                    groupid = +params["gid"]; // (+) converts string 'gid' to a number
 
                 return this.elementService.getAll(filter, groupid);
             })
@@ -77,13 +77,12 @@ export class ElementListComponent implements OnInit, OnDestroy  {
         this.subscription.unsubscribe();
     }    
 
-    dragStart(event, element) {
+    dragStart(e, element) {
         
-        let cr: ClientRect = event.currentTarget.getBoundingClientRect(),
-            offset: Point = new Point(event.clientX - cr.left, event.clientY - cr.top);
+        let cr: ClientRect = e.currentTarget.getBoundingClientRect(),
+            offset: Point = new Point(e.clientX - cr.left, e.clientY - cr.top);
 
-        event.dataTransfer.setData(elemDragOffset, JSON.stringify(offset));
-        event.dataTransfer.setData(elemDragType, JSON.stringify(element));
+        e.dataTransfer.setData("text/plain", JSON.stringify({ element: element, offset: offset }));
     }
 
     selectElement(element) {

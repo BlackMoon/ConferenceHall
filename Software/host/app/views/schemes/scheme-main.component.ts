@@ -5,7 +5,7 @@ import { SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
 import { borderClass, frameClass, lineClass, markClass, shapeClass, Point } from "../../common/svg-utils";
-import { elemDragOffset, elemDragType, ElementModel, SchemeModel } from "../../models";
+import { ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
 const zoomStep = 0.1;
@@ -485,14 +485,17 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     drop(e) {
-        
-        let element: ElementModel = JSON.parse(e.dataTransfer.getData(elemDragType)),
-            offset: Point = JSON.parse(e.dataTransfer.getData(elemDragOffset)),
+        debugger;
+        let data = JSON.parse(e.dataTransfer.getData("text/plain")),
+            element: ElementModel = data.element,
+            offset: Point = data.offset,
             id = element.id, 
             // размеры в см
             h = element.height * 100,
             w = element.width * 100;
-        
+
+        e.dataTransfer.clearData();
+
         this.createPattern(id, h, w);
 
         let g = document.createElementNS(this.canvas.namespaceURI, "g");

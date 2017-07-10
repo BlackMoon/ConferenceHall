@@ -54,7 +54,7 @@ export class AppointmentDialogComponent implements OnInit {
     }
 
     onHide() {
-        this.closed.emit();
+        //this.closed.emit();
     }
 
     save(event, appointment) {

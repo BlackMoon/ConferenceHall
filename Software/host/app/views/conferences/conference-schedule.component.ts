@@ -2,6 +2,7 @@
 import { AfterViewInit, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
+import { isIe } from "../../common/globals/detectIE";
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { TabView } from "primeng/components/tabview/tabview";
@@ -102,7 +103,7 @@ export class ConferenceScheduleComponent implements AfterViewInit {
     }
     
     drop(e, element) {
-        
+      
         let mouseX = e.pageX,
             mouseY = e.pageY;
         
@@ -121,11 +122,16 @@ export class ConferenceScheduleComponent implements AfterViewInit {
                 break;
             }
         }
+        debugger;
         // drop именно внутри календаря
         if (day) {
             let data = day.data("date");
+            
             if (data) {
-                let conference: ConferenceModel = JSON.parse(e.dataTransfer.getData(confDragType));
+                // {format} parameter in IE only support [text/plain, text/uri-list] values
+                let dragData = e.dataTransfer.getData(isIe ? "text" : confDragType),
+                    conference: ConferenceModel = JSON.parse(dragData);
+                
                 this.makeAppointment(conference, new Date(data));
             }
         }

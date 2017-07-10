@@ -42,7 +42,7 @@ export class Logger {
      * @param summary - заголовок
      * @param detail - текст
      */
-    log = (level, summary, detail) => this.log2(level, { summary: summary, detail: detail });
+    log = (level, summary, detail) => this.log2(level, { summary: summary, detail: detail || "" });
 
     /**
      * Логгирование

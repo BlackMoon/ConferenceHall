@@ -1,12 +1,14 @@
-﻿<detail>
-    <nav>
-        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-        <div class="ui-toolbar-group-right">
-            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!orgForm.valid" form="orgForm"></button>
-        </div>
-    </nav>
-    <main>
-        <form id="orgForm" [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
+﻿<form [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
+    <detail>
+
+        <nav>
+            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+            <div class="ui-toolbar-group-right">
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!orgForm.valid"></button>
+            </div>
+        </nav>
+        <main>
+
 
             <input type="hidden" formControlName="id" />
 
@@ -72,7 +74,8 @@
                     </div>
                 </p-accordionTab>
             </p-accordion>
-        </form>
-    </main>
 
-</detail>
+        </main>
+
+    </detail>
+</form>

@@ -5,4 +5,4 @@ import { UniqueSuffixPipe } from './pipes';
     declarations: [UniqueSuffixPipe],
     exports: [UniqueSuffixPipe]
 })
-export class GlobalsModule {}
+export class GlobalsModule { }
