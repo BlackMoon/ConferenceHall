@@ -1,16 +1,14 @@
-﻿
-<detail>
-    <nav>
-        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-        <div class="ui-toolbar-group-right">
-            <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0" [routerLink]="['/send', id]"></button>
-            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid" form="conferenceForm"></button>
-        </div>
-    </nav>
+﻿<form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
+    <detail>
+        <nav>
+            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" title="Отправить уведомление" icon="fa-envelope-o" [disabled]="members.length === 0" [routerLink]="['/send', id]"></button>
+                <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="!conferenceForm.valid"></button>
+            </div>
+        </nav>
 
-    <main>
-        <form id="conferenceForm" [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
-
+        <main>
             <input type="hidden" formControlName="id" />
 
             <p-accordion>
@@ -121,7 +119,6 @@
                 </p-accordionTab>
 
             </p-accordion>
-        </form>
-    </main>
-
-</detail>
+        </main>
+    </detail>
+</form>

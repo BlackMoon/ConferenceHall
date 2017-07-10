@@ -584,7 +584,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     save(scheme) {
-
+       
         let svg = this.canvas.cloneNode(true);
         
         // сохраняется начальный план (без трансформации)
@@ -605,8 +605,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
         [].forEach.call(frames,
             frame => frame.removeAttributeNS(null, "stroke"));
         
-        scheme.gridInterval = this.gridInterval;
-        scheme.plan = svg.outerHTML;
+        scheme.plan = svg.outerHTML || new XMLSerializer().serializeToString(svg);
 
         this.schemeService
             .update(scheme)

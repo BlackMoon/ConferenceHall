@@ -26,7 +26,7 @@ import { OrganizationTreeComponent } from "./organization-tree.component";
 import { OrganizationService } from "./organization.service";
 
 @NgModule({
-    declarations: [OrganizationDetailComponent, OrganizationTreeComponent, TestComponent],
+    declarations: [OrganizationDetailComponent, OrganizationTreeComponent],
     exports: [OrganizationTreeComponent],
     imports: [
         AccordionModule,
