@@ -3,6 +3,7 @@ import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 
+import { isIe } from "./common/globals/ie-utils";
 import { Logger } from "./common/logger";
 import { Layout } from "./common/navigation/layout";
 import { Storage } from "./common/storage";
@@ -65,12 +66,18 @@ export class AppComponent implements OnInit {
                     this.cls = "ui-xl-10";
                 else if (this.bitTest(Layout.ShowLeftSide) || this.bitTest(Layout.ShowRightSide))
                     this.cls = "ui-xl-11";
-                debugger;
+                
                 setTimeout(() => {
-                    let evt = document.createEvent('UIEvents');
-                    evt.initUIEvent('resize', true, false, window, 0);
 
-                    window.dispatchEvent(evt);
+                    let e;
+                    if (!isIe) 
+                        e = new Event("resize");
+                    else {
+                        e = document.createEvent("UIEvents");
+                        e.initUIEvent("resize", true, false, window, 0);
+                    }
+
+                    window.dispatchEvent(e);
                 }, 0);
             });
 
@@ -95,7 +102,7 @@ export class AppComponent implements OnInit {
 
     onResize() {
         let h = window.innerHeight;
-        debugger;
+       
         this.bottomBarEl && (h -= this.bottomBarEl.nativeElement.offsetHeight);
         this.topBarEl && (h -= this.topBarEl.nativeElement.offsetHeight);
         

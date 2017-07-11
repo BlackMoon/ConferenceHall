@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { ConfirmationService } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { Point } from "../../common/svg-utils";
+import { Point } from "../../common/ui/svg-utils";
 import { ElementGroupCommand, ElementModel } from '../../models';
 import { ElementService } from './element.service';
 

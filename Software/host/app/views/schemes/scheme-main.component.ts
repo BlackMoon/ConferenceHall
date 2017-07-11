@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SelectItem } from 'primeng/primeng';
 import { Logger } from "../../common/logger";
 import { Mediator } from "../../common/mediator";
-import { borderClass, frameClass, lineClass, markClass, shapeClass, Point } from "../../common/svg-utils";
+import { borderClass, frameClass, lineClass, markClass, shapeClass, Point } from "../../common/ui/svg-utils";
 import { ElementModel, SchemeModel } from "../../models";
 import { SchemeService } from "./scheme.service";
 
