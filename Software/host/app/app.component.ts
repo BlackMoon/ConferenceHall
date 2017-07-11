@@ -1,4 +1,4 @@
-﻿import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
@@ -15,7 +15,7 @@ const startViewKey = 'returnUrl';
     styleUrls: ['app.component.css'],
     templateUrl: 'app.component.html'
 })
-export class AppComponent implements AfterViewChecked, OnInit {
+export class AppComponent implements AfterViewInit, OnInit {
     
     /**
      * Responsive class for big screen monitors (ui-xl*)
@@ -72,7 +72,7 @@ export class AppComponent implements AfterViewChecked, OnInit {
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
     }
 
-    ngAfterViewChecked() {
+    ngAfterViewInit() {
 
         this.onResize();    
     }

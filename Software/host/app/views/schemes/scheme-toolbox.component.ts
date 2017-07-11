@@ -1,4 +1,4 @@
-﻿import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+﻿import { AfterViewChecked, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from "rxjs";
@@ -17,7 +17,7 @@ const minChars = 3;
     selector: 'scheme-toolbox',
     templateUrl: 'scheme-toolbox.component.html'
 })
-export class SchemeToolboxComponent implements AfterViewInit, OnDestroy {
+export class SchemeToolboxComponent implements OnDestroy {
 
     filter: string;
     header: string;

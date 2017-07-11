@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
@@ -16,7 +16,7 @@ const tickInterval = 5000;
     styleUrls: ["screen.component.css"],
     templateUrl: 'screen.component.html'
 })
-export class ScreenComponent implements OnInit {
+export class ScreenComponent implements AfterViewInit, OnInit {
 
     canvas: any;
     canvasBox: any;
