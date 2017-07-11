@@ -2,12 +2,11 @@
 import { AfterViewInit, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { isIe } from "../../common/globals/detectIE";
 import { Logger } from "../../common/logger";
 import { Schedule } from "primeng/components/schedule/schedule";
 import { TabView } from "primeng/components/tabview/tabview";
 import { AppointmentDialogComponent } from "./appointment-dialog.component";
-import { AppointmentModel, ConferenceModel, ConfState, confDragType, GroupCommand, NodeGroupCommand, TimeRange } from '../../models';
+import { AppointmentModel, ConferenceModel, ConfState, GroupCommand, NodeGroupCommand, TimeRange } from '../../models';
 import { ConfirmationService, MenuItem } from 'primeng/primeng';
 import { ConferenceService } from './conference.service';
 import { ConferenceTableComponent } from "./conference-table.component";
@@ -122,14 +121,14 @@ export class ConferenceScheduleComponent implements AfterViewInit {
                 break;
             }
         }
-        debugger;
+       
         // drop именно внутри календаря
         if (day) {
             let data = day.data("date");
             
             if (data) {
-                // {format} parameter in IE only support [text/plain, text/uri-list] values
-                let dragData = e.dataTransfer.getData(isIe ? "text" : confDragType),
+                // ie supports only text data format
+                let dragData = e.dataTransfer.getData("text"),
                     conference: ConferenceModel = JSON.parse(dragData);
                 
                 this.makeAppointment(conference, new Date(data));

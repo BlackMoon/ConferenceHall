@@ -81,8 +81,8 @@ export class ElementListComponent implements OnInit, OnDestroy  {
         
         let cr: ClientRect = e.currentTarget.getBoundingClientRect(),
             offset: Point = new Point(e.clientX - cr.left, e.clientY - cr.top);
-
-        e.dataTransfer.setData("text/plain", JSON.stringify({ element: element, offset: offset }));
+        
+        e.dataTransfer.setData("text", JSON.stringify({ element: element, offset: offset }));
     }
 
     selectElement(element) {

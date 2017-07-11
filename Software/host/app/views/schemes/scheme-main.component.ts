@@ -485,16 +485,14 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     drop(e) {
-        debugger;
-        let data = JSON.parse(e.dataTransfer.getData("text/plain")),
+        // ie supports only text data format
+        let data = JSON.parse(e.dataTransfer.getData("text")),
             element: ElementModel = data.element,
             offset: Point = data.offset,
-            id = element.id, 
+            id = element.id,
             // размеры в см
             h = element.height * 100,
             w = element.width * 100;
-
-        e.dataTransfer.clearData();
 
         this.createPattern(id, h, w);
 

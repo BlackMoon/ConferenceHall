@@ -1,8 +1,6 @@
 ﻿import { KeyModel } from './index';
 import { JsonProperty } from '../common/map-utils';
 
-export const confDragType = "conference";
-
 /**
  * Состояние конференции
  */

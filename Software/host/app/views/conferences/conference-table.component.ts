@@ -2,9 +2,8 @@
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ConfirmationService, MenuItem, SelectItem } from 'primeng/primeng';
-import { isIe } from "../../common/globals/detectIE";
 import { Logger } from "../../common/logger";
-import { ConferenceModel, ConfState, confDragType } from '../../models';
+import { ConferenceModel, ConfState } from '../../models';
 import { ConferenceService } from './conference.service';
 
 @Component({
@@ -101,12 +100,8 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
     dragStart(e, conference) {
         e.currentTarget.click();
         
-        // {format} parameter in IE only supports [text/plain, text/uri-list] values
+        // ie supports only text data format
         e.dataTransfer.setData("text", JSON.stringify(conference));
-        //e.dataTransfer.setData(confDragType, JSON.stringify(conference));
-        
-        console.log(e.dataTransfer.getData("text"));
-        //console.log(e.dataTransfer.getData(confDragType));
     }
 
     editConference(e, id: number) {
