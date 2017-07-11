@@ -69,7 +69,7 @@ export class OrganizationDetailComponent implements OnInit {
     onSelect = () => this.fileUpload.styleClass = "";
 
     save(e, org) {
-
+        
         e.preventDefault();
 
         (this.fileUpload.files.length > 0) && (org.logo = this.fileUpload.files[0]);

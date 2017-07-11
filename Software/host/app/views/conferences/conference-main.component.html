@@ -1,5 +1,5 @@
-﻿<form [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
-    <detail>
+﻿<form class="h100p" [formGroup]="conferenceForm" (ngSubmit)="save($event, conferenceForm.value)">
+    <detail [formGroup]="conferenceForm">
         <nav>
             <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
             <div class="ui-toolbar-group-right">

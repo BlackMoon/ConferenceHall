@@ -1,4 +1,4 @@
-﻿<form [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
+﻿<form class="h100p" [formGroup]="orgForm" (ngSubmit)="save($event, orgForm.value)">
     <detail>
 
         <nav>
@@ -8,6 +8,7 @@
             </div>
         </nav>
         <main>
+
             <input type="hidden" formControlName="id" />
 
             <p-accordion>
@@ -73,6 +74,5 @@
                 </p-accordionTab>
             </p-accordion>
         </main>
-
     </detail>
 </form>
