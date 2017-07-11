@@ -15,7 +15,7 @@ const startViewKey = 'returnUrl';
     styleUrls: ['app.component.css'],
     templateUrl: 'app.component.html'
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements OnInit {
     
     /**
      * Responsive class for big screen monitors (ui-xl*)
@@ -65,8 +65,13 @@ export class AppComponent implements AfterViewInit, OnInit {
                     this.cls = "ui-xl-10";
                 else if (this.bitTest(Layout.ShowLeftSide) || this.bitTest(Layout.ShowRightSide))
                     this.cls = "ui-xl-11";
+                debugger;
+                setTimeout(() => {
+                    let evt = document.createEvent('UIEvents');
+                    evt.initUIEvent('resize', true, false, window, 0);
 
-                setTimeout(() => window.dispatchEvent(new Event("resize")), 0);
+                    window.dispatchEvent(evt);
+                }, 0);
             });
 
         this.startView = new URLSearchParams(window.location.search.slice(1)).get(startViewKey);
@@ -90,7 +95,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     onResize() {
         let h = window.innerHeight;
-        
+        debugger;
         this.bottomBarEl && (h -= this.bottomBarEl.nativeElement.offsetHeight);
         this.topBarEl && (h -= this.topBarEl.nativeElement.offsetHeight);
         
