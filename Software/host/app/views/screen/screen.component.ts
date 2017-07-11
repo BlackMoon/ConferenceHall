@@ -2,7 +2,7 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
-import { borderClass, markClass } from "../../common/svg-utils";
+import { borderClass, markClass } from "../../common/ui/svg-utils";
 import { MemberModel, MemberState, ScreenModel } from '../../models';
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
 import { HubService } from "../../common/hub.service";

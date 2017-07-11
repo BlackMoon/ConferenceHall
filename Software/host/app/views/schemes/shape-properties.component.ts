@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from "rxjs";
 import { Mediator } from "../../common/mediator";
 
-import * as SVG from "../../common/svg-utils";
+import * as SVG from "../../common/ui/svg-utils";
 
 @Component({
     encapsulation: ViewEncapsulation.None,
