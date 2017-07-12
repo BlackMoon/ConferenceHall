@@ -11,11 +11,10 @@ import { ScreenTableComponent } from './screen-table.component';
 import { MemberScreenComponent } from './member-screen.component';
 import { ScreenService } from './screen.service';
 
-import { DatexPipe } from "../../common/globals/pipes";
 import { UiModule } from '../../common/ui/ui.module';
 
 @NgModule({
-    declarations: [ DatexPipe, MemberScreenComponent, ScreenComponent, ScreenTableComponent ],
+    declarations: [ MemberScreenComponent, ScreenComponent, ScreenTableComponent ],
     imports: [ButtonModule, CarouselModule, CommonModule, DataTableModule, SchemesModule, ScreenRoutingModule, ToolbarModule, UiModule],
     providers: [ HubService, MemberService, ScreenService]
 })
