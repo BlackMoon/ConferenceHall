@@ -102,6 +102,11 @@ export class AppComponent implements OnInit {
 
     bitTest = (layout: Layout) => this.layout & layout;
 
+    logout() {
+        this.authService.logout();
+        this.router.navigate(["/login"]);
+    }
+
     onResize() {
         let h = window.innerHeight;
        

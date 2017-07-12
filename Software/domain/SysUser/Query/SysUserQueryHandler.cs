@@ -2,6 +2,7 @@
 using domain.Common.Query;
 using Kit.Core.CQRS.Query;
 using Kit.Dal.DbManager;
+using System;
 using System.Threading.Tasks;
 
 namespace domain.SysUser.Query
@@ -9,7 +10,6 @@ namespace domain.SysUser.Query
     public class SysUserQueryHandler : KeyObjectQueryHandler<FindSysUserByIdQuery, SysUser>,         
         IQueryHandler<FindSysUserByLoginQuery, SysUser>        
     {
-        private const string SelectSysUser = "SELECT u.* FROM conf_hall.users u";
 
         public SysUserQueryHandler(IDbManager dbManager) : base(dbManager)
         {
@@ -18,14 +18,13 @@ namespace domain.SysUser.Query
 
         public SysUser Execute(FindSysUserByLoginQuery query)
         {
-            DbManager.Open();
-            return DbManager.DbConnection.QuerySingleOrDefault<SysUser>($"{SelectSysUser} WHERE u.login = @login", new { login = query.Login });
+            throw new NotImplementedException();
         }
         
-        public Task<SysUser> ExecuteAsync(FindSysUserByLoginQuery query)
+        public async Task<SysUser> ExecuteAsync(FindSysUserByLoginQuery query)
         {
-            DbManager.OpenAsync();
-            return DbManager.DbConnection.QuerySingleOrDefaultAsync<SysUser>($"{SelectSysUser} WHERE u.login = @login", new { login = query.Login });
+            await DbManager.OpenAsync();
+            return await DbManager.DbConnection.QuerySingleOrDefaultAsync<SysUser>("SELECT u.* FROM conf_hall.users u WHERE u.login = @login", new { login = query.Login });
         }
     }
 }
