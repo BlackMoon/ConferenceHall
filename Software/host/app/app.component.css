@@ -195,6 +195,11 @@ Raleway font
     color: greenyellow;
 }
 
+.font_6 {
+    font: normal normal normal 28px/1.4em raleway,sans-serif;
+    color: white;
+}
+
 .font_8 {
     font: normal normal normal 15px/1.4em raleway,sans-serif;
     color: white;
@@ -212,7 +217,6 @@ Raleway font
 .w100p {
     width: 100%
 }
-
 
 .h100p .ui-datagrid-content, .h100p .ui-datalist-content {
     height: 100%;

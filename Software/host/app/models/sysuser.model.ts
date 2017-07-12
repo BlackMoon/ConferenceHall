@@ -48,7 +48,12 @@ export class SysUserModel extends KeyModel  {
     locked: boolean;
     login: string;
     password: string;
+
+    /**
+     * Действие для привязки пользователя к сотруднику
+     */
     operation: UserOperation;
+
     role: UserRole;
 
     constructor() {

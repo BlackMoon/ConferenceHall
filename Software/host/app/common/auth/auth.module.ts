@@ -1,7 +1,10 @@
-﻿import { ModuleWithProviders, NgModule } from '@angular/core';
+﻿import { CommonModule } from "@angular/common";
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
+import { ButtonModule, InputTextModule, PasswordModule } from 'primeng/primeng';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
+import { AuthGuard } from './auth.guard';
 import { AuthService, Storage, TokenKey } from './auth.service';
 import { LoginComponent } from "./login.component";
 
@@ -9,15 +12,14 @@ let authHttpServiceFactory = (authService: AuthService, http: Http, options: Req
 
     return new AuthHttp(new AuthConfig({
         tokenName: TokenKey,
-        tokenGetter: (() => authService.isAuthenticated ? Storage.getItem(TokenKey) : authService.login().toPromise()),
-        globalHeaders: [{ 'Content-Type': 'application/json' }, { 'Access-Control - Allow - Origin': '*'}]
+        tokenGetter: (() => authService.isAuthenticated ? Storage.getItem(TokenKey) : authService.login().toPromise())
     }), http, options);
 }
 
 @NgModule({
     declarations: [LoginComponent],    
     exports: [LoginComponent],
-    imports: [FormsModule, HttpModule]    
+    imports: [ButtonModule, CommonModule, FormsModule, HttpModule, InputTextModule, PasswordModule]    
 })
 export class AuthModule {
 
@@ -25,6 +27,7 @@ export class AuthModule {
         return {
             ngModule: AuthModule,
             providers: [
+                AuthGuard,
                 {
                     provide: AuthHttp,
                     useFactory: authHttpServiceFactory,

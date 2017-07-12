@@ -3,6 +3,7 @@ import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 
+import { AuthService } from "./common/auth/auth.service";
 import { isIe } from "./common/globals/ie-utils";
 import { Logger } from "./common/logger";
 import { Layout } from "./common/navigation/layout";
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
     @ViewChild("content") contentEl: ElementRef;
 
     constructor(
+        private authService: AuthService,
         private logger: Logger,
         private route: ActivatedRoute,
         private router: Router,

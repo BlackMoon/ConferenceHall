@@ -1,5 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { JwtHelper } from 'angular2-jwt';
 import { Observable } from 'rxjs';
@@ -34,7 +34,7 @@ class Pads implements Dict<any>
     'Zeros' = CryptoJS.pad.ZeroPadding;
 }
 
-export const Storage = localStorage;//sessionStorage;
+export const Storage = isDevMode ? localStorage : sessionStorage;
 export const TokenKey = 'token';
 
 /**

@@ -23,7 +23,7 @@
                 </p>
             </a>
 
-            <ul class="topbar-menu">
+            <ul class="topbar-menu" *ngIf="authService.isAuthenticated">
                 <li>
                     <a [routerLink]="['/schedule']" title="Календарь">
                         <span class="fa-stack fa-2x">
