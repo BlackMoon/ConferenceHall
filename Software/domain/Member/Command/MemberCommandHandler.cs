@@ -75,15 +75,10 @@ namespace domain.Member.Command
 
         public async Task<bool> ExecuteAsync(PartialUpdateCommand command)
         {
-            List<string> columns = new List<string>();
+            List<string> columns = new List<string>() { "seat = @seat" };
 
             DbManager.AddParameter("id", command.MemberId);
-
-            if (command.Seat != null)
-            {
-                DbManager.AddParameter("seat", command.Seat);
-                columns.Add("seat = @seat");
-            }
+            DbManager.AddParameter("seat", command.Seat ?? (object)DBNull.Value);
 
             if (command.State.HasValue)
             {

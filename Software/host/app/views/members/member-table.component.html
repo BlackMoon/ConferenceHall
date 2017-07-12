@@ -7,11 +7,11 @@
     <p-column field="seat" header="Место" [editable]="editable" [style]="{ 'overflow':'visible', 'text-align': 'center', 'vertical-align': 'middle', 'width': '15%'}" *ngIf="editable">
         <ng-template let-col let-member="rowData" pTemplate="body">
             <span class="fa-stack circle {{member.state == MemberState.Confirmed ? 'on' : ''}}">
-                <strong class="fa-stack-1x">{{member[col.field]}}</strong>
+                <span class="fa-lg" style="vertical-align: initial">{{member[col.field]}}</span>
             </span>
         </ng-template>
         <ng-template let-col let-member="rowData" pTemplate="editor">
-            <p-dropdown [ngModel]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" required="true" (onChange)="changeSeat($event.value, member)"></p-dropdown>
+            <p-dropdown [ngModel]="member[col.field]" [options]="availableSeats" [autoWidth]="false" [style]="{'width':'100%'}" (onChange)="changeSeat($event.value, member)"></p-dropdown>
         </ng-template>
     </p-column>
     <p-column header="В помещении" *ngIf="editable" [style]="{'text-align': 'center', 'width': '15%'}">

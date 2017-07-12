@@ -346,9 +346,10 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
 
         [].forEach.call(this.members, m => (m.state === MemberState.Confirmed) && this.schemeMain.toggleMark(m.seat, true));
 
-        this.seats = this.schemeMain
+        this.seats = [{ label: 'Нет', value: null }]
+            .concat(this.schemeMain
             .getMarkCodes()
-            .map(c => <SelectItem>{ label: c, value: c });
+            .map(c => <SelectItem>{ label: c, value: c }));
     }
 
     showSchemeChange(value) {
