@@ -2,17 +2,17 @@
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="position:absolute; top:40%; left:50%"></i>
 </p-blockUI>
 
-<detail>
-    <nav>
-        <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
-        <div class="ui-toolbar-group-right">
-            <button pButton type="button" title="Создать ссылку" icon="fa-link" [disabled]="loading" (click)="addLink()"></button>
-            <button pButton type="submit" label="Отправить" icon="fa-envelope-o" [disabled]="!sendMessageForm.valid || loading" form="sendMessageForm"></button>
-        </div>
-    </nav>
+<form class="h100p" [formGroup]="sendMessageForm" (ngSubmit)="send($event, sendMessageForm.value)">
+    <detail>
+        <nav>
+            <button pButton type="button" title="Назад" icon="fa-arrow-left" (click)="location.back()"></button>
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" title="Создать ссылку" icon="fa-link" [disabled]="loading" (click)="addLink()"></button>
+                <button pButton type="submit" label="Отправить" icon="fa-envelope-o" [disabled]="!sendMessageForm.valid || loading"></button>
+            </div>
+        </nav>
 
-    <main>
-        <form id="sendMessageForm" [formGroup]="sendMessageForm" (ngSubmit)="send($event, sendMessageForm.value)">
+        <main>
 
             <p-panel #pnl>
                 <div class="ui-g">
@@ -25,8 +25,8 @@
                     </div>
                 </div>
             </p-panel>
-        </form>
-    </main>
+        </main>
 
-</detail>
+    </detail>
+</form>
 

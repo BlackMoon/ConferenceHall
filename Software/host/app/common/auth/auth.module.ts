@@ -1,7 +1,9 @@
 ﻿import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { AuthService, Storage, TokenKey } from './auth.service';
+import { LoginComponent } from "./login.component";
 
 let authHttpServiceFactory = (authService: AuthService, http: Http, options: RequestOptions) => {
 
@@ -13,9 +15,9 @@ let authHttpServiceFactory = (authService: AuthService, http: Http, options: Req
 }
 
 @NgModule({
-    declarations: [],    
-    exports: [],
-    imports: [HttpModule]    
+    declarations: [LoginComponent],    
+    exports: [LoginComponent],
+    imports: [FormsModule, HttpModule]    
 })
 export class AuthModule {
 
