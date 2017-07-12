@@ -2,22 +2,26 @@
     <div class="ui-g">
         <div class="ui-g-4"></div>
         <div class="ui-g-4">
-            <div class="ui-xl-2"></div>
-            <div class="ui-xl-8 ui-g-12">
-                <div class="font_6 center ui-g-12">
-                    Войти в систему
+            <div class="ui-g">
+                <div class="ui-xl-2 ui-g-nopad"></div>
+                <div class="ui-xl-8 ui-g-12 ui-g-nopad">
+                    <form [formGroup]="loginForm" (ngSubmit)="authenticate($event, loginForm.value)">
+                        <div class="font_6 center ui-g-12">
+                            Войти в систему
+                        </div>
+                        <div class="ui-g-12">
+                            <input type="text" pInputText formControlName="login" placeholder="Логин" />
+                        </div>
+                        <div class="ui-g-12">
+                            <input type="password" pPassword formControlName="password" [feedback]="false" placeholder="Пароль" />
+                        </div>
+                        <div class="ui-g-12">
+                            <button pButton type="submit" label="Войти" icon="ui-icon-person" [disabled]="!loginForm.valid"></button>
+                        </div>
+                    </form>
                 </div>
-                <div class="ui-g-12">
-                    <input type="text" pInputText placeholder="Логин" />
-                </div>
-                <div class="ui-xl-12 ui-g-12">
-                    <input type="password" pPassword placeholder="Пароль" />
-                </div>
-                <div class="ui-g-12">
-                    <button pButton type="submit" label="Войти" icon="ui-icon-person"></button>
-                </div>
+                <div class="ui-xl-2 ui-g-nopad"></div>
             </div>
-            <div class="ui-xl-2"></div>
         </div>
         <div class="ui-g-4"></div>
     </div>

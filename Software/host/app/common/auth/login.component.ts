@@ -1,4 +1,6 @@
 ﻿import { Component, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
 
 @Component({
     encapsulation: ViewEncapsulation.None,
@@ -8,5 +10,28 @@
 })
 export class LoginComponent {
 
-    
+    loginForm: any;
+
+    constructor(
+        private authService: AuthService,
+        private fb: FormBuilder) { }
+
+    ngOnInit() {
+
+        this.loginForm = this.fb.group({
+            login: [null, Validators.required],
+            password: [null, Validators.required]
+        });
+    }
+
+    authenticate(e, user) {
+
+        e.preventDefault();
+
+        this.authService.login(user.login, user.password)
+            .subscribe(
+                __ => {},
+                error => {});
+    }
+
 }

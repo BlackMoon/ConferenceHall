@@ -1,6 +1,6 @@
 ﻿import { CommonModule } from "@angular/common";
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { ButtonModule, InputTextModule, PasswordModule } from 'primeng/primeng';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
@@ -19,7 +19,7 @@ let authHttpServiceFactory = (authService: AuthService, http: Http, options: Req
 @NgModule({
     declarations: [LoginComponent],    
     exports: [LoginComponent],
-    imports: [ButtonModule, CommonModule, FormsModule, HttpModule, InputTextModule, PasswordModule]    
+    imports: [ButtonModule, CommonModule, FormsModule, HttpModule, InputTextModule, PasswordModule, ReactiveFormsModule]    
 })
 export class AuthModule {
 

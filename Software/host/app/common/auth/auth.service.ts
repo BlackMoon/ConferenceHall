@@ -6,9 +6,6 @@ import { Observable } from 'rxjs';
 import { SysUserModel } from '../../models/index';
 import * as CryptoJS from 'crypto-js';
 
-const secretUrl = '/secret';
-const tokenUrl = '/token';
-
 const passwordKey = 'pswd';
 const usernameKey = 'uname';
 
@@ -42,12 +39,16 @@ export const TokenKey = 'token';
  */
 @Injectable()
 export class AuthService {
+
     private jwtHelper: JwtHelper = new JwtHelper();
 
     private claims: Claims = new Claims();
     private pads: Pads = new Pads();
 
     private storage: Storage;
+
+    private secretUrl = isDevMode() ? "http://localhost:64346/secret" : "/secret";
+    private tokenUrl = isDevMode() ? "http://localhost:64346/token" : "/token";
     
     constructor(private http: Http) {
                 
@@ -93,7 +94,7 @@ export class AuthService {
         let options = new RequestOptions({ headers: headers });  
 
         var self = this;
-        return this.http.post(secretUrl, `username=${username}`, options)
+        return this.http.post(this.secretUrl, `username=${username}`, options)
             .map((r: Response) => r.json())
             .mergeMap(o => {
 
@@ -108,7 +109,7 @@ export class AuthService {
                         encrypted = cipher.encrypt(password, key, { iv: iv, mode: mode, padding: pad });
 
                     return this.http
-                        .post(tokenUrl, `username=${username}&password=${encrypted}&key=${o.key}`, options)
+                        .post(this.tokenUrl, `username=${username}&password=${encrypted}&key=${o.key}`, options)
                         .map((r: Response) => r.json())
                         .mergeMap(o => {
                             
