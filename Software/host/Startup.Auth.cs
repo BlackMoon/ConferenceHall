@@ -32,7 +32,7 @@ namespace host
                     // todo валидация логина  
                     if (true)
                     {
-                        key = new byte[tokenOptions.TwoFactorAuthOptions.KeySize/4];
+                        key = new byte[tokenOptions.TwoFactorAuthOptions.KeySize / 4];
                         RandomNumberGenerator.Create().GetBytes(key);
                     }
                     return Task.FromResult(key);

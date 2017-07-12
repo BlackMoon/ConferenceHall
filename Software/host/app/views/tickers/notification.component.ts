@@ -54,7 +54,6 @@ export class NotificationComponent implements OnInit {
 
                     this.recipients = employees.map(e => <SelectItem>{ label: e.name, value: e.id });
                     this.conferenceId && this.sendMessageForm.patchValue({ selectedRecipients: this.recipients.map(r => r.value) });
-
                 },
                 error => this.logger.error2(error));
     }

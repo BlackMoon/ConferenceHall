@@ -9,21 +9,30 @@ import { Message } from 'primeng/primeng';
  * @param error
  */
 export function handleResponseError(error: Response | any): ErrorObservable {
-    
+   
     let errMsg: Message = { };
     if (error instanceof Response) {
 
-        const body = error.json() || "";
+        let body;
 
-        if (body.hasOwnProperty("message")) {
-            errMsg.summary = body.message;
-            errMsg.detail = body.detail;
+        try {
+            body = error.json() || "";
+        } catch (e) {
+            body = error.text();
         }
-        else {
-            const err = body.error || JSON.stringify(body);
-            errMsg.summary = error.status.toString();
-            errMsg.detail = `${error.statusText || ""} ${err}`;
-        }
+
+        if (body instanceof Object) {
+
+            if (body.hasOwnProperty("message")) {
+                errMsg.summary = body.message;
+                errMsg.detail = body.detail;
+            } else {
+                const err = body.error || JSON.stringify(body);
+                errMsg.summary = error.status.toString();
+                errMsg.detail = `${error.statusText || ""} ${err}`;
+            }
+        } else
+            errMsg.summary = body;
     }
     else
         errMsg.detail = error.message ? error.message : error.toString();

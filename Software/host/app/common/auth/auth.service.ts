@@ -3,6 +3,7 @@ import { Injectable, isDevMode } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { JwtHelper } from 'angular2-jwt';
 import { Observable } from 'rxjs';
+import { handleResponseError } from '../http-error';
 import { SysUserModel } from '../../models/index';
 import * as CryptoJS from 'crypto-js';
 
@@ -123,7 +124,8 @@ export class AuthService {
                 }
                 else
                     return Observable.throw('Unknown algorithm');                    
-            });
+            })
+            .catch(handleResponseError);
     }
 
     logout(): void {
