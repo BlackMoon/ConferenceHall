@@ -22,44 +22,13 @@ namespace domain.Login.Command
         /// <returns></returns>
         public LoginCommandResult Execute(LoginCommand command)
         {
-            LoginStatus status = LoginStatus.Success;
-            string msg = null;
-
-            try
-            {
-                DbManager.AddParameter("plogin", command.UserName);
-                DbManager.AddParameter("ppassword", command.Password);
-
-                DbManager.Open();
-                DbManager.ExecuteNonQuery(CommandType.StoredProcedure, "user_logon");
-            }
-            catch (PostgresException ex)
-            {
-                msg = ex.MessageText;
-                status = LoginStatus.Failure;
-
-                Logger.LogError($"{ex.Message}. {ex.Detail}");
-            }
-            catch (Exception ex)
-            {
-                msg = ex.Message;
-                status = LoginStatus.Failure;
-
-                Logger.LogError(msg);
-            }
-            finally
-            {
-                DbManager.Close();
-            }
-
-            return new LoginCommandResult() { Status = status, Message = msg };
+            throw new NotImplementedException();
         }
 
         public async Task<LoginCommandResult> ExecuteAsync(LoginCommand command)
         {
             LoginStatus status = LoginStatus.Success;
             string msg = null;
-
             
             try
             {
