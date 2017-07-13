@@ -1,17 +1,20 @@
-﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, trigger, state, animate, transition, style  } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Logger } from "../../common/logger";
 import { borderClass, markClass } from "../../common/ui/svg-utils";
 import { MemberModel, MemberState, ScreenModel } from '../../models';
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
+import { fadeInAnimation } from "../../common/animations/fade-in.animation";
 import { HubService } from "../../common/hub.service";
 import { ScreenService } from "./screen.service";
 import { MemberScreenComponent } from "./member-screen.component";
 
+const speakerInterval = 30000;
 const tickInterval = 5000;
 
 @Component({
+    animations: [fadeInAnimation],
     host: { '(window:resize)': "onResize($event)" },
     styleUrls: ["screen.component.css"],
     templateUrl: 'screen.component.html'
@@ -27,6 +30,8 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     subject: string;
 
     hubObservable: Observable<any>;
+    showSpeaker: boolean = false;
+    speaker: string = "Выступает speaker";
 
 // ReSharper disable once InconsistentNaming
     private _tickers: string[] = [];
@@ -137,23 +142,36 @@ export class ScreenComponent implements AfterViewInit, OnInit {
         setInterval(() => this.now = new Date(), 1000);
 
         // ticker
+        let ticker = setInterval(this.tickerHandler, tickInterval);
+
+        // speaker
         setInterval(() => {
-            let ix = this.tickers.indexOf(this.ticker) + 1;
-            if (ix > this.tickers.length - 1) {
-                ix = 0;
-            }
             
-            this.ticker = this.tickers[ix];
+            if (this.showSpeaker) 
+                ticker = setInterval(this.tickerHandler, tickInterval);
+            else
+                clearInterval(ticker);
+           
+            this.showSpeaker = !this.showSpeaker;
 
-            this.memberScreen.scroll();
-
-        }, tickInterval);
+        }, speakerInterval);
 
         this.onResize();
     }
 
     ngAfterViewInit() {
         this.onResize();
+    }
+
+    tickerHandler = () => {
+        let ix = this.tickers.indexOf(this.ticker) + 1;
+        if (ix > this.tickers.length - 1) {
+            ix = 0;
+        }
+
+        this.ticker = this.tickers[ix];
+
+        this.memberScreen.scroll();    
     }
 
     onResize() {

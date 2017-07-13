@@ -26,3 +26,12 @@ export class ScreenModel extends KeyModel {
         this.tickers = null;
     }
 }
+
+/**
+ * Оратор
+ */
+export class SpeakerModel {
+
+    summary: string;
+    details: string;
+}

@@ -9,7 +9,19 @@
         </div>
     </div>
     <div #box1 class="ui-g-4 ui-g-nopad ui-corner-left">
-        <member-screen></member-screen>
+        <member-screen [ngClass]="{'ui-helper-hidden': showSpeaker}"></member-screen>                
+        <div class="h100p ui-widget-content" [ngClass]="{'ui-helper-hidden': !showSpeaker}" style="-moz-box-sizing: border-box; box-sizing: border-box; position: relative">
+            <div id="speaker" class="ui-g" [@fadeInAnimation]="showSpeaker ? 'show' : 'hide'">
+                <div class="ui-g-12 center ellipsis-m4" style="height: 118px">
+                    <span class="font_1">{{speaker}}</span>
+                </div>
+                <div class="ui-g-1"></div>
+                <div class="ui-g-10 ellipsis-m3 center" style="height: 76px">
+                    {{speaker}}
+                </div>
+                <div class="ui-g-1"></div>
+            </div>
+        </div>
     </div>
     <div #box2 class="ui-g-8 ui-widget-content ui-g-nopad ui-corner-right">
         <scheme-main [schemeId]="activeScreen?.schemeId"></scheme-main>
