@@ -44,11 +44,9 @@ namespace host
             tokenOptions.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature);
             tokenOptions.IdentityResolver = async (u, p) =>
             {
-                ICommandDispatcher commandDispatcher = app.ApplicationServices.GetRequiredService<ICommandDispatcher>();
-                IQueryDispatcher queryDispatcher = app.ApplicationServices.GetRequiredService<IQueryDispatcher>();
-
                 ClaimsIdentity identity = null;
-               
+
+                ICommandDispatcher commandDispatcher = app.ApplicationServices.GetRequiredService<ICommandDispatcher>();
                 LoginCommandResult result = await commandDispatcher.DispatchAsync<LoginCommand, LoginCommandResult>(
                     new LoginCommand()
                     {
@@ -58,10 +56,10 @@ namespace host
 
                 if (result.Status == LoginStatus.Success)
                 {
-                    SysUser sysUser = await queryDispatcher.DispatchAsync<FindSysUserByLoginQuery, SysUser>(new FindSysUserByLoginQuery { Login = u});
+                    SysUser sysUser = result.SysUser;
 
-                    Claim[] claims = (sysUser != null) ?
-                        new[] { new Claim("role", sysUser.Role.ToString()) } :
+                    Claim[] claims = sysUser != null ? 
+                        new[] { new Claim(ClaimTypes.GivenName, sysUser.Name), new Claim(ClaimTypes.Role, sysUser.Role.ToString()) } :
                         null;
 
                     identity = new ClaimsIdentity(new GenericIdentity(u, "Token"), claims);

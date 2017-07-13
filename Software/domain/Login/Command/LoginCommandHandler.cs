@@ -1,11 +1,11 @@
-﻿using System;
-using System.Data;
-using System.Threading.Tasks;
+﻿using Dapper;
 using domain.Common.Command;
-using Microsoft.Extensions.Logging;
 using Kit.Core.CQRS.Command;
 using Kit.Dal.DbManager;
+using Microsoft.Extensions.Logging;
 using Npgsql;
+using System;
+using System.Threading.Tasks;
 
 namespace domain.Login.Command
 {
@@ -28,14 +28,15 @@ namespace domain.Login.Command
         public async Task<LoginCommandResult> ExecuteAsync(LoginCommand command)
         {
             LoginStatus status = LoginStatus.Success;
+            SysUser.SysUser user = null;
             string msg = null;
             
             try
             {
-                DbManager.AddParameter("plogin", command.UserName);
-                DbManager.AddParameter("ppassword", command.Password);
-               
-                await DbManager.ExecuteNonQueryAsync(CommandType.StoredProcedure, "conf_hall.user_logon");
+                DynamicParameters param = new DynamicParameters(new { plogin = command.UserName, ppassword = command.Password });
+
+                await DbManager.OpenAsync();
+                user = await DbManager.DbConnection.QuerySingleOrDefaultAsync<SysUser.SysUser>("SELECT * FROM conf_hall.user_logon(@plogin, @ppassword)", param);
             }
             catch (PostgresException ex)
             {
@@ -56,7 +57,7 @@ namespace domain.Login.Command
                 DbManager.Close();
             }
 
-            return new LoginCommandResult() { Status = status, Message = msg };
+            return new LoginCommandResult() { Message = msg, Status = status, SysUser = user};
         }
     }
 }

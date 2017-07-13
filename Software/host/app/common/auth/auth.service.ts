@@ -48,8 +48,7 @@ export class AuthService {
 
     private storage: Storage;
 
-    private secretUrl = isDevMode() ? "http://localhost:64346/secret" : "/secret";
-    private tokenUrl = isDevMode() ? "http://localhost:64346/token" : "/token";
+    private url: string = isDevMode() ? "http://localhost:64346" : "";
     
     constructor(private http: Http) {
                 
@@ -95,7 +94,7 @@ export class AuthService {
         let options = new RequestOptions({ headers: headers });  
 
         var self = this;
-        return this.http.post(this.secretUrl, `username=${username}`, options)
+        return this.http.post(`${this.url}/secret`, `username=${username}`, options)
             .map((r: Response) => r.json())
             .mergeMap(o => {
 
@@ -110,7 +109,7 @@ export class AuthService {
                         encrypted = cipher.encrypt(password, key, { iv: iv, mode: mode, padding: pad });
 
                     return this.http
-                        .post(this.tokenUrl, `username=${username}&password=${encrypted}&key=${o.key}`, options)
+                        .post(`${this.url}/token`, `username=${username}&password=${encrypted}&key=${o.key}`, options)
                         .map((r: Response) => r.json())
                         .mergeMap(o => {
                             

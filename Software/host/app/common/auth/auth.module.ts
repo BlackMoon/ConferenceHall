@@ -2,7 +2,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
-import { ButtonModule, InputTextModule, MessagesModule, PasswordModule } from 'primeng/primeng';
+import { BlockUIModule, ButtonModule, InputTextModule, MessagesModule, PanelModule, PasswordModule } from 'primeng/primeng';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { AuthGuard } from './auth.guard';
 import { AuthService, Storage, TokenKey } from './auth.service';
@@ -19,7 +19,7 @@ let authHttpServiceFactory = (authService: AuthService, http: Http, options: Req
 @NgModule({
     declarations: [LoginComponent],    
     exports: [LoginComponent],
-    imports: [ButtonModule, CommonModule, FormsModule, HttpModule, InputTextModule, MessagesModule, PasswordModule, ReactiveFormsModule]    
+    imports: [BlockUIModule, ButtonModule, CommonModule, FormsModule, HttpModule, InputTextModule, MessagesModule, PanelModule, PasswordModule, ReactiveFormsModule]    
 })
 export class AuthModule {
 

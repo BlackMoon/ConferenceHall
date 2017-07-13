@@ -7,7 +7,7 @@ using NpgsqlTypes;
 namespace domain.SysUser
 {
     /// <summary>
-    /// Действия. (Привязать, отвязать) пользователя к сотруднику. pgSql enumeration [user_role]
+    /// Действия. (Привязать, отвязать) пользователя к сотруднику. 
     /// </summary>
     public enum UserOperation
     {
@@ -19,7 +19,7 @@ namespace domain.SysUser
     }
 
     /// <summary>
-    /// Роль пользователя
+    /// Роль пользователя. pgSql enumeration [user_role]
     /// </summary>
     public enum UserRole
     {
@@ -40,6 +40,8 @@ namespace domain.SysUser
         public bool Locked { get; set; }
 
         public string Login { get; set; }
+
+        public string Name { get; set; }
 
         public string Password { get; set; }
 

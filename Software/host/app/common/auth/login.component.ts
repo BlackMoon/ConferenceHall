@@ -7,11 +7,15 @@ import { Logger } from "../logger";
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: "app-login",
-    styles: [ ".login-panel { margin-top: 5em }"],
+    styles: [".login-panel { margin-top: 5em }", 
+             ".ui-panel-content, .ui-panel-content-wrapper { height: 100% }",
+             ".ui-panel-titlebar { display: none }",
+             ".ui-panel-content.ui-widget-content { padding: 0 !important}"],
     templateUrl: "login.component.html"
 })
 export class LoginComponent {
-    
+
+    loading:boolean;
     loginForm: any;
     returnUrl: string;
 
@@ -36,11 +40,19 @@ export class LoginComponent {
 
         e.preventDefault();
 
+        this.loading = true;
+
         this.authService
             .login(user.login, user.password)
             .subscribe(
-                _ => this.router.navigateByUrl(this.returnUrl),
-                error => this.logger.error2(error)
+                _ => {
+                    this.router.navigateByUrl(this.returnUrl);
+                    this.loading = false;
+                },
+                error => {
+                    this.logger.error2(error);
+                    this.loading = false;
+                }
             );
     }
 
