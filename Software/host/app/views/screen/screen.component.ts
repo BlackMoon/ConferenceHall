@@ -5,7 +5,7 @@ import { Logger } from "../../common/logger";
 import { borderClass, markClass } from "../../common/ui/svg-utils";
 import { MemberModel, MemberState, ScreenModel } from '../../models';
 import { SchemeMainComponent } from "../schemes/scheme-main.component";
-import { fadeInAnimation } from "../../common/animations/fade-in.animation";
+import { slideInAnimation, slideOutAnimation } from "../../common/animations";
 import { HubService } from "../../common/hub.service";
 import { ScreenService } from "./screen.service";
 import { MemberScreenComponent } from "./member-screen.component";
@@ -14,7 +14,7 @@ const speakerInterval = 30000;
 const tickInterval = 5000;
 
 @Component({
-    animations: [fadeInAnimation],
+    animations: [slideInAnimation, slideOutAnimation],
     host: { '(window:resize)': "onResize($event)" },
     styleUrls: ["screen.component.css"],
     templateUrl: 'screen.component.html'
@@ -30,6 +30,7 @@ export class ScreenComponent implements AfterViewInit, OnInit {
     subject: string;
 
     hubObservable: Observable<any>;
+
     showSpeaker: boolean = false;
     speaker: string = "Выступает speaker";
 
@@ -146,12 +147,12 @@ export class ScreenComponent implements AfterViewInit, OnInit {
 
         // speaker
         setInterval(() => {
-            
-            if (this.showSpeaker) 
+
+            if (this.showSpeaker)
                 ticker = setInterval(this.tickerHandler, tickInterval);
             else
                 clearInterval(ticker);
-           
+
             this.showSpeaker = !this.showSpeaker;
 
         }, speakerInterval);
