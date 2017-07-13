@@ -1,9 +1,10 @@
 ﻿import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Http, RequestOptions, URLSearchParams } from '@angular/http';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
 import { Message } from 'primeng/primeng';
 
 import { AuthService } from "./common/auth/auth.service";
+import { AuthGuard } from "./common/auth/auth.guard";
 import { isIe } from "./common/globals/ie-utils";
 import { Logger } from "./common/logger";
 import { Layout } from "./common/navigation/layout";
@@ -38,11 +39,21 @@ export class AppComponent implements OnInit {
     @ViewChild("content") contentEl: ElementRef;
 
     constructor(
+        private authGuard: AuthGuard,
         private authService: AuthService,
         private logger: Logger,
         private route: ActivatedRoute,
         private router: Router,
         private storage: Storage) {
+
+        this.router
+            .events
+            .filter(e => e instanceof RoutesRecognized)
+            .subscribe((e: RoutesRecognized) => {
+                
+                if (!this.authGuard.canActivate(this.route.snapshot, e.state))
+                    return;
+            });
 
         this.router
             .events
