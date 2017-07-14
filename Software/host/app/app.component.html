@@ -15,9 +15,9 @@
                 </div>
                 <h1 class="font_0" style="margin: 0 0 0 62px; line-height: 1em">Conference&nbsp;Hall</h1>
                 <p class="font_8" style="margin: 0 0 0 62px">
-                    <span class="color_13">
-                        <span style="letter-spacing: .1em">
-                            Концепция &amp; ИАС
+                    <span>
+                        <span *ngIf="this.authService.LoggedUser">
+                            Вошел как : {{this.authService.LoggedUser.name}}
                         </span>
                     </span>
                 </p>

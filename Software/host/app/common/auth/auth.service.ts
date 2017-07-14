@@ -17,7 +17,8 @@ class Claims implements Dict<string>
 {
     'description' = null;
     'isadmin' = null;
-    'username' = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';
+    'login' = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';
+    'name' = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname';
 
     [key: string]: string;
 }
@@ -61,10 +62,11 @@ export class AuthService {
     }
 
     get LoggedUser(): SysUserModel {
-        var user: SysUserModel = new SysUserModel(),
+        let user: SysUserModel,
             token = this.storage.getItem(TokenKey);
 
         if (token != null) {
+            user = new SysUserModel();
             let obj = this.jwtHelper.decodeToken(token);
 
             for (let key in this.claims) {

@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
      * Responsive class for big screen monitors (ui-xl*)
      */
     cls: string;
-
+   
     msgs: Message[] = [];
 
     private layout: Layout = Layout.None;

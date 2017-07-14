@@ -4,6 +4,7 @@ import 'core-js/es7/reflect';
 import 'intl';
 import 'intl/locale-data/jsonp/en.js'
 import 'reflect-metadata';
+import 'web-animations-js';
 import 'zone.js/dist/zone';
 
 if (process.env.ENV === 'production') {
