@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Kit.Dal.Oracle Class Library</Description>
+    <AssemblyTitle>Kit.Dal.Oracle</AssemblyTitle>
+    <TargetFramework>net46</TargetFramework>
+    <AssemblyName>Kit.Dal.Oracle</AssemblyName>
+    <PackageId>Kit.Dal.Oracle</PackageId>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kit.Dal\Kit.Dal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="odac.x64" Version="12.1.2400" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+</Project>
