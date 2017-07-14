@@ -7,5 +7,5 @@
 	remote = http://tfs:8080/tfs/ntcGroup/ntcProjects/_git/kit
 	branch = netcore1.1
 	commit = 1d5f5ccb5e4e80d31e9e9b2d282b10d4ca30cfd1
-	parent = cc9dfa10ccd417988823cbab8d8e796953c78dcc
+	parent = 9fc8a721e4f24b7c0f8e631e1064db846babea46
 	cmdver = 0.3.1
