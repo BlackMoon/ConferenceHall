@@ -1,20 +1,18 @@
-﻿using System;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using domain.Login.Command;
+﻿using domain.Login.Command;
 using domain.SysUser;
-using domain.SysUser.Query;
 using host.Security.TokenProvider;
 using Kit.Core.CQRS.Command;
-using Kit.Core.CQRS.Query;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace host
 {
