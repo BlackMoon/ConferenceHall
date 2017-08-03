@@ -7,7 +7,8 @@ export PATH=$GIT_ROOT/bin:$GIT_SUBREPO_ROOT/lib:$PATH"
 export MANPATH=$GIT_SUBREPO_ROO/man:$MANPATH"
 
 if [ -n "$1" ]
+echo "ok"	
     then git checkout --progress -B $1 
 fi
 
-git subrepo pull --all
+#git subrepo pull --all
