@@ -7,3 +7,4 @@ export PATH=$GIT_ROOT/bin:$GIT_SUBREPO_ROOT/lib:$PATH"
 export MANPATH=$GIT_SUBREPO_ROO/man:$MANPATH"
 
 git subrepo pull --all
+
