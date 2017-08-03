@@ -8,5 +8,4 @@
 	branch = netcore1.1
 	commit = 1d5f5ccb5e4e80d31e9e9b2d282b10d4ca30cfd1
 	parent = 37c5b162c774fd2031dc7ccbdb17f2daced56f68
-	cmdver = 0.3.1	
-	method = merge
+	cmdver = 0.3.1		
