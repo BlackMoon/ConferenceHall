@@ -12,4 +12,4 @@ echo "ok"
     then git checkout --progress -B $1 2>&1 | Write-Host
 fi
 
-git subrepo pull --all
+git subrepo pull --all $1 2>&1 | Write-Host
