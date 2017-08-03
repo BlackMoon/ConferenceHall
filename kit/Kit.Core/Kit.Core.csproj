@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.0.0" />
-    <PackageReference Include="CacheManager.Core" Version="1.0.1" />
+    <PackageReference Include="CacheManager.Core" Version="1.1.0" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.2.2" />
     <PackageReference Include="Mapster" Version="3.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.2" />

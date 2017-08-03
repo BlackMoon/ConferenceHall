@@ -1,8 +1,5 @@
 ﻿using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
-using Kit.Core.CQRS.Command;
-using Kit.Core.CQRS.Job;
-using Kit.Core.CQRS.Query;
 using Kit.Core.Interception;
 using Kit.Core.Interception.Attribute;
 using Microsoft.Extensions.DependencyInjection;
