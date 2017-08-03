@@ -1,0 +1,50 @@
+﻿<form class="h100p" [formGroup]="elementForm" (ngSubmit)="save($event, elementForm.value)">
+    <detail>
+        <nav>
+            <button pButton type="submit" label="Сохранить" icon="fa-floppy-o" [disabled]="submitDisabled"></button>
+        </nav>
+        <main>
+            <input type="hidden" formControlName="id" />
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <input type="text" pInputText formControlName="name" placeholder="Название" class="w100p" style="-moz-box-sizing: border-box; box-sizing: border-box" />
+                </div>
+                <div class="ui-g-12">
+                    Изображение :
+                    <div>
+                        <small>(макс. размер - 1024 x 1024)</small>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    <p-fileUpload #fileUpload chooseLabel="Выбрать" accept="image/*" maxFileSize="1000000" previewWidth="48" styleClass="hidden" (onSelect)="onSelect()"></p-fileUpload>
+                    <div class="ui-fileupload">
+                        <div class="ui-fileupload-content ui-widget-content ui-corner-bottom" *ngIf="id && (fileUpload.files.length == 0)">
+                            <div class="ui-fileupload-files">
+                                <div>
+                                    <div class="ui-fileupload-row">
+                                        <div>
+                                            <img class="center" src="/api/shape/{{id | uniquesuffix}}" width="48" height="48">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12">
+                    Реальная высота, м :
+                </div>
+                <div class="ui-g-12">
+                    <p-spinner formControlName="height" [min]="0.1" [step]="0.1"></p-spinner>
+                </div>
+                <div class="ui-g-12">
+                    Реальная ширина, м :
+                </div>
+                <div class="ui-g-12">
+                    <p-spinner formControlName="width" [min]="0.1" [step]="0.1"></p-spinner>
+                </div>
+            </div>
+        </main>
+    </detail>
+</form>

@@ -1,0 +1,29 @@
+﻿#speaker {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.font2 { font-size: 1.5em; font-weight: bold} 
+
+.h48 { height: 2em }
+
+.h72 { height: 72px }
+
+.bggreen {
+    background-color: rgba(0, 180, 115, 1);
+}
+
+.bgred {
+    background-color: rgba(240, 60, 70, 1);
+}
+
+.bggreen, .bgred {
+    color: white;
+}
+
+.tnlogo {
+    max-height: 100%;
+    max-width: 100%;
+}

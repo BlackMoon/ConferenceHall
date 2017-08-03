@@ -1,0 +1,48 @@
+﻿<p-panel #pnl styleClass="h100p" [style]="{'border': 'none'}">
+    <p-treeTable matchTable="ui-treetable" [value]="nodes" selectionMode="{{this.editMode || this.readOnly ? 'checkbox' : 'single'}}" styleClass="h100p {{this.readOnly ? 'no-header' : ''}}"
+                 [(selection)]="selectedNodes" (onNodeExpand)="loadNode($event)" (onNodeSelect)="selectNode($event)" (onNodeUnselect)="unSelectNode($event)">
+        <p-header>
+            <div class="ui-g">
+                <div class="ui-g-8 ui-g-nopad">
+                    <input type="text" pInputText placeholder="Поиск" [ngModel]="filter" [ngClass]="'w100p'" (ngModelChange)="filterChange($event)" (keypress)="filterKeyPressed($event)" />
+                </div>
+                <div class="ui-g-4 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">
+                        <p-toggleButton onIcon="fa fa-user-circle" onLabel="&zwnj;" offIcon="fa fa-building" offLabel="&zwnj;" [(ngModel)]="emplSearch" [title]="searchTitle" (onChange)="changeSearchKind($event)"></p-toggleButton>
+                        <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()" *ngIf="!readOnly"></p-toggleButton>
+                    </div>
+                </div>
+            </div>
+        </p-header>
+        <p-footer *ngIf="!readOnly">
+            <div class="ui-g">
+                <div class="ui-g-6 ui-g-nopad">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedNodes.length === 0" *ngIf="editMode" (click)="removeNodes()"></button>
+                    </div>
+                </div>
+                <div class="ui-g-6 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">
+                        <button type="button" pButton icon="fa-plus" title="Добавить организацию" [routerLink]="['/orgs/new']"></button>
+                    </div>
+                </div>
+            </div>
+        </p-footer>
+        <p-column field="name" header="Наименование" [style]="{ 'text-overflow': 'ellipsis' }">
+            <ng-template let-col let-node="rowData" pTemplate="body">
+                <img #icon src="/api/icon/{{node.data['id'] | uniquesuffix}}" width="32" (load)="icon.classList.remove('ui-helper-hidden')" class="ui-helper-hidden" *ngIf="!node.leaf">
+                {{node.data[col.field]}}
+            </ng-template>
+        </p-column>
+        <p-column field="description" header="Описание" [style]="{ 'text-overflow': 'ellipsis' }"></p-column>
+        <p-column field="locked" [style]="{ 'width':'60px'}" [styleClass]="'center'" *ngIf="!readOnly">
+            <ng-template let-col let-node="rowData" pTemplate="body">
+                <i class="fa fa-lg fa-user-plus" title="Добавить сотрудника" *ngIf="!node.leaf && editMode" (click)="addEmployee($event, node.data['id'])"></i>
+                <i class="fa fa-lg fa-lock" title="Блокирован" *ngIf="node.leaf && node.data[col.field]"></i>
+            </ng-template>
+        </p-column>
+    </p-treeTable>
+</p-panel>
+<p-blockUI [blocked]="loading" [target]="pnl">
+    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw" style="position:absolute; top:40%; left:50%"></i>
+</p-blockUI>
