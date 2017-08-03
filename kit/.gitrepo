@@ -7,6 +7,6 @@
 	remote = http://portal:8080/tfs/ntcGroup/ntcProjects/_git/kit
 	branch = netcore1.1
 	commit = b871e04db2312ebf7dc94fc047b29b7743eb778b
-	parent = 2b7e5091ae9a31e8a26607145a98e1dfe0819bd1
+	parent = 98bec9831a5677e31ce91da093242ba649632010
 	method = merge
 	cmdver = 0.3.1
