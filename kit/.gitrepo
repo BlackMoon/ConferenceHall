@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = http://tfs:8080/tfs/ntcGroup/ntcProjects/_git/kit
+	branch = netcore1.1
+	commit = 7b2dc833f6ca9982121736378914ee573c97d8c9
+	parent = f859681a098c1ffbb52946800d6fa0456e3c389c
+	cmdver = 0.3.1
