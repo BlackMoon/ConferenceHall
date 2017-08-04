@@ -73,7 +73,8 @@ namespace domain.Employee.Query
 
             SqlBuilder sqlBuilder = new SqlBuilder("conf_hall.employees e")
                 .Column("e.id")
-                .Column("e.name");
+                .Column("e.name")
+                .OrderBy("lower(e.name)");
             
             DynamicParameters param = new DynamicParameters();
 
@@ -82,8 +83,7 @@ namespace domain.Employee.Query
             {
                 sqlBuilder
                     .Join("conf_hall.conf_members m ON m.employee_id = e.id")
-                    .Where("m.conf_id = @conferenceId")
-                    .OrderBy("lower(e.name)");
+                    .Where("m.conf_id = @conferenceId");
 
                 param.Add("conferenceId", query.ConferenceId);
             }

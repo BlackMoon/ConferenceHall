@@ -38,12 +38,12 @@ namespace messengers.Jabber
 
         private void XmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
         {
-            _errors.Add("Ошибка авторизации: " + e.Failure);
+            InnerErrors.Add("Ошибка авторизации: " + e.Failure);
         }
 
         private void XmppClient_OnError(object sender, Matrix.ExceptionEventArgs e)
         {
-            _errors.Add("Ошибка клиента: " + e.Exception);
+            InnerErrors.Add("Ошибка клиента: " + e.Exception);
         }
 
         // region генерация сообщения
@@ -79,14 +79,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            InnerErrors.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add(" Список адресатов не заполнен. ");
         }
 
 
@@ -126,14 +126,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            InnerErrors.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add(" Список адресатов не заполнен. ");
         }
     }
 }

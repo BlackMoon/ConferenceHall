@@ -50,7 +50,7 @@ namespace messengers.Vk
                 catch (Exception ex)
                 {
 
-                    _errors.Add("авторизация в vk не прошла. " + ex.Message);
+                    InnerErrors.Add("авторизация в vk не прошла. " + ex.Message);
                     return;
                 }
 
@@ -66,17 +66,17 @@ namespace messengers.Vk
                         }
                         catch (Exception ex)
                         {
-                            _errors.Add("vk_id=" + vkid + "не произошла отправка сообщения " + ex.Message);
+                            InnerErrors.Add($"vk_id={vkid} не произошла отправка сообщения {ex.Message}");
                         }
                     }
                     else
                     {
-                        _errors.Add(vkid + " vk_id в неизвестном формате");
+                        InnerErrors.Add($"{vkid} vk_id в неизвестном формате");
                     }
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add(" Список адресатов не заполнен. ");
         }
 
         public override async Task SendAsync(string subject, string body, params string[] addresses)
@@ -101,7 +101,7 @@ namespace messengers.Vk
                 }
                 catch (Exception ex)
                 {
-                    _errors.Add("авторизация в vk не прошла. " + ex.Message);
+                    InnerErrors.Add($"авторизация в vk не прошла. {ex.Message}");
                     return;
                 }
 
@@ -120,21 +120,18 @@ namespace messengers.Vk
                         }
                         catch (Exception ex)
                         {
-                            _errors.Add("vk_id=" + vkid + "не произошла отправка сообщения " + ex.Message);
+                            InnerErrors.Add($"vk_id={vkid} не произошла отправка сообщения {ex.Message}");
                         }
                     }
                     else
                     {
-                        _errors.Add(vkid + " vk_id в неизвестном формате");
+                        InnerErrors.Add($"{vkid} vk_id в неизвестном формате");
                     }
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add("Список адресатов не заполнен.");
         }
-
     }
-
-
 }
 
