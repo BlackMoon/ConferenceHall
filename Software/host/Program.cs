@@ -1,6 +1,6 @@
 ﻿using domain.Member;
 using domain.Member.Query;
-using domain.Screen.Query;
+using domain.Ticker.Query;
 using DryIoc;
 using host.Hubs;
 using Kit.Core.CQRS.Query;
@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text.RegularExpressions;
-using domain.Ticker.Query;
 
 namespace host
 {

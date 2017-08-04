@@ -41,12 +41,12 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="package-lock.json" />
     <None Include="package.json" />
     <None Include="tsconfig.json" />
     <None Include="tslint.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\kit\Kit.Core.Web\Kit.Core.Web.csproj" />
     <ProjectReference Include="..\domain\domain.csproj" />
     <ProjectReference Include="..\messengers\messengers.csproj" />
   </ItemGroup>

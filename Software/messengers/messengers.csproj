@@ -13,4 +13,8 @@
     <PackageReference Include="VkNet" Version="1.28.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\kit\Kit.Core\Kit.Core.csproj" />
+  </ItemGroup>
+
 </Project>
