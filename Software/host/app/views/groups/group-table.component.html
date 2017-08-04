@@ -1,8 +1,0 @@
-﻿<p-dataTable dataKey="id" matchTable="ui-datatable" [value]="groups" selectionMode="single" styleClass="h100p no-header screen" [rows]="10" (onRowSelect)="selectRow($event)">
-    <p-column [style]="{'width':'2em'}">
-        <ng-template let-group="rowData" pTemplate="body">
-            <i class="{{group.icon}}"></i>
-        </ng-template>
-    </p-column>    
-    <p-column field="name"></p-column>    
-</p-dataTable>
