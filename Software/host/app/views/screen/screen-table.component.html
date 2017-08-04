@@ -1,0 +1,39 @@
+﻿<p-toolbar>
+    <button pButton type="button" icon="fa-chevron-left" (click)="addDays(-1)"></button>
+    <h3 style="display: inline-block">{{startDate | date:'dd.MM.yyyy'}}</h3>
+    <button pButton type="button" icon="fa-chevron-right" (click)="addDays(1)"></button>
+</p-toolbar>
+
+<p-carousel [value]="screens" [firstVisible]="firstVisible" numVisible="4" styleClass="carousel">
+
+    <ng-template let-screen pTemplate="item">
+        
+        <div class="ui-g">
+            <div class="ui-g-12 center ellipsis-m4" style="height: 118px">
+                <span class="font_1">{{screen.subject}}</span>
+            </div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-10 ellipsis-m3" style="height: 76px">
+                {{screen.hall}}
+            </div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-10">
+                <i class="fa fa-exclamation-circle" *ngIf="screen.state === ConfState.Active"></i>
+                {{ConfState.toName(screen.state)}}
+            </div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-10">
+                {{screen.startDate | datex:'HH:mm'}} - {{screen.endDate | datex:'HH:mm'}}
+            </div>
+            <div class="ui-g-1"></div>
+            <div class="ui-g-12 center">
+                <button type="button" pButton icon="fa-info" label="Подробнее" [routerLink]="['/conferences', screen.id]"></button>
+                <button type="button" pButton icon="fa-desktop" (click)="openDesktop(screen.id)"></button>
+            </div>
+        </div>
+       
+    </ng-template>
+
+</p-carousel>

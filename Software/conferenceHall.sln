@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "host", "host\host.csproj", "{0B4EF56A-A0B1-427D-B26E-2894905B911D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "domain", "domain\domain.csproj", "{1F010146-9460-45D5-8991-45ED70D27399}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "messengers", "messengers\messengers.csproj", "{4840A8B2-B48C-433F-A84F-47C55BE6400A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E4A6BBE7-DCA2-4DFB-9071-E8A19842C404}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Core", "..\kit\Kit.Core\Kit.Core.csproj", "{2DF957BB-2096-4D70-AC70-1E4A8CE7966A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Core.Web", "..\kit\Kit.Core.Web\Kit.Core.Web.csproj", "{12B08D75-2C68-4976-A462-F460EDC16685}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Dal", "..\kit\Kit.Dal\Kit.Dal.csproj", "{1651900F-92D0-4802-A837-7D33D932DB51}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kit.Dal.Postgre", "..\kit\Kit.Dal.Postgre\Kit.Dal.Postgre.csproj", "{6BBC71C4-3920-49F5-9F3D-0B6E16C05B54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B4EF56A-A0B1-427D-B26E-2894905B911D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B4EF56A-A0B1-427D-B26E-2894905B911D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B4EF56A-A0B1-427D-B26E-2894905B911D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B4EF56A-A0B1-427D-B26E-2894905B911D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F010146-9460-45D5-8991-45ED70D27399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F010146-9460-45D5-8991-45ED70D27399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F010146-9460-45D5-8991-45ED70D27399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F010146-9460-45D5-8991-45ED70D27399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4840A8B2-B48C-433F-A84F-47C55BE6400A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF957BB-2096-4D70-AC70-1E4A8CE7966A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF957BB-2096-4D70-AC70-1E4A8CE7966A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF957BB-2096-4D70-AC70-1E4A8CE7966A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF957BB-2096-4D70-AC70-1E4A8CE7966A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12B08D75-2C68-4976-A462-F460EDC16685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B08D75-2C68-4976-A462-F460EDC16685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B08D75-2C68-4976-A462-F460EDC16685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B08D75-2C68-4976-A462-F460EDC16685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1651900F-92D0-4802-A837-7D33D932DB51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1651900F-92D0-4802-A837-7D33D932DB51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1651900F-92D0-4802-A837-7D33D932DB51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1651900F-92D0-4802-A837-7D33D932DB51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BBC71C4-3920-49F5-9F3D-0B6E16C05B54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BBC71C4-3920-49F5-9F3D-0B6E16C05B54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BBC71C4-3920-49F5-9F3D-0B6E16C05B54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BBC71C4-3920-49F5-9F3D-0B6E16C05B54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

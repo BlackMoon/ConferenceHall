@@ -1,0 +1,41 @@
+﻿<p-dataTable matchTable="ui-datatable" dataKey="id" [value]="conferences" [loading]="loading" [rows]="10" selectionMode="single" [(selection)]="selectedConference" styleClass="h100p no-header">
+    <p-header>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-g-nopad">
+                <div class="ui-toolbar-group-left">
+                    <p-dropdown [options]="states" [(ngModel)]="selectedState" (onChange)="changeState($event.value)"></p-dropdown>
+                </div>
+                <div class="ui-toolbar-group-right">
+                    <button type="button" pButton icon="fa-calendar-times-o" title="Назначить" [disabled]="selectedState!==ConfState.Planned || !this.selectedConference" (click)="makeAppointment()"></button>
+                    <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
+                </div>
+            </div>
+        </div>
+    </p-header>
+    <p-footer>
+        <div class="ui-g">
+            <div class="ui-g-6 ui-g-nopad">
+                <div class="ui-toolbar-group-left">
+                    <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="!this.selectedConference" *ngIf="editMode" (click)="removeConference()"></button>
+                </div>
+            </div>
+            <div class="ui-g-6 ui-g-nopad">
+                <div class="ui-toolbar-group-right">
+                    <button type="button" pButton icon="fa-plus" title="Добавить совещание" [routerLink]="['/conferences/new']"></button>
+                </div>
+            </div>
+        </div>       
+    </p-footer>
+    <p-column selectionMode="single" [style]="{ 'width':'3em'}"></p-column>
+    <p-column field="subject" header="Наименование">
+        <ng-template let-conference="rowData" pTemplate="body">
+            <span pDraggable="dd_conf" class="ui-cell-data w100p" style="display: block" (onDragStart)="dragStart($event, conference)" *ngIf="selectedState===ConfState.Planned">{{conference.subject}}</span>
+            <span class="ui-cell-data" *ngIf="selectedState!==ConfState.Planned">{{conference.subject}}</span>
+        </ng-template>
+    </p-column> 
+    <p-column [style]="{ 'width':'60px'}" [styleClass]="center" *ngIf="editMode">
+        <ng-template let-conference="rowData" pTemplate="body">
+            <i class="fa fa-lg fa-pencil" title="Изменить" (click)="editConference($event, conference.id)"></i>
+        </ng-template>
+    </p-column>
+</p-dataTable>

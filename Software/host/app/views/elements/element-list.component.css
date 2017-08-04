@@ -1,0 +1,29 @@
+﻿img.center {
+    vertical-align: middle;
+}
+
+.ui-select {
+    position: absolute;
+    top: 24px;
+    right: 0;
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+div._32, div._48 {
+    overflow: hidden;
+}
+
+div._32 {
+    height: 32px;
+    width: 32px;
+}
+
+div._48 {
+    height: 48px;
+    width: 48px;
+}

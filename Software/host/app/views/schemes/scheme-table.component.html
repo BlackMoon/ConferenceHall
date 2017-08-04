@@ -1,0 +1,37 @@
+﻿<p-dataTable dataKey="id" [value]="schemes" [rows]="10" selectionMode="{{editMode ? 'multiple' : 'single'}}" [(selection)]="selectedSchemes" (onRowSelect)="selectRow($event)" styleClass="no-header">
+    <p-header>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-g-nopad">
+                <div class="ui-toolbar-group-right">
+                    <p-toggleButton onIcon="fa fa-ban" onLabel="Готово" offIcon="fa fa-pencil" offLabel="Правка" (onChange)="changeEditMode()"></p-toggleButton>
+                </div>
+            </div>
+        </div>
+    </p-header>
+    <p-footer>
+        <form [formGroup]="schemeForm" (ngSubmit)="addScheme(schemeForm.value)">
+            <div class="ui-g">
+                <div class="ui-g-2 ui-g-nopad">
+                    <div class="ui-toolbar-group-left">
+                        <button type="button" pButton icon="fa-trash" title="Удалить" [disabled]="this.selectedSchemes.length === 0" *ngIf="editMode" (click)="removeRows()"></button>
+                    </div>
+                </div>
+                <div class="ui-g-8 ui-g-nopad">
+                    <input pInputText type="text" formControlName="name" class="w100p" />
+                </div>
+                <div class="ui-g-2 ui-g-nopad">
+                    <div class="ui-toolbar-group-right">
+                        <button type="submit" pButton icon="fa-plus" title="Добавить cхему" [disabled]="!schemeForm.valid"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </p-footer>
+    <p-column selectionMode="multiple" [style]="{ 'width':'3em'}" *ngIf="editMode"></p-column>
+    <p-column field="name" header="Наименование"></p-column>
+    <p-column [style]="{ 'width':'60px'}" styleClass="center" *ngIf="editMode">
+        <ng-template let-col let-scheme="rowData" pTemplate="body">
+            <i class="fa fa-lg fa-files-o" title="Копировать" (click)="copyScheme($event, scheme.id)"></i>
+        </ng-template>
+    </p-column>
+</p-dataTable>
