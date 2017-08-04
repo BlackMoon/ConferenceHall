@@ -47,9 +47,6 @@
     <None Include="tslint.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\kit\Kit.Core.Web\Kit.Core.Web.csproj" />
-    <ProjectReference Include="..\..\..\kit\Kit.Core\Kit.Core.csproj" />
-    <ProjectReference Include="..\..\..\kit\Kit.Dal\Kit.Dal.csproj" />
     <ProjectReference Include="..\domain\domain.csproj" />
     <ProjectReference Include="..\messengers\messengers.csproj" />
   </ItemGroup>
