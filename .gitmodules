@@ -1,4 +1,4 @@
 [submodule "kit"]
 	path = kit
-	url = http://portal:8080/tfs/ntcGroup/ntcProjects/_git/kit
+	url = http://192.168.99.4:8080/tfs/ntcGroup/ntcProjects/_git/kit
 	branch = netcore1.1
