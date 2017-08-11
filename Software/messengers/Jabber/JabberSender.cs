@@ -36,14 +36,14 @@ namespace messengers.Jabber
             _jabberSettings = jabberOptions.Value;
         }
 
-        private void xmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
+        private void XmppClient_OnAuthError(object sender, Matrix.Xmpp.Sasl.SaslEventArgs e)
         {
-            _errors.Add("Ошибка авторизации: " + e.Failure);
+            InnerErrors.Add("Ошибка авторизации: " + e.Failure);
         }
 
-        private void xmppClient_OnError(object sender, Matrix.ExceptionEventArgs e)
+        private void XmppClient_OnError(object sender, Matrix.ExceptionEventArgs e)
         {
-            _errors.Add("Ошибка клиента: " + e.Exception);
+            InnerErrors.Add("Ошибка клиента: " + e.Exception);
         }
 
         // region генерация сообщения
@@ -62,8 +62,8 @@ namespace messengers.Jabber
                 
                 xmppClient.SetXmppDomain(jid.Server);
                 xmppClient.StartTls = true;
-                xmppClient.OnAuthError += xmppClient_OnAuthError;
-                xmppClient.OnError += xmppClient_OnError;
+                xmppClient.OnAuthError += XmppClient_OnAuthError;
+                xmppClient.OnError += XmppClient_OnError;
                 xmppClient.Open();
 
                 Thread.Sleep(_jabberSettings.JabberDelay);
@@ -79,14 +79,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            InnerErrors.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add(" Список адресатов не заполнен. ");
         }
 
 
@@ -106,8 +106,8 @@ namespace messengers.Jabber
 
                 xmppClient.SetXmppDomain(jid.Server);
                 xmppClient.StartTls = true;
-                xmppClient.OnAuthError += xmppClient_OnAuthError;
-                xmppClient.OnError += xmppClient_OnError;
+                xmppClient.OnAuthError += XmppClient_OnAuthError;
+                xmppClient.OnError += XmppClient_OnError;
                 xmppClient.Open();
 
                 Thread.Sleep(_jabberSettings.JabberDelay);
@@ -126,14 +126,14 @@ namespace messengers.Jabber
                         }
                         else
                         {
-                            _errors.Add(recipient + " jid в неизвестном формате");
+                            InnerErrors.Add(recipient + " jid в неизвестном формате");
                         }
                     }
                 }
                 xmppClient.Close();
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add(" Список адресатов не заполнен. ");
         }
     }
 }

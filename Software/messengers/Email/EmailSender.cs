@@ -43,7 +43,7 @@ namespace messengers.Email
                     if (AddressValidator(email))
                         emailMessage.To.Add(new MailboxAddress("", email));
                     else
-                        _errors.Add(email + " почтовый ящик в неизвестном формате");
+                        InnerErrors.Add($"{email} почтовый ящик в неизвестном формате");
                 }
 
                 if (!string.IsNullOrEmpty(subject))
@@ -69,7 +69,7 @@ namespace messengers.Email
                     }
                     catch (Exception ex)
                     {
-                        _errors.Add(ex.Message);
+                        InnerErrors.Add(ex.Message);
                     }
                     finally
                     {
@@ -78,7 +78,7 @@ namespace messengers.Email
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add("Список адресатов не заполнен.");
 
         }
 
@@ -93,7 +93,7 @@ namespace messengers.Email
                     if (AddressValidator(email))
                         emailMessage.To.Add(new MailboxAddress("", email));
                     else
-                        _errors.Add(email + " почтовый ящик в неизвестном формате");
+                        InnerErrors.Add($"{email} почтовый ящик в неизвестном формате");
                 }
                 
                 if (!string.IsNullOrEmpty(subject))
@@ -120,7 +120,7 @@ namespace messengers.Email
                     }
                     catch (Exception ex)
                     {
-                        _errors.Add(ex.Message);
+                        InnerErrors.Add(ex.Message);
                     }
                     finally
                     {
@@ -129,7 +129,7 @@ namespace messengers.Email
                 }
             }
             else
-                _errors.Add(" Список адресатов не заполнен. ");
+                InnerErrors.Add("Список адресатов не заполнен.");
             
         }
     }
