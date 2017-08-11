@@ -240,7 +240,7 @@ export class ConferenceScheduleComponent implements AfterViewInit {
 
             let panel = panels[ix],
                 cs = getComputedStyle(panel);
-
+            
             panel.style.height = `${tabview.offsetHeight - nav.offsetHeight - parseFloat(cs.paddingBottom)}px`;
         }
     }
@@ -248,8 +248,8 @@ export class ConferenceScheduleComponent implements AfterViewInit {
     removeEventFromSchedule(event) {
 
         this.confirmationService.confirm({
-            header: 'Вопрос',
-            icon: 'fa fa-trash',
+            header: "Вопрос",
+            icon: "fa fa-trash",
             message: `Удалить [${event.title}]?`,
             accept: _ => {
 

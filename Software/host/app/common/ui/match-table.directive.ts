@@ -57,6 +57,4 @@ export class MatchTableDirective implements AfterViewChecked {
 
         this.wrapper.style.height = `${h}px`;
     }
-
-    
 }
