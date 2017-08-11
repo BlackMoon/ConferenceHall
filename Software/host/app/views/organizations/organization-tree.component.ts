@@ -15,7 +15,7 @@ enum SearchKind { SearchOrg, SearchEmployee };
     selector: "organization-tree",
     styles: [
         ".ui-panel-content, .ui-panel-content-wrapper { height: 100% }",
-        ".ui-panel-titlebar { display: none }",
+        ".ui-panel-footer, .ui-panel-titlebar { display: none }",
         ".ui-panel-content.ui-widget-content { padding: 0 !important}"],
     templateUrl: "organization-tree.component.html"
 })
