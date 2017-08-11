@@ -179,7 +179,7 @@ export class ConferenceScheduleComponent implements AfterViewInit {
     }
 
     employeeTreeChanged(c: NodeGroupCommand) {
-       
+        
         this.selectedEmployeeIds = c.employeeIds;
         this.selectedOrganizationIds = c.organizationIds;
         this.loadEvents();

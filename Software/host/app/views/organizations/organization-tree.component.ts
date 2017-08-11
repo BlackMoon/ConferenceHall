@@ -182,7 +182,7 @@ export class OrganizationTreeComponent implements OnInit {
                             this.selectedNodes = this.selectedNodes.concat(nodes);
 
                             // not necessary to pass nodeGroupCommand to conference-main.component
-                            this.selectionChanged.emit(undefined);
+                            !this.readOnly && this.selectionChanged.emit(undefined);
                         }
                     },
                     error => this.logger.error2(error));
@@ -221,9 +221,9 @@ export class OrganizationTreeComponent implements OnInit {
     removeNodes(id: number) {
 
         this.confirmationService.confirm({
-            header: 'Вопрос',
-            icon: 'fa fa-trash',
-            message: `Удалить выбранные записи?`,
+            header: "Вопрос",
+            icon: "fa fa-trash",
+            message: "Удалить выбранные записи?",
             accept: () => {
                 
                 let c = this.getNodeGroupCommand();
@@ -249,7 +249,7 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     selectNode(e) {
-        
+      
         let id;
 
         if (this.editMode || this.readOnly) {
@@ -278,7 +278,7 @@ export class OrganizationTreeComponent implements OnInit {
     }
 
     unSelectNode() {
-
+        
         if (this.readOnly) {
 
             let c = this.emitData ? this.getNodeGroupCommand() : undefined;
