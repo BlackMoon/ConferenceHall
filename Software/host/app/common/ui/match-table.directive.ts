@@ -54,7 +54,7 @@ export class MatchTableDirective implements AfterViewChecked {
         header && (h -= header.offsetHeight);
         footer && (h -= footer.offsetHeight);
         paginator && (h -= paginator.offsetHeight);
-        console.log(h);
+        
         this.wrapper.style.height = `${h}px`;
     }
 }
