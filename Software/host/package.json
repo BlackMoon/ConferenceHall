@@ -19,7 +19,7 @@
     "intl": "^1.2.5",
     "jquery": "^2.2.4",
     "npm": "^5.0.3",
-    "primeng": "^4.0.0-rc.3",
+    "primeng": "^4.1.0",
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.3.3",
     "signalr": "^2.2.2",
