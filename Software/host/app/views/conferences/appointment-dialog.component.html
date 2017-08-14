@@ -1,5 +1,5 @@
-﻿<p-dialog [header]="header" [(visible)]="visible" modal="modal" minHeight="420" minWidth="300" width="400" dismissableMask="true" [responsive]="true" (onHide)="onHide()">
-    <form [formGroup]="appointmentForm" (ngSubmit)="save($event, appointmentForm.value)">
+﻿<form [formGroup]="appointmentForm" (ngSubmit)="save($event, appointmentForm.value)">
+    <p-dialog [header]="header" [(visible)]="visible" modal="modal" minHeight="420" minWidth="300" width="400" dismissableMask="true" [responsive]="true" (onHide)="onHide()">
         <div class="ui-g">
             <div class="ui-g-12 ui-g-nopad">
                 <div class="ui-g-6" style="padding: .5em 0">
@@ -17,10 +17,8 @@
             </div>
         </div>
         <p-footer>
-            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                <button type="button" pButton icon="fa-close" (click)="visible=false" label="Отмена"></button>
-                <button type="submit" pButton icon="fa-check" label="ОК" [disabled]="!appointmentForm.valid"></button>
-            </div>
+            <button type="submit" pButton icon="fa-check" label="ОК" [disabled]="!appointmentForm.valid"></button>
+            <button type="button" pButton icon="fa-close" (click)="visible=false" label="Отмена"></button>
         </p-footer>
-    </form>
-</p-dialog>
+    </p-dialog>
+</form>

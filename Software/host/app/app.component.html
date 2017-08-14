@@ -113,11 +113,10 @@
     <div class="ui-xl-1 ui-g-nopad" *ngIf="bitTest(Layout.ShowRightSide)"></div>
 </div>
     
-
 <p-confirmDialog #cd width="450">
     <p-footer>
-        <button type="button" pButton icon="fa-close" label="Нет" (click)="cd.reject()"></button>
         <button type="button" pButton icon="fa-check" label="Да" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="fa-close" label="Нет" (click)="cd.reject()"></button>
     </p-footer>
 </p-confirmDialog>
 
