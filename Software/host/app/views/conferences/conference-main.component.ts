@@ -242,16 +242,16 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
         this.memberService
             .delete(this.selectedMembers.map(s => s.id))
             .subscribe(
-            _ => {
+                _ => {
                
-                this.selectedMembers.forEach(member => {
-                    let ix = this.members.findIndex(m => m.id === member.id);
-                    (ix !== -1) && this.members.splice(ix, 1);
-                });
+                    this.selectedMembers.forEach(member => {
+                        let ix = this.members.findIndex(m => m.id === member.id);
+                        (ix !== -1) && this.members.splice(ix, 1);
+                    });
 
-                this.selectedMembers.length = 0;
-            },
-            error => this.logger.error2(error));
+                    this.selectedMembers.length = 0;
+                },
+                error => this.logger.error2(error));
        
     }
 

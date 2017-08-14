@@ -43,6 +43,7 @@ export class OrganizationTreeComponent implements OnInit {
     @Input()
     emitData: boolean = true;
 
+    @Output() nodesLoaded = new EventEmitter<any>();
     @Output() selectionChanged = new EventEmitter<any>();
 
     nodes: TreeNode[] = [];
@@ -80,20 +81,20 @@ export class OrganizationTreeComponent implements OnInit {
         this.organizationService
             .getAll(this.emplSearch, null, this.filter)
             .subscribe(
-            nodes => {
+                nodes => {
 
-                nodes.forEach(n => {
+                    nodes.forEach(n => {
 
-                    if (expanded.indexOf(n.data.id) !== -1) {
-                        this.loadNode({ node: n });
-                        n.expanded = true;
-                    }
+                        if (expanded.indexOf(n.data.id) !== -1) {
+                            this.loadNode({ node: n });
+                            n.expanded = true;
+                        }
 
-                });
+                    });
 
-                this.nodes = nodes;
-            },
-            error => this.logger.error2(error));
+                    this.nodes = nodes;
+                },
+                error => this.logger.error2(error));
 
         this.searchTitle = e.checked ? "По сотрудникам" : "По организациям";
     }
@@ -180,9 +181,8 @@ export class OrganizationTreeComponent implements OnInit {
                                 this.selectedNodes.push(n);
                             });
                             this.selectedNodes = this.selectedNodes.concat(nodes);
-
-                            // not necessary to pass nodeGroupCommand to conference-main.component
-                            !this.readOnly && this.selectionChanged.emit(undefined);
+                            
+                            this.nodesLoaded.emit(undefined);
                         }
                     },
                     error => this.logger.error2(error));
