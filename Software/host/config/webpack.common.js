@@ -1,5 +1,6 @@
 ﻿var ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // ReSharper disable InconsistentNaming
@@ -16,27 +17,25 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['', '.ts', '.js'] // Try .ts first, otherwise map will reference .js file.
+        extensions: ['.ts', '.js'] // Try .ts first, otherwise map will reference .js file.
     },
 
     module: {
         loaders: [
             {
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader', 'angular2-template-loader']
-            },
-            {
-                test: /\.html$/,
-                loader: 'html'
-            },
-            {
-                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?.*)?$/,
-                loader: 'file?name=assets/[name].[hash].[ext]'
+                loaders: 'awesome-typescript-loader!angular2-template-loader'
             },
             {
                 test: /\.css$/,
-                loader: 'to-string!style!css'
-            }
+                loaders: 'to-string-loader!style-loader!css-loader'
+            },
+            {
+                test: /\.html$/,
+                loader: 'html-loader'
+            },
+            { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
+            { test: /\.(png|gif|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" }
         ]
     },
 
@@ -49,7 +48,7 @@ module.exports = {
 
       new CopyWebpackPlugin([
           { from: 'favicon.ico' },
-          { from: './images', to: './assets', ignore: 'bg.jpg' }
+          { from: './images', to: './assets' }
         ]),
 
       new webpack.optimize.CommonsChunkPlugin({
