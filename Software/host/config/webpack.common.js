@@ -34,8 +34,14 @@ module.exports = {
                 test: /\.html$/,
                 loader: 'html-loader'
             },
-            { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" },
-            { test: /\.(png|gif|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader" }
+            {
+                test: /\.(png|jpg|gif|ico|ttf|eot|svg)(\?.*)?$/,
+                loader: "url-loader"
+            },
+            {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "url-loader"
+            }
         ]
     },
 
