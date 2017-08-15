@@ -83,7 +83,11 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
 
     actionClick = () => this.actionCommand();
 
-    addConferenceToList = (conference: ConferenceModel) => this.conferences.push(conference);
+    addConferenceToList(conference: ConferenceModel) {
+        let clones = [...this.conferences];
+        clones.push(conference);
+        this.conferences = clones;
+    }
 
     changeEditMode() {
         this.editMode = !this.editMode;

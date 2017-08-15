@@ -51,10 +51,10 @@ export class ConferenceService extends HttpDataService<ConferenceModel> {
     }
 
     getAll(startDate: Date, endDate: Date, state: ConfState = null, hallIds: number[] = null, employeeIds: number[] = null, organizationIds: number[] = null): Observable<any> {
-
+        
         let body: FindConferencesQuery = { startDate: startDate, endDate: endDate };
 
-        state && (body.state = state);
+        (state != null) && (body.state = state);
         hallIds && hallIds.length > 0 && (body.hallIds = hallIds);
         employeeIds && employeeIds.length > 0 && (body.employeeIds = employeeIds);
         organizationIds && organizationIds.length > 0 && (body.organizationIds = organizationIds);
