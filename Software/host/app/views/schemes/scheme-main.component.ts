@@ -131,9 +131,10 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     ngOnDestroy() {
 
         if (this.canvas) {
-            this.canvas.removeEventListener("mousedown");
-            this.canvas.removeEventListener("mousemove");
-            this.canvas.removeEventListener("mouseup");
+            
+            this.canvas.removeEventListener("mousedown", this.canvasMouseDown);
+            this.canvas.removeEventListener("mousemove", this.canvasMouseMove);
+            this.canvas.removeEventListener("mouseup", this.canvasMouseUp);
         }
     }
 
@@ -218,7 +219,7 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     canvasMouseDown(e) {
-
+        
         e.stopPropagation();
 
         if (e.buttons === 1) {
@@ -563,15 +564,15 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                     if (!this.readOnly) {
                         this.drawBorder();
                         this.drawGrid();
+                        
+                        this.canvas
+                            .addEventListener("mousedown", this.canvasMouseDown.bind(this));
 
                         this.canvas
-                            .addEventListener("mousedown", (event) => this.canvasMouseDown(event));
+                            .addEventListener("mousemove", this.canvasMouseMove.bind(this));
 
                         this.canvas
-                            .addEventListener("mousemove", (event) => this.canvasMouseMove(event));
-
-                        this.canvas
-                            .addEventListener("mouseup", (event) => this.canvasMouseUp(event));
+                            .addEventListener("mouseup", this.canvasMouseUp.bind(this));
                     }
                 }
                     
