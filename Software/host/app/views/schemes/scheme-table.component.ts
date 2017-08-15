@@ -47,9 +47,9 @@ export class SchemeTableComponent implements OnInit {
                 key => {
                     scheme.id = key;
 
-                    let schemes = [...this.schemes];
-                    schemes.push(scheme);
-                    this.schemes = schemes;
+                    let clones = [...this.schemes];
+                    clones.push(scheme);
+                    this.schemes = clones;
                     
                     this.schemeForm.reset();
                 },

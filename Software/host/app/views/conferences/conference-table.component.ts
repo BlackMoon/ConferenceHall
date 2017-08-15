@@ -153,8 +153,7 @@ export class ConferenceTableComponent implements OnInit, OnChanges {
 
         this.selectedConference = null;
 
-        let ix = this.conferences.findIndex(c => c.id === id);
-        (ix !== -1) && this.conferences.splice(ix, 1);
+        this.conferences = this.conferences.filter(c => c.id !== id);
 
         // В расписании нет [Планируемых] конференций
         if (this.selectedState !== ConfState.Planned) {

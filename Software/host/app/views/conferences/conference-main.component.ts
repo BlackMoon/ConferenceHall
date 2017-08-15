@@ -243,12 +243,8 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .delete(this.selectedMembers.map(s => s.id))
             .subscribe(
                 _ => {
-                    debugger;
-                    this.selectedMembers.forEach(member => {
-                        let ix = this.members.findIndex(m => m.id === member.id);
-                        (ix !== -1) && this.members.splice(ix, 1);
-                    });
-
+                    let ids = this.selectedMembers.map(m => m.id);
+                    this.members = this.members.filter(m => ids.indexOf(m.id) === -1);
                     this.selectedMembers.length = 0;
                 },
                 error => this.logger.error2(error));
@@ -256,7 +252,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     moveToTarget() {
-        debugger;
+       
         // employee --> member
         let members = this.selectedEmployees.map(e => <any>{ employeeId: e.id, name: e.name, job: e.job, position: e.position });
        
@@ -265,15 +261,18 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .subscribe(
                 // only new members {id, employeeId}
                 nmembers => {
-                    debugger;
+
+                    let clones = [...this.members];
+
                     nmembers.forEach(nm => {
                         let member:MemberModel = members.find(m => m.employeeId === nm.employeeId);
-                       
+
                         if (member) {
                             member.id = nm.id;
-                            this.members.push(member);
+                            clones.push(member);
                         }
                     });
+                    this.members = clones;
 
                     this.selectedMembers.length = 0;
                 },

@@ -109,12 +109,6 @@ export class MemberTableComponent {
                 });    
     }
 
-    removeMember(id) {
-
-        let ix = this.members.findIndex(m => m.id === id);
-        (ix !== -1) && this.members.splice(ix, 1);
-    }
-
     selectRow(e) {
        this.selectionChanged.emit(this.selectedMembers);
     }
