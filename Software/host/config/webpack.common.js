@@ -35,7 +35,11 @@ module.exports = {
                 loader: 'html-loader'
             },
             {
-                test: /\.(png|jpg|gif|ico|ttf|eot|svg)(\?.*)?$/,
+                test: /\.(gif|ico|jp(e)?g|png)(\?.*)?$/,
+                loader: "file-loader?name=assets/[name].[hash].[ext]"
+            },
+            {
+                test: /\.(eot|svg|ttf)(\?.*)?$/,
                 loader: "url-loader"
             },
             {
