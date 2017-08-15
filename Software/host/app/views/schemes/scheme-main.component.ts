@@ -31,6 +31,11 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
     zoomCoef: number;                               // коэф. масштабирования [0..1]
 
+    // event listeners with [this] scope
+    canvasMouseDownBind: Function = this.canvasMouseDown.bind(this);
+    canvasMouseMoveBind: Function = this.canvasMouseMove.bind(this);
+    canvasMouseUpBind: Function = this.canvasMouseUp.bind(this);
+
     // ReSharper disable InconsistentNaming
     private _schemeId: number;
 
@@ -132,9 +137,9 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
 
         if (this.canvas) {
             
-            this.canvas.removeEventListener("mousedown", this.canvasMouseDown);
-            this.canvas.removeEventListener("mousemove", this.canvasMouseMove);
-            this.canvas.removeEventListener("mouseup", this.canvasMouseUp);
+            this.canvas.removeEventListener("mousedown", this.canvasMouseDownBind);
+            this.canvas.removeEventListener("mousemove", this.canvasMouseMoveBind);
+            this.canvas.removeEventListener("mouseup", this.canvasMouseUpBind);
         }
     }
 
@@ -566,13 +571,13 @@ export class SchemeMainComponent implements AfterViewInit, OnDestroy, OnInit {
                         this.drawGrid();
                         
                         this.canvas
-                            .addEventListener("mousedown", this.canvasMouseDown.bind(this));
+                            .addEventListener("mousedown", this.canvasMouseDownBind);
 
                         this.canvas
-                            .addEventListener("mousemove", this.canvasMouseMove.bind(this));
+                            .addEventListener("mousemove", this.canvasMouseMoveBind);
 
                         this.canvas
-                            .addEventListener("mouseup", this.canvasMouseUp.bind(this));
+                            .addEventListener("mouseup", this.canvasMouseUpBind);
                     }
                 }
                     
