@@ -143,7 +143,7 @@ export class OrganizationTreeComponent implements OnInit {
      * Выбранные сотрудники (employees --> узлы 2го уровня)     
      */
     getEmployees(): EmployeeModel[] {
-
+        debugger;
         let employees: EmployeeModel[] = [];
         
         this.selectedNodes.forEach(n => {

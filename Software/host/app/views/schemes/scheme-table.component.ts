@@ -46,7 +46,11 @@ export class SchemeTableComponent implements OnInit {
             .subscribe(
                 key => {
                     scheme.id = key;
-                    this.schemes.push(scheme);
+
+                    let schemes = [...this.schemes];
+                    schemes.push(scheme);
+                    this.schemes = schemes;
+                    
                     this.schemeForm.reset();
                 },
                 error => this.logger.error2(error));
@@ -71,7 +75,7 @@ export class SchemeTableComponent implements OnInit {
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить выбранные записи?`,
+            message: 'Удалить выбранные записи?',
             accept: _ => {                
 
                 this.schemeService
@@ -79,10 +83,8 @@ export class SchemeTableComponent implements OnInit {
                     .subscribe(
                     _ => {
 
-                        this.selectedSchemes.forEach(s => {
-                            let ix = this.schemes.findIndex(n => n.id === s.id);
-                            (ix !== -1) && this.schemes.splice(ix, 1);
-                        });
+                        let ids = this.selectedSchemes.map(s => s.id);
+                        this.schemes = this.schemes.filter(s => ids.indexOf(s.id) === -1);
 
                         this.selectedSchemes.length = 0;
                     },

@@ -58,19 +58,17 @@ export class HallTableComponent implements OnInit {
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить выбранные записи?`,
+            message: 'Удалить выбранные записи?',
             accept: _ => {                
 
                 this.hallService
                     .delete(this.selectedHalls.map(h => h.id))
                     .subscribe(
                     _ => {
-
-                        this.selectedHalls.forEach(h => {
-                            let ix = this.halls.findIndex(n => n.id === h.id);
-                            (ix !== -1) && this.halls.splice(ix, 1);
-                        });
-
+                        
+                        let ids = this.selectedHalls.map(h => h.id);
+                        this.halls = this.halls.filter(h => ids.indexOf(h.id) === -1);
+                        
                         this.selectedHalls.length = 0;
                     },
                     error => this.logger.error2(error));

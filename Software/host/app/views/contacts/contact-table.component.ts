@@ -68,7 +68,10 @@ export class ContactTableComponent implements OnInit {
                     let sender = this.senders.find(s => s.value === contact.kind);
                     sender && (contact.name = sender.label);
 
-                    this.contacts.push(contact);
+                    let contacts = [...this.contacts];
+                    contacts.push(contact);
+
+                    this.contacts = contacts;
                     this.contactForm.reset({ kind: defaultKind });
                 },
                 error => this.logger.error2(error));        
@@ -124,22 +127,20 @@ export class ContactTableComponent implements OnInit {
         this.confirmationService.confirm({
             header: 'Вопрос',
             icon: 'fa fa-trash',
-            message: `Удалить выбранные записи?`,
+            message: 'Удалить выбранные записи?',
             accept: _ => {                
 
                 this.contactService
                     .delete(this.selectedContacts.map(s => s.id))
                     .subscribe(
-                    _ => {
+                        _ => {
 
-                        this.selectedContacts.forEach(h => {
-                            let ix = this.contacts.findIndex(n => n.id === h.id);
-                            (ix !== -1) && this.contacts.splice(ix, 1);
-                        });
+                            let ids = this.selectedContacts.map(h => h.id);
+                            this.contacts = this.contacts.filter(c => ids.indexOf(c.id) === -1);
 
-                        this.selectedContacts.length = 0;
-                    },
-                    error => this.logger.error2(error));
+                            this.selectedContacts.length = 0;
+                        },
+                        error => this.logger.error2(error));
             }
         });
     }

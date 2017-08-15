@@ -243,7 +243,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .delete(this.selectedMembers.map(s => s.id))
             .subscribe(
                 _ => {
-               
+                    debugger;
                     this.selectedMembers.forEach(member => {
                         let ix = this.members.findIndex(m => m.id === member.id);
                         (ix !== -1) && this.members.splice(ix, 1);
@@ -256,7 +256,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
     }
 
     moveToTarget() {
-        
+        debugger;
         // employee --> member
         let members = this.selectedEmployees.map(e => <any>{ employeeId: e.id, name: e.name, job: e.job, position: e.position });
        
@@ -265,7 +265,7 @@ export class ConferenceMainComponent implements AfterViewInit, OnInit {
             .subscribe(
                 // only new members {id, employeeId}
                 nmembers => {
-                   
+                    debugger;
                     nmembers.forEach(nm => {
                         let member:MemberModel = members.find(m => m.employeeId === nm.employeeId);
                        
